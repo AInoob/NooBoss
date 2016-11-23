@@ -38,3 +38,49 @@ body{
 .app-status-checkbox{
   display: none;
 }
+
+.app-status{
+  background-image: url("/thirdParty/power-button-on.svg");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  height: 20px;
+  width: 20px;
+  display: block;
+  float: left;
+  margin-left: 10px;
+}
+
+.app-status-checkbox:not(:checked) + .app .app-status{
+  background-image: url("/thirdParty/power-button-off.svg");
+}
+
+.app-status-checkbox:not(:checked) + .app{
+  background-color: grey;
+}
+
+.app-status-checkbox:not(:checked) + .app img{
+  filter: invert(10%);
+}
+
+.app:hover{
+  background-color:white !important;
+}
+
+.app-status-checkbox:not(:checked) + .app:hover{
+  background-color:#bbbbbb !important;
+}
+
+.app-version{
+  margin-top: 20px;
+}
+
+.app-uninstall{
+  background-image: url("/thirdParty/remove.svg");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  height: 20px;
+  width: 20px;
+  display: block;
+  float: right;
+  margin-right: 10px;
+}

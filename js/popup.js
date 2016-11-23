@@ -28,19 +28,29 @@ chrome.management.getAll(function(appInfoList){
       iconUrl=canvas.toDataURL();
     }
     var appDiv=$('<div class="app"></div>');
-    var enabled=$('<input type="checkbox" class="app-status-checkbox" id="'+appInfo.id+'-status" />');
+    var statusCheck=$('<input type="checkbox" class="app-status-checkbox" id="'+appInfo.id+'-status" />');
     if(appInfo.enabled){
-      enabled.attr('checked',true);
+      statusCheck.attr('checked',true);
     }
-    appDiv.append(enabled);
     iconImg=$('<img class="app-icon" src='+iconUrl+' />');
     appDiv.append(iconImg);
     var infoDiv=$('<div class="app-info"</div>');
-    infoDiv.append('<label data="'+appInfo.id+'" class="app-status">hello</label>');
-    infoDiv.append('<button data="'+appInfo.id+'" class="app-uninstall">no</label>');
+    infoDiv.append('<label data="'+appInfo.id+'" class="app-status"></label>');
+    infoDiv.append('<label data="'+appInfo.id+'" class="app-uninstall"></label>');
     infoDiv.append('<div class="app-version">'+appInfo.version+'</div>');
     infoDiv.append('<span title="'+appInfo.name+'" class="app-name">'+appInfo.name+'</span>');
     appDiv.append(infoDiv);
+    $('#appList').append(statusCheck);
     $('#appList').append(appDiv);
   }
+  $('.app-status').on('click',function(e){
+    var id=e.target.getAttribute('data');
+    var enabled=false;
+    if($('#'+id+'-status')[0].checked){
+      enabled=true;
+    }
+    chrome.management.setEnabled(id,!enabled,function(){
+      $('#'+id+'-status').attr('checked',!enabled);
+    });
+  });
 });
