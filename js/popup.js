@@ -4,10 +4,13 @@ canvas.height=128;
 var ctx=canvas.getContext('2d');
 ctx.font="120px Arial";
 
+var appInfoMap={};
+
 chrome.management.getAll(function(appInfoList){
   for(var i=0;i<appInfoList.length;i++){
     console.log(i);
     var appInfo=appInfoList[i];
+    appInfoMap[appInfo.id]=appInfo;
     var iconImg=undefined;
     var iconUrl=undefined;
     if(appInfo.icons){
@@ -27,7 +30,7 @@ chrome.management.getAll(function(appInfoList){
       ctx.fillText(appInfo.name[0],22,110);
       iconUrl=canvas.toDataURL();
     }
-    var appDiv=$('<div class="app"></div>');
+    var appDiv=$('<div id="'+appInfo.id+'-app" class="app"></div>');
     var statusCheck=$('<input type="checkbox" class="app-status-checkbox" id="'+appInfo.id+'-status" />');
     if(appInfo.enabled){
       statusCheck.attr('checked',true);
@@ -51,6 +54,18 @@ chrome.management.getAll(function(appInfoList){
     }
     chrome.management.setEnabled(id,!enabled,function(){
       $('#'+id+'-status').attr('checked',!enabled);
+    });
+  });
+  $('.app-uninstall').on('click',function(e){
+    var id=e.target.getAttribute('data');
+    chrome.management.uninstall(id,function(){
+      if(chrome.runtime.lastError){
+        console.log(chrome.runtime.lastError);
+      }
+      else{
+        $('#'+id+'-status').remove();
+        $('#'+id+'-app').remove();
+      }
     });
   });
 });
