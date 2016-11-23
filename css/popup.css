@@ -1,0 +1,40 @@
+body{
+  width: 600px;
+}
+
+.app{
+  width: 100px;
+  height: 100px;
+  float: left;
+  overflow: hidden;
+  font-size: 12px;
+  position: relative;
+}
+
+.app-icon, .app-info{
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.app-icon {
+  width: 86px;
+  margin: 7px;
+}
+
+.app-info{
+  width: 100px;
+  transform: rotateY(180deg);
+  padding-top: 15px;
+  text-align: center;
+}
+
+.app:hover .app-info{
+  transform: rotateY(0deg);
+}
+.app:hover .app-icon{
+  transform: rotateY(180deg);
+}
+
+.app-status-checkbox{
+  display: none;
+}
