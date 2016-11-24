@@ -9,6 +9,7 @@
     "scripts":["js/background.js"]
   },
   "permissions":[
-    "management"
+    "management",
+    "notifications"
   ]
 }

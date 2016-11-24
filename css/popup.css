@@ -2,9 +2,12 @@ body{
   width: 600px;
 }
 
+
+
 .app{
-  width: 100px;
-  height: 100px;
+  width: 98px;
+  height: 98px;
+  border: 1px solid pink;
   float: left;
   overflow: hidden;
   font-size: 12px;
@@ -39,18 +42,7 @@ body{
   display: none;
 }
 
-.app-status{
-  background-image: url("/thirdParty/power-button-on.svg");
-  background-size: 20px 20px;
-  background-repeat: no-repeat;
-  height: 20px;
-  width: 20px;
-  display: block;
-  float: left;
-  margin-left: 10px;
-}
-
-.app-status-checkbox:not(:checked) + .app .app-status{
+.app-status-checkbox:not(:checked) + .app .app-switch{
   background-image: url("/thirdParty/power-button-off.svg");
 }
 
@@ -74,6 +66,21 @@ body{
   margin-top: 20px;
 }
 
+.app-switch, .app-uninstall{
+  cursor: pointer;
+}
+
+.app-switch{
+  background-image: url("/thirdParty/power-button-on.svg");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  height: 20px;
+  width: 20px;
+  display: block;
+  float: left;
+  margin-left: 10px;
+}
+
 .app-uninstall{
   background-image: url("/thirdParty/remove.svg");
   background-size: 20px 20px;
@@ -83,4 +90,8 @@ body{
   display: block;
   float: right;
   margin-right: 10px;
+}
+
+.app-version, .app-name{
+  display: block;
 }
