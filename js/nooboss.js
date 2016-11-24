@@ -60,11 +60,11 @@
 	    Route,
 	    { component: __webpack_require__(239) },
 	    React.createElement(Route, { path: 'popup.html', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'home', component: __webpack_require__(252) }),
+	    React.createElement(Route, { path: 'overview', component: __webpack_require__(252) }),
 	    React.createElement(Route, { path: 'manage', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'related', component: __webpack_require__(253) }),
+	    React.createElement(Route, { path: 'discover', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'options', component: __webpack_require__(254) }),
-	    React.createElement(Route, { path: 'update', component: __webpack_require__(255) }),
+	    React.createElement(Route, { path: 'history', component: __webpack_require__(255) }),
 	    React.createElement(Route, { path: 'about', component: __webpack_require__(256) })
 	  )
 	), document.getElementById('nooboss'));
@@ -26780,17 +26780,8 @@
 	            null,
 	            React.createElement(
 	              Link,
-	              { to: '/home' },
-	              'Home'
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            React.createElement(
-	              Link,
-	              { to: '/related' },
-	              'Related'
+	              { to: '/overview' },
+	              'Overview'
 	            )
 	          ),
 	          React.createElement(
@@ -26807,8 +26798,17 @@
 	            null,
 	            React.createElement(
 	              Link,
-	              { to: '/update' },
-	              'Update'
+	              { to: '/discover' },
+	              'Discover'
+	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { to: '/history' },
+	              'History'
 	            )
 	          )
 	        )
@@ -26817,6 +26817,7 @@
 	        title: 'NooBoss'
 	      }),
 	      this.props.children,
+	      React.createElement('div', { className: 'footerPad' }),
 	      React.createElement(
 	        'div',
 	        { className: 'footer' },
@@ -28029,7 +28030,7 @@
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'NooBoss-body' },
 	      appList
 	    );
 	  }
@@ -28051,7 +28052,7 @@
 	    var info = this.props.info;
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "app-holder" },
 	      React.createElement("input", { type: "checkbox", className: "app-status-checkbox", readOnly: true, id: info.id + '-status', checked: info.enabled }),
 	      React.createElement(
 	        "div",
@@ -28122,7 +28123,7 @@
 	    return React.createElement(
 	      "p",
 	      null,
-	      "Related"
+	      "Discover"
 	    );
 	  }
 	});

@@ -92,7 +92,7 @@ module.exports = React.createClass({
         );
     }.bind(this));
     return(
-      <div>
+      <div className="NooBoss-body">
         {appList}
       </div>
     );

@@ -8,7 +8,7 @@ module.exports = React.createClass({
   render: function(){
     var info=this.props.info;
     return(
-      <div>
+      <div className="app-holder">
         <input type="checkbox" className="app-status-checkbox" readOnly id={info.id+'-status'} checked={info.enabled} />
         <div className="app" id={info.id+'-app'}>
           <img className="app-icon" src={info.iconUrl} />

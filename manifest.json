@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "NooBoss",
-  "description": "Handles all your extensions, apps, and themes, recommends extensions and scripts based on websites you visited, and warns you bad reputation extensions",
+  "description": "Manage your extensions, apps, and themes, recommends extensions and scripts personally, and warns you bad reputation extensions",
   "version": "0.0.1",
   "browser_action": {
     "default_icon": "images/icon_128.png",

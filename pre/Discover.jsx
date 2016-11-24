@@ -9,7 +9,7 @@ module.exports = React.createClass({
   },
   render: function(){
     return(
-      <p>Related</p>
+      <p>Discover</p>
     );
   }
 });

@@ -8,16 +8,17 @@ module.exports = React.createClass({
       <div id="NooBoss-Core">
         <nav>
           <ul>
-            <li><Link to="/home">Home</Link></li>
-            <li><Link to="/related">Related</Link></li>
+            <li><Link to="/overview">Overview</Link></li>
             <li><Link to="/manage">Manage</Link></li>
-            <li><Link to="/update">Update</Link></li>
+            <li><Link to="/discover">Discover</Link></li>
+            <li><Link to="/history">History</Link></li>
           </ul>
         </nav>
         <Helmet
           title="NooBoss"
         />
         {this.props.children}
+        <div className="footerPad"></div>
         <div className="footer">
           <ul>
             <li><Link to="/options">Options</Link></li>
