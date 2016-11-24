@@ -5,13 +5,15 @@ module.exports = React.createClass({
     return null;
   },
   componentDidMount: function(){
-    <Helmet
-      title="Options"
-    />
   },
   render: function(){
     return(
-      <p>Options</p>
+      <div>
+        <Helmet
+          title="Options"
+        />
+        <p>Options</p>
+      </div>
     );
   }
 });

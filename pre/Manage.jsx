@@ -6,9 +6,6 @@ module.exports = React.createClass({
     return this.state||{};
   },
   componentDidMount: function(){
-    <Helmet
-      title="Manage"
-    />
     chrome.management.getAll(function(appInfoList){
       for(var i=0;i<appInfoList.length;i++){
         appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
@@ -43,7 +40,17 @@ module.exports = React.createClass({
     return iconUrl;
   },
   toggleState: function(info){
+    var action='enable';
+    if(info.enabled){
+      action='disable';
+    }
+    _gaq.push(['_trackEvent', 'manage', action, info.id]);
     chrome.management.setEnabled(info.id,!info.enabled,function(){
+      var result='enabled';
+      if(info.enabled){
+        result='disabled';
+      }
+      _gaq.push(['_trackEvent', 'result', result, info.id]);
       this.setState(function(prevState){
         for(var i=0;i<prevState.appInfoList.length;i++){
           if(info.id==prevState.appInfoList[i].id){
@@ -56,8 +63,11 @@ module.exports = React.createClass({
     }.bind(this));
   },
   uninstall: function(info){
+    var result='unstall_success';
+    _gaq.push(['_trackEvent', 'manage', 'uninstall', info.id]);
     chrome.management.uninstall(info.id,function(){
       if(chrome.runtime.lastError){
+        action='uninstall_fail';
         console.log(chrome.runtime.lastError);
         chrome.notifications.create({
           type:'basic',
@@ -83,6 +93,7 @@ module.exports = React.createClass({
           return prevState;
         });
       }
+      _gaq.push(['_trackEvent', 'result', result, info.id]);
     }.bind(this));
   },
   render: function(){
@@ -93,6 +104,9 @@ module.exports = React.createClass({
     }.bind(this));
     return(
       <div className="NooBoss-body">
+        <Helmet
+          title="Manage"
+        />
         {appList}
       </div>
     );

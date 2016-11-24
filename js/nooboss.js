@@ -53,9 +53,14 @@
 	var Link = __webpack_require__(183).Link;
 	var browserHistory = ReactRouter.browserHistory;
 
+	function logPageView() {
+	  _gaq.push(['_trackPageview']);
+	  console.log(window.location.pathname);
+	}
+
 	ReactDOM.render(React.createElement(
 	  Router,
-	  { history: browserHistory },
+	  { history: browserHistory, onUpdate: logPageView },
 	  React.createElement(
 	    Route,
 	    { component: __webpack_require__(239) },
@@ -26814,7 +26819,7 @@
 	        )
 	      ),
 	      React.createElement(Helmet, {
-	        title: 'NooBoss'
+	        title: 'Core'
 	      }),
 	      this.props.children,
 	      React.createElement('div', { className: 'footerPad' }),
@@ -27946,9 +27951,6 @@
 	    return this.state || {};
 	  },
 	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'Manage'
-	    });
 	    chrome.management.getAll(function (appInfoList) {
 	      for (var i = 0; i < appInfoList.length; i++) {
 	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
@@ -27983,7 +27985,17 @@
 	    return iconUrl;
 	  },
 	  toggleState: function (info) {
+	    var action = 'enable';
+	    if (info.enabled) {
+	      action = 'disable';
+	    }
+	    _gaq.push(['_trackEvent', 'manage', action, info.id]);
 	    chrome.management.setEnabled(info.id, !info.enabled, function () {
+	      var result = 'enabled';
+	      if (info.enabled) {
+	        result = 'disabled';
+	      }
+	      _gaq.push(['_trackEvent', 'result', result, info.id]);
 	      this.setState(function (prevState) {
 	        for (var i = 0; i < prevState.appInfoList.length; i++) {
 	          if (info.id == prevState.appInfoList[i].id) {
@@ -27996,8 +28008,11 @@
 	    }.bind(this));
 	  },
 	  uninstall: function (info) {
+	    var result = 'unstall_success';
+	    _gaq.push(['_trackEvent', 'manage', 'uninstall', info.id]);
 	    chrome.management.uninstall(info.id, function () {
 	      if (chrome.runtime.lastError) {
+	        action = 'uninstall_fail';
 	        console.log(chrome.runtime.lastError);
 	        chrome.notifications.create({
 	          type: 'basic',
@@ -28022,6 +28037,7 @@
 	          return prevState;
 	        });
 	      }
+	      _gaq.push(['_trackEvent', 'result', result, info.id]);
 	    }.bind(this));
 	  },
 	  render: function () {
@@ -28031,6 +28047,9 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBoss-body' },
+	      React.createElement(Helmet, {
+	        title: 'Manage'
+	      }),
 	      appList
 	    );
 	  }
@@ -28091,16 +28110,19 @@
 	  getInitialState: function () {
 	    return null;
 	  },
-	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'Home'
-	    });
-	  },
+	  componentDidMount: function () {},
 	  render: function () {
 	    return React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      'Home'
+	      React.createElement(Helmet, {
+	        title: 'Home'
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Home'
+	      )
 	    );
 	  }
 	});
@@ -28110,20 +28132,24 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Helmet = __webpack_require__(240);
 	module.exports = React.createClass({
-	  displayName: "exports",
+	  displayName: 'exports',
 
 	  getInitializeState: function () {},
-	  compenentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: "Related"
-	    });
-	  },
+	  compenentDidMount: function () {},
 	  render: function () {
 	    return React.createElement(
-	      "p",
+	      'div',
 	      null,
-	      "Discover"
+	      React.createElement(Helmet, {
+	        title: 'Discover'
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Discover new apps'
+	      )
 	    );
 	  }
 	});
@@ -28140,16 +28166,19 @@
 	  getInitialState: function () {
 	    return null;
 	  },
-	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'Options'
-	    });
-	  },
+	  componentDidMount: function () {},
 	  render: function () {
 	    return React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      'Options'
+	      React.createElement(Helmet, {
+	        title: 'Options'
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        'Options'
+	      )
 	    );
 	  }
 	});
@@ -28166,16 +28195,19 @@
 	  getInitialState: function () {
 	    return null;
 	  },
-	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'Update'
-	    });
-	  },
+	  componentDidMount: function () {},
 	  render: function () {
 	    return React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      'Update'
+	      React.createElement(Helmet, {
+	        title: 'History'
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        'History'
+	      )
 	    );
 	  }
 	});
@@ -28192,16 +28224,19 @@
 	  getInitialState: function () {
 	    return null;
 	  },
-	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'About'
-	    });
-	  },
+	  componentDidMount: function () {},
 	  render: function () {
 	    return React.createElement(
-	      'p',
+	      'div',
 	      null,
-	      'About'
+	      React.createElement(Helmet, {
+	        title: 'About'
+	      }),
+	      React.createElement(
+	        'p',
+	        null,
+	        'About'
+	      )
 	    );
 	  }
 	});

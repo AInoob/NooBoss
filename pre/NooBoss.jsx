@@ -7,8 +7,14 @@ var IndexRoute = ReactRouter.IndexRoute;
 var Link = require('react-router').Link;
 var browserHistory = ReactRouter.browserHistory;
 
+
+function logPageView(){
+  _gaq.push(['_trackPageview']);
+  console.log(window.location.pathname);
+}
+
 ReactDOM.render(
-  <Router history={browserHistory}>
+  <Router history={browserHistory} onUpdate={logPageView}>
     <Route component={require('./Core.jsx')}>
       <Route path="popup.html" component={require('./Manage.jsx')} />
       <Route path="overview" component={require('./Overview.jsx')} />

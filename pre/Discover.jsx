@@ -1,15 +1,18 @@
 var React = require('react');
+var Helmet= require('react-helmet');
 module.exports = React.createClass({
   getInitializeState: function(){
   },
   compenentDidMount: function(){
-    <Helmet
-      title="Related"
-    />
   },
   render: function(){
     return(
-      <p>Discover</p>
+      <div>
+        <Helmet
+          title="Discover"
+        />
+        <p>Discover new apps</p>
+      </div>
     );
   }
 });

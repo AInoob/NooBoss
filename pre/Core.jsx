@@ -15,7 +15,7 @@ module.exports = React.createClass({
           </ul>
         </nav>
         <Helmet
-          title="NooBoss"
+          title="Core"
         />
         {this.props.children}
         <div className="footerPad"></div>
