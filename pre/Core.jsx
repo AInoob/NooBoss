@@ -8,7 +8,7 @@ module.exports = React.createClass({
       <div id="NooBoss-Core">
         <nav>
           <ul>
-            <li><Link to="/pupup.html">Home</Link></li>
+            <li><Link to="/home">Home</Link></li>
             <li><Link to="/related">Related</Link></li>
             <li><Link to="/manage">Manage</Link></li>
             <li><Link to="/update">Update</Link></li>
@@ -18,7 +18,7 @@ module.exports = React.createClass({
           title="NooBoss"
         />
         {this.props.children}
-        <div>
+        <div className="footer">
           <ul>
             <li><Link to="/options">Options</Link></li>
             <li><Link to="/about">About</Link></li>

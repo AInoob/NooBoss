@@ -3,7 +3,12 @@
   "name": "NooBoss",
   "version": "0.0.1",
   "browser_action": {
+    "default_icon": "images/icon_128.png",
+    "default_title": "NooBoss~~~",
     "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "images/icon_128.png"
   },
   "background": {
     "scripts":["js/background.js"]

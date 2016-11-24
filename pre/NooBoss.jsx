@@ -10,7 +10,8 @@ var browserHistory = ReactRouter.browserHistory;
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={require('./Core.jsx')}>
-      <Route path="popup.html" component={require('./Home.jsx')} />
+      <Route path="popup.html" component={require('./Manage.jsx')} />
+      <Route path="home" component={require('./Home.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />
       <Route path="related" component={require('./Related.jsx')} />
       <Route path="options" component={require('./Options.jsx')} />

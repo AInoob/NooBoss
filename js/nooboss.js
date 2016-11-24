@@ -60,7 +60,8 @@
 	    Route,
 	    { component: __webpack_require__(239) },
 	    React.createElement(Route, { path: 'popup.html', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'manage', component: __webpack_require__(251) }),
+	    React.createElement(Route, { path: 'home', component: __webpack_require__(252) }),
+	    React.createElement(Route, { path: 'manage', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'related', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'options', component: __webpack_require__(254) }),
 	    React.createElement(Route, { path: 'update', component: __webpack_require__(255) }),
@@ -26779,7 +26780,7 @@
 	            null,
 	            React.createElement(
 	              Link,
-	              { to: '/pupup.html' },
+	              { to: '/home' },
 	              'Home'
 	            )
 	          ),
@@ -26818,7 +26819,7 @@
 	      this.props.children,
 	      React.createElement(
 	        'div',
-	        null,
+	        { className: 'footer' },
 	        React.createElement(
 	          'ul',
 	          null,
@@ -27936,33 +27937,7 @@
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
-	module.exports = React.createClass({
-	  displayName: 'exports',
-
-	  getInitialState: function () {
-	    return null;
-	  },
-	  componentDidMount: function () {
-	    React.createElement(Helmet, {
-	      title: 'Home'
-	    });
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'p',
-	      null,
-	      'Home'
-	    );
-	  }
-	});
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Helmet = __webpack_require__(240);
-	var AppBrief = __webpack_require__(252);
+	var AppBrief = __webpack_require__(251);
 	module.exports = React.createClass({
 	  displayName: 'exports',
 
@@ -28055,18 +28030,13 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'p',
-	        null,
-	        'Manage'
-	      ),
 	      appList
 	    );
 	  }
 	});
 
 /***/ },
-/* 252 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -28104,6 +28074,32 @@
 	          )
 	        )
 	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Helmet = __webpack_require__(240);
+	module.exports = React.createClass({
+	  displayName: 'exports',
+
+	  getInitialState: function () {
+	    return null;
+	  },
+	  componentDidMount: function () {
+	    React.createElement(Helmet, {
+	      title: 'Home'
+	    });
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'p',
+	      null,
+	      'Home'
 	    );
 	  }
 	});

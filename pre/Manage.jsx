@@ -93,7 +93,6 @@ module.exports = React.createClass({
     }.bind(this));
     return(
       <div>
-        <p>Manage</p>
         {appList}
       </div>
     );
