@@ -15,20 +15,17 @@ body{
   overflow: hidden;
 }
 
-body::-webkit-scrollbar-track
-{
-  background-color: #73AD21;
-  border-radius: 10px;
-}
-body::-webkit-scrollbar
-{
+body::-webkit-scrollbar {
   width: 10px;
-  background-color: #73AD21;
+  background-color: #283c0c;
 }
-body::-webkit-scrollbar-thumb
-{
+body::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background-image:  linear-gradient(to right, yellow , #133D06);
+  background-image: linear-gradient(to right, #e08dd3 , #882780);
+}
+body::-webkit-scrollbar-track {
+  background-color: pink;
+  border-radius: 10px;
 }
 
 *{
@@ -68,7 +65,9 @@ ul{
 }
 
 nav ul li{
-  width: 25%;
+  width: 24.77%;
+  border-left: 1px solid pink;
+  border-right: 1px solid pink;
 }
 
 nav ul li a{
@@ -88,7 +87,9 @@ nav ul li a{
 }
 
 .footer ul li{
-  width: 50%;
+  width: 49.77%;
+  border-left: 1px solid pink;
+  border-right: 1px solid pink;
 }
 
 .app-holder{
@@ -185,4 +186,9 @@ nav ul li a{
 
 .app-version, .app-name{
   display: block;
+}
+
+.History-recordList li{
+  width: 100%;
+  font-size: 15px;
 }

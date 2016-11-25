@@ -63,26 +63,21 @@ module.exports = React.createClass({
     }.bind(this));
   },
   uninstall: function(info){
-    var result='unstall_success';
-    _gaq.push(['_trackEvent', 'manage', 'uninstall', info.id]);
+    var result='removal_success';
+    _gaq.push(['_trackEvent', 'manage', 'removal', info.id]);
     chrome.management.uninstall(info.id,function(){
       if(chrome.runtime.lastError){
-        action='uninstall_fail';
+        action='removal_fail';
         console.log(chrome.runtime.lastError);
         chrome.notifications.create({
           type:'basic',
-          iconUrl: info.iconUrl,
-          title: 'Uninstallation calcelled',
-          message: 'You have cancel the uninstallation of '+info.name
+          iconUrl: '/images/icon_128.png',
+          title: 'Removal calcelled',
+          message: 'You have cancelled the removal of '+info.name,
+          imageUrl: info.icon
         });
       }
       else{
-        chrome.notifications.create({
-          type:'basic',
-          iconUrl: info.iconUrl,
-          title: info.name+'Uninstallation compelte',
-          message: info.name+' is now uninstalled'
-        });
         this.setState(function(prevState){
           for(var i=0;i<prevState.appInfoList.length;i++){
             if(info.id==prevState.appInfoList[i].id){

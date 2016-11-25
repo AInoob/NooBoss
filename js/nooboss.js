@@ -28008,25 +28008,20 @@
 	    }.bind(this));
 	  },
 	  uninstall: function (info) {
-	    var result = 'unstall_success';
-	    _gaq.push(['_trackEvent', 'manage', 'uninstall', info.id]);
+	    var result = 'removal_success';
+	    _gaq.push(['_trackEvent', 'manage', 'removal', info.id]);
 	    chrome.management.uninstall(info.id, function () {
 	      if (chrome.runtime.lastError) {
-	        action = 'uninstall_fail';
+	        action = 'removal_fail';
 	        console.log(chrome.runtime.lastError);
 	        chrome.notifications.create({
 	          type: 'basic',
-	          iconUrl: info.iconUrl,
-	          title: 'Uninstallation calcelled',
-	          message: 'You have cancel the uninstallation of ' + info.name
+	          iconUrl: '/images/icon_128.png',
+	          title: 'Removal calcelled',
+	          message: 'You have cancelled the removal of ' + info.name,
+	          imageUrl: info.icon
 	        });
 	      } else {
-	        chrome.notifications.create({
-	          type: 'basic',
-	          iconUrl: info.iconUrl,
-	          title: info.name + 'Uninstallation compelte',
-	          message: info.name + ' is now uninstalled'
-	        });
 	        this.setState(function (prevState) {
 	          for (var i = 0; i < prevState.appInfoList.length; i++) {
 	            if (info.id == prevState.appInfoList[i].id) {
@@ -28193,13 +28188,26 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
-	    return null;
+	    return this.state || { recordList: [] };
 	  },
-	  componentDidMount: function () {},
+	  componentDidMount: function () {
+	    getDB('history_records', function (recordList) {
+	      this.setState({ recordList: recordList });
+	    }.bind(this));
+	  },
 	  render: function () {
+	    console.log(this.state.recordList);
+	    var recordList = this.state.recordList.map(function (record, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        record.event
+	      );
+	    });
+	    console.log(recordList);
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'NooBoss-body' },
 	      React.createElement(Helmet, {
 	        title: 'History'
 	      }),
@@ -28207,6 +28215,11 @@
 	        'p',
 	        null,
 	        'History'
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'History-recordList' },
+	        recordList
 	      )
 	    );
 	  }

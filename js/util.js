@@ -1,3 +1,17 @@
+function dataUrlFromUrl(link, callback){
+  var img=new Image();
+  img.addEventListener('load',function(){
+    var canvas=document.createElement("canvas");
+    canvas.width=img.width;
+    canvas.height=img.height;
+    var ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,img.width,img.height);
+    var dataUrl=canvas.toDataURL();
+    callback(dataUrl);
+  });
+  img.src=link;
+}
+
 function isOn(key,callbackTrue,callbackFalse,param){
   get(key,function(value){
     if(value=='1'){
@@ -19,8 +33,9 @@ function setIfNull(key,setValue,callback){
       set(key,setValue,callback);
     }
     else{
-      if(callback)
-    callback();
+      if(callback){
+        callback();
+      }
     }
   });
 }
@@ -38,7 +53,9 @@ function setDB(key,value,callback){
     var store = tx.objectStore("Store");
     var action1=store.put({key:key, value:value});
     action1.onsuccess=function(){
-      callback();
+      if(callback){
+        callback();
+      }
     }
     action1.onerror=function(){
       console.log('setDB fail');
