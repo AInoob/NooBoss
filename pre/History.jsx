@@ -13,20 +13,32 @@ module.exports = React.createClass({
     console.log(this.state.recordList);
     var recordList=this.state.recordList.map(function(record,index){
       return(
-        <li key={index}>
-        {record.event}
-        </li>);
-    });
+        <tr key={index}>
+          <td>{new timeago().format(record.date)}</td>
+          <td>{record.category}</td>
+          <td><img src={record.icon} /></td>
+          <td>{record.event}</td>
+        </tr>);
+    }).reverse();
     console.log(recordList);
     return(
       <div className="NooBoss-body">
         <Helmet
           title="History"
         />
-        <p>History</p>
-        <ul className="History-recordList">
-          {recordList}
-        </ul>
+        <table className="History-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Category</th>
+              <th>Icon</th>
+              <th>Event</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recordList}
+          </tbody>
+        </table>
       </div>
     );
   }

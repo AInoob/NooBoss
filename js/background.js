@@ -88,7 +88,7 @@ NooBoss.History.addRecord=function(record){
 }
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'installation', id:appInfo.id, event:appInfo.name+' has been added to your browswer'});
+    NooBoss.History.addRecord({category:'installation', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' has been added to your browswer'});
     NooBoss.Management.updateAppInfo(appInfo);
     chrome.notifications.create({
       type:'basic',
@@ -98,7 +98,9 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onUninstalled.addListener(function(id){
-    NooBoss.History.addRecord({category:'removal', id:id, event:appInfo.name+' has been removed from your browswer'});
+    getDB(id,function(appInfo){
+      NooBoss.History.addRecord({category:'removal', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' has been removed from your browswer'});
+    });
     NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
     chrome.notifications.create({
       type:'basic',
@@ -108,7 +110,7 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onEnabled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'enabled', id:appInfo.id, event:appInfo.name+' is now enabled'});
+    NooBoss.History.addRecord({category:'enabled', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' is now enabled'});
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',
@@ -117,7 +119,7 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onDisabled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'disabled', id:appInfo.id, event:appInfo.name+' is now disabled'});
+    NooBoss.History.addRecord({category:'disabled', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' is now disabled'});
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',

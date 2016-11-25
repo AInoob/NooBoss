@@ -28199,11 +28199,30 @@
 	    console.log(this.state.recordList);
 	    var recordList = this.state.recordList.map(function (record, index) {
 	      return React.createElement(
-	        'li',
+	        'tr',
 	        { key: index },
-	        record.event
+	        React.createElement(
+	          'td',
+	          null,
+	          new timeago().format(record.date)
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          record.category
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          React.createElement('img', { src: record.icon })
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          record.event
+	        )
 	      );
-	    });
+	    }).reverse();
 	    console.log(recordList);
 	    return React.createElement(
 	      'div',
@@ -28212,14 +28231,41 @@
 	        title: 'History'
 	      }),
 	      React.createElement(
-	        'p',
-	        null,
-	        'History'
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'History-recordList' },
-	        recordList
+	        'table',
+	        { className: 'History-table' },
+	        React.createElement(
+	          'thead',
+	          null,
+	          React.createElement(
+	            'tr',
+	            null,
+	            React.createElement(
+	              'th',
+	              null,
+	              'Date'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Category'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Icon'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Event'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'tbody',
+	          null,
+	          recordList
+	        )
 	      )
 	    );
 	  }

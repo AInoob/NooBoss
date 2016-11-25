@@ -188,7 +188,19 @@ nav ul li a{
   display: block;
 }
 
-.History-recordList li{
-  width: 100%;
+.History-table tbody tr td{
   font-size: 15px;
+  border-top: 2px solid pink;
+}
+
+.History-table tbody tr td img{
+  height: 13px;
+  width: 13px;
+}
+.History-table tbody tr td:nth-child(2){
+  text-transform: capitalize;
+}
+
+.History-table tbody tr td:nth-child(3){
+  text-align: center;
 }
