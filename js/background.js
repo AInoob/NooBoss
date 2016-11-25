@@ -35,7 +35,7 @@ NooBoss.Util.getIcon=function(appInfo,callback){
 
 //Management
 NooBoss.Management={};
-NooBoss.Management.updateAppInfo=function(appInfo,extraInfo){
+NooBoss.Management.updateAppInfo=function(appInfo,extraInfo,callback){
   NooBoss.Util.getIcon(appInfo,function(dataUrl){
     appInfo.icon=dataUrl;
     getDB(appInfo.id,function(oldInfo){
@@ -50,7 +50,7 @@ NooBoss.Management.updateAppInfo=function(appInfo,extraInfo){
         oldInfo.lastUpdateDate=time;
       }
       $.extend(oldInfo,appInfo,extraInfo);
-      setDB(appInfo.id,oldInfo);
+      setDB(appInfo.id,oldInfo,callback);
     });
   });
 }
@@ -88,8 +88,11 @@ NooBoss.History.addRecord=function(record){
 }
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'installation', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' has been added to your browswer'});
-    NooBoss.Management.updateAppInfo(appInfo);
+    NooBoss.Management.updateAppInfo(appInfo,null,function(data){
+      getDB(appInfo.id,function(appInfo){
+        NooBoss.History.addRecord({action:'installed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+      });
+    });
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',
@@ -99,7 +102,12 @@ NooBoss.History.listen=function(){
   });
   chrome.management.onUninstalled.addListener(function(id){
     getDB(id,function(appInfo){
-      NooBoss.History.addRecord({category:'removal', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' has been removed from your browswer'});
+      if(!appInfo){
+        getDB(id,this);
+      }
+      else{
+        NooBoss.History.addRecord({action:'removal', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+      }
     });
     NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
     chrome.notifications.create({
@@ -109,22 +117,36 @@ NooBoss.History.listen=function(){
       message: id+' has been removed from your browswer'
     });
   });
-  chrome.management.onEnabled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'enabled', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' is now enabled'});
+  chrome.management.onEnabled.addListener(function(appInfoOld){
+    getDB(appInfoOld.id,function(appInfo){
+      if(!appInfo){
+        getDB(appInfoOld.id,this);
+      }
+      else{
+        NooBoss.History.addRecord({action:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+      }
+    });
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',
-      title: 'Enabled: '+appInfo.name,
-      message: appInfo.name+' is now enabled'
+      title: 'Enabled: '+appInfoOld.name,
+      message: appInfoOld.name+' is now enabled'
     });
   });
-  chrome.management.onDisabled.addListener(function(appInfo){
-    NooBoss.History.addRecord({category:'disabled', id:appInfo.id, icon: appInfo.icon, event:appInfo.name+' is now disabled'});
+  chrome.management.onDisabled.addListener(function(appInfoOld){
+    getDB(appInfoOld.id,function(appInfo){
+      if(!appInfo){
+        getDB(appInfoOld.id,this);
+      }
+      else{
+        NooBoss.History.addRecord({action:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+      }
+    });
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',
-      title: 'Disabled: '+appInfo.name,
-      message: appInfo.name+' is now disabled'
+      title: 'Disabled: '+appInfoOld.name,
+      message: appInfoOld.name+' is now disabled'
     });
   });
 }

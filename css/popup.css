@@ -204,3 +204,10 @@ nav ul li a{
 .History-table tbody tr td:nth-child(3){
   text-align: center;
 }
+
+.History-table tbody tr td:nth-child(4){
+  width: 300px;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}

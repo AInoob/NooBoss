@@ -28209,7 +28209,7 @@
 	        React.createElement(
 	          'td',
 	          null,
-	          record.category
+	          record.action
 	        ),
 	        React.createElement(
 	          'td',
@@ -28219,7 +28219,16 @@
 	        React.createElement(
 	          'td',
 	          null,
-	          record.event
+	          React.createElement(
+	            'a',
+	            { target: '_blank', title: record.name, href: "https://chrome.google.com/webstore/detail/" + record.id },
+	            record.name
+	          )
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          record.version
 	        )
 	      );
 	    }).reverse();
@@ -28247,7 +28256,7 @@
 	            React.createElement(
 	              'th',
 	              null,
-	              'Category'
+	              'Action'
 	            ),
 	            React.createElement(
 	              'th',
@@ -28257,7 +28266,12 @@
 	            React.createElement(
 	              'th',
 	              null,
-	              'Event'
+	              'Name'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Version'
 	            )
 	          )
 	        ),

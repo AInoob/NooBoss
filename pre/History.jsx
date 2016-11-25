@@ -15,9 +15,10 @@ module.exports = React.createClass({
       return(
         <tr key={index}>
           <td>{new timeago().format(record.date)}</td>
-          <td>{record.category}</td>
+          <td>{record.action}</td>
           <td><img src={record.icon} /></td>
-          <td>{record.event}</td>
+          <td><a target="_blank" title={record.name} href={"https://chrome.google.com/webstore/detail/"+record.id}>{record.name}</a></td>
+          <td>{record.version}</td>
         </tr>);
     }).reverse();
     console.log(recordList);
@@ -30,9 +31,10 @@ module.exports = React.createClass({
           <thead>
             <tr>
               <th>Date</th>
-              <th>Category</th>
+              <th>Action</th>
               <th>Icon</th>
-              <th>Event</th>
+              <th>Name</th>
+              <th>Version</th>
             </tr>
           </thead>
           <tbody>
