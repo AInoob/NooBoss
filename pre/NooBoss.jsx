@@ -10,7 +10,6 @@ var browserHistory = ReactRouter.browserHistory;
 
 function logPageView(){
   _gaq.push(['_trackPageview']);
-  console.log(window.location.pathname);
 }
 
 ReactDOM.render(
@@ -18,6 +17,7 @@ ReactDOM.render(
     <Route component={require('./Core.jsx')}>
       <Route path="popup.html" component={require('./Manage.jsx')} />
       <Route path="overview" component={require('./Overview.jsx')} />
+      <Route path="app" component={require('./App.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />
       <Route path="discover" component={require('./Discover.jsx')} />
       <Route path="options" component={require('./Options.jsx')} />

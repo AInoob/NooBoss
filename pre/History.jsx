@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 var Helmet = require('react-helmet');
 module.exports = React.createClass({
   getInitialState: function(){
@@ -10,18 +11,16 @@ module.exports = React.createClass({
     }.bind(this));
   },
   render: function(){
-    console.log(this.state.recordList);
-    var recordList=this.state.recordList.map(function(record,index){
+    var recordList=(this.state.recordList||[{name:'Nothing is here yet, enable or disable your apps to see effects',id:'mgehojanhfgnndgffijeglgahakgmgkj'}]).map(function(record,index){
       return(
         <tr key={index}>
           <td>{new timeago().format(record.date)}</td>
-          <td>{record.action}</td>
+          <td className={record.action}>{record.action}</td>
           <td><img src={record.icon} /></td>
-          <td><a target="_blank" title={record.name} href={"https://chrome.google.com/webstore/detail/"+record.id}>{record.name}</a></td>
+          <td><Link title={record.name} to={"/app?id="+record.id}>{record.name}</Link></td>
           <td>{record.version}</td>
         </tr>);
     }).reverse();
-    console.log(recordList);
     return(
       <div className="NooBoss-body">
         <Helmet

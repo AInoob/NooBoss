@@ -1,0 +1,251 @@
+body {
+  background-color: beige;
+  margin: 0px;
+  width: 600px;
+  &::-webkit-scrollbar {
+    background-color: #283c0c;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(to right, #e08dd3 , #882780);
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: pink;
+    border-radius: 10px;
+  }
+}
+.footerPad {
+  height: 37px;
+  width: 100%;
+}
+.NooBoss-body {
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+}
+* {
+  transition-duration: 0.618s;
+}
+nav {
+  height: 37px;
+  width: 100%;
+  ul {
+    li {
+      border-left: 1px solid pink;
+      border-right: 1px solid pink;
+      width: 24.77%;
+      a {
+        color: white;
+      }
+    }
+  }
+}
+a {
+  text-decoration: none;
+}
+ul {
+  margin: 0px;
+  padding-left: 0px;
+  li {
+    background-color: #333333;
+    display: block;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    a {
+      display: block;
+      width: 100%;
+    }
+    &:hover {
+      background-color: pink;
+    }
+  }
+}
+.footer {
+  bottom: 0px;
+  clear: both;
+  height: 37px;
+  position: fixed;
+  width: 100%;
+  ul {
+    li {
+      border-left: 1px solid pink;
+      border-right: 1px solid pink;
+      width: 49.77%;
+      a {
+        color: white;
+      }
+    }
+  }
+}
+.app-holder {
+  float:left;
+  height: 98px;
+  width: 98px;
+  .app-status-checkbox {
+    display: none;
+    &:not(:checked)+ .app-brief {
+        background-color: grey;
+        .app-switch {
+          background-image: url("/thirdParty/power-button-off.svg");
+        }
+        .app-info {
+          background-color: grey;
+        }
+        img {
+          filter: invert(10%);
+        }
+        hover {
+          background-color:#bbbbbb !important;
+        }
+      }
+  }
+  .app-brief {
+    background-color: beige;
+    border: 1px solid pink;
+    font-size: 12px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    &:hover {
+      .app-info {
+        transform: rotateY(0deg);
+      }
+      .app-icon {
+        transform: rotateY(180deg);
+      }
+    }
+    .app-info {
+      backface-visibility: hidden;
+      background-color: beige;
+      height: 98px;
+      padding-top: 15px;
+      position: absolute;
+      text-align: center;
+      transform: rotateY(180deg);
+      width: 100%;
+      .app-version {
+        display: block;
+        margin-top: 20px;
+      }
+    }
+    .app-icon {
+      backface-visibility: hidden;
+      margin: 7px;
+      position: absolute;
+      width: 86px;
+    }
+    .app-switch {
+      background-image: url("/thirdParty/power-button-on.svg");
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      cursor: pointer;
+      display: block;
+      float: left;
+      height: 20px;
+      margin-left: 10px;
+      width: 20px;
+    }
+    .app-uninstall {
+      background-image: url("/thirdParty/remove.svg");
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      cursor: pointer;
+      display: block;
+      float: right;
+      height: 20px;
+      margin-right: 10px;
+      width: 20px;
+    }
+    .app-name {
+      display: block;
+    }
+  }
+}
+
+.History-table {
+  tbody {
+    tr {
+      td {
+        border-top: 2px solid pink;
+        font-size: 15px;
+        img {
+          height: 13px;
+          width: 13px;
+        }
+        &:nth-child(2) {
+          text-transform: capitalize;
+          font-weight: bold;
+        }
+        &:nth-child(3) {
+          text-align: center;
+        }
+        &:nth-child(4) {
+          display: block;
+          overflow: hidden;
+          white-space: nowrap;
+          width: 300px;
+        }
+      }
+      .disabled {
+        color: grey;
+      }
+      .enabled {
+        color: green;
+      }
+      .removed {
+        color: red;
+      }
+    }
+  }
+}
+
+.app{
+  .app-icon{
+    width: 100px;
+    height: 100%;
+    float: left;
+    img{
+      width: 96px;
+      margin: auto;
+      margin-top: 2px;
+    }
+  }
+  .app-main{
+    float:left;
+    width: 500px;
+    .app-brief{
+      width: 400px;
+      float: left;
+      height: 100px;
+      .app-name{
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+    .app-launcher{
+      float: right;
+      width: 100px;
+      height: 100px;
+      background-color: #37d351;;
+      border-radius: 30px;
+      line-height: 100px;
+      vertical-align: middle;
+      text-align: center;
+      font-weight: bold;
+      font-size: 23px;
+      color: white;
+      &:hover{
+        cursor: pointer;
+      }
+    }
+    .app-detail{
+      border-top: 2px dashed pink;
+      width: 400px;
+      float: left;
+    }
+  }
+}

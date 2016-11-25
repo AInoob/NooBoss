@@ -1,213 +1,235 @@
-body{
-  width: 600px;
-  margin: 0px;
+body {
   background-color: beige;
+  margin: 0px;
+  width: 600px;
 }
-
-.footerPad{
-  height: 37px;
-  width: 100%;
-}
-
-.NooBoss-body{
-  height: auto;
-  width: 100%;
-  overflow: hidden;
-}
-
 body::-webkit-scrollbar {
-  width: 10px;
   background-color: #283c0c;
+  width: 10px;
 }
 body::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to right, #e08dd3, #882780);
   border-radius: 5px;
-  background-image: linear-gradient(to right, #e08dd3 , #882780);
 }
 body::-webkit-scrollbar-track {
   background-color: pink;
   border-radius: 10px;
 }
-
-*{
+.footerPad {
+  height: 37px;
+  width: 100%;
+}
+.NooBoss-body {
+  height: auto;
+  overflow: hidden;
+  width: 100%;
+}
+* {
   transition-duration: 0.618s;
 }
-
-nav{
-  width: 100%;
+nav {
   height: 37px;
+  width: 100%;
 }
-
-a{
+nav ul li {
+  border-left: 1px solid pink;
+  border-right: 1px solid pink;
+  width: 24.77%;
+}
+nav ul li a {
+  color: white;
+}
+a {
   text-decoration: none;
 }
-
-ul li{
+ul {
+  margin: 0px;
+  padding-left: 0px;
+}
+ul li {
+  background-color: #333333;
   display: block;
   float: left;
   font-size: 28px;
   font-weight: bold;
   text-align: center;
-  background-color: #333;
 }
-
-ul li a{
+ul li a {
   display: block;
   width: 100%;
 }
-
-ul li:hover{
+ul li:hover {
   background-color: pink;
 }
-
-ul{
-  margin: 0px;
-  padding-left: 0px;
-}
-
-nav ul li{
-  width: 24.77%;
-  border-left: 1px solid pink;
-  border-right: 1px solid pink;
-}
-
-nav ul li a{
-  color: white;
-}
-
-.footer ul li a{
-  color: white;
-}
-
-.footer{
+.footer {
+  bottom: 0px;
   clear: both;
-  width: 100%;
   height: 37px;
   position: fixed;
-  bottom: 0px;
+  width: 100%;
 }
-
-.footer ul li{
-  width: 49.77%;
+.footer ul li {
   border-left: 1px solid pink;
   border-right: 1px solid pink;
+  width: 49.77%;
 }
-
-.app-holder{
+.footer ul li a {
+  color: white;
+}
+.app-holder {
+  float: left;
+  height: 98px;
   width: 98px;
-  height: 98px;
-  float:left;
 }
-
-.app{
-  width: 100%;
-  height: 100%;
-  border: 1px solid pink;
-  overflow: hidden;
-  font-size: 12px;
-  position: relative;
-  background-color: beige;
-}
-
-.app-icon, .app-info{
-  position: absolute;
-  backface-visibility: hidden;
-}
-
-.app-icon {
-  width: 86px;
-  margin: 7px;
-}
-
-.app-info{
-  height: 98px;
-  background-color: beige;
-  width: 100%;
-  transform: rotateY(180deg);
-  padding-top: 15px;
-  text-align: center;
-}
-
-.app:hover .app-info{
-  transform: rotateY(0deg);
-}
-.app:hover .app-icon{
-  transform: rotateY(180deg);
-}
-
-.app-status-checkbox{
+.app-holder .app-status-checkbox {
   display: none;
 }
-
-.app-status-checkbox:not(:checked) + .app .app-switch{
-  background-image: url("/thirdParty/power-button-off.svg");
-}
-
-.app-status-checkbox:not(:checked) + .app{
+.app-holder .app-status-checkbox:not(:checked) + .app-brief {
   background-color: grey;
 }
-
-.app-status-checkbox:not(:checked) + .app img{
+.app-holder .app-status-checkbox:not(:checked) + .app-brief .app-switch {
+  background-image: url("/thirdParty/power-button-off.svg");
+}
+.app-holder .app-status-checkbox:not(:checked) + .app-brief .app-info {
+  background-color: grey;
+}
+.app-holder .app-status-checkbox:not(:checked) + .app-brief img {
   filter: invert(10%);
 }
-
-.app-status-checkbox:not(:checked) + .app:hover{
-  background-color:#bbbbbb !important;
+.app-holder .app-status-checkbox:not(:checked) + .app-brief hover {
+  background-color: #bbbbbb !important;
 }
-
-.app-version{
+.app-holder .app-brief {
+  background-color: beige;
+  border: 1px solid pink;
+  font-size: 12px;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.app-holder .app-brief:hover .app-info {
+  transform: rotateY(0deg);
+}
+.app-holder .app-brief:hover .app-icon {
+  transform: rotateY(180deg);
+}
+.app-holder .app-brief .app-info {
+  backface-visibility: hidden;
+  background-color: beige;
+  height: 98px;
+  padding-top: 15px;
+  position: absolute;
+  text-align: center;
+  transform: rotateY(180deg);
+  width: 100%;
+}
+.app-holder .app-brief .app-info .app-version {
+  display: block;
   margin-top: 20px;
 }
-
-.app-switch, .app-uninstall{
-  cursor: pointer;
+.app-holder .app-brief .app-icon {
+  backface-visibility: hidden;
+  margin: 7px;
+  position: absolute;
+  width: 86px;
 }
-
-.app-switch{
+.app-holder .app-brief .app-switch {
   background-image: url("/thirdParty/power-button-on.svg");
-  background-size: 20px 20px;
   background-repeat: no-repeat;
-  height: 20px;
-  width: 20px;
+  background-size: 20px 20px;
+  cursor: pointer;
   display: block;
   float: left;
-  margin-left: 10px;
-}
-
-.app-uninstall{
-  background-image: url("/thirdParty/remove.svg");
-  background-size: 20px 20px;
-  background-repeat: no-repeat;
   height: 20px;
+  margin-left: 10px;
   width: 20px;
+}
+.app-holder .app-brief .app-uninstall {
+  background-image: url("/thirdParty/remove.svg");
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  cursor: pointer;
   display: block;
   float: right;
+  height: 20px;
   margin-right: 10px;
+  width: 20px;
 }
-
-.app-version, .app-name{
+.app-holder .app-brief .app-name {
   display: block;
 }
-
-.History-table tbody tr td{
-  font-size: 15px;
+.History-table tbody tr td {
   border-top: 2px solid pink;
+  font-size: 15px;
 }
-
-.History-table tbody tr td img{
+.History-table tbody tr td img {
   height: 13px;
   width: 13px;
 }
-.History-table tbody tr td:nth-child(2){
+.History-table tbody tr td:nth-child(2) {
   text-transform: capitalize;
+  font-weight: bold;
 }
-
-.History-table tbody tr td:nth-child(3){
+.History-table tbody tr td:nth-child(3) {
   text-align: center;
 }
-
-.History-table tbody tr td:nth-child(4){
-  width: 300px;
+.History-table tbody tr td:nth-child(4) {
   display: block;
   overflow: hidden;
   white-space: nowrap;
+  width: 300px;
+}
+.History-table tbody tr .disabled {
+  color: grey;
+}
+.History-table tbody tr .enabled {
+  color: green;
+}
+.History-table tbody tr .removed {
+  color: red;
+}
+.app .app-icon {
+  width: 100px;
+  height: 100%;
+  float: left;
+}
+.app .app-icon img {
+  width: 96px;
+  margin: auto;
+  margin-top: 2px;
+}
+.app .app-main {
+  float: left;
+  width: 500px;
+}
+.app .app-main .app-brief {
+  width: 400px;
+  float: left;
+  height: 100px;
+}
+.app .app-main .app-brief .app-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+.app .app-main .app-launcher {
+  float: right;
+  width: 100px;
+  height: 100px;
+  background-color: #37d351;
+  border-radius: 30px;
+  line-height: 100px;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  font-size: 23px;
+  color: white;
+}
+.app .app-main .app-launcher:hover {
+  cursor: pointer;
+}
+.app .app-main .app-detail {
+  border-top: 2px dashed pink;
+  width: 400px;
+  float: left;
 }

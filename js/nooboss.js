@@ -55,7 +55,6 @@
 
 	function logPageView() {
 	  _gaq.push(['_trackPageview']);
-	  console.log(window.location.pathname);
 	}
 
 	ReactDOM.render(React.createElement(
@@ -66,11 +65,12 @@
 	    { component: __webpack_require__(239) },
 	    React.createElement(Route, { path: 'popup.html', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'overview', component: __webpack_require__(252) }),
+	    React.createElement(Route, { path: 'app', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'manage', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'discover', component: __webpack_require__(253) }),
-	    React.createElement(Route, { path: 'options', component: __webpack_require__(254) }),
-	    React.createElement(Route, { path: 'history', component: __webpack_require__(255) }),
-	    React.createElement(Route, { path: 'about', component: __webpack_require__(256) })
+	    React.createElement(Route, { path: 'discover', component: __webpack_require__(254) }),
+	    React.createElement(Route, { path: 'options', component: __webpack_require__(255) }),
+	    React.createElement(Route, { path: 'history', component: __webpack_require__(256) }),
+	    React.createElement(Route, { path: 'about', component: __webpack_require__(257) })
 	  )
 	), document.getElementById('nooboss'));
 
@@ -28055,8 +28055,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(183).Link;
 	module.exports = React.createClass({
-	  displayName: "exports",
+	  displayName: 'exports',
 
 	  getInitialState: function () {
 	    return null;
@@ -28065,26 +28066,26 @@
 	  render: function () {
 	    var info = this.props.info;
 	    return React.createElement(
-	      "div",
-	      { className: "app-holder" },
-	      React.createElement("input", { type: "checkbox", className: "app-status-checkbox", readOnly: true, id: info.id + '-status', checked: info.enabled }),
+	      'div',
+	      { className: 'app-holder' },
+	      React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
 	      React.createElement(
-	        "div",
-	        { className: "app", id: info.id + '-app' },
-	        React.createElement("img", { className: "app-icon", src: info.iconUrl }),
+	        'div',
+	        { className: 'app-brief', id: info.id + '-app' },
+	        React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
 	        React.createElement(
-	          "div",
-	          { className: "app-info" },
-	          React.createElement("label", { data: info.id, onClick: this.props.toggle, className: "app-switch" }),
-	          React.createElement("label", { data: info.id, onClick: this.props.uninstall, className: "app-uninstall" }),
+	          'div',
+	          { className: 'app-info' },
+	          React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' }),
+	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-uninstall' }),
 	          React.createElement(
-	            "span",
-	            { className: "app-version", title: info.version },
+	            'span',
+	            { className: 'app-version', title: info.version },
 	            info.version
 	          ),
 	          React.createElement(
-	            "span",
-	            { className: "app-name", title: info.name },
+	            Link,
+	            { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
 	            info.name
 	          )
 	        )
@@ -28131,6 +28132,101 @@
 	module.exports = React.createClass({
 	  displayName: 'exports',
 
+	  getInitialState: function () {
+	    return this.state || {};
+	  },
+	  componentDidMount: function () {
+	    var id = getParameterByName('id');
+	    getDB(id, function (appInfo) {
+	      this.setState({ appInfo: appInfo });
+	      console.log(appInfo);
+	    }.bind(this));
+	  },
+	  launchApp: function () {
+	    chrome.management.launchApp(this.state.appInfo.id);
+	    window.close();
+	  },
+	  render: function () {
+	    var appInfo = this.state.appInfo || {};
+	    var launch = null;
+	    if (appInfo.isApp) {
+	      launch = React.createElement(
+	        'div',
+	        { className: 'app-launcher', onClick: this.launchApp },
+	        'Launch'
+	      );
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'NooBoss-body' },
+	      React.createElement(Helmet, {
+	        title: 'App'
+	      }),
+	      React.createElement(
+	        'div',
+	        { className: 'app' },
+	        React.createElement(
+	          'div',
+	          { className: 'app-icon' },
+	          React.createElement('img', { src: appInfo.icon })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'app-main' },
+	          React.createElement(
+	            'div',
+	            { className: 'app-brief' },
+	            React.createElement(
+	              'div',
+	              { className: 'app-name' },
+	              appInfo.name
+	            ),
+	            React.createElement(
+	              'div',
+	              null,
+	              appInfo.version
+	            ),
+	            React.createElement(
+	              'div',
+	              null,
+	              appInfo.status
+	            ),
+	            React.createElement(
+	              'div',
+	              null,
+	              'Rating: &*&^'
+	            )
+	          ),
+	          launch,
+	          React.createElement(
+	            'div',
+	            { className: 'app-detail' },
+	            React.createElement(
+	              'div',
+	              null,
+	              'Last update -- ' + new timeago().format(appInfo.lastUpdateDate)
+	            ),
+	            React.createElement(
+	              'div',
+	              null,
+	              'Installed ----- ' + new timeago().format(appInfo.installedDate)
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Helmet = __webpack_require__(240);
+	module.exports = React.createClass({
+	  displayName: 'exports',
+
 	  getInitializeState: function () {},
 	  compenentDidMount: function () {},
 	  render: function () {
@@ -28150,7 +28246,7 @@
 	});
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -28179,10 +28275,11 @@
 	});
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var Link = __webpack_require__(183).Link;
 	var Helmet = __webpack_require__(240);
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -28196,8 +28293,7 @@
 	    }.bind(this));
 	  },
 	  render: function () {
-	    console.log(this.state.recordList);
-	    var recordList = this.state.recordList.map(function (record, index) {
+	    var recordList = (this.state.recordList || [{ name: 'Nothing is here yet, enable or disable your apps to see effects', id: 'mgehojanhfgnndgffijeglgahakgmgkj' }]).map(function (record, index) {
 	      return React.createElement(
 	        'tr',
 	        { key: index },
@@ -28208,7 +28304,7 @@
 	        ),
 	        React.createElement(
 	          'td',
-	          null,
+	          { className: record.action },
 	          record.action
 	        ),
 	        React.createElement(
@@ -28220,8 +28316,8 @@
 	          'td',
 	          null,
 	          React.createElement(
-	            'a',
-	            { target: '_blank', title: record.name, href: "https://chrome.google.com/webstore/detail/" + record.id },
+	            Link,
+	            { title: record.name, to: "/app?id=" + record.id },
 	            record.name
 	          )
 	        ),
@@ -28232,7 +28328,6 @@
 	        )
 	      );
 	    }).reverse();
-	    console.log(recordList);
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBoss-body' },
@@ -28286,7 +28381,7 @@
 	});
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

@@ -45,10 +45,6 @@ NooBoss.Management.updateAppInfo=function(appInfo,extraInfo,callback){
         oldInfo.installedDate=time;
         oldInfo.lastUpdateDate=time;
       }
-      else{
-        var time=new Date().getTime();
-        oldInfo.lastUpdateDate=time;
-      }
       $.extend(oldInfo,appInfo,extraInfo);
       setDB(appInfo.id,oldInfo,callback);
     });
@@ -88,7 +84,8 @@ NooBoss.History.addRecord=function(record){
 }
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
-    NooBoss.Management.updateAppInfo(appInfo,null,function(data){
+    var time=new Date().getTime();
+    NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
       getDB(appInfo.id,function(appInfo){
         NooBoss.History.addRecord({action:'installed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       });
