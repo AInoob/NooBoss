@@ -54,7 +54,7 @@
 	var browserHistory = ReactRouter.browserHistory;
 
 	function logPageView() {
-	  _gaq.push(['_trackPageview']);
+	  newCommunityRecord(true, ['_trackPageview']);
 	}
 
 	ReactDOM.render(React.createElement(
@@ -27989,13 +27989,13 @@
 	    if (info.enabled) {
 	      action = 'disable';
 	    }
-	    _gaq.push(['_trackEvent', 'manage', action, info.id]);
+	    newCommunityRecord(true, ['_trackEvent', 'manage', action, info.id]);
 	    chrome.management.setEnabled(info.id, !info.enabled, function () {
 	      var result = 'enabled';
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      _gaq.push(['_trackEvent', 'result', result, info.id]);
+	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	      this.setState(function (prevState) {
 	        for (var i = 0; i < prevState.appInfoList.length; i++) {
 	          if (info.id == prevState.appInfoList[i].id) {
@@ -28009,7 +28009,7 @@
 	  },
 	  uninstall: function (info) {
 	    var result = 'removal_success';
-	    _gaq.push(['_trackEvent', 'manage', 'removal', info.id]);
+	    newCommunityRecord(true, ['_trackEvent', 'manage', 'removal', info.id]);
 	    chrome.management.uninstall(info.id, function () {
 	      if (chrome.runtime.lastError) {
 	        action = 'removal_fail';
@@ -28032,12 +28032,15 @@
 	          return prevState;
 	        });
 	      }
-	      _gaq.push(['_trackEvent', 'result', result, info.id]);
+	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	    }.bind(this));
+	  },
+	  openOptions: function (url) {
+	    chrome.tabs.create({ url: url });
 	  },
 	  render: function () {
 	    var appList = (this.state.appInfoList || []).map(function (appInfo, index) {
-	      return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo), info: appInfo });
+	      return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), info: appInfo });
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
@@ -28065,6 +28068,10 @@
 	  componentDidMount: function () {},
 	  render: function () {
 	    var info = this.props.info;
+	    var options = null;
+	    if (this.props.optionsUrl) {
+	      options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'app-holder' },
@@ -28077,6 +28084,7 @@
 	          'div',
 	          { className: 'app-info' },
 	          React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' }),
+	          options,
 	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-uninstall' }),
 	          React.createElement(
 	            'span',
@@ -28142,6 +28150,9 @@
 	      console.log(appInfo);
 	    }.bind(this));
 	  },
+	  openUrl: function (url) {
+	    chrome.tabs.create({ url: url });
+	  },
 	  launchApp: function () {
 	    chrome.management.launchApp(this.state.appInfo.id);
 	    window.close();
@@ -28156,6 +28167,83 @@
 	        'Launch'
 	      );
 	    }
+	    var launchType = null;
+	    if (appInfo.launchType) {
+	      launchType = React.createElement(
+	        'tr',
+	        null,
+	        React.createElement(
+	          'td',
+	          null,
+	          'launch type'
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          appInfo.launchType
+	        )
+	      );
+	    }
+	    var permissions = null;
+	    var permissionList = (appInfo.permissions || []).map(function (elem, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        elem
+	      );
+	    });
+	    permissions = React.createElement(
+	      'tr',
+	      null,
+	      React.createElement(
+	        'td',
+	        null,
+	        'permissions'
+	      ),
+	      React.createElement(
+	        'td',
+	        null,
+	        React.createElement(
+	          'ul',
+	          null,
+	          permissionList
+	        )
+	      )
+	    );
+	    var hostPermissions = null;
+	    var hostPermissionList = (appInfo.hostPermissions || []).map(function (elem, index) {
+	      return React.createElement(
+	        'li',
+	        { key: index },
+	        elem
+	      );
+	    });
+	    hostPermissions = React.createElement(
+	      'tr',
+	      null,
+	      React.createElement(
+	        'td',
+	        null,
+	        'host permissions'
+	      ),
+	      React.createElement(
+	        'td',
+	        null,
+	        React.createElement(
+	          'ul',
+	          null,
+	          hostPermissionList
+	        )
+	      )
+	    );
+	    var options = null;
+	    if (appInfo.optionsUrl) {
+	      options = React.createElement(
+	        'span',
+	        { target: '_blank', className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl), href: appInfo.optionsUrl },
+	        'Options'
+	      );
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBoss-body' },
@@ -28168,48 +28256,239 @@
 	        React.createElement(
 	          'div',
 	          { className: 'app-icon' },
-	          React.createElement('img', { src: appInfo.icon })
+	          React.createElement(
+	            'a',
+	            { href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
+	            React.createElement('img', { src: appInfo.icon })
+	          ),
+	          options
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'app-main' },
 	          React.createElement(
-	            'div',
-	            { className: 'app-brief' },
-	            React.createElement(
-	              'div',
-	              { className: 'app-name' },
-	              appInfo.name
-	            ),
-	            React.createElement(
-	              'div',
-	              null,
-	              appInfo.version
-	            ),
-	            React.createElement(
-	              'div',
-	              null,
-	              appInfo.status
-	            ),
-	            React.createElement(
-	              'div',
-	              null,
-	              'Rating: &*&^'
-	            )
+	            'a',
+	            { target: '_blank', href: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-name' },
+	            appInfo.name
 	          ),
 	          launch,
 	          React.createElement(
-	            'div',
+	            'table',
+	            { className: 'app-brief' },
+	            React.createElement(
+	              'tbody',
+	              null,
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'version'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.version
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'status'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.status
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'rating'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  '*&&*'
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'description'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.description
+	                )
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'table',
 	            { className: 'app-detail' },
 	            React.createElement(
-	              'div',
+	              'tbody',
 	              null,
-	              'Last update -- ' + new timeago().format(appInfo.lastUpdateDate)
-	            ),
-	            React.createElement(
-	              'div',
-	              null,
-	              'Installed ----- ' + new timeago().format(appInfo.installedDate)
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'last update'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  new timeago().format(appInfo.lastUpdateDate)
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'installed'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  new timeago().format(appInfo.installedDate)
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'enabled'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.enabled
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'homepage url'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { href: appInfo.homepageUrl },
+	                    appInfo.homepageUrl
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'id'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.id
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'short name'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.shortName
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'type'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.type
+	                )
+	              ),
+	              launchType,
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'offline enabled'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  getString(appInfo.offlineEnabled)
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'may disable'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  getString(appInfo.mayDisable)
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'install type'
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  appInfo.installType
+	                )
+	              ),
+	              hostPermissions,
+	              permissions
 	            )
 	          )
 	        )
@@ -28258,6 +28537,19 @@
 	    return null;
 	  },
 	  componentDidMount: function () {},
+	  clearHistory: function () {
+	    var result = confirm('Do you want to clear the History?');
+	    if (result) {
+	      setDB('history_records', null, function () {
+	        chrome.notifications.create({
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'History cleaned',
+	          message: 'App history cleared'
+	        });
+	      });
+	    }
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -28269,6 +28561,11 @@
 	        'p',
 	        null,
 	        'Options'
+	      ),
+	      React.createElement(
+	        'div',
+	        { onClick: this.clearHistory },
+	        'Clear History'
 	      )
 	    );
 	  }
@@ -28293,7 +28590,7 @@
 	    }.bind(this));
 	  },
 	  render: function () {
-	    var recordList = (this.state.recordList || [{ name: 'Nothing is here yet, enable or disable your apps to see effects', id: 'mgehojanhfgnndgffijeglgahakgmgkj' }]).map(function (record, index) {
+	    var recordList = (this.state.recordList || [{ name: 'Nothing is here yet', id: 'mgehojanhfgnndgffijeglgahakgmgkj' }]).map(function (record, index) {
 	      return React.createElement(
 	        'tr',
 	        { key: index },

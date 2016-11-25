@@ -7,11 +7,14 @@ body {
     width: 10px;
   }
   &::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(to right, #e08dd3 , #882780);
+    background-image: linear-gradient(to right, #000000, #000000);
     border-radius: 5px;
+    &:hover {
+      background-image: linear-gradient(to right, pink, pink);
+    }
   }
   &::-webkit-scrollbar-track {
-    background-color: pink;
+    background-color: white;
     border-radius: 10px;
   }
 }
@@ -128,6 +131,8 @@ ul {
       transform: rotateY(180deg);
       width: 100%;
       .app-version {
+        font-weight: bold;
+        font-style: italic;
         display: block;
         margin-top: 20px;
       }
@@ -146,7 +151,18 @@ ul {
       display: block;
       float: left;
       height: 20px;
-      margin-left: 10px;
+      margin-left: 8px;
+      width: 20px;
+    }
+    .app-options{
+      background-image: url("/thirdParty/options.svg");
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      cursor: pointer;
+      display: block;
+      height: 20px;
+      float: left;
+      margin-left: 11px;
       width: 20px;
     }
     .app-uninstall {
@@ -157,11 +173,13 @@ ul {
       display: block;
       float: right;
       height: 20px;
-      margin-right: 10px;
+      margin-right: 8px;
       width: 20px;
     }
     .app-name {
       display: block;
+      font-weight: bold;
+      color: #2d40b6;
     }
   }
 }
@@ -196,6 +214,9 @@ ul {
       .enabled {
         color: green;
       }
+      .installed{
+        color: limegreen;
+      }
       .removed {
         color: red;
       }
@@ -213,17 +234,41 @@ ul {
       margin: auto;
       margin-top: 2px;
     }
+    .app-options{
+      width: 100px;
+      height: 50px;
+      background-color: brown;
+      border-radius: 16px;
+      line-height: 50px;
+      vertical-align: middle;
+      text-align: center;
+      font-weight: bold;
+      font-size: 23px;
+      color: white;
+      display: block;
+    }
   }
   .app-main{
     float:left;
     width: 500px;
+    .app-name{
+      font-weight: bold;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2d40b6;
+      width: 400px;
+      float: left;
+    }
     .app-brief{
       width: 400px;
       float: left;
       height: 100px;
-      .app-name{
-        font-weight: bold;
-        font-size: 18px;
+      tbody{
+        tr{
+          td{
+            vertical-align: top;
+          }
+        }
       }
     }
     .app-launcher{
@@ -243,9 +288,27 @@ ul {
       }
     }
     .app-detail{
-      border-top: 2px dashed pink;
       width: 400px;
       float: left;
+      tbody{
+        tr{
+          td{
+            border-top: 2px solid pink;
+            ul{
+              li{
+                font-size: 12px;
+                height: 16px;
+                width: 100%;
+                background-color: rgba(0,0,0,0);
+                text-align: left;
+                &:hover {
+                  background-color: rgba(0,0,0,0);
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -8,11 +8,14 @@ body::-webkit-scrollbar {
   width: 10px;
 }
 body::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(to right, #e08dd3, #882780);
+  background-image: linear-gradient(to right, #000000, #000000);
   border-radius: 5px;
 }
+body::-webkit-scrollbar-thumb:hover {
+  background-image: linear-gradient(to right, pink, pink);
+}
 body::-webkit-scrollbar-track {
-  background-color: pink;
+  background-color: white;
   border-radius: 10px;
 }
 .footerPad {
@@ -125,6 +128,8 @@ ul li:hover {
   width: 100%;
 }
 .app-holder .app-brief .app-info .app-version {
+  font-weight: bold;
+  font-style: italic;
   display: block;
   margin-top: 20px;
 }
@@ -142,7 +147,18 @@ ul li:hover {
   display: block;
   float: left;
   height: 20px;
-  margin-left: 10px;
+  margin-left: 8px;
+  width: 20px;
+}
+.app-holder .app-brief .app-options {
+  background-image: url("/thirdParty/options.svg");
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  cursor: pointer;
+  display: block;
+  height: 20px;
+  float: left;
+  margin-left: 11px;
   width: 20px;
 }
 .app-holder .app-brief .app-uninstall {
@@ -153,11 +169,13 @@ ul li:hover {
   display: block;
   float: right;
   height: 20px;
-  margin-right: 10px;
+  margin-right: 8px;
   width: 20px;
 }
 .app-holder .app-brief .app-name {
   display: block;
+  font-weight: bold;
+  color: #2d40b6;
 }
 .History-table tbody tr td {
   border-top: 2px solid pink;
@@ -186,6 +204,9 @@ ul li:hover {
 .History-table tbody tr .enabled {
   color: green;
 }
+.History-table tbody tr .installed {
+  color: limegreen;
+}
 .History-table tbody tr .removed {
   color: red;
 }
@@ -199,18 +220,37 @@ ul li:hover {
   margin: auto;
   margin-top: 2px;
 }
+.app .app-icon .app-options {
+  width: 100px;
+  height: 50px;
+  background-color: brown;
+  border-radius: 16px;
+  line-height: 50px;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  font-size: 23px;
+  color: white;
+  display: block;
+}
 .app .app-main {
   float: left;
   width: 500px;
+}
+.app .app-main .app-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d40b6;
+  width: 400px;
+  float: left;
 }
 .app .app-main .app-brief {
   width: 400px;
   float: left;
   height: 100px;
 }
-.app .app-main .app-brief .app-name {
-  font-weight: bold;
-  font-size: 18px;
+.app .app-main .app-brief tbody tr td {
+  vertical-align: top;
 }
 .app .app-main .app-launcher {
   float: right;
@@ -229,7 +269,19 @@ ul li:hover {
   cursor: pointer;
 }
 .app .app-main .app-detail {
-  border-top: 2px dashed pink;
   width: 400px;
   float: left;
+}
+.app .app-main .app-detail tbody tr td {
+  border-top: 2px solid pink;
+}
+.app .app-main .app-detail tbody tr td ul li {
+  font-size: 12px;
+  height: 16px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: left;
+}
+.app .app-main .app-detail tbody tr td ul li:hover {
+  background-color: rgba(0, 0, 0, 0);
 }

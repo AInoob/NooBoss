@@ -44,13 +44,13 @@ module.exports = React.createClass({
     if(info.enabled){
       action='disable';
     }
-    _gaq.push(['_trackEvent', 'manage', action, info.id]);
+    newCommunityRecord(true,['_trackEvent', 'manage', action, info.id]);
     chrome.management.setEnabled(info.id,!info.enabled,function(){
       var result='enabled';
       if(info.enabled){
         result='disabled';
       }
-      _gaq.push(['_trackEvent', 'result', result, info.id]);
+      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
       this.setState(function(prevState){
         for(var i=0;i<prevState.appInfoList.length;i++){
           if(info.id==prevState.appInfoList[i].id){
@@ -64,7 +64,7 @@ module.exports = React.createClass({
   },
   uninstall: function(info){
     var result='removal_success';
-    _gaq.push(['_trackEvent', 'manage', 'removal', info.id]);
+    newCommunityRecord(true,['_trackEvent', 'manage', 'removal', info.id]);
     chrome.management.uninstall(info.id,function(){
       if(chrome.runtime.lastError){
         action='removal_fail';
@@ -88,13 +88,16 @@ module.exports = React.createClass({
           return prevState;
         });
       }
-      _gaq.push(['_trackEvent', 'result', result, info.id]);
+      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
     }.bind(this));
+  },
+  openOptions:function(url){
+    chrome.tabs.create({url:url});
   },
   render: function(){
     var appList=(this.state.appInfoList||[]).map(function(appInfo,index){
       return (
-        <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo)} info={appInfo} />
+        <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} info={appInfo} />
         );
     }.bind(this));
     return(

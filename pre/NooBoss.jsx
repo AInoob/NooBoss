@@ -9,7 +9,7 @@ var browserHistory = ReactRouter.browserHistory;
 
 
 function logPageView(){
-  _gaq.push(['_trackPageview']);
+  newCommunityRecord(true,['_trackPageview']);
 }
 
 ReactDOM.render(

@@ -1,3 +1,23 @@
+function getString(elem){
+  if(elem===undefined||elem===null){
+    return '';
+  }
+  else{
+    return elem.toString();
+  }
+}
+
+function newCommunityRecord(ga,data){
+  isOn('joinCommunity',function(){
+    if(ga){
+      _gaq.push(data);
+    }
+    else{
+      console.log(data);
+    }
+  });
+}
+
 function getParameterByName(name, url) {
   if (!url) {
     url = window.location.href;

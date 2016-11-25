@@ -11,7 +11,7 @@ module.exports = React.createClass({
     }.bind(this));
   },
   render: function(){
-    var recordList=(this.state.recordList||[{name:'Nothing is here yet, enable or disable your apps to see effects',id:'mgehojanhfgnndgffijeglgahakgmgkj'}]).map(function(record,index){
+    var recordList=(this.state.recordList||[{name:'Nothing is here yet',id:'mgehojanhfgnndgffijeglgahakgmgkj'}]).map(function(record,index){
       return(
         <tr key={index}>
           <td>{new timeago().format(record.date)}</td>

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "NooBoss",
   "description": "Manage your extensions, apps, and themes, recommends extensions and scripts personally, and warns you bad reputation extensions",
-  "version": "0.0.2.1",
+  "version": "0.0.3",
   "browser_action": {
     "default_icon": "images/icon_128.png",
     "default_title": "NooBoss~~~",
@@ -17,6 +17,8 @@
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "permissions":[
     "management",
-    "notifications"
+    "notifications",
+    "storage",
+    "unlimitedStorage"
   ]
 }

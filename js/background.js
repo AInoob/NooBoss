@@ -1,5 +1,19 @@
 var NooBoss={};
 
+NooBoss.defaultValues=[
+  ['userId',(Math.random().toString(36)+'00000000000000000').slice(2, 19)],
+  ['joinCommunity','1'],
+  ['showAds','-1'],
+];
+
+NooBoss.initDefaultValues=function(){
+  var temp;
+  for(var i=0;i<NooBoss.defaultValues.length;i++){
+    temp=NooBoss.defaultValues[i];
+    setIfNull(temp[0],temp[1]);
+  }
+}
+
 NooBoss.Util={};
 
 NooBoss.Util.getIcon=function(appInfo,callback){
@@ -72,7 +86,6 @@ NooBoss.Management.init=function(){
 //History
 NooBoss.History={};
 NooBoss.History.addRecord=function(record){
-  console.log(record);
   getDB('history_records',function(recordList){
     if(!recordList){
       recordList=[];
@@ -103,7 +116,7 @@ NooBoss.History.listen=function(){
         getDB(id,this);
       }
       else{
-        NooBoss.History.addRecord({action:'removal', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        NooBoss.History.addRecord({action:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
     });
     NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
@@ -150,6 +163,7 @@ NooBoss.History.listen=function(){
 
 
 NooBoss.init=function(){
+  NooBoss.initDefaultValues();
   NooBoss.History.listen();
   NooBoss.Management.init();
 }
