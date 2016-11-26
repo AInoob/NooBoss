@@ -14,6 +14,7 @@ module.exports = React.createClass({
             <li><Link to="/history">History</Link></li>
           </ul>
         </nav>
+        <div className="headerPad"></div>
         <Helmet
           title="Core"
         />

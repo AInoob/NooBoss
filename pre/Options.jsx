@@ -5,7 +5,7 @@ module.exports = React.createClass({
     return {setting:{joinCommunity:false,showAds:false}};
   },
   componentDidMount: function(){
-    var switchList=['joinCommunity','showAds'];
+    var switchList=['joinCommunity','showAds','notifyStateChange','notifyInstallation','notifyRemoval'];
     for(var i=0;i<switchList.length;i++){
       isOn(
         switchList[i],
@@ -69,6 +69,10 @@ module.exports = React.createClass({
         <div className="header">Clean</div>
         <div className="button" onClick={this.clearHistory}>Clear History</div>
         <div className="button" onClick={this.reset}>Reset everything (careful!)</div>
+        <div className="header">Notification</div>
+        {this.getSwitch('notifyStateChange')}
+        {this.getSwitch('notifyInstallation')}
+        {this.getSwitch('notifyRemoval')}
         <div className="header">Experience</div>
         {this.getSwitch('joinCommunity')}
         {this.getSwitch('showAds')}

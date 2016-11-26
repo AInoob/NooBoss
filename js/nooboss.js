@@ -26818,6 +26818,7 @@
 	          )
 	        )
 	      ),
+	      React.createElement('div', { className: 'headerPad' }),
 	      React.createElement(Helmet, {
 	        title: 'Core'
 	      }),
@@ -28085,7 +28086,7 @@
 	          { className: 'app-info' },
 	          React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' }),
 	          options,
-	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-uninstall' }),
+	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
 	          React.createElement(
 	            'span',
 	            { className: 'app-version', title: info.version },
@@ -28146,10 +28147,22 @@
 	  componentDidMount: function () {
 	    var id = getParameterByName('id');
 	    getDB(id, function (appInfo) {
-	      if (appInfo.enabled) {
-	        appInfo.state = 'enabled';
-	      } else {
-	        appInfo.state = 'disabled';
+	      if (appInfo.state != 'removed') {
+	        if (appInfo.enabled) {
+	          appInfo.state = 'enabled';
+	        } else {
+	          appInfo.state = 'disabled';
+	        }
+	        chrome.management.get(id, function () {
+	          if (chrome.runtime.lastError) {
+	            appInfo.state = 'removed';
+	            setDB(id, appInfo);
+	            this.setState(function (prevState) {
+	              prevState.appInfo.state = 'removed';
+	              return prevState;
+	            });
+	          }
+	        }.bind(this));
 	      }
 	      this.setState({ appInfo: appInfo });
 	      console.log(appInfo);
@@ -28157,6 +28170,54 @@
 	  },
 	  openUrl: function (url) {
 	    chrome.tabs.create({ url: url });
+	  },
+	  toggleState: function (info) {
+	    var info = this.state.appInfo;
+	    var action = 'enable';
+	    if (info.enabled) {
+	      action = 'disable';
+	    }
+	    newCommunityRecord(true, ['_trackEvent', 'manage', action, info.id]);
+	    chrome.management.setEnabled(info.id, !info.enabled, function () {
+	      var result = 'enabled';
+	      if (info.enabled) {
+	        result = 'disabled';
+	      }
+	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
+	      this.setState(function (prevState) {
+	        prevState.appInfo.enabled = !info.enabled;
+	        if (prevState.appInfo.enabled) {
+	          prevState.appInfo.state = 'enabled';
+	        } else {
+	          prevState.appInfo.state = 'disabled';
+	        }
+	        return prevState;
+	      });
+	    }.bind(this));
+	  },
+	  uninstall: function (info) {
+	    var result = 'removal_success';
+	    newCommunityRecord(true, ['_trackEvent', 'manage', 'removal', info.id]);
+	    chrome.management.uninstall(this.state.appInfo.id, function () {
+	      if (chrome.runtime.lastError) {
+	        action = 'removal_fail';
+	        console.log(chrome.runtime.lastError);
+	        chrome.notifications.create({
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'Removal calcelled',
+	          message: 'You have cancelled the removal of ' + info.name,
+	          imageUrl: info.icon
+	        });
+	      } else {
+	        this.setState(function (prevState) {
+	          prevState.appInfo.enabled = false;
+	          prevState.appInfo.state = 'removed';
+	          return prevState;
+	        });
+	      }
+	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
+	    }.bind(this));
 	  },
 	  launchApp: function () {
 	    chrome.management.launchApp(this.state.appInfo.id);
@@ -28243,10 +28304,26 @@
 	    );
 	    var options = null;
 	    if (appInfo.optionsUrl) {
-	      options = React.createElement(
-	        'span',
-	        { target: '_blank', className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl), href: appInfo.optionsUrl },
-	        'Options'
+	      options = React.createElement('span', { target: '_blank', className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl), href: appInfo.optionsUrl });
+	    }
+	    var config = null;
+	    if (appInfo.state != 'removed') {
+	      config = React.createElement(
+	        'div',
+	        { className: 'config' },
+	        React.createElement('label', { onClick: this.toggleState, className: 'app-switch' }),
+	        options,
+	        React.createElement('label', { onClick: this.uninstall, className: 'app-remove' })
+	      );
+	    } else {
+	      config = React.createElement(
+	        'div',
+	        { className: 'config' },
+	        React.createElement(
+	          'a',
+	          { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
+	          React.createElement('label', { className: 'app-add' })
+	        )
 	      );
 	    }
 	    return React.createElement(
@@ -28266,7 +28343,7 @@
 	            { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
 	            React.createElement('img', { src: appInfo.icon })
 	          ),
-	          options
+	          config
 	        ),
 	        React.createElement(
 	          'div',
@@ -28310,8 +28387,8 @@
 	                  null,
 	                  React.createElement(
 	                    'span',
-	                    { className: (this.state.appInfo || {}).state },
-	                    (this.state.appInfo || {}).state
+	                    { className: 'noTransTime ' + (this.state.appInfo || {}).state },
+	                    capFirst((this.state.appInfo || {}).state)
 	                  )
 	                )
 	              ),
@@ -28371,7 +28448,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('installed')
+	                  capFirst('first installed')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28406,7 +28483,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { href: appInfo.homepageUrl },
+	                    { target: '_blank', href: appInfo.homepageUrl },
 	                    appInfo.homepageUrl
 	                  )
 	                )
@@ -28474,6 +28551,24 @@
 	                React.createElement(
 	                  'td',
 	                  null,
+	                  capFirst('update url')
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { target: '_blank', href: appInfo.updateUrl },
+	                    appInfo.updateUrl
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
 	                  capFirst('may disable')
 	                ),
 	                React.createElement(
@@ -28518,6 +28613,9 @@
 	  getInitializeState: function () {},
 	  compenentDidMount: function () {},
 	  render: function () {
+	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      console.log(tabs[0]);
+	    });
 	    return React.createElement(
 	      'div',
 	      null,
@@ -28546,7 +28644,7 @@
 	    return { setting: { joinCommunity: false, showAds: false } };
 	  },
 	  componentDidMount: function () {
-	    var switchList = ['joinCommunity', 'showAds'];
+	    var switchList = ['joinCommunity', 'showAds', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval'];
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
 	        this.setState(function (prevState) {
@@ -28624,6 +28722,14 @@
 	        { className: 'button', onClick: this.reset },
 	        'Reset everything (careful!)'
 	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'header' },
+	        'Notification'
+	      ),
+	      this.getSwitch('notifyStateChange'),
+	      this.getSwitch('notifyInstallation'),
+	      this.getSwitch('notifyRemoval'),
 	      React.createElement(
 	        'div',
 	        { className: 'header' },

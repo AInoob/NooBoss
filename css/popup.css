@@ -18,7 +18,8 @@ body::-webkit-scrollbar-track {
   background-color: white;
   border-radius: 10px;
 }
-.footerPad {
+.footerPad,
+.headerPad {
   height: 37px;
   width: 100%;
 }
@@ -30,7 +31,12 @@ body::-webkit-scrollbar-track {
 * {
   transition-duration: 0.618s;
 }
+.noTransTime {
+  transition-duration: 0s;
+}
 nav {
+  position: fixed;
+  top: 0px;
   height: 37px;
   width: 100%;
 }
@@ -161,7 +167,7 @@ ul li:hover {
   margin-left: 11px;
   width: 20px;
 }
-.app-holder .app-brief .app-uninstall {
+.app-holder .app-brief .app-remove {
   background-image: url("/thirdParty/remove.svg");
   background-repeat: no-repeat;
   background-size: 20px 20px;
@@ -220,18 +226,30 @@ ul li:hover {
   margin: auto;
   margin-top: 2px;
 }
-.app .app-icon .app-options {
-  width: 100px;
-  height: 50px;
-  background-color: brown;
-  border-radius: 16px;
-  line-height: 50px;
-  vertical-align: middle;
-  text-align: center;
-  font-weight: bold;
-  font-size: 23px;
-  color: white;
+.app .app-icon .config .app-switch,
+.app .app-icon .config .app-options,
+.app .app-icon .config .app-remove,
+.app .app-icon .config .app-add {
+  background-repeat: no-repeat;
+  background-size: 50px 50px;
+  cursor: pointer;
   display: block;
+  height: 50px;
+  margin: auto;
+  margin-top: 8px;
+  width: 50px;
+}
+.app .app-icon .config .app-switch {
+  background-image: url("/thirdParty/power-button-on.svg");
+}
+.app .app-icon .config .app-options {
+  background-image: url("/thirdParty/options.svg");
+}
+.app .app-icon .config .app-remove {
+  background-image: url("/thirdParty/remove.svg");
+}
+.app .app-icon .config .app-add {
+  background-image: url("/thirdParty/add.svg");
 }
 .app .app-main {
   float: left;

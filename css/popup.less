@@ -18,7 +18,7 @@ body {
     border-radius: 10px;
   }
 }
-.footerPad {
+.footerPad, .headerPad {
   height: 37px;
   width: 100%;
 }
@@ -30,7 +30,15 @@ body {
 * {
   transition-duration: 0.618s;
 }
+
+.noTransTime{
+  transition-duration: 0s;
+}
+
 nav {
+  height: 37px;
+  position: fixed;
+  top: 0px;
   height: 37px;
   width: 100%;
   ul {
@@ -165,7 +173,7 @@ ul {
       margin-left: 11px;
       width: 20px;
     }
-    .app-uninstall {
+    .app-remove {
       background-image: url("/thirdParty/remove.svg");
       background-repeat: no-repeat;
       background-size: 20px 20px;
@@ -234,18 +242,29 @@ ul {
       margin: auto;
       margin-top: 2px;
     }
-    .app-options{
-      width: 100px;
-      height: 50px;
-      background-color: brown;
-      border-radius: 16px;
-      line-height: 50px;
-      vertical-align: middle;
-      text-align: center;
-      font-weight: bold;
-      font-size: 23px;
-      color: white;
-      display: block;
+    .config{
+      .app-switch, .app-options, .app-remove, .app-add{
+        background-repeat: no-repeat;
+        background-size: 50px 50px;
+        cursor: pointer;
+        display: block;
+        height: 50px;
+        margin: auto;
+        margin-top: 8px;
+        width: 50px;
+      }
+      .app-switch {
+        background-image: url("/thirdParty/power-button-on.svg");
+      }
+      .app-options{
+        background-image: url("/thirdParty/options.svg");
+      }
+      .app-remove {
+        background-image: url("/thirdParty/remove.svg");
+      }
+      .app-add {
+        background-image: url("/thirdParty/add.svg");
+      }
     }
   }
   .app-main{

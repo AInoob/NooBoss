@@ -1,6 +1,9 @@
 var textIdMap={
   joinCommunity: 'join NooBoss community',
-  showAds: 'show ADs'
+  showAds: 'show ADs',
+  notifyStateChange: 'notify state change',
+  notifyInstallation: 'notify installation',
+  notifyRemoval: 'notify removal'
 }
 
 function getTextFromId(id){

@@ -20,7 +20,7 @@ module.exports = React.createClass({
           <div className="app-info">
             <label data={info.id} onClick={this.props.toggle} className="app-switch"></label>
             {options}
-            <label data={info.id} onClick={this.props.uninstall} className="app-uninstall"></label>
+            <label data={info.id} onClick={this.props.uninstall} className="app-remove"></label>
             <span className="app-version" title={info.version}>{info.version}</span>
             <Link to={'/app?id='+info.id} className="app-name" title={info.name}>{info.name}</Link>
           </div>
