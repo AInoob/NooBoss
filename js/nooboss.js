@@ -28146,6 +28146,11 @@
 	  componentDidMount: function () {
 	    var id = getParameterByName('id');
 	    getDB(id, function (appInfo) {
+	      if (appInfo.enabled) {
+	        appInfo.state = 'enabled';
+	      } else {
+	        appInfo.state = 'disabled';
+	      }
 	      this.setState({ appInfo: appInfo });
 	      console.log(appInfo);
 	    }.bind(this));
@@ -28198,7 +28203,7 @@
 	      React.createElement(
 	        'td',
 	        null,
-	        'permissions'
+	        capFirst('permissions')
 	      ),
 	      React.createElement(
 	        'td',
@@ -28224,7 +28229,7 @@
 	      React.createElement(
 	        'td',
 	        null,
-	        'host permissions'
+	        capFirst('host permissions')
 	      ),
 	      React.createElement(
 	        'td',
@@ -28258,7 +28263,7 @@
 	          { className: 'app-icon' },
 	          React.createElement(
 	            'a',
-	            { href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
+	            { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
 	            React.createElement('img', { src: appInfo.icon })
 	          ),
 	          options
@@ -28268,7 +28273,7 @@
 	          { className: 'app-main' },
 	          React.createElement(
 	            'a',
-	            { target: '_blank', href: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-name' },
+	            { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-name' },
 	            appInfo.name
 	          ),
 	          launch,
@@ -28284,7 +28289,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'version'
+	                  capFirst('version')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28298,12 +28303,16 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'status'
+	                  capFirst('state')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  appInfo.status
+	                  React.createElement(
+	                    'span',
+	                    { className: (this.state.appInfo || {}).state },
+	                    (this.state.appInfo || {}).state
+	                  )
 	                )
 	              ),
 	              React.createElement(
@@ -28312,7 +28321,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'rating'
+	                  capFirst('rating')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28326,7 +28335,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'description'
+	                  capFirst('description')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28348,12 +28357,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'last update'
+	                  capFirst('last update')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  new timeago().format(appInfo.lastUpdateDate)
+	                  capFirst(new timeago().format(appInfo.lastUpdateDate))
 	                )
 	              ),
 	              React.createElement(
@@ -28362,12 +28371,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'installed'
+	                  capFirst('installed')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  new timeago().format(appInfo.installedDate)
+	                  capFirst(new timeago().format(appInfo.installedDate))
 	                )
 	              ),
 	              React.createElement(
@@ -28376,12 +28385,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'enabled'
+	                  capFirst('enabled')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  appInfo.enabled
+	                  capFirst(appInfo.enabled)
 	                )
 	              ),
 	              React.createElement(
@@ -28390,7 +28399,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'homepage url'
+	                  capFirst('homepage url')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28408,7 +28417,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'id'
+	                  capFirst('id')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28422,7 +28431,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'short name'
+	                  capFirst('short name')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28436,12 +28445,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'type'
+	                  capFirst('type')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  appInfo.type
+	                  capFirst(appInfo.type)
 	                )
 	              ),
 	              launchType,
@@ -28451,12 +28460,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'offline enabled'
+	                  capFirst('offline enabled')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  getString(appInfo.offlineEnabled)
+	                  capFirst(getString(appInfo.offlineEnabled))
 	                )
 	              ),
 	              React.createElement(
@@ -28465,12 +28474,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'may disable'
+	                  capFirst('may disable')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  getString(appInfo.mayDisable)
+	                  capFirst(getString(appInfo.mayDisable))
 	                )
 	              ),
 	              React.createElement(
@@ -28479,12 +28488,12 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  'install type'
+	                  capFirst('install type')
 	                ),
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  appInfo.installType
+	                  capFirst(appInfo.installType)
 	                )
 	              ),
 	              hostPermissions,
@@ -28534,9 +28543,28 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
-	    return null;
+	    return { setting: { joinCommunity: false, showAds: false } };
 	  },
-	  componentDidMount: function () {},
+	  componentDidMount: function () {
+	    var switchList = ['joinCommunity', 'showAds'];
+	    for (var i = 0; i < switchList.length; i++) {
+	      isOn(switchList[i], function (ii) {
+	        this.setState(function (prevState) {
+	          console.log(prevState);
+	          prevState.setting[switchList[ii]] = true;
+	          console.log(prevState);
+	          return prevState;
+	        });
+	      }.bind(this, i), function (ii) {
+	        this.setState(function (prevState) {
+	          console.log(prevState);
+	          prevState.setting[switchList[ii]] = false;
+	          console.log(prevState);
+	          return prevState;
+	        });
+	      }.bind(this, i));
+	    }
+	  },
 	  clearHistory: function () {
 	    var result = confirm('Do you want to clear the History?');
 	    if (result) {
@@ -28550,7 +28578,25 @@
 	      });
 	    }
 	  },
+	  toggleSetting: function (id) {
+	    var newValue = !this.state.setting[id];
+	    set(id, newValue, function () {
+	      this.setState(function (prevState) {
+	        prevState.setting[id] = newValue;
+	        return prevState;
+	      });
+	    }.bind(this));
+	  },
+	  getSwitch: function (id) {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('input', { type: 'checkbox', onClick: this.toggleSetting.bind(this, id), checked: this.state.setting[id] }),
+	      getTextFromId(id)
+	    );
+	  },
 	  render: function () {
+	    console.log(this.state);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -28562,6 +28608,8 @@
 	        null,
 	        'Options'
 	      ),
+	      this.getSwitch('joinCommunity'),
+	      this.getSwitch('showAds'),
 	      React.createElement(
 	        'div',
 	        { onClick: this.clearHistory },

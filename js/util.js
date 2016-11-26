@@ -1,3 +1,17 @@
+var textIdMap={
+  joinCommunity: 'join NooBoss community',
+  showAds: 'show ADs'
+}
+
+function getTextFromId(id){
+  return textIdMap[id];
+}
+
+function capFirst(elem){
+  str=getString(elem);
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function getString(elem){
   if(elem===undefined||elem===null){
     return '';

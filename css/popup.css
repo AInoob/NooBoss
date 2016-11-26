@@ -252,6 +252,19 @@ ul li:hover {
 .app .app-main .app-brief tbody tr td {
   vertical-align: top;
 }
+.app .app-main .app-brief tbody tr td .disabled {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: grey;
+}
+.app .app-main .app-brief tbody tr td .enabled {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: green;
+}
+.app .app-main .app-brief tbody tr td:nth-child(1) {
+  width: 20%;
+}
 .app .app-main .app-launcher {
   float: right;
   width: 100px;
@@ -271,9 +284,13 @@ ul li:hover {
 .app .app-main .app-detail {
   width: 400px;
   float: left;
+  table-layout: fixed;
 }
 .app .app-main .app-detail tbody tr td {
   border-top: 2px solid pink;
+}
+.app .app-main .app-detail tbody tr td:nth-child(1) {
+  width: 20%;
 }
 .app .app-main .app-detail tbody tr td ul li {
   font-size: 12px;

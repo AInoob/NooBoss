@@ -7,6 +7,12 @@ module.exports = React.createClass({
   componentDidMount: function(){
     var id=getParameterByName('id');
     getDB(id,function(appInfo){
+      if(appInfo.enabled){
+        appInfo.state='enabled';
+      }
+      else{
+        appInfo.state='disabled';
+      }
       this.setState({appInfo: appInfo});
       console.log(appInfo);
     }.bind(this));
@@ -32,12 +38,12 @@ module.exports = React.createClass({
     var permissionList=(appInfo.permissions||[]).map(function(elem,index){
       return <li key={index}>{elem}</li>
     });
-    permissions=<tr><td>{'permissions'}</td><td><ul>{permissionList}</ul></td></tr>
+    permissions=<tr><td>{capFirst('permissions')}</td><td><ul>{permissionList}</ul></td></tr>
     var hostPermissions=null;
     var hostPermissionList=(appInfo.hostPermissions||[]).map(function(elem,index){
       return <li key={index}>{elem}</li>
     });
-    hostPermissions=<tr><td>{'host permissions'}</td><td><ul>{hostPermissionList}</ul></td></tr>
+    hostPermissions=<tr><td>{capFirst('host permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
     var options=null;
     if(appInfo.optionsUrl){
       options=<span target="_blank" className="app-options" onClick={this.openUrl.bind(null,appInfo.optionsUrl)} href={appInfo.optionsUrl}>Options</span>
@@ -49,33 +55,33 @@ module.exports = React.createClass({
         />
         <div className="app">
           <div className="app-icon">
-            <a href={'https://chrome.google.com/webstore/detail/'+appInfo.id}><img src={appInfo.icon} /></a>
+            <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id}><img src={appInfo.icon} /></a>
             {options}
           </div>
           <div className="app-main">
-            <a target="_blank" href={'https://chrome.google.com/webstore/detail/'+appInfo.id} className="app-name">{appInfo.name}</a>
+            <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id} className="app-name">{appInfo.name}</a>
             {launch}
             <table className="app-brief">
               <tbody>
-                <tr><td>{'version'}</td><td>{appInfo.version}</td></tr>
-                <tr><td>{'status'}</td><td>{appInfo.status}</td></tr>
-                <tr><td>{'rating'}</td><td>{'*&&*'}</td></tr>
-                <tr><td>{'description'}</td><td>{appInfo.description}</td></tr>
+                <tr><td>{capFirst('version')}</td><td>{appInfo.version}</td></tr>
+                <tr><td>{capFirst('state')}</td><td><span className={(this.state.appInfo||{}).state}>{(this.state.appInfo||{}).state}</span></td></tr>
+                <tr><td>{capFirst('rating')}</td><td>{'*&&*'}</td></tr>
+                <tr><td>{capFirst('description')}</td><td>{appInfo.description}</td></tr>
               </tbody>
             </table>
             <table className="app-detail">
               <tbody>
-                <tr><td>{'last update'}</td><td>{new timeago().format(appInfo.lastUpdateDate)}</td></tr>
-                <tr><td>{'installed'}</td><td>{new timeago().format(appInfo.installedDate)}</td></tr>
-                <tr><td>{'enabled'}</td><td>{appInfo.enabled}</td></tr>
-                <tr><td>{'homepage url'}</td><td><a href={appInfo.homepageUrl}>{appInfo.homepageUrl}</a></td></tr>
-                <tr><td>{'id'}</td><td>{appInfo.id}</td></tr>
-                <tr><td>{'short name'}</td><td>{appInfo.shortName}</td></tr>
-                <tr><td>{'type'}</td><td>{appInfo.type}</td></tr>
+                <tr><td>{capFirst('last update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
+                <tr><td>{capFirst('installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
+                <tr><td>{capFirst('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
+                <tr><td>{capFirst('homepage url')}</td><td><a href={appInfo.homepageUrl}>{appInfo.homepageUrl}</a></td></tr>
+                <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
+                <tr><td>{capFirst('short name')}</td><td>{appInfo.shortName}</td></tr>
+                <tr><td>{capFirst('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
                 {launchType}
-                <tr><td>{'offline enabled'}</td><td>{getString(appInfo.offlineEnabled)}</td></tr>
-                <tr><td>{'may disable'}</td><td>{getString(appInfo.mayDisable)}</td></tr>
-                <tr><td>{'install type'}</td><td>{appInfo.installType}</td></tr>
+                <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
+                <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
+                <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
                 {hostPermissions}
                 {permissions}
               </tbody>

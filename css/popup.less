@@ -267,6 +267,17 @@ ul {
         tr{
           td{
             vertical-align: top;
+            .disabled {
+              font-weight: bold;
+              color: grey;
+            }
+            .enabled {
+              font-weight: bold;
+              color: green;
+            }
+            &:nth-child(1) {
+              width: 20%;
+            }
           }
         }
       }
@@ -290,9 +301,13 @@ ul {
     .app-detail{
       width: 400px;
       float: left;
+      table-layout: fixed;
       tbody{
         tr{
           td{
+            &:nth-child(1) {
+              width: 20%;
+            }
             border-top: 2px solid pink;
             ul{
               li{
