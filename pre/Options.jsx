@@ -50,20 +50,28 @@ module.exports = React.createClass({
       });
     }.bind(this));
   },
+  reset: function(){
+    var result=confirm('Do you want to reset and clearn everything?');
+    if(result){
+      chrome.runtime.sendMessage({job:'reset'});
+    }
+  },
   getSwitch: function(id){
-    return <div><input type="checkbox" onClick={this.toggleSetting.bind(this,id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
+    return <div className="switch"><input type="checkbox" onClick={this.toggleSetting.bind(this,id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
   },
   render: function(){
     console.log(this.state);
     return(
-      <div>
+      <div className="Options">
         <Helmet
           title="Options"
         />
-        <p>Options</p>
+        <div className="header">Clean</div>
+        <div className="button" onClick={this.clearHistory}>Clear History</div>
+        <div className="button" onClick={this.reset}>Reset everything (careful!)</div>
+        <div className="header">Experience</div>
         {this.getSwitch('joinCommunity')}
         {this.getSwitch('showAds')}
-        <div onClick={this.clearHistory}>Clear History</div>
       </div>
     );
   }

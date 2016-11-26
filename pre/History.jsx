@@ -3,7 +3,7 @@ var Link = require('react-router').Link;
 var Helmet = require('react-helmet');
 module.exports = React.createClass({
   getInitialState: function(){
-    return this.state||{recordList:[]};
+    return {recordList:[]};
   },
   componentDidMount: function(){
     getDB('history_records',function(recordList){

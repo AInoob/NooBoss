@@ -27948,7 +27948,7 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
-	    return this.state || {};
+	    return {};
 	  },
 	  componentDidMount: function () {
 	    chrome.management.getAll(function (appInfoList) {
@@ -28587,10 +28587,16 @@
 	      });
 	    }.bind(this));
 	  },
+	  reset: function () {
+	    var result = confirm('Do you want to reset and clearn everything?');
+	    if (result) {
+	      chrome.runtime.sendMessage({ job: 'reset' });
+	    }
+	  },
 	  getSwitch: function (id) {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'switch' },
 	      React.createElement('input', { type: 'checkbox', onClick: this.toggleSetting.bind(this, id), checked: this.state.setting[id] }),
 	      getTextFromId(id)
 	    );
@@ -28599,22 +28605,32 @@
 	    console.log(this.state);
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'Options' },
 	      React.createElement(Helmet, {
 	        title: 'Options'
 	      }),
 	      React.createElement(
-	        'p',
-	        null,
-	        'Options'
+	        'div',
+	        { className: 'header' },
+	        'Clean'
 	      ),
-	      this.getSwitch('joinCommunity'),
-	      this.getSwitch('showAds'),
 	      React.createElement(
 	        'div',
-	        { onClick: this.clearHistory },
+	        { className: 'button', onClick: this.clearHistory },
 	        'Clear History'
-	      )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: this.reset },
+	        'Reset everything (careful!)'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'header' },
+	        'Experience'
+	      ),
+	      this.getSwitch('joinCommunity'),
+	      this.getSwitch('showAds')
 	    );
 	  }
 	});
@@ -28630,7 +28646,7 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
-	    return this.state || { recordList: [] };
+	    return { recordList: [] };
 	  },
 	  componentDidMount: function () {
 	    getDB('history_records', function (recordList) {

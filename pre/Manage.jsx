@@ -3,7 +3,7 @@ var Helmet = require('react-helmet');
 var AppBrief = require('./AppBrief.jsx');
 module.exports = React.createClass({
   getInitialState: function(){
-    return this.state||{};
+    return {};
   },
   componentDidMount: function(){
     chrome.management.getAll(function(appInfoList){

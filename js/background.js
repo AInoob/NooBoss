@@ -6,6 +6,24 @@ NooBoss.defaultValues=[
   ['showAds','-1'],
 ];
 
+NooBoss.resetSettings=function(){
+  var temp;
+  for(var i=0;i<NooBoss.defaultValues.length;i++){
+    temp=NooBoss.defaultValues[i];
+    set(temp[0],temp[1]);
+  }
+}
+
+NooBoss.resetIndexedDB=function(){
+  var req= window.indexedDB.deleteDatabase('NooBoss');
+  req.onerror=function(e){
+    console.log(e);
+  }
+  req.onsuccess=function(e){
+    NooBoss.Management.init();
+  }
+}
+
 NooBoss.initDefaultValues=function(){
   var temp;
   for(var i=0;i<NooBoss.defaultValues.length;i++){
@@ -170,4 +188,13 @@ NooBoss.init=function(){
 
 document.addEventListener('DOMContentLoaded', function(){
   NooBoss.init()
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if('job' in request){
+        if (request.job == "reset"){
+          NooBoss.resetSettings();
+          NooBoss.resetIndexedDB();
+        }
+      }
+    });
 });

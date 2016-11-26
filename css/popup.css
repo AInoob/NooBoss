@@ -253,12 +253,10 @@ ul li:hover {
   vertical-align: top;
 }
 .app .app-main .app-brief tbody tr td .disabled {
-  text-transform: capitalize;
   font-weight: bold;
   color: grey;
 }
 .app .app-main .app-brief tbody tr td .enabled {
-  text-transform: capitalize;
   font-weight: bold;
   color: green;
 }
@@ -301,4 +299,30 @@ ul li:hover {
 }
 .app .app-main .app-detail tbody tr td ul li:hover {
   background-color: rgba(0, 0, 0, 0);
+}
+.Options .header {
+  height: 33px;
+  width: 100%;
+  font-size: 21px;
+  font-weight: bold;
+  font-style: italic;
+}
+.Options .switch,
+.Options .button {
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 120px;
+}
+.Options .button {
+  height: 30px;
+  margin-top: 2px;
+  margin-buttom: 2px;
+  cursor: pointer;
+  padding-left: 20px;
+  background-color: red;
+  color: white;
+  border-radius: 9px;
+  display: inline-block;
+  padding-right: 20px;
 }
