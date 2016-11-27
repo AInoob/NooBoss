@@ -136,8 +136,9 @@ module.exports = React.createClass({
     }
     var crxName=null;
     if(this.state.crxVersion){
-      crxName='extension_'+(this.state.crxVersion.replace(/\./g,'_'));
+      crxName='extension_'+(this.state.crxVersion.replace(/\./g,'_')+'.crx');
     }
+    var manifestUrl='chrome-extension://'+appInfo.id+'/manifest.json';
     return(
       <div className="NooBoss-body">
         <Helmet
@@ -172,6 +173,7 @@ module.exports = React.createClass({
                 <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
                 <tr><td>{capFirst('download crx')}</td><td><a target="_blank" href={this.state.crxUrl}>{crxName}</a></td></tr>
                 <tr><td>{capFirst('update url')}</td><td><a target="_blank" href={appInfo.updateUrl}>{appInfo.updateUrl}</a></td></tr>
+                <tr><td>{capFirst('manifest file')}</td><td><a target="_blank" href={manifestUrl}>{manifestUrl}</a></td></tr>
                 <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
                 <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
                 {hostPermissions}

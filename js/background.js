@@ -134,14 +134,18 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onUninstalled.addListener(function(id){
-    getDB(id,function(appInfo){
+    var recordUninstall=function(times,appInfo){
+      console.log('recordUninstall '+times);
       if(!appInfo){
-        getDB(id,this);
+        if(times<9){
+          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+        }
       }
       else{
         NooBoss.History.addRecord({action:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
-    });
+    }
+    getDB(id,recordUninstall.bind(null,1));
     NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
     isOn('notifyRemoval',function(){
       getDB(id,function(appInfo){
@@ -155,14 +159,19 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onEnabled.addListener(function(appInfoOld){
-    getDB(appInfoOld.id,function(appInfo){
+    var id=appInfoOld.id;
+    var recordEnable=function(times,appInfo){
+      console.log('recordEnable'+times);
       if(!appInfo){
-        getDB(appInfoOld.id,this);
+        if(times<9){
+          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+        }
       }
       else{
         NooBoss.History.addRecord({action:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
-    });
+    }
+    getDB(id,recordEnable.bind(null,1));
     isOn('notifyStateChange',function(){
       chrome.notifications.create({
         type:'basic',
@@ -173,14 +182,19 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onDisabled.addListener(function(appInfoOld){
-    getDB(appInfoOld.id,function(appInfo){
+    var id=appInfoOld.id;
+    var recordDisable=function(times,appInfo){
+      console.log('recordDisable'+times);
       if(!appInfo){
-        getDB(appInfoOld.id,this);
+        if(times<9){
+          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+        }
       }
       else{
         NooBoss.History.addRecord({action:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
-    });
+    }
+    getDB(id,recordDisable.bind(null,1));
     isOn('notifyStateChange',function(){
       chrome.notifications.create({
         type:'basic',

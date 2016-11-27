@@ -28337,8 +28337,9 @@
 	    }
 	    var crxName = null;
 	    if (this.state.crxVersion) {
-	      crxName = 'extension_' + this.state.crxVersion.replace(/\./g, '_');
+	      crxName = 'extension_' + (this.state.crxVersion.replace(/\./g, '_') + '.crx');
 	    }
+	    var manifestUrl = 'chrome-extension://' + appInfo.id + '/manifest.json';
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBoss-body' },
@@ -28591,6 +28592,24 @@
 	                    'a',
 	                    { target: '_blank', href: appInfo.updateUrl },
 	                    appInfo.updateUrl
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  capFirst('manifest file')
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { target: '_blank', href: manifestUrl },
+	                    manifestUrl
 	                  )
 	                )
 	              ),
