@@ -28146,6 +28146,15 @@
 	  },
 	  componentDidMount: function () {
 	    var id = getParameterByName('id');
+	    var chromeVersion = getChromeVersion();
+	    $.ajax({
+	      dataType: 'xml',
+	      url: 'https://clients2.google.com/service/update2/crx?prodversion=' + chromeVersion + '&x=id%3D' + id + '%26installsource%3Dondemand%26uc'
+	    }).done(function (data) {
+	      crxUrl = $(data).find('updatecheck').attr('codebase');
+	      crxVersion = $(data).find('updatecheck').attr('version');
+	      this.setState({ crxUrl: crxUrl, crxVersion: crxVersion });
+	    }.bind(this));
 	    getDB(id, function (appInfo) {
 	      if (appInfo.state != 'removed') {
 	        if (appInfo.enabled) {
@@ -28215,8 +28224,8 @@
 	          prevState.appInfo.state = 'removed';
 	          return prevState;
 	        });
+	        newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	      }
-	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	    }.bind(this));
 	  },
 	  launchApp: function () {
@@ -28325,6 +28334,10 @@
 	          React.createElement('label', { className: 'app-add' })
 	        )
 	      );
+	    }
+	    var crxName = null;
+	    if (this.state.crxVersion) {
+	      crxName = 'extension_' + this.state.crxVersion.replace(/\./g, '_');
 	    }
 	    return React.createElement(
 	      'div',
@@ -28543,6 +28556,24 @@
 	                  'td',
 	                  null,
 	                  capFirst(getString(appInfo.offlineEnabled))
+	                )
+	              ),
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  capFirst('download crx')
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  React.createElement(
+	                    'a',
+	                    { target: '_blank', href: this.state.crxUrl },
+	                    crxName
+	                  )
 	                )
 	              ),
 	              React.createElement(

@@ -87,8 +87,8 @@ ul li:hover {
 }
 .app-holder {
   float: left;
-  height: 98px;
-  width: 98px;
+  height: 100px;
+  width: 100px;
 }
 .app-holder .app-status-checkbox {
   display: none;

@@ -19,6 +19,7 @@
     "management",
     "notifications",
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "https://clients2.google.com/*"
   ]
 }

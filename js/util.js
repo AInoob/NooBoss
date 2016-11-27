@@ -1,3 +1,8 @@
+function getChromeVersion(){
+  var match = window.navigator.userAgent.match(/Chrom(?:e|ium)\/([0-9\.]+)/);
+  return match ? match[1] : null;
+}
+
 var textIdMap={
   joinCommunity: 'join NooBoss community',
   showAds: 'show ADs',

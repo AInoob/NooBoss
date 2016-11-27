@@ -6,6 +6,15 @@ module.exports = React.createClass({
   },
   componentDidMount: function(){
     var id=getParameterByName('id');
+    var chromeVersion=getChromeVersion();
+    $.ajax({
+      dataType: 'xml',
+      url:'https://clients2.google.com/service/update2/crx?prodversion='+chromeVersion+'&x=id%3D'+id+'%26installsource%3Dondemand%26uc'
+    }).done(function(data){
+      crxUrl=$(data).find('updatecheck').attr('codebase');
+      crxVersion=$(data).find('updatecheck').attr('version');
+      this.setState({crxUrl:crxUrl,crxVersion:crxVersion});
+    }.bind(this))
     getDB(id,function(appInfo){
       if(appInfo.state!='removed'){
         if(appInfo.enabled){
@@ -78,8 +87,8 @@ module.exports = React.createClass({
           prevState.appInfo.state='removed';
           return prevState;
         });
+        newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
       }
-      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
     }.bind(this));
   },
   launchApp: function(){
@@ -125,6 +134,10 @@ module.exports = React.createClass({
           <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id}><label className='app-add'></label></a>
         </div>
     }
+    var crxName=null;
+    if(this.state.crxVersion){
+      crxName='extension_'+(this.state.crxVersion.replace(/\./g,'_'));
+    }
     return(
       <div className="NooBoss-body">
         <Helmet
@@ -157,6 +170,7 @@ module.exports = React.createClass({
                 <tr><td>{capFirst('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
                 {launchType}
                 <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
+                <tr><td>{capFirst('download crx')}</td><td><a target="_blank" href={this.state.crxUrl}>{crxName}</a></td></tr>
                 <tr><td>{capFirst('update url')}</td><td><a target="_blank" href={appInfo.updateUrl}>{appInfo.updateUrl}</a></td></tr>
                 <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
                 <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
