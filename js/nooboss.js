@@ -27946,10 +27946,11 @@
 	var Helmet = __webpack_require__(240);
 	var AppBrief = __webpack_require__(251);
 	module.exports = React.createClass({
-	  displayName: 'exports',
-
+	  displayName: "Manage",
 	  getInitialState: function () {
-	    return {};
+	    return {
+	      filter: { type: 'all', keyword: '' }
+	    };
 	  },
 	  componentDidMount: function () {
 	    chrome.management.getAll(function (appInfoList) {
@@ -28039,9 +28040,23 @@
 	  openOptions: function (url) {
 	    chrome.tabs.create({ url: url });
 	  },
+	  updateFilter: function (e) {
+	    var id = e.target.id;
+	    var value = e.target.value;
+	    this.setState(function (prevState) {
+	      prevState.filter[id] = value;
+	      return prevState;
+	    });
+	  },
 	  render: function () {
 	    var appList = (this.state.appInfoList || []).map(function (appInfo, index) {
-	      return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), info: appInfo });
+	      var filter = this.state.filter;
+	      var pattern = new RegExp(filter.keyword, 'i');
+	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
+	        return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), info: appInfo });
+	      } else {
+	        return null;
+	      }
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
@@ -28049,6 +28064,40 @@
 	      React.createElement(Helmet, {
 	        title: 'Manage'
 	      }),
+	      React.createElement(
+	        'div',
+	        { className: 'searchBar' },
+	        React.createElement(
+	          'div',
+	          { className: 'type' },
+	          'Type:',
+	          React.createElement(
+	            'select',
+	            { onChange: this.updateFilter, id: 'type' },
+	            React.createElement(
+	              'option',
+	              { value: 'all' },
+	              'All'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'extension' },
+	              'Extension'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'app' },
+	              'App'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'theme' },
+	              'Theme'
+	            )
+	          )
+	        ),
+	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
+	      ),
 	      appList
 	    );
 	  }
@@ -28073,6 +28122,10 @@
 	    if (this.props.optionsUrl) {
 	      options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
 	    }
+	    var toggle = null;
+	    if (!info.type.match('theme')) {
+	      toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'app-holder' },
@@ -28084,7 +28137,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'app-info' },
-	          React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' }),
+	          toggle,
 	          options,
 	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
 	          React.createElement(
@@ -28313,14 +28366,18 @@
 	    );
 	    var options = null;
 	    if (appInfo.optionsUrl) {
-	      options = React.createElement('span', { target: '_blank', className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl), href: appInfo.optionsUrl });
+	      options = React.createElement('span', { className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl) });
+	    }
+	    var toggle = null;
+	    if (appInfo.type && !appInfo.type.match('theme')) {
+	      toggle = React.createElement('label', { onClick: this.toggleState, className: 'app-switch' });
 	    }
 	    var config = null;
 	    if (appInfo.state != 'removed') {
 	      config = React.createElement(
 	        'div',
 	        { className: 'config' },
-	        React.createElement('label', { onClick: this.toggleState, className: 'app-switch' }),
+	        toggle,
 	        options,
 	        React.createElement('label', { onClick: this.uninstall, className: 'app-remove' })
 	      );
@@ -28497,7 +28554,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', href: appInfo.homepageUrl },
+	                    { target: '_blank', title: appInfo.homepageUrl, href: appInfo.homepageUrl },
 	                    appInfo.homepageUrl
 	                  )
 	                )
@@ -28572,7 +28629,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', href: this.state.crxUrl },
+	                    { target: '_blank', title: this.state.crxUrl, href: this.state.crxUrl },
 	                    crxName
 	                  )
 	                )
@@ -28590,7 +28647,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', href: appInfo.updateUrl },
+	                    { target: '_blank', title: appInfo.updateUrl, href: appInfo.updateUrl },
 	                    appInfo.updateUrl
 	                  )
 	                )
@@ -28608,8 +28665,8 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', href: manifestUrl },
-	                    manifestUrl
+	                    { onClick: this.openUrl.bind(null, manifestUrl), href: '', title: manifestUrl },
+	                    'manifest.json'
 	                  )
 	                )
 	              ),

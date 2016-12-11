@@ -117,13 +117,17 @@ module.exports = React.createClass({
     hostPermissions=<tr><td>{capFirst('host permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
     var options=null;
     if(appInfo.optionsUrl){
-      options=<span target="_blank" className="app-options" onClick={this.openUrl.bind(null,appInfo.optionsUrl)} href={appInfo.optionsUrl}></span>
+      options=<span className="app-options" onClick={this.openUrl.bind(null,appInfo.optionsUrl)}></span>
+    }
+    var toggle=null;
+    if(appInfo.type&&!appInfo.type.match('theme')){
+        toggle=<label onClick={this.toggleState} className="app-switch"></label>
     }
     var config=null;
     if(appInfo.state!='removed'){
       config=
         <div className="config">
-          <label onClick={this.toggleState} className="app-switch"></label>
+          {toggle}
           {options}
           <label onClick={this.uninstall} className="app-remove"></label>
         </div>
@@ -165,15 +169,15 @@ module.exports = React.createClass({
                 <tr><td>{capFirst('last update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
                 <tr><td>{capFirst('first installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
                 <tr><td>{capFirst('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
-                <tr><td>{capFirst('homepage url')}</td><td><a target="_blank" href={appInfo.homepageUrl}>{appInfo.homepageUrl}</a></td></tr>
+                <tr><td>{capFirst('homepage url')}</td><td><a target="_blank" title={appInfo.homepageUrl} href={appInfo.homepageUrl}>{appInfo.homepageUrl}</a></td></tr>
                 <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
                 <tr><td>{capFirst('short name')}</td><td>{appInfo.shortName}</td></tr>
                 <tr><td>{capFirst('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
                 {launchType}
                 <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
-                <tr><td>{capFirst('download crx')}</td><td><a target="_blank" href={this.state.crxUrl}>{crxName}</a></td></tr>
-                <tr><td>{capFirst('update url')}</td><td><a target="_blank" href={appInfo.updateUrl}>{appInfo.updateUrl}</a></td></tr>
-                <tr><td>{capFirst('manifest file')}</td><td><a target="_blank" href={manifestUrl}>{manifestUrl}</a></td></tr>
+                <tr><td>{capFirst('download crx')}</td><td><a target="_blank" title={this.state.crxUrl} href={this.state.crxUrl}>{crxName}</a></td></tr>
+                <tr><td>{capFirst('update url')}</td><td><a target="_blank" title={appInfo.updateUrl} href={appInfo.updateUrl}>{appInfo.updateUrl}</a></td></tr>
+                <tr><td>{capFirst('manifest file')}</td><td><a onClick={this.openUrl.bind(null,manifestUrl)} href="" title={manifestUrl}>manifest.json</a></td></tr>
                 <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
                 <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
                 {hostPermissions}

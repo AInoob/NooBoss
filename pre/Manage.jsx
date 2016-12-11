@@ -2,8 +2,11 @@ var React = require('react');
 var Helmet = require('react-helmet');
 var AppBrief = require('./AppBrief.jsx');
 module.exports = React.createClass({
+  displayName: "Manage",
   getInitialState: function(){
-    return {};
+    return {
+      filter:{type:'all',keyword: ''}
+    };
   },
   componentDidMount: function(){
     chrome.management.getAll(function(appInfoList){
@@ -94,17 +97,44 @@ module.exports = React.createClass({
   openOptions:function(url){
     chrome.tabs.create({url:url});
   },
+  updateFilter: function(e){
+    var id=e.target.id;
+    var value=e.target.value;
+    this.setState(function(prevState){
+      prevState.filter[id]=value;
+      return prevState;
+    });
+  },
   render: function(){
     var appList=(this.state.appInfoList||[]).map(function(appInfo,index){
-      return (
-        <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} info={appInfo} />
-        );
+      var filter=this.state.filter;
+      var pattern=new RegExp(filter.keyword,'i');
+      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
+        return (
+          <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} info={appInfo} />
+          );
+      }
+      else{
+        return null;
+      }
     }.bind(this));
     return(
       <div className="NooBoss-body">
         <Helmet
           title="Manage"
         />
+        <div className="searchBar">
+          <div className="type">
+            Type: 
+            <select onChange={this.updateFilter} id="type">
+              <option value="all">All</option>
+              <option value="extension">Extension</option>
+              <option value="app">App</option>
+              <option value="theme">Theme</option>
+            </select>
+          </div>
+          <input id="keyword" onChange={this.updateFilter} type="text" />
+        </div>
         {appList}
       </div>
     );

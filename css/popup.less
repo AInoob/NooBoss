@@ -1,7 +1,7 @@
 body {
   background-color: beige;
   margin: 0px;
-  width: 600px;
+  width: 588px;
   &::-webkit-scrollbar {
     background-color: #283c0c;
     width: 10px;
@@ -26,6 +26,20 @@ body {
   height: auto;
   overflow: hidden;
   width: 100%;
+  .searchBar{
+    overflow: hidden;
+    .type{
+      float: left;
+      select{
+        height: 33px;
+      }
+    }
+    #keyword{
+      float: left;
+      margin-left: 13px;
+      height: 26px;
+    }
+  }
 }
 * {
   transition-duration: 0.618s;
@@ -33,6 +47,14 @@ body {
 
 .noTransTime{
   transition-duration: 0s;
+}
+
+a{
+  color: #4016d9;
+}
+
+a:visited{
+  color: #4016d9;
 }
 
 nav {
@@ -44,8 +66,7 @@ nav {
   ul {
     li {
       border-left: 1px solid pink;
-      border-right: 1px solid pink;
-      width: 24.77%;
+      width: 145px;
       a {
         color: white;
       }
@@ -83,8 +104,7 @@ ul {
   ul {
     li {
       border-left: 1px solid pink;
-      border-right: 1px solid pink;
-      width: 49.77%;
+      width: 292px;
       a {
         color: white;
       }
@@ -93,8 +113,8 @@ ul {
 }
 .app-holder {
   float:left;
-  height: 100px;
-  width: 100px;
+  height: 98px;
+  width: 98px;
   .app-status-checkbox {
     display: none;
     &:not(:checked)+ .app-brief {
@@ -202,6 +222,9 @@ ul {
           height: 13px;
           width: 13px;
         }
+        &:nth-child(1) {
+          width: 123px;
+        }
         &:nth-child(2) {
           text-transform: capitalize;
           font-weight: bold;
@@ -213,7 +236,7 @@ ul {
           display: block;
           overflow: hidden;
           white-space: nowrap;
-          width: 300px;
+          width: 260px;
         }
       }
       .disabled {
@@ -269,7 +292,7 @@ ul {
   }
   .app-main{
     float:left;
-    width: 500px;
+    width: 488px;
     .app-name{
       font-weight: bold;
       font-size: 18px;

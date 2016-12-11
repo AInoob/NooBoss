@@ -164,7 +164,7 @@ NooBoss.History.listen=function(){
       console.log('recordEnable'+times);
       if(!appInfo){
         if(times<9){
-          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+          setTimeout(getDB.bind(null,id,recordEnable.bind(null,times+1)),1000);
         }
       }
       else{
