@@ -4,8 +4,9 @@ var AppBrief = require('./AppBrief.jsx');
 module.exports = React.createClass({
   displayName: "Manage",
   getInitialState: function(){
+    var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return {
-      filter:{type:'all',keyword: ''}
+      filter:{type:type,keyword: ''}
     };
   },
   componentDidMount: function(){
@@ -118,6 +119,7 @@ module.exports = React.createClass({
         return null;
       }
     }.bind(this));
+    var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return(
       <div className="NooBoss-body">
         <Helmet
@@ -126,10 +128,10 @@ module.exports = React.createClass({
         <div className="searchBar">
           <div className="type">
             Type: 
-            <select onChange={this.updateFilter} id="type">
+            <select defaultValue={type} onChange={this.updateFilter} id="type">
               <option value="all">All</option>
-              <option value="extension">Extension</option>
               <option value="app">App</option>
+              <option value="extension">Extension</option>
               <option value="theme">Theme</option>
             </select>
           </div>

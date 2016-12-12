@@ -61,8 +61,7 @@ nav {
   width: 100%;
 }
 nav ul li {
-  border-left: 1px solid pink;
-  width: 145px;
+  width: 25%;
 }
 nav ul li a {
   color: white;
@@ -75,7 +74,7 @@ ul {
   padding-left: 0px;
 }
 ul li {
-  background-color: #333333;
+  background: linear-gradient(to right, pink, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, pink);
   display: block;
   float: left;
   font-size: 28px;
@@ -89,6 +88,9 @@ ul li a {
 ul li:hover {
   background-color: pink;
 }
+ul li.active {
+  background: linear-gradient(to right, pink, pink);
+}
 .footer {
   bottom: 0px;
   clear: both;
@@ -97,8 +99,8 @@ ul li:hover {
   width: 100%;
 }
 .footer ul li {
-  border-left: 1px solid pink;
-  width: 292px;
+  background: linear-gradient(to right, pink, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, pink);
+  width: 50%;
 }
 .footer ul li a {
   color: white;

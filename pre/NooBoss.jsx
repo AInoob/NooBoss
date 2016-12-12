@@ -19,6 +19,7 @@ ReactDOM.render(
       <Route path="overview" component={require('./Overview.jsx')} />
       <Route path="app" component={require('./App.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />
+      <Route path="manage/*" component={require('./Manage.jsx')} />
       <Route path="discover" component={require('./Discover.jsx')} />
       <Route path="options" component={require('./Options.jsx')} />
       <Route path="history" component={require('./History.jsx')} />

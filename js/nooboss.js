@@ -67,6 +67,7 @@
 	    React.createElement(Route, { path: 'overview', component: __webpack_require__(252) }),
 	    React.createElement(Route, { path: 'app', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'manage', component: __webpack_require__(250) }),
+	    React.createElement(Route, { path: 'manage/*', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'discover', component: __webpack_require__(254) }),
 	    React.createElement(Route, { path: 'options', component: __webpack_require__(255) }),
 	    React.createElement(Route, { path: 'history', component: __webpack_require__(256) }),
@@ -26771,6 +26772,9 @@
 	  displayName: 'exports',
 
 	  render: function () {
+	    var activeList = {};
+	    console.log(this.props.location.pathname.match(/\/(\w+)/)[1]);
+	    activeList[this.props.location.pathname.match(/\/(\w+)/)[1]] = 'active';
 	    return React.createElement(
 	      'div',
 	      { id: 'NooBoss-Core' },
@@ -26782,7 +26786,7 @@
 	          null,
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.overview },
 	            React.createElement(
 	              Link,
 	              { to: '/overview' },
@@ -26791,7 +26795,7 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.manage },
 	            React.createElement(
 	              Link,
 	              { to: '/manage' },
@@ -26800,7 +26804,7 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.discover },
 	            React.createElement(
 	              Link,
 	              { to: '/discover' },
@@ -26809,7 +26813,7 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.history },
 	            React.createElement(
 	              Link,
 	              { to: '/history' },
@@ -26832,7 +26836,7 @@
 	          null,
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.options },
 	            React.createElement(
 	              Link,
 	              { to: '/options' },
@@ -26841,7 +26845,7 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            null,
+	            { className: activeList.about },
 	            React.createElement(
 	              Link,
 	              { to: '/about' },
@@ -27948,8 +27952,9 @@
 	module.exports = React.createClass({
 	  displayName: "Manage",
 	  getInitialState: function () {
+	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return {
-	      filter: { type: 'all', keyword: '' }
+	      filter: { type: type, keyword: '' }
 	    };
 	  },
 	  componentDidMount: function () {
@@ -28058,6 +28063,7 @@
 	        return null;
 	      }
 	    }.bind(this));
+	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBoss-body' },
@@ -28073,7 +28079,7 @@
 	          'Type:',
 	          React.createElement(
 	            'select',
-	            { onChange: this.updateFilter, id: 'type' },
+	            { defaultValue: type, onChange: this.updateFilter, id: 'type' },
 	            React.createElement(
 	              'option',
 	              { value: 'all' },
@@ -28081,13 +28087,13 @@
 	            ),
 	            React.createElement(
 	              'option',
-	              { value: 'extension' },
-	              'Extension'
+	              { value: 'app' },
+	              'App'
 	            ),
 	            React.createElement(
 	              'option',
-	              { value: 'app' },
-	              'App'
+	              { value: 'extension' },
+	              'Extension'
 	            ),
 	            React.createElement(
 	              'option',
@@ -28162,24 +28168,96 @@
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
+	var Link = __webpack_require__(183).Link;
 	module.exports = React.createClass({
-	  displayName: 'exports',
-
+	  displayName: 'Overview',
 	  getInitialState: function () {
-	    return null;
+	    return {};
 	  },
-	  componentDidMount: function () {},
+	  componentDidMount: function () {
+	    chrome.management.getAll(function (appInfoList) {
+	      for (var i = 0; i < appInfoList.length; i++) {
+	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+	      }
+	      this.setState({ appInfoList: appInfoList });
+	    }.bind(this));
+	  },
+	  getIconUrl: function (appInfo) {
+	    var iconUrl = undefined;
+	    if (appInfo.icons) {
+	      var maxSize = 0;
+	      for (var j = 0; j < appInfo.icons.length; j++) {
+	        var iconInfo = appInfo.icons[j];
+	        if (iconInfo.size > maxSize) {
+	          maxSize = iconInfo.size;
+	          iconUrl = iconInfo.url;
+	        }
+	      }
+	    }
+	    if (!iconUrl) {
+	      var canvas = document.createElement("canvas");
+	      canvas.width = 128;
+	      canvas.height = 128;
+	      var ctx = canvas.getContext('2d');
+	      ctx.font = "120px Arial";
+	      ctx.fillStyle = "grey";
+	      ctx.fillRect(0, 0, canvas.width, canvas.height);
+	      ctx.fillStyle = "white";
+	      ctx.fillText(appInfo.name[0], 22, 110);
+	      iconUrl = canvas.toDataURL();
+	    }
+	    return iconUrl;
+	  },
 	  render: function () {
+	    var appInfoList = this.state.appInfoList || [];
+	    var overview = {};
+	    overview.app = 0;
+	    overview.extension = 0;
+	    overview.theme = 0;
+	    for (var i = 0; i < appInfoList.length; i++) {
+	      var appInfo = appInfoList[i];
+	      if (appInfo.type == 'extension') {
+	        overview.extension++;
+	      } else if (appInfo.type.indexOf('app') != -1) {
+	        overview.app++;
+	      } else if (appInfo.type == 'theme') {
+	        overview.theme++;
+	      }
+	    }
+	    console.log();
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'NooBox-body' },
 	      React.createElement(Helmet, {
 	        title: 'Home'
 	      }),
 	      React.createElement(
-	        'p',
-	        null,
-	        'Home'
+	        'div',
+	        { id: 'overview' },
+	        React.createElement(
+	          'div',
+	          { className: 'manage' },
+	          'You have:',
+	          React.createElement(
+	            Link,
+	            { to: '/manage/app' },
+	            overview.app
+	          ),
+	          ' app(s),',
+	          React.createElement(
+	            Link,
+	            { to: '/manage/extension' },
+	            overview.extension
+	          ),
+	          ' extension(s),',
+	          React.createElement(
+	            Link,
+	            { to: '/manage/theme' },
+	            overview.theme
+	          ),
+	          ' theme'
+	        ),
+	        React.createElement('div', { className: 'discover' })
 	      )
 	    );
 	  }
