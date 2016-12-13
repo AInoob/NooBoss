@@ -23,24 +23,44 @@ body::-webkit-scrollbar-track {
   height: 37px;
   width: 100%;
 }
+#overview .manage {
+  font-size: 22px;
+  font-weight: bold;
+}
 .NooBoss-body {
   height: auto;
   overflow: hidden;
   width: 100%;
 }
-.NooBoss-body .searchBar {
+.NooBoss-body .actionBar {
+  font-size: 16px;
+  font-weight: bold;
   overflow: hidden;
 }
-.NooBoss-body .searchBar .type {
+.NooBoss-body .actionBar .type,
+.NooBoss-body .actionBar .event {
   float: left;
 }
-.NooBoss-body .searchBar .type select {
+.NooBoss-body .actionBar .type select,
+.NooBoss-body .actionBar .event select {
   height: 33px;
 }
-.NooBoss-body .searchBar #keyword {
+.NooBoss-body .actionBar #keyword {
   float: left;
   margin-left: 13px;
   height: 26px;
+}
+.NooBoss-body .actionBar span {
+  margin-left: 8px;
+}
+.NooBoss-body .actionBar span:hover {
+  cursor: pointer;
+}
+.NooBoss-body .actionBar #enableAll {
+  color: lime;
+}
+.NooBoss-body .actionBar #disableAll {
+  color: grey;
 }
 * {
   transition-duration: 0.618s;
@@ -61,10 +81,14 @@ nav {
   width: 100%;
 }
 nav ul li {
+  background: linear-gradient(to right, pink, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, pink);
   width: 25%;
 }
 nav ul li a {
   color: white;
+}
+nav ul li:hover {
+  background: linear-gradient(to right, pink, pink);
 }
 a {
   text-decoration: none;
@@ -74,7 +98,6 @@ ul {
   padding-left: 0px;
 }
 ul li {
-  background: linear-gradient(to right, pink, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, black, pink);
   display: block;
   float: left;
   font-size: 28px;
@@ -84,9 +107,6 @@ ul li {
 ul li a {
   display: block;
   width: 100%;
-}
-ul li:hover {
-  background-color: pink;
 }
 ul li.active {
   background: linear-gradient(to right, pink, pink);
@@ -104,6 +124,12 @@ ul li.active {
 }
 .footer ul li a {
   color: white;
+}
+.footer ul li:hover {
+  background: linear-gradient(to right, pink, pink);
+}
+.footer ul li.active {
+  background: linear-gradient(to right, pink, pink);
 }
 .app-holder {
   float: left;
@@ -138,18 +164,22 @@ ul li.active {
   width: 100%;
 }
 .app-holder .app-brief:hover .app-info {
+  -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
 .app-holder .app-brief:hover .app-icon {
+  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
 .app-holder .app-brief .app-info {
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   background-color: beige;
   height: 98px;
   padding-top: 15px;
   position: absolute;
   text-align: center;
+  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
   width: 100%;
 }
@@ -160,6 +190,7 @@ ul li.active {
   margin-top: 20px;
 }
 .app-holder .app-brief .app-icon {
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   margin: 7px;
   position: absolute;
@@ -306,8 +337,8 @@ ul li.active {
 }
 .app .app-main .app-launcher {
   float: right;
-  width: 100px;
-  height: 100px;
+  width: 88px;
+  height: 88px;
   background-color: #37d351;
   border-radius: 30px;
   line-height: 100px;

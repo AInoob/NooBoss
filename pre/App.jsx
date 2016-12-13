@@ -14,7 +14,12 @@ module.exports = React.createClass({
       crxUrl=$(data).find('updatecheck').attr('codebase');
       crxVersion=$(data).find('updatecheck').attr('version');
       this.setState({crxUrl:crxUrl,crxVersion:crxVersion});
-    }.bind(this))
+    }.bind(this));
+    $.ajax({
+      url:'https://chrome.google.com/webstore/detail/'+id
+    }).done(function(data){
+      this.setState({rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5'});
+    }.bind(this));
     getDB(id,function(appInfo){
       if(appInfo.state!='removed'){
         if(appInfo.enabled){
@@ -143,6 +148,7 @@ module.exports = React.createClass({
       crxName='extension_'+(this.state.crxVersion.replace(/\./g,'_')+'.crx');
     }
     var manifestUrl='chrome-extension://'+appInfo.id+'/manifest.json';
+    var nb_rating=<tr><td>{capFirst('NB-Rating')}</td><td>{this.state.nb_rating}</td></tr>;
     return(
       <div className="NooBoss-body">
         <Helmet
@@ -160,7 +166,7 @@ module.exports = React.createClass({
               <tbody>
                 <tr><td>{capFirst('version')}</td><td>{appInfo.version}</td></tr>
                 <tr><td>{capFirst('state')}</td><td><span className={'noTransTime '+(this.state.appInfo||{}).state}>{capFirst((this.state.appInfo||{}).state)}</span></td></tr>
-                <tr><td>{capFirst('rating')}</td><td>{'*&&*'}</td></tr>
+                <tr><td>{capFirst('rating')}</td><td>{this.state.rating}</td></tr>
                 <tr><td>{capFirst('description')}</td><td>{appInfo.description}</td></tr>
               </tbody>
             </table>

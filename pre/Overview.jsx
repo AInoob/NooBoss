@@ -66,13 +66,13 @@ module.exports = React.createClass({
         />
         <div id="overview">
           <div className="manage">
-            You have: 
+            You have:&nbsp;
             <Link to="/manage/app">
               {overview.app}
-            </Link> app(s),
+            </Link> app(s),&nbsp;
             <Link to="/manage/extension">
               {overview.extension}
-            </Link> extension(s),
+            </Link> extension(s),&nbsp;
             <Link to="/manage/theme">
               {overview.theme}
             </Link> theme

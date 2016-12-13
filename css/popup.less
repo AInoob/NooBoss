@@ -22,13 +22,23 @@ body {
   height: 37px;
   width: 100%;
 }
+
+#overview{
+  .manage{
+    font-size: 22px;
+    font-weight: bold;
+  }
+}
+
 .NooBoss-body {
   height: auto;
   overflow: hidden;
   width: 100%;
-  .searchBar{
+  .actionBar{
+    font-size: 16px;
+    font-weight: bold;
     overflow: hidden;
-    .type{
+    .type, .event{
       float: left;
       select{
         height: 33px;
@@ -38,6 +48,18 @@ body {
       float: left;
       margin-left: 13px;
       height: 26px;
+    }
+    span{
+      &:hover{
+        cursor: pointer;
+      }
+      margin-left: 8px;
+    }
+    #enableAll{
+      color: lime;
+    }
+    #disableAll{
+      color: grey;
     }
   }
 }
@@ -65,9 +87,13 @@ nav {
   width: 100%;
   ul {
     li {
+      background: linear-gradient(to right, pink,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,pink);
       width: 25%;
       a {
         color: white;
+      }
+      &:hover {
+        background: linear-gradient(to right, pink,pink);
       }
     }
   }
@@ -79,7 +105,6 @@ ul {
   margin: 0px;
   padding-left: 0px;
   li {
-    background: linear-gradient(to right, pink,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,black,pink);
     display: block;
     float: left;
     font-size: 28px;
@@ -88,9 +113,6 @@ ul {
     a {
       display: block;
       width: 100%;
-    }
-    &:hover {
-      background-color: pink;
     }
   }
   li.active{
@@ -110,6 +132,12 @@ ul {
       a {
         color: white;
       }
+      &:hover {
+        background: linear-gradient(to right, pink,pink);
+      }
+    }
+    li.active{
+      background: linear-gradient(to right, pink,pink);
     }
   }
 }
@@ -145,19 +173,23 @@ ul {
     width: 100%;
     &:hover {
       .app-info {
+        -webkit-transform: rotateY(0deg);
         transform: rotateY(0deg);
       }
       .app-icon {
+        -webkit-transform: rotateY(180deg);
         transform: rotateY(180deg);
       }
     }
     .app-info {
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       background-color: beige;
       height: 98px;
       padding-top: 15px;
       position: absolute;
       text-align: center;
+      -webkit-transform: rotateY(180deg);
       transform: rotateY(180deg);
       width: 100%;
       .app-version {
@@ -168,6 +200,7 @@ ul {
       }
     }
     .app-icon {
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       margin: 7px;
       position: absolute;
@@ -328,8 +361,8 @@ ul {
     }
     .app-launcher{
       float: right;
-      width: 100px;
-      height: 100px;
+      width: 88px;
+      height: 88px;
       background-color: #37d351;;
       border-radius: 30px;
       line-height: 100px;

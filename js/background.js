@@ -4,9 +4,10 @@ NooBoss.defaultValues=[
   ['userId',(Math.random().toString(36)+'00000000000000000').slice(2, 19)],
   ['joinCommunity','1'],
   ['showAds','-1'],
-  ['notifyStateChange','1'],
+  ['notifyStateChange','-1'],
   ['notifyInstallation','1'],
   ['notifyRemoval','1'],
+  ['autoStateManage','-1'],
 ];
 
 NooBoss.resetSettings=function(){
@@ -121,7 +122,9 @@ NooBoss.History.listen=function(){
     var time=new Date().getTime();
     NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
       getDB(appInfo.id,function(appInfo){
-        NooBoss.History.addRecord({action:'installed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        NooBoss.History.addRecord({event:'installed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        isOn('joinCommunity',function(){
+        });
       });
     });
     isOn('notifyInstallation',function(){
@@ -142,7 +145,7 @@ NooBoss.History.listen=function(){
         }
       }
       else{
-        NooBoss.History.addRecord({action:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        NooBoss.History.addRecord({event:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
     }
     getDB(id,recordUninstall.bind(null,1));
@@ -168,7 +171,7 @@ NooBoss.History.listen=function(){
         }
       }
       else{
-        NooBoss.History.addRecord({action:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        NooBoss.History.addRecord({event:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
     }
     getDB(id,recordEnable.bind(null,1));
@@ -191,7 +194,7 @@ NooBoss.History.listen=function(){
         }
       }
       else{
-        NooBoss.History.addRecord({action:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        NooBoss.History.addRecord({event:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
       }
     }
     getDB(id,recordDisable.bind(null,1));
@@ -215,6 +218,13 @@ NooBoss.init=function(){
 
 document.addEventListener('DOMContentLoaded', function(){
   NooBoss.init()
+  chrome.tabs.onCreated.addListener(function(tab){
+    console.log(tab);
+  });
+  chrome.tabs.onUpdated.addListener(function(tabId,info,tab){
+    console.log(info);
+    console.log(tab);
+  });
   chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       if('job' in request){

@@ -8,7 +8,8 @@ var textIdMap={
   showAds: 'show ADs',
   notifyStateChange: 'notify state change',
   notifyInstallation: 'notify installation',
-  notifyRemoval: 'notify removal'
+  notifyRemoval: 'notify removal',
+  autoStateManage: 'auto state manage'
 }
 
 function getTextFromId(id){
