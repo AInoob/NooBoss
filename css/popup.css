@@ -51,6 +51,7 @@ body::-webkit-scrollbar-track {
   height: 26px;
 }
 .NooBoss-body .actionBar span {
+  line-height: 30px;
   margin-left: 8px;
 }
 .NooBoss-body .actionBar span:hover {
