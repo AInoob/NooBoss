@@ -98,6 +98,7 @@ module.exports = React.createClass({
   updateRule: function(e){
     var id=e.target.id;
     var value=e.target.value;
+    console.log(value);
     this.setState(function(prevState){
       prevState.rule[id]=value;
       return prevState;
@@ -113,9 +114,6 @@ module.exports = React.createClass({
       }
     }
     this.setState(function(prevState){
-      prevState.rule.selected={};
-      prevState.rule.action='enableOnly';
-      prevState.rule.match='';
       prevState.rules.push({
         ids: ids,
         action: prevState.rule.action,
@@ -123,6 +121,10 @@ module.exports = React.createClass({
           url: prevState.rule.match
         }
       });
+      prevState.rule.selected={};
+      prevState.rule.action='enableOnly';
+      prevState.rule.match='';
+      return prevState;
     },function(){
       set('autoStateRules',JSON.stringify(this.state.rules),function(){
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
