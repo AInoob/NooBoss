@@ -75,7 +75,12 @@ module.exports = React.createClass({
             </Link> extension(s),&nbsp;
             <Link to="/manage/theme">
               {overview.theme}
-            </Link> theme
+            </Link> theme<br/>
+            You have:&nbsp;
+            <Link to="/autoState">
+              {(this.state.rules||[]).length}
+            </Link>
+            &nbsp;Auto state rule(s).
           </div>
           <div className="discover">
           </div>

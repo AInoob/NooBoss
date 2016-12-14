@@ -3,10 +3,10 @@ var Helmet = require('react-helmet');
 module.exports = React.createClass({
   displayName: 'Options',
   getInitialState: function(){
-    return {setting:{joinCommunity:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoStateManage:false}};
+    return {setting:{joinCommunity:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false}};
   },
   componentDidMount: function(){
-    var switchList=['joinCommunity','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoStateManage'];
+    var switchList=['joinCommunity','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
     for(var i=0;i<switchList.length;i++){
       isOn(
         switchList[i],
@@ -56,16 +56,33 @@ module.exports = React.createClass({
   getSwitch: function(id,handler){
     return <div className="switch"><input type="checkbox" onChange={handler||this.toggleSetting.bind(this,id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
   },
-  autoStateManage: function(){
+  showAds: function(){
+    alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
+  },
+  joinCommunity: function(){
+    if(this.state.setting.joinCommunity){
+      var sadMove=confirm('You are about to leave NooBoss community, by doing so: AInoob(author) will no longer know if anyone is using NooBoss or not, thus he might slows down the NooBoss project or even shuts it down. However, this is your choice, click "OK" if you do not want to send your NooBoss usage data and extensions you are using to NooBox community.(NooBoss never track your personal information)');
+      if(!sadMove){
+        return;
+      }
+    }
+    set(id,newValue,function(){
+      this.setState(function(prevState){
+        prevState.setting[id]=newValue;
+        return prevState;
+      });
+    }.bind(this));
+  },
+  autoState: function(){
     var change=function(value){
-      set('autoStateManage',value,function(){
+      set('autoState',value,function(){
         this.setState(function(prevState){
-          prevState.setting.autoStateManage=value;
+          prevState.setting.autoState=value;
           return prevState;
         });
       }.bind(this))
     }.bind(this);
-    if(!this.state.setting.autoStateManage){
+    if(!this.state.setting.autoState){
       chrome.permissions.contains({
         permissions: ['tabs']
       },function(result){
@@ -133,11 +150,12 @@ module.exports = React.createClass({
         {this.getSwitch('notifyStateChange')}
         {this.getSwitch('notifyInstallation')}
         {this.getSwitch('notifyRemoval')}
+        {this.getSwitch('autoStateNotification')}
         <div className="header">Functions</div>
-        {this.getSwitch('autoStateManage',this.autoStateManage)}
+        {this.getSwitch('autoState',this.autoState)}
         <div className="header">Experience</div>
-        {this.getSwitch('joinCommunity')}
-        {this.getSwitch('showAds')}
+        {this.getSwitch('joinCommunity',this.joinCommunity)}
+        {this.getSwitch('showAds',this.showAds)}
       </div>
     );
   }

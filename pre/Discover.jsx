@@ -14,7 +14,7 @@ module.exports = React.createClass({
         <Helmet
           title="Discover"
         />
-        <p>Discover new apps</p>
+        <p>Discover function is not available yet, sorry about this</p>
       </div>
     );
   }

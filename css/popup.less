@@ -35,7 +35,7 @@ body {
   overflow: hidden;
   width: 100%;
   .actionBar{
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     overflow: hidden;
     .type, .event{
@@ -43,6 +43,11 @@ body {
       select{
         height: 33px;
       }
+    }
+    a{
+      margin-left: 10px;
+      color: #ffa2a2;
+      text-decoration: underline;
     }
     #keyword{
       float: left;
@@ -57,7 +62,7 @@ body {
       margin-left: 8px;
     }
     #enableAll{
-      color: lime;
+      color: #15af52;
     }
     #disableAll{
       color: grey;
@@ -142,7 +147,19 @@ ul {
     }
   }
 }
+.dimmer,.nonDimmer{
+  position: absolute;
+  height: 98px;
+  width: 98px;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.64);
+  pointer-events: none;
+}
+.nonDimmer{
+  background-color: rgba(0,0,0,0);
+}
 .app-holder {
+  position: relative;
   float:left;
   height: 98px;
   width: 98px;
@@ -244,6 +261,58 @@ ul {
       display: block;
       font-weight: bold;
       color: #2d40b6;
+    }
+  }
+}
+
+.newRule{
+  width: 100%;
+  text-align: center;
+  .selected{
+    min-height: 13px;
+    img{
+      height: 15px;
+      width: 15px;
+    }
+  }
+}
+
+h2{
+  text-align: center;
+}
+
+.actionBar.autoState{
+  border-top: 2px solid pink;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
+.AutoStateRules{
+  tbody {
+    tr {
+      td {
+        border-top: 2px solid pink;
+        font-size: 15px;
+        img {
+          height: 15px;
+          width: 15px;
+        }
+        &:nth-child(1) {
+          width: 60px;
+        }
+        &:nth-child(2) {
+          width: 100px;
+          text-align: center;
+        }
+        &:nth-child(3) {
+          text-align: center;
+          width: 100px;
+        }
+        &:nth-child(4) {
+          width: 260px;
+          text-align: center;
+        }
+      }
     }
   }
 }

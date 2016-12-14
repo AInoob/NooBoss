@@ -20,6 +20,7 @@ ReactDOM.render(
       <Route path="app" component={require('./App.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />
       <Route path="manage/*" component={require('./Manage.jsx')} />
+      <Route path="autoState" component={require('./AutoState.jsx')} />
       <Route path="discover" component={require('./Discover.jsx')} />
       <Route path="options" component={require('./Options.jsx')} />
       <Route path="history" component={require('./History.jsx')} />

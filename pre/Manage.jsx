@@ -1,6 +1,7 @@
 var React = require('react');
 var Helmet = require('react-helmet');
 var AppBrief = require('./AppBrief.jsx');
+var Link = require('react-router').Link;
 module.exports = React.createClass({
   displayName: "Manage",
   getInitialState: function(){
@@ -177,6 +178,7 @@ module.exports = React.createClass({
           <span id="enableAll" onClick={this.enableAll}>Enable all</span>
           <span id="disableAll" onClick={this.disableAll}>Disable all</span>
           <span id="undo" onClick={this.undoAll}>Undo all</span>
+          <Link to="/autoState">Auto state</Link>
         </div>
         {appList}
       </div>

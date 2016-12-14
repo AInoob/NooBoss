@@ -7,7 +7,8 @@ NooBoss.defaultValues=[
   ['notifyStateChange','-1'],
   ['notifyInstallation','1'],
   ['notifyRemoval','1'],
-  ['autoStateManage','-1'],
+  ['autoState','-1'],
+  ['autoState','1']
 ];
 
 NooBoss.resetSettings=function(){
@@ -71,50 +72,171 @@ NooBoss.Util.getIcon=function(appInfo,callback){
 
 //Management
 NooBoss.Management={};
-NooBoss.Management.autoStateManage={};
-NooBoss.Management.autoStateManage.enable=function(){
-  NooBoss.Management.autoStateManage.init();
+NooBoss.Management.autoState={};
+NooBoss.Management.autoState.enable=function(){
+  NooBoss.Management.autoState.init();
   chrome.tabs.onCreated.addListener(function(tab){
-    NooBoss.Management.autoStateManage.newTab(tab);
+    NooBoss.Management.autoState.newTab(tab);
   });
   chrome.tabs.onUpdated.addListener(function(tabId,info,tab){
-    NooBoss.Management.autoStateManage.updateTab(tabId,info,tab);
+    NooBoss.Management.autoState.updateTab(tabId,info,tab);
   });
   chrome.tabs.onRemoved.addListener(function(tabId){
-    NooBoss.Management.autoStateManage.removeTab(tabId);
+    NooBoss.Management.autoState.removeTab(tabId);
+  });
+  chrome.tabs.onReplaced.addListener(function(addedTabId,removedTabId){
+    chrome.tabs.get(addedTabId,function(tab){
+      NooBoss.Management.autoState.newTab(tab);
+      console.log('replaced');
+    });
   });
 }
-NooBoss.Management.autoStateManage.newTab=function(tab){
-  NooBoss.Management.autoStateManage.tabs[tab.id]=tab.url;
-  console.log(NooBoss.Management.autoStateManage.tabs);
+NooBoss.Management.autoState.newTab=function(tab){
+  console.log(tab);
+  NooBoss.Management.autoState.tabs[tab.id]=tab.url;
+  NooBoss.Management.autoState.manage(tab.id);
 }
-NooBoss.Management.autoStateManage.updateTab=function(tabId,changeInfo,tab){
+NooBoss.Management.autoState.updateTab=function(tabId,changeInfo,tab){
   if(changeInfo.url){
-    var oldUrl=(NooBoss.Management.autoStateManage.tabs[tabId]||{}).url;
+    var oldUrl=(NooBoss.Management.autoState.tabs[tabId]||{}).url;
     if(oldUrl!=changeInfo.url){
-      NooBoss.Management.autoStateManage.tabs[tabId]=changeInfo.url;
-      console.log(NooBoss.Management.autoStateManage.tabs);
+      NooBoss.Management.autoState.tabs[tabId]=changeInfo.url;
+      NooBoss.Management.autoState.manage(tabId);
     }
   }
 }
-NooBoss.Management.autoStateManage.removeTab=function(tabId){
-  NooBoss.Management.autoStateManage.tabs[tabId]=null;
-  console.log(NooBoss.Management.autoStateManage.tabs);
+NooBoss.Management.autoState.removeTab=function(tabId){
+  NooBoss.Management.autoState.tabs[tabId]=null;
+  NooBoss.Management.autoState.manage(tabId);
 }
-NooBoss.Management.autoStateManage.disable=function(){
+NooBoss.Management.autoState.disable=function(){
   chrome.tabs.onCreated.removeListener();
   chrome.tabs.onUpdated.removeListener();
   chrome.tabs.onRemoved.removeListener();
+  chrome.tabs.onReplaced.removeListener();
 }
-NooBoss.Management.autoStateManage.init=function(){
-  NooBoss.Management.autoStateManage.tabs={};
+NooBoss.Management.autoState.manage=function(tabId){
+  var autoState=NooBoss.Management.autoState;
+  console.log(autoState.rules);
+  var tabs=autoState.tabs;
+  var nextPhases={};
+  for(var i=0;i<autoState.rules.length;i++){
+    var rule=autoState.rules[i];
+    var appIds=rule.ids;
+    var pattern=new RegExp(rule.match.url,'i');
+    var tabIds=Object.keys(tabs);
+    var matched=false;
+    for(var j=0;j<tabIds.length;j++){
+      var url=tabs[tabIds[j]];
+      if(pattern.exec(url)){
+        matched=true;
+        break;
+      }
+    }
+    console.log(rule.action);
+    switch(rule.action){
+      case 'enableOnly':
+        if(matched){
+          for(var k=0;k<appIds.length;k++){
+            autoState.setAppState(appIds[k],true,tabId,i);
+            nextPhases[appIds[k]]={
+              enabled: true,
+              tabid: tabId,
+              ruleId: i
+            }
+          }
+        }
+        else{
+          for(var k=0;k<appIds.length;k++){
+            nextPhases[appIds[k]]={
+              enabled: false,
+              tabid: null,
+              ruleId: i
+            }
+          }
+        }
+        break;
+      case 'enable':
+        if(matched){
+          for(var k=0;k<appIds.length;k++){
+            autoState.setAppState(appIds[k],true,tabId,i);
+            nextPhases[appIds[k]]={
+              enabled: true,
+              tabid: tabId,
+              ruleId: i
+            }
+          }
+        }
+        break;
+      case 'disable':
+        if(matched){
+          for(var k=0;k<appIds.length;k++){
+            autoState.setAppState(appIds[k],true,tabId,i);
+            nextPhases[appIds[k]]={
+              enabled: false,
+              tabid: null,
+              ruleId: i
+            }
+          }
+        }
+        break;
+    }
+  }
+  var ids=Object.keys(nextPhases);
+  console.log(nextPhases);
+  for(var i=0;i<ids.length;i++){
+    var id=ids[i];
+    var phase=nextPhases[id];
+    autoState.setAppState(id,phase.enabled,phase.tabId,phase.ruleId);
+  }
+}
+
+NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
+  if(NooBoss.Management.apps[id]){
+    var appInfo=NooBoss.Management.apps[id];
+    if(appInfo&&appInfo.enabled!=enabled){
+      appInfo.enabled=enabled;
+      chrome.management.setEnabled(id, enabled,function(){
+        var enabledStr='enabled';
+        if(!enabled){
+          enabledStr='disabled';
+        }
+        isOn('autoStateNotification',function(){
+          chrome.notifications.create({
+            type:'basic',
+            iconUrl: '/images/icon_128.png',
+            title: 'Auto state management',
+            message: appInfo.name+' has been '+enabledStr+' because of rule #'+(ruleId+1)
+          });
+        });
+        if(tabId){
+          chrome.tabs.reload(tabId);
+        }
+      });
+    }
+  }
+}
+
+NooBoss.Management.autoState.init=function(){
+  //{[id],condition,match}
+  NooBoss.Management.autoState.rules=[];
+//  NooBoss.Management.autoState.rules=[{ids:['kbmfpngjjgdllneeigpgjifpgocmfgmb'],action:'onlyEnable',match:{url:'^https://www.reddit.com'}},{ids:['eogeabecipmckmihpmkgjbghbffcebcf'],action:'onlyEnable',match:{url:'^http://slither.io'}}];
+  NooBoss.Management.autoState.tabs={};
+  NooBoss.Management.autoState.updateRules();
   chrome.tabs.query({},function(tabList){
     for(var i=0;i<tabList.length;i++){
       var tabInfo=tabList[i];
-      NooBoss.Management.autoStateManage.tabs[tabInfo.id]=tabInfo.url;
+      NooBoss.Management.autoState.tabs[tabInfo.id]=tabInfo.url;
     }
-    NooBoss.Management.autoStateManage.rules=[];
-    console.log(NooBoss.Management.autoStateManage.tabs);
+    console.log(NooBoss.Management.autoState.tabs);
+  });
+}
+NooBoss.Management.autoState.updateRules=function(){
+  get('autoStateRules',function(data){
+    if(data){
+      NooBoss.Management.autoState.rules=JSON.parse(data);
+      NooBoss.Management.autoState.manage();
+    }
   });
 }
 NooBoss.Management.updateAppInfo=function(appInfo,extraInfo,callback){
@@ -144,13 +266,16 @@ NooBoss.Management.updateAppInfoById=function(id,updateInfo){
 
 NooBoss.Management.init=function(){
   chrome.management.getAll(function(appInfoList){
+    var apps={};
     for(var i=0;i<appInfoList.length;i++){
       var appInfo=appInfoList[i];
       NooBoss.Management.updateAppInfo(appInfo);
+      apps[appInfo.id]=appInfo;
     }
+    NooBoss.Management.apps=apps;
   });
-  isOn('autoStateManage',
-    NooBoss.Management.autoStateManage.enable);
+  isOn('autoState',
+    NooBoss.Management.autoState.enable);
 }
 
 //History
@@ -167,6 +292,7 @@ NooBoss.History.addRecord=function(record){
 }
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
+    NooBoss.Management.apps[appInfo.id]=appInfo;
     var time=new Date().getTime();
     NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
       getDB(appInfo.id,function(appInfo){
@@ -185,6 +311,7 @@ NooBoss.History.listen=function(){
     });
   });
   chrome.management.onUninstalled.addListener(function(id){
+    NooBoss.Management.apps[id]=null;
     var recordUninstall=function(times,appInfo){
       console.log('recordUninstall '+times);
       if(!appInfo){
@@ -211,6 +338,7 @@ NooBoss.History.listen=function(){
   });
   chrome.management.onEnabled.addListener(function(appInfoOld){
     var id=appInfoOld.id;
+    NooBoss.Management.apps[id].enabled=true;
     var recordEnable=function(times,appInfo){
       console.log('recordEnable'+times);
       if(!appInfo){
@@ -234,6 +362,7 @@ NooBoss.History.listen=function(){
   });
   chrome.management.onDisabled.addListener(function(appInfoOld){
     var id=appInfoOld.id;
+    NooBoss.Management.apps[id].enabled=false;
     var recordDisable=function(times,appInfo){
       console.log('recordDisable'+times);
       if(!appInfo){
@@ -274,11 +403,14 @@ document.addEventListener('DOMContentLoaded', function(){
           NooBoss.resetSettings();
           NooBoss.resetIndexedDB();
         }
-        else if(request.job =='autoStateManage'){
-          isOn('autoStateManage',
-            NooBoss.Management.autoStateManage.enable,
-            NooBoss.Management.autoStateManage.disable
+        else if(request.job =='autoState'){
+          isOn('autoState',
+            NooBoss.Management.autoState.enable,
+            NooBoss.Management.autoState.disable
           );
+        }
+        else if(request.job == 'updateAutoStateRules'){
+          NooBoss.Management.autoState.updateRules();
         }
       }
     });

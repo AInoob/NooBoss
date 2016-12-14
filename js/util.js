@@ -9,7 +9,8 @@ var textIdMap={
   notifyStateChange: 'notify state change',
   notifyInstallation: 'notify installation',
   notifyRemoval: 'notify removal',
-  autoStateManage: 'auto state manage'
+  autoState: 'auto state manage',
+  autoStateNotification: 'auto state notification'
 }
 
 function getTextFromId(id){

@@ -68,10 +68,11 @@
 	    React.createElement(Route, { path: 'app', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'manage', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'manage/*', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'discover', component: __webpack_require__(254) }),
-	    React.createElement(Route, { path: 'options', component: __webpack_require__(255) }),
-	    React.createElement(Route, { path: 'history', component: __webpack_require__(256) }),
-	    React.createElement(Route, { path: 'about', component: __webpack_require__(257) })
+	    React.createElement(Route, { path: 'autoState', component: __webpack_require__(254) }),
+	    React.createElement(Route, { path: 'discover', component: __webpack_require__(255) }),
+	    React.createElement(Route, { path: 'options', component: __webpack_require__(256) }),
+	    React.createElement(Route, { path: 'history', component: __webpack_require__(257) }),
+	    React.createElement(Route, { path: 'about', component: __webpack_require__(258) })
 	  )
 	), document.getElementById('nooboss'));
 
@@ -27949,6 +27950,7 @@
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
 	var AppBrief = __webpack_require__(251);
+	var Link = __webpack_require__(183).Link;
 	module.exports = React.createClass({
 	  displayName: "Manage",
 	  getInitialState: function () {
@@ -28154,6 +28156,11 @@
 	          'span',
 	          { id: 'undo', onClick: this.undoAll },
 	          'Undo all'
+	        ),
+	        React.createElement(
+	          Link,
+	          { to: '/autoState' },
+	          'Auto state'
 	        )
 	      ),
 	      appList
@@ -28176,41 +28183,66 @@
 	  componentDidMount: function () {},
 	  render: function () {
 	    var info = this.props.info;
-	    var options = null;
-	    if (this.props.optionsUrl) {
-	      options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
-	    }
-	    var toggle = null;
-	    if (!info.type.match('theme')) {
-	      toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
-	    }
-	    return React.createElement(
-	      'div',
-	      { className: 'app-holder' },
-	      React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
-	      React.createElement(
+	    if (this.props.isAutoState) {
+	      console.log('yay');
+	      return React.createElement(
 	        'div',
-	        { className: 'app-brief', id: info.id + '-app' },
-	        React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
+	        { className: 'app-holder', onClick: this.props.select },
+	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
 	        React.createElement(
 	          'div',
-	          { className: 'app-info' },
-	          toggle,
-	          options,
-	          React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
+	          { className: 'app-brief', id: info.id + '-app' },
+	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
 	          React.createElement(
-	            'span',
-	            { className: 'app-version', title: info.version },
-	            info.version
-	          ),
-	          React.createElement(
-	            Link,
-	            { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
+	            'div',
+	            { className: 'app-info' },
+	            React.createElement(
+	              'span',
+	              { className: 'app-version', title: info.version },
+	              info.version
+	            ),
 	            info.name
 	          )
+	        ),
+	        React.createElement('div', { className: this.props.dimmer })
+	      );
+	    } else {
+	      var options = null;
+	      if (this.props.optionsUrl) {
+	        options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
+	      }
+	      var toggle = null;
+	      if (!info.type.match('theme')) {
+	        toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
+	      }
+	      return React.createElement(
+	        'div',
+	        { className: 'app-holder' },
+	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
+	        React.createElement(
+	          'div',
+	          { className: 'app-brief', id: info.id + '-app' },
+	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
+	          React.createElement(
+	            'div',
+	            { className: 'app-info' },
+	            toggle,
+	            options,
+	            React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
+	            React.createElement(
+	              'span',
+	              { className: 'app-version', title: info.version },
+	              info.version
+	            ),
+	            React.createElement(
+	              Link,
+	              { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
+	              info.name
+	            )
+	          )
 	        )
-	      )
-	    );
+	      );
+	    }
 	  }
 	});
 
@@ -28307,7 +28339,15 @@
 	            { to: '/manage/theme' },
 	            overview.theme
 	          ),
-	          ' theme'
+	          ' theme',
+	          React.createElement('br', null),
+	          'You have:\xA0',
+	          React.createElement(
+	            Link,
+	            { to: '/autoState' },
+	            (this.state.rules || []).length
+	          ),
+	          '\xA0Auto state rule(s).'
 	        ),
 	        React.createElement('div', { className: 'discover' })
 	      )
@@ -28863,6 +28903,352 @@
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
+	var AppBrief = __webpack_require__(251);
+	var Link = __webpack_require__(183).Link;
+	var browserHistory = __webpack_require__(183).browserHistory;
+	module.exports = React.createClass({
+	  displayName: "AutoState",
+	  getInitialState: function () {
+	    return {
+	      filter: { type: 'all', keyword: '' },
+	      rule: {
+	        selected: {},
+	        action: 'enableOnly',
+	        match: ''
+	      },
+	      icons: {}
+	    };
+	  },
+	  componentDidMount: function () {
+	    isOn('autoState', null, function () {
+	      alert('Auto state managment is disabled, please turn it on in options page to use this feature');
+	      browserHistory.push('/options');
+	    });
+	    chrome.management.getAll(function (appInfoList) {
+	      var originalStates = {};
+	      for (var i = 0; i < appInfoList.length; i++) {
+	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+	        var action = 'disable';
+	        if (appInfoList[i].enabled) {
+	          action = 'enable';
+	        }
+	      }
+	      this.setState({ appInfoList: appInfoList });
+	    }.bind(this));
+	    get('autoStateRules', function (data) {
+	      var rules = [];
+	      if (data) {
+	        rules = JSON.parse(data);
+	      }
+	      this.setState({ rules: rules });
+	    }.bind(this));
+	  },
+	  getIconUrl: function (appInfo) {
+	    var iconUrl = undefined;
+	    if (appInfo.icons) {
+	      var maxSize = 0;
+	      for (var j = 0; j < appInfo.icons.length; j++) {
+	        var iconInfo = appInfo.icons[j];
+	        if (iconInfo.size > maxSize) {
+	          maxSize = iconInfo.size;
+	          iconUrl = iconInfo.url;
+	        }
+	      }
+	    }
+	    if (!iconUrl) {
+	      var canvas = document.createElement("canvas");
+	      canvas.width = 128;
+	      canvas.height = 128;
+	      var ctx = canvas.getContext('2d');
+	      ctx.font = "120px Arial";
+	      ctx.fillStyle = "grey";
+	      ctx.fillRect(0, 0, canvas.width, canvas.height);
+	      ctx.fillStyle = "white";
+	      ctx.fillText(appInfo.name[0], 22, 110);
+	      iconUrl = canvas.toDataURL();
+	    }
+	    this.setState(function (prevState) {
+	      prevState.icons[appInfo.id] = iconUrl;
+	    });
+	    return iconUrl;
+	  },
+	  getFilteredList: function () {
+	    return (this.state.appInfoList || []).map(function (appInfo) {
+	      var filter = this.state.filter;
+	      var pattern = new RegExp(filter.keyword, 'i');
+	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
+	        return appInfo;
+	      } else {
+	        return null;
+	      }
+	    }.bind(this));
+	  },
+	  updateFilter: function (e) {
+	    var id = e.target.id;
+	    var value = e.target.value;
+	    this.setState(function (prevState) {
+	      prevState.filter[id] = value;
+	      return prevState;
+	    });
+	  },
+	  select: function (id) {
+	    this.setState(function (prevState) {
+	      prevState.rule.selected[id] = !prevState.rule.selected[id];
+	      return prevState;
+	    });
+	  },
+	  updateRule: function (e) {
+	    var id = e.target.id;
+	    var value = e.target.value;
+	    this.setState(function (prevState) {
+	      prevState.rule[id] = value;
+	      return prevState;
+	    });
+	  },
+	  addRule: function () {
+	    var ids = [];
+	    var keys = Object.keys(this.state.rule.selected);
+	    for (var i = 0; i < keys.length; i++) {
+	      var id = keys[i];
+	      if (this.state.rule.selected[id]) {
+	        ids.push(id);
+	      }
+	    }
+	    this.setState(function (prevState) {
+	      prevState.rule.selected = {};
+	      prevState.rule.action = 'enableOnly';
+	      prevState.rule.match = '';
+	      prevState.rules.push({
+	        ids: ids,
+	        action: prevState.rule.action,
+	        match: {
+	          url: prevState.rule.match
+	        }
+	      });
+	    }, function () {
+	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
+	      });
+	    });
+	  },
+	  deleteRule: function (index) {
+	    var decision = confirm('Do you want to remove rule #' + (index + 1) + '?');
+	    if (decision) {
+	      this.setState(function (prevState) {
+	        prevState.rules.splice(index, 1);
+	      }, function () {
+	        set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	          chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
+	        });
+	      });
+	    }
+	  },
+	  editRule: function (index) {
+	    this.setState(function (prevState) {
+	      var rule = prevState.rules.splice(index, 1)[0];
+	      prevState.rule.selected = {};
+	      for (var i = 0; i < rule.ids.length; i++) {
+	        prevState.rule.selected[rule.ids[i]] = true;
+	      }
+	      prevState.rule.action = rule.action;
+	      prevState.rule.match = rule.match.url;
+	    }, function () {
+	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
+	      });
+	    });
+	  },
+	  render: function () {
+	    var appList = this.getFilteredList().map(function (appInfo, index) {
+	      if (appInfo) {
+	        var dimmer = 'dimmer';
+	        if (this.state.rule.selected[appInfo.id]) {
+	          dimmer = 'nonDimmer';
+	        }
+	        return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	      }
+	    }.bind(this));
+	    var preRuleList = [{ ids: [], action: "Hello", match: { url: 'You do not have any rule yet' } }];
+	    if (this.state.rules && this.state.rules.length > 0) {
+	      preRuleList = this.state.rules;
+	    }
+	    var ruleList = preRuleList.map(function (rule, index) {
+	      var icons = rule.ids.map(function (id, index) {
+	        return React.createElement('img', { key: index, src: this.state.icons[id] });
+	      }.bind(this));
+	      return React.createElement(
+	        'tr',
+	        { className: 'rule', key: index },
+	        React.createElement(
+	          'td',
+	          null,
+	          index + 1
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          icons
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          rule.action
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          rule.match.url
+	        ),
+	        React.createElement(
+	          'td',
+	          { onClick: this.editRule.bind(this, index) },
+	          'Edit'
+	        ),
+	        React.createElement(
+	          'td',
+	          { onClick: this.deleteRule.bind(this, index) },
+	          'Delete'
+	        )
+	      );
+	    }.bind(this));
+	    var selectedIcons = (Object.keys(this.state.rule.selected) || []).map(function (id, index) {
+	      if (this.state.rule.selected[id]) return React.createElement('img', { key: index, src: this.state.icons[id] });
+	    }.bind(this));
+	    return React.createElement(
+	      'div',
+	      { className: 'NooBoss-body' },
+	      React.createElement(Helmet, {
+	        title: 'Manage'
+	      }),
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Rules'
+	      ),
+	      React.createElement(
+	        'table',
+	        { className: 'AutoStateRules' },
+	        React.createElement(
+	          'thead',
+	          null,
+	          React.createElement(
+	            'tr',
+	            null,
+	            React.createElement(
+	              'th',
+	              null,
+	              'Number'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Extensions'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Action'
+	            ),
+	            React.createElement(
+	              'th',
+	              null,
+	              'Match'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'tbody',
+	          null,
+	          ruleList
+	        )
+	      ),
+	      React.createElement(
+	        'h2',
+	        null,
+	        'New rule'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'newRule' },
+	        'Apps: ',
+	        React.createElement(
+	          'div',
+	          { className: 'selected' },
+	          selectedIcons
+	        ),
+	        'Action:\xA0',
+	        React.createElement(
+	          'select',
+	          { value: this.state.rule.action, onChange: this.updateRule, id: 'action' },
+	          React.createElement(
+	            'option',
+	            { value: 'enableOnly' },
+	            'Only Enable when matched'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'enable' },
+	            'Enable when matched'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'disable' },
+	            'Disable when matched'
+	          )
+	        ),
+	        '\xA0Url:\xA0',
+	        React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, type: 'text' }),
+	        React.createElement(
+	          'button',
+	          { className: 'addRule', onClick: this.addRule },
+	          'Add rule'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'actionBar autoState' },
+	        React.createElement(
+	          'div',
+	          { className: 'type' },
+	          'Type:',
+	          React.createElement(
+	            'select',
+	            { onChange: this.updateFilter, id: 'type' },
+	            React.createElement(
+	              'option',
+	              { value: 'all' },
+	              'All'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'app' },
+	              'App'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'extension' },
+	              'Extension'
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'theme' },
+	              'Theme'
+	            )
+	          )
+	        ),
+	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
+	      ),
+	      appList
+	    );
+	  }
+	});
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Helmet = __webpack_require__(240);
 	module.exports = React.createClass({
 	  displayName: 'exports',
 
@@ -28881,14 +29267,14 @@
 	      React.createElement(
 	        'p',
 	        null,
-	        'Discover new apps'
+	        'Discover function is not available yet, sorry about this'
 	      )
 	    );
 	  }
 	});
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -28896,10 +29282,10 @@
 	module.exports = React.createClass({
 	  displayName: 'Options',
 	  getInitialState: function () {
-	    return { setting: { joinCommunity: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoStateManage: false } };
+	    return { setting: { joinCommunity: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false } };
 	  },
 	  componentDidMount: function () {
-	    var switchList = ['joinCommunity', 'showAds', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoStateManage'];
+	    var switchList = ['joinCommunity', 'showAds', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification'];
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
 	        this.setState(function (prevState) {
@@ -28950,16 +29336,33 @@
 	      getTextFromId(id)
 	    );
 	  },
-	  autoStateManage: function () {
+	  showAds: function () {
+	    alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
+	  },
+	  joinCommunity: function () {
+	    if (this.state.setting.joinCommunity) {
+	      var sadMove = confirm('You are about to leave NooBoss community, by doing so: AInoob(author) will no longer know if anyone is using NooBoss or not, thus he might slows down the NooBoss project or even shuts it down. However, this is your choice, click "OK" if you do not want to send your NooBoss usage data and extensions you are using to NooBox community.(NooBoss never track your personal information)');
+	      if (!sadMove) {
+	        return;
+	      }
+	    }
+	    set(id, newValue, function () {
+	      this.setState(function (prevState) {
+	        prevState.setting[id] = newValue;
+	        return prevState;
+	      });
+	    }.bind(this));
+	  },
+	  autoState: function () {
 	    var change = function (value) {
-	      set('autoStateManage', value, function () {
+	      set('autoState', value, function () {
 	        this.setState(function (prevState) {
-	          prevState.setting.autoStateManage = value;
+	          prevState.setting.autoState = value;
 	          return prevState;
 	        });
 	      }.bind(this));
 	    }.bind(this);
-	    if (!this.state.setting.autoStateManage) {
+	    if (!this.state.setting.autoState) {
 	      chrome.permissions.contains({
 	        permissions: ['tabs']
 	      }, function (result) {
@@ -29041,25 +29444,26 @@
 	      this.getSwitch('notifyStateChange'),
 	      this.getSwitch('notifyInstallation'),
 	      this.getSwitch('notifyRemoval'),
+	      this.getSwitch('autoStateNotification'),
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
 	        'Functions'
 	      ),
-	      this.getSwitch('autoStateManage', this.autoStateManage),
+	      this.getSwitch('autoState', this.autoState),
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
 	        'Experience'
 	      ),
-	      this.getSwitch('joinCommunity'),
-	      this.getSwitch('showAds')
+	      this.getSwitch('joinCommunity', this.joinCommunity),
+	      this.getSwitch('showAds', this.showAds)
 	    );
 	  }
 	});
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -29221,7 +29625,7 @@
 	});
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

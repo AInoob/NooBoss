@@ -33,7 +33,7 @@ body::-webkit-scrollbar-track {
   width: 100%;
 }
 .NooBoss-body .actionBar {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   overflow: hidden;
 }
@@ -44,6 +44,11 @@ body::-webkit-scrollbar-track {
 .NooBoss-body .actionBar .type select,
 .NooBoss-body .actionBar .event select {
   height: 33px;
+}
+.NooBoss-body .actionBar a {
+  margin-left: 10px;
+  color: #ffa2a2;
+  text-decoration: underline;
 }
 .NooBoss-body .actionBar #keyword {
   float: left;
@@ -58,7 +63,7 @@ body::-webkit-scrollbar-track {
   cursor: pointer;
 }
 .NooBoss-body .actionBar #enableAll {
-  color: lime;
+  color: #15af52;
 }
 .NooBoss-body .actionBar #disableAll {
   color: grey;
@@ -132,7 +137,20 @@ ul li.active {
 .footer ul li.active {
   background: linear-gradient(to right, pink, pink);
 }
+.dimmer,
+.nonDimmer {
+  position: absolute;
+  height: 98px;
+  width: 98px;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.64);
+  pointer-events: none;
+}
+.nonDimmer {
+  background-color: rgba(0, 0, 0, 0);
+}
 .app-holder {
+  position: relative;
   float: left;
   height: 98px;
   width: 98px;
@@ -234,6 +252,48 @@ ul li.active {
   display: block;
   font-weight: bold;
   color: #2d40b6;
+}
+.newRule {
+  width: 100%;
+  text-align: center;
+}
+.newRule .selected {
+  min-height: 13px;
+}
+.newRule .selected img {
+  height: 15px;
+  width: 15px;
+}
+h2 {
+  text-align: center;
+}
+.actionBar.autoState {
+  border-top: 2px solid pink;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+.AutoStateRules tbody tr td {
+  border-top: 2px solid pink;
+  font-size: 15px;
+}
+.AutoStateRules tbody tr td img {
+  height: 15px;
+  width: 15px;
+}
+.AutoStateRules tbody tr td:nth-child(1) {
+  width: 60px;
+}
+.AutoStateRules tbody tr td:nth-child(2) {
+  width: 100px;
+  text-align: center;
+}
+.AutoStateRules tbody tr td:nth-child(3) {
+  text-align: center;
+  width: 100px;
+}
+.AutoStateRules tbody tr td:nth-child(4) {
+  width: 260px;
+  text-align: center;
 }
 .History-table tbody tr td {
   border-top: 2px solid pink;
