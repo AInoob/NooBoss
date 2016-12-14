@@ -13,6 +13,13 @@ module.exports = React.createClass({
       }
       this.setState({appInfoList:appInfoList});
     }.bind(this));
+    get('autoStateRules',function(data){
+      var rules=[];
+      if(data){
+        rules=JSON.parse(data);
+      }
+      this.setState({rules:rules});
+    }.bind(this));
   },
   getIconUrl: function(appInfo){
     var iconUrl=undefined;
@@ -66,21 +73,22 @@ module.exports = React.createClass({
         />
         <div id="overview">
           <div className="manage">
-            You have:&nbsp;
-            <Link to="/manage/app">
-              {overview.app}
-            </Link> app(s),&nbsp;
-            <Link to="/manage/extension">
-              {overview.extension}
-            </Link> extension(s),&nbsp;
-            <Link to="/manage/theme">
-              {overview.theme}
-            </Link> theme<br/>
-            You have:&nbsp;
-            <Link to="/autoState">
-              {(this.state.rules||[]).length}
-            </Link>
-            &nbsp;Auto state rule(s).
+            <div className="sectionHeader">You have</div>
+            <div className="status">
+              <Link to="/manage/app">
+                {overview.app}
+              </Link> app(s),&nbsp;
+              <Link to="/manage/extension">
+                {overview.extension}
+              </Link> extension(s),&nbsp;
+              <Link to="/manage/theme">
+                {overview.theme}
+              </Link> theme<br/>
+              <Link to="/autoState">
+                {(this.state.rules||[]).length}
+              </Link>
+              &nbsp;Auto state rule(s).
+            </div>
           </div>
           <div className="discover">
           </div>

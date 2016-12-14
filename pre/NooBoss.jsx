@@ -15,7 +15,6 @@ function logPageView(){
 ReactDOM.render(
   <Router history={browserHistory} onUpdate={logPageView}>
     <Route component={require('./Core.jsx')}>
-      <Route path="popup.html" component={require('./Manage.jsx')} />
       <Route path="overview" component={require('./Overview.jsx')} />
       <Route path="app" component={require('./App.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />

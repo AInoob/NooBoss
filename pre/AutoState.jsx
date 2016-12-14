@@ -13,7 +13,8 @@ module.exports = React.createClass({
         action: 'enableOnly',
         match: ''
       },
-      icons: {}
+      icons: {},
+      names: {}
     };
   },
   componentDidMount: function(){
@@ -22,15 +23,16 @@ module.exports = React.createClass({
       browserHistory.push('/options');
     })
     chrome.management.getAll(function(appInfoList){
-      var originalStates={};
+      var names={};
       for(var i=0;i<appInfoList.length;i++){
         appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
         var action='disable';
         if(appInfoList[i].enabled){
           action='enable';
         }
+        names[appInfoList[i].id]=appInfoList[i].name;
       }
-      this.setState({appInfoList:appInfoList});
+      this.setState({appInfoList:appInfoList,names:names});
     }.bind(this));
     get('autoStateRules',function(data){
       var rules=[];
@@ -176,7 +178,10 @@ module.exports = React.createClass({
     }
     var ruleList=(preRuleList).map(function(rule,index){
       var icons=rule.ids.map(function(id,index){
-        return <img key={index} src={this.state.icons[id]}/>
+        console.log(id);
+        console.log(this.state.names);
+        console.log(this.state.names[id]);
+        return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
       }.bind(this));
       return(
         <tr className="rule" key={index}>
@@ -191,7 +196,7 @@ module.exports = React.createClass({
     }.bind(this));
     var selectedIcons=(Object.keys(this.state.rule.selected)||[]).map(function(id,index){
       if(this.state.rule.selected[id])
-        return <img key={index} src={this.state.icons[id]}/>
+        return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
     }.bind(this));
     return(
       <div className="NooBoss-body">

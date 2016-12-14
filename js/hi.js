@@ -1,7 +1,7 @@
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-77112662-5']);
 if(window.location.pathname=='/popup.html'){
-  history.pushState(null,null,'/manage');
+  history.pushState(null,null,'/overview');
 }
 _gaq.push(['_trackPageview']);
 

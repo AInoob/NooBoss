@@ -5,7 +5,6 @@ var Link = require('react-router').Link;
 module.exports = React.createClass({
   render: function(){
     var activeList={};
-    console.log(this.props.location.pathname.match(/\/(\w+)/)[1]);
     activeList[this.props.location.pathname.match(/\/(\w+)/)[1]]='active'
     return(
       <div id="NooBoss-Core">
