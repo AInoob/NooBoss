@@ -30,6 +30,104 @@ body::-webkit-scrollbar-track {
 #overview .status {
   margin-left: 30px;
 }
+#overview a,
+#overview a:visited {
+  color: #f927cd;
+  text-decoration: underline;
+}
+.flip .front,
+.flip .back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.flip:hover .front {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.flip:hover .back {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.flip .front {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.flip .back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+#discover {
+  background-color: #f7f1ac;
+  overflow: hidden;
+}
+#discover .website {
+  color: #f927cd;
+  font-weight: bold;
+}
+#discover .header {
+  font-size: 22px;
+}
+#discover .reco {
+  padding-top: 3px;
+  overflow: hidden;
+}
+#discover .reco + .reco {
+  border-top: solid 3px pink;
+}
+#discover .reco .appBrief {
+  float: left;
+  width: 200px;
+}
+#discover .reco .appBrief .description {
+  margin-top: -44px;
+}
+#discover .reco .appReview {
+  float: left;
+}
+#discover .reco .appReview .rating {
+  float: left;
+  width: 60px;
+  text-align: center;
+}
+#discover .reco .appReview .rating .ratingBar {
+  margin: auto;
+}
+#discover .reco .appReview .rating .ratingDetail {
+  margin-top: -50px;
+}
+#discover .reco .appReview .tags {
+  float: left;
+}
+#discover .reco .votes {
+  width: 66px;
+  float: left;
+}
+#discover .reco .votes .score {
+  width: 66px;
+  text-align: center;
+}
+#discover .reco .votes .upVotes,
+#discover .reco .votes .downVotes {
+  width: 66px;
+}
+#discover .reco .votes .downVotes {
+  margin-top: 5px;
+}
+#discover .reco .votes .front,
+#discover .reco .votes .back {
+  cursor: pointer;
+}
+#discover .reco .votes .front {
+  margin-left: 23px;
+  position: absolute;
+}
+#discover .reco .votes .back {
+  width: 66px;
+  text-align: center;
+}
+#discover .reco .app {
+  float: left;
+}
 .NooBoss-body {
   height: auto;
   overflow: hidden;
@@ -522,4 +620,24 @@ h2 {
   border-radius: 9px;
   display: inline-block;
   padding-right: 20px;
+}
+.arrowUp {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid grey;
+}
+.arrowUp.active {
+  border-bottom: 10px solid pink;
+}
+.arrowDown {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid grey;
+}
+.arrowDown.active {
+  border-top: 10px solid pink;
 }

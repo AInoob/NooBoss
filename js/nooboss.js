@@ -27951,7 +27951,7 @@
 	module.exports = React.createClass({
 	  displayName: 'Overview',
 	  getInitialState: function () {
-	    return {};
+	    return { joinCommunity: false, infosGoogle: {} };
 	  },
 	  componentDidMount: function () {
 	    chrome.management.getAll(function (appInfoList) {
@@ -27967,6 +27967,48 @@
 	      }
 	      this.setState({ rules: rules });
 	    }.bind(this));
+	    isOn('joinCommunity', function () {
+	      this.setState({ joinCommunity: true });
+	      chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
+	        var url = "";
+	        if (tabs[0]) url = tabs[0].url;
+	        var website = extractDomain(url);
+	        $.ajax({ url: 'https://ainoob.com/api/nooboss/website/' + website
+	        }).done(function (data) {
+	          this.setState({
+	            recoList: data.recoList,
+	            appInfosWeb: data.appInfos,
+	            website: website
+	          }, this.getInfosGoogle);
+	        }.bind(this));
+	      }.bind(this));
+	    }.bind(this));
+	  },
+	  getInfosGoogle: function () {
+	    for (var i = 0; i < this.state.recoList.length; i++) {
+	      var id = this.state.recoList[i].id;
+	      $.ajax({
+	        url: 'https://chrome.google.com/webstore/detail/' + id
+	      }).done(function (id, data) {
+	        var a = data.indexOf('src="', data.indexOf('<img  alt="Extension"')) + 5;
+	        var b = data.indexOf('"', a);
+	        var imgUrl = data.slice(a, b);
+	        a = data.indexOf('<h1 class="e-f-w">') + 18;
+	        b = data.indexOf('</h1>', a);
+	        var name = data.slice(a, b);
+	        a = data.indexOf('itemprop="description">') + 23;
+	        b = data.indexOf('</', a);
+	        var description = data.slice(a, b);
+	        this.setState(function (prevState) {
+	          prevState.infosGoogle[id] = {
+	            imgUrl: imgUrl,
+	            name: name,
+	            description: description
+	          };
+	          return prevState;
+	        });
+	      }.bind(this, id));
+	    }
 	  },
 	  getIconUrl: function (appInfo) {
 	    var iconUrl = undefined;
@@ -28009,6 +28051,151 @@
 	      } else if (appInfo.type == 'theme') {
 	        overview.theme++;
 	      }
+	    }
+	    var discover = null;
+	    var recoList;
+	    if (!this.state.joinCommunity) {
+	      discover = React.createElement(
+	        'div',
+	        { id: 'discover' },
+	        'Community feature is off.',
+	        React.createElement(
+	          'p',
+	          null,
+	          'You will not see apps recommended by users for various websites or community details for each app(turn it on ',
+	          React.createElement(
+	            Link,
+	            { to: '/options' },
+	            'here'
+	          ),
+	          ').'
+	        )
+	      );
+	    } else {
+	      var recoList = (this.state.recoList || []).map(function (elem, index) {
+	        var app = null;
+	        var appInfo = null;
+	        if (this.state.appInfosWeb) {
+	          appInfo = this.state.appInfosWeb[elem.id];
+	        }
+	        if (appInfo) {
+	          var tags = Object.keys(appInfo.tags).map(function (tag, index2) {
+	            var counter = appInfo.tags[tag];
+	            return React.createElement(
+	              'div',
+	              { key: index2, className: 'tag' },
+	              tag,
+	              ':',
+	              counter
+	            );
+	          });
+	          app = React.createElement(
+	            'div',
+	            { className: 'app' },
+	            React.createElement(
+	              Link,
+	              { className: 'appBrief flip', to: "/appWeb?id=" + elem.id },
+	              React.createElement(
+	                'div',
+	                { className: 'front' },
+	                React.createElement(
+	                  'div',
+	                  { className: 'name' },
+	                  (this.state.infosGoogle[elem.id] || {}).name
+	                ),
+	                React.createElement('img', { src: (this.state.infosGoogle[elem.id] || {}).imgUrl })
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'description back' },
+	                (this.state.infosGoogle[elem.id] || {}).description
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'appReview' },
+	              React.createElement(
+	                'div',
+	                { className: 'flip rating' },
+	                React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } }),
+	                React.createElement(
+	                  'div',
+	                  { className: 'back ratingDetail' },
+	                  React.createElement(
+	                    'div',
+	                    { className: 'upVotes' },
+	                    'up',
+	                    React.createElement('br', null),
+	                    appInfo.upVotes
+	                  ),
+	                  React.createElement(
+	                    'div',
+	                    { className: 'downVotes' },
+	                    'down',
+	                    React.createElement('br', null),
+	                    appInfo.downVotes
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'tags' },
+	                tags
+	              )
+	            )
+	          );
+	        }
+	        return React.createElement(
+	          'div',
+	          { className: 'reco', key: index },
+	          React.createElement(
+	            'div',
+	            { className: 'votes' },
+	            React.createElement(
+	              'div',
+	              { className: 'upVotes flip' },
+	              React.createElement('div', { className: 'front arrowUp' }),
+	              React.createElement(
+	                'div',
+	                { className: 'back' },
+	                elem.upVotes
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'score' },
+	              elem.upVotes - elem.downVotes
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'downVotes flip' },
+	              React.createElement('div', { className: 'front arrowDown' }),
+	              React.createElement(
+	                'div',
+	                { className: 'back' },
+	                elem.downVotes
+	              )
+	            )
+	          ),
+	          app
+	        );
+	      }.bind(this));
+	      discover = React.createElement(
+	        'div',
+	        { id: 'discover' },
+	        React.createElement(
+	          'div',
+	          { className: 'header' },
+	          'Apps for ',
+	          React.createElement(
+	            'span',
+	            { className: 'website' },
+	            this.state.website
+	          ),
+	          ':'
+	        ),
+	        recoList
+	      );
 	    }
 	    return React.createElement(
 	      'div',
@@ -28054,10 +28241,10 @@
 	              { to: '/autoState' },
 	              (this.state.rules || []).length
 	            ),
-	            '\xA0Auto state rule(s).'
+	            '\xA0auto state rule(s).'
 	          )
 	        ),
-	        React.createElement('div', { className: 'discover' })
+	        discover
 	      )
 	    );
 	  }
@@ -29351,12 +29538,7 @@
 	        return;
 	      }
 	    }
-	    set(id, newValue, function () {
-	      this.setState(function (prevState) {
-	        prevState.setting[id] = newValue;
-	        return prevState;
-	      });
-	    }.bind(this));
+	    this.toggleSetting('joinCommunity');
 	  },
 	  autoState: function () {
 	    var change = function (value) {

@@ -31,6 +31,106 @@ body {
   .status{
     margin-left: 30px;
   }
+  a,a:visited{
+    color: #f927cd;
+    text-decoration: underline;
+  }
+}
+
+.flip{
+  .front,.back{
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  &:hover {
+    .front{
+      -webkit-transform: rotateY(180deg);
+      transform: rotateY(180deg);
+    }
+    .back{
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+    }
+  }
+  .front{
+    -webkit-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+  }
+  .back{
+    -webkit-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+  }
+}
+
+#discover{
+  background-color: #f7f1ac;
+  .website{
+    color: #f927cd;
+    font-weight: bold;
+  }
+  .header{
+    font-size: 22px;
+  }
+  overflow: hidden;
+  .reco{
+    padding-top: 3px;
+    overflow: hidden;
+    & + .reco{
+      border-top: solid 3px pink;
+    }
+    .appBrief{
+      float: left;
+      width: 200px;
+      .description{
+        margin-top: -44px;
+      }
+    }
+    .appReview{
+      float: left;
+      .rating{
+        float: left;
+        width: 60px;
+        text-align: center;
+        .ratingBar{
+          margin:auto;
+        }
+        .ratingDetail{
+          margin-top: -50px;
+        }
+      }
+      .tags{
+        float: left;
+      }
+    }
+    .votes{
+      width:66px;
+      float:left;
+      .score{
+        width: 66px;
+        text-align: center;
+      }
+      .upVotes,.downVotes{
+        width: 66px;
+      }
+      .downVotes{
+        margin-top: 5px;
+      }
+      .front,.back{
+        cursor: pointer;
+      }
+      .front{
+        margin-left: 23px;
+        position:absolute;
+      }
+      .back{
+        width: 66px;
+        text-align: center;
+      }
+    }
+    .app{
+      float: left;
+    }
+  }
 }
 
 .NooBoss-body {
@@ -567,4 +667,28 @@ h2{
     display: inline-block;
     padding-right: 20px;
   }
+}
+
+.arrowUp {
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid grey;
+}
+
+.arrowUp.active{
+  border-bottom: 10px solid pink;
+}
+
+.arrowDown {
+  width: 0; 
+  height: 0; 
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid grey;
+}
+
+.arrowDown.active{
+  border-top: 10px solid pink;
 }

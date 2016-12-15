@@ -66,12 +66,7 @@ module.exports = React.createClass({
         return;
       }
     }
-    set(id,newValue,function(){
-      this.setState(function(prevState){
-        prevState.setting[id]=newValue;
-        return prevState;
-      });
-    }.bind(this));
+    this.toggleSetting('joinCommunity');
   },
   autoState: function(){
     var change=function(value){

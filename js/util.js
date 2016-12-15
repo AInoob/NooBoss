@@ -13,6 +13,19 @@ var textIdMap={
   autoStateNotification: 'auto state notification'
 }
 
+function extractDomain(url) {
+  var domain;
+  if (url.indexOf("://") > -1) {
+    domain = url.split('/')[2];
+  }
+  else {
+    domain = url.split('/')[0];
+  }
+  domain = domain.split(':')[0];
+  var list=domain.split('.');
+  return list[list.length-2]+'.'+list[list.length-1];
+}
+
 function getTextFromId(id){
   return textIdMap[id];
 }
