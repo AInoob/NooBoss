@@ -64,9 +64,9 @@
 	    Route,
 	    { component: __webpack_require__(239) },
 	    React.createElement(Route, { path: 'overview', component: __webpack_require__(250) }),
-	    React.createElement(Route, { path: 'app', component: __webpack_require__(251) }),
-	    React.createElement(Route, { path: 'manage', component: __webpack_require__(252) }),
-	    React.createElement(Route, { path: 'manage/*', component: __webpack_require__(252) }),
+	    React.createElement(Route, { path: 'app', component: __webpack_require__(252) }),
+	    React.createElement(Route, { path: 'manage', component: __webpack_require__(253) }),
+	    React.createElement(Route, { path: 'manage/*', component: __webpack_require__(253) }),
 	    React.createElement(Route, { path: 'autoState', component: __webpack_require__(254) }),
 	    React.createElement(Route, { path: 'discover', component: __webpack_require__(255) }),
 	    React.createElement(Route, { path: 'options', component: __webpack_require__(256) }),
@@ -27947,11 +27947,19 @@
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
+	var AppBrief = __webpack_require__(251);
 	var Link = __webpack_require__(183).Link;
 	module.exports = React.createClass({
 	  displayName: 'Overview',
 	  getInitialState: function () {
-	    return { joinCommunity: false, infosGoogle: {} };
+	    return {
+	      joinCommunity: false,
+	      filter: { type: 'all', keyword: '' },
+	      reco: {
+	        selected: {}
+	      },
+	      infosGoogle: {}
+	    };
 	  },
 	  componentDidMount: function () {
 	    chrome.management.getAll(function (appInfoList) {
@@ -27982,6 +27990,31 @@
 	          }, this.getInfosGoogle);
 	        }.bind(this));
 	      }.bind(this));
+	    }.bind(this));
+	  },
+	  select: function (id) {
+	    this.setState(function (prevState) {
+	      prevState.reco.selected[id] = !prevState.reco.selected[id];
+	      return prevState;
+	    });
+	  },
+	  updateFilter: function (e) {
+	    var id = e.target.id;
+	    var value = e.target.value;
+	    this.setState(function (prevState) {
+	      prevState.filter[id] = value;
+	      return prevState;
+	    });
+	  },
+	  getFilteredList: function () {
+	    return (this.state.appInfoList || []).map(function (appInfo) {
+	      var filter = this.state.filter;
+	      var pattern = new RegExp(filter.keyword, 'i');
+	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
+	        return appInfo;
+	      } else {
+	        return null;
+	      }
 	    }.bind(this));
 	  },
 	  getInfosGoogle: function () {
@@ -28036,6 +28069,30 @@
 	    }
 	    return iconUrl;
 	  },
+	  addReco: function (appId, action) {
+	    var reco;
+	    get('userId', function (userId) {
+	      reco = {
+	        userId: userId,
+	        website: this.state.website
+	      };
+	      if (appId) {
+	        reco.action = action;
+	        reco.appIds = [appId];
+	      } else {
+	        reco.action = 'up';
+	        reco.appIds = this.state.reco.selected;
+	      }
+	      $.ajax({
+	        type: 'POST',
+	        url: "https://ainoob.com/api/nooboss/reco/website",
+	        contentType: "application/json",
+	        data: JSON.stringify(reco)
+	      }).done(function (data) {
+	        console.log(data);
+	      });
+	    }.bind(this));
+	  },
 	  render: function () {
 	    var appInfoList = this.state.appInfoList || [];
 	    var overview = {};
@@ -28072,13 +28129,16 @@
 	        )
 	      );
 	    } else {
-	      var recoList = (this.state.recoList || []).map(function (elem, index) {
-	        var app = null;
-	        var appInfo = null;
-	        if (this.state.appInfosWeb) {
-	          appInfo = this.state.appInfosWeb[elem.id];
-	        }
-	        if (appInfo) {
+	      var recoList;
+	      if ((this.state.recoList || []).length > 0) {
+	        recoList = (this.state.recoList || []).map(function (elem, index) {
+	          var app = null;
+	          var appInfo = null;
+	          var id = elem.id;
+	          if (this.state.appInfosWeb) {
+	            appInfo = this.state.appInfosWeb[id];
+	          }
+	          appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
 	          var tags = Object.keys(appInfo.tags).map(function (tag, index2) {
 	            var counter = appInfo.tags[tag];
 	            return React.createElement(
@@ -28089,26 +28149,30 @@
 	              counter
 	            );
 	          });
+	          var ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
+	          if (appInfo.upVotes != 0 || appInfo.downVotes != 0) {
+	            ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
+	          }
 	          app = React.createElement(
 	            'div',
 	            { className: 'app' },
 	            React.createElement(
 	              Link,
-	              { className: 'appBrief flip', to: "/appWeb?id=" + elem.id },
+	              { className: 'appBrief flip', to: "/appWeb?id=" + id },
 	              React.createElement(
 	                'div',
 	                { className: 'front' },
 	                React.createElement(
 	                  'div',
 	                  { className: 'name' },
-	                  (this.state.infosGoogle[elem.id] || {}).name
+	                  (this.state.infosGoogle[id] || {}).name
 	                ),
-	                React.createElement('img', { src: (this.state.infosGoogle[elem.id] || {}).imgUrl })
+	                React.createElement('img', { src: (this.state.infosGoogle[id] || {}).imgUrl })
 	              ),
 	              React.createElement(
 	                'div',
 	                { className: 'description back' },
-	                (this.state.infosGoogle[elem.id] || {}).description
+	                (this.state.infosGoogle[id] || {}).description
 	              )
 	            ),
 	            React.createElement(
@@ -28117,7 +28181,7 @@
 	              React.createElement(
 	                'div',
 	                { className: 'flip rating' },
-	                React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } }),
+	                ratingBar,
 	                React.createElement(
 	                  'div',
 	                  { className: 'back ratingDetail' },
@@ -28144,59 +28208,127 @@
 	              )
 	            )
 	          );
-	        }
-	        return React.createElement(
-	          'div',
-	          { className: 'reco', key: index },
-	          React.createElement(
+	          return React.createElement(
 	            'div',
-	            { className: 'votes' },
+	            { className: 'reco', key: index },
 	            React.createElement(
 	              'div',
-	              { className: 'upVotes flip' },
-	              React.createElement('div', { className: 'front arrowUp' }),
+	              { className: 'votes' },
 	              React.createElement(
 	                'div',
-	                { className: 'back' },
-	                elem.upVotes
+	                { className: 'upVotes flip', onClick: this.addReco.bind(this, id, 'up') },
+	                React.createElement('div', { className: 'front arrowUp' }),
+	                React.createElement(
+	                  'div',
+	                  { className: 'back' },
+	                  elem.upVotes
+	                )
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'score' },
+	                elem.upVotes - elem.downVotes
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'downVotes flip', onClick: this.addReco.bind(this, id, 'down') },
+	                React.createElement('div', { className: 'front arrowDown' }),
+	                React.createElement(
+	                  'div',
+	                  { className: 'back' },
+	                  elem.downVotes
+	                )
 	              )
 	            ),
+	            app
+	          );
+	        }.bind(this));
+	      } else {
+	        recoList = React.createElement(
+	          'div',
+	          { className: 'noReco' },
+	          'No one has recommended any extensions for this website yet, do you have a wonderful extension for ',
+	          this.state.website,
+	          '?'
+	        );
+	      }
+	    }
+	    var appList = this.getFilteredList().map(function (appInfo, index) {
+	      if (appInfo) {
+	        var dimmer = 'dimmer';
+	        if (this.state.reco.selected[appInfo.id]) {
+	          dimmer = 'nonDimmer';
+	        }
+	        return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	      }
+	    }.bind(this));
+	    var recoApps = React.createElement(
+	      'div',
+	      { className: 'recoApp' },
+	      React.createElement('input', { type: 'checkbox', className: 'goReco' }),
+	      React.createElement(
+	        'div',
+	        { className: 'recoBoard' },
+	        React.createElement(
+	          'div',
+	          { className: 'actionBar' },
+	          React.createElement(
+	            'div',
+	            { className: 'type' },
+	            'Type:',
 	            React.createElement(
-	              'div',
-	              { className: 'score' },
-	              elem.upVotes - elem.downVotes
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'downVotes flip' },
-	              React.createElement('div', { className: 'front arrowDown' }),
+	              'select',
+	              { onChange: this.updateFilter, id: 'type' },
 	              React.createElement(
-	                'div',
-	                { className: 'back' },
-	                elem.downVotes
+	                'option',
+	                { value: 'all' },
+	                'All'
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'app' },
+	                'App'
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'extension' },
+	                'Extension'
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'theme' },
+	                'Theme'
 	              )
 	            )
 	          ),
-	          app
-	        );
-	      }.bind(this));
-	      discover = React.createElement(
-	        'div',
-	        { id: 'discover' },
-	        React.createElement(
-	          'div',
-	          { className: 'header' },
-	          'Apps for ',
+	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
+	          React.createElement('br', null),
 	          React.createElement(
-	            'span',
-	            { className: 'website' },
-	            this.state.website
-	          ),
-	          ':'
+	            'button',
+	            { className: 'addReco', onClick: this.addReco.bind(this, null) },
+	            'Recommend'
+	          )
 	        ),
-	        recoList
-	      );
-	    }
+	        appList
+	      )
+	    );
+	    discover = React.createElement(
+	      'div',
+	      { id: 'discover' },
+	      React.createElement(
+	        'div',
+	        { className: 'header' },
+	        'Apps for ',
+	        React.createElement(
+	          'span',
+	          { className: 'website' },
+	          this.state.website
+	        ),
+	        ':'
+	      ),
+	      recoList,
+	      recoApps
+	    );
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBox-body' },
@@ -28252,6 +28384,83 @@
 
 /***/ },
 /* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Link = __webpack_require__(183).Link;
+	module.exports = React.createClass({
+	  displayName: 'exports',
+
+	  getInitialState: function () {
+	    return null;
+	  },
+	  componentDidMount: function () {},
+	  render: function () {
+	    var info = this.props.info;
+	    if (this.props.isAutoState) {
+	      return React.createElement(
+	        'div',
+	        { className: 'app-holder', onClick: this.props.select },
+	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
+	        React.createElement(
+	          'div',
+	          { className: 'app-brief', id: info.id + '-app' },
+	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
+	          React.createElement(
+	            'div',
+	            { className: 'app-info' },
+	            React.createElement(
+	              'span',
+	              { className: 'app-version', title: info.version },
+	              info.version
+	            ),
+	            info.name
+	          )
+	        ),
+	        React.createElement('div', { className: this.props.dimmer })
+	      );
+	    } else {
+	      var options = null;
+	      if (this.props.optionsUrl) {
+	        options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
+	      }
+	      var toggle = null;
+	      if (!info.type.match('theme')) {
+	        toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
+	      }
+	      return React.createElement(
+	        'div',
+	        { className: 'app-holder' },
+	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
+	        React.createElement(
+	          'div',
+	          { className: 'app-brief', id: info.id + '-app' },
+	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
+	          React.createElement(
+	            'div',
+	            { className: 'app-info' },
+	            toggle,
+	            options,
+	            React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
+	            React.createElement(
+	              'span',
+	              { className: 'app-version', title: info.version },
+	              info.version
+	            ),
+	            React.createElement(
+	              Link,
+	              { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
+	              info.name
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }
+	});
+
+/***/ },
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -28787,12 +28996,12 @@
 	});
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
-	var AppBrief = __webpack_require__(253);
+	var AppBrief = __webpack_require__(251);
 	var Link = __webpack_require__(183).Link;
 	module.exports = React.createClass({
 	  displayName: "Manage",
@@ -29010,89 +29219,12 @@
 	});
 
 /***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var Link = __webpack_require__(183).Link;
-	module.exports = React.createClass({
-	  displayName: 'exports',
-
-	  getInitialState: function () {
-	    return null;
-	  },
-	  componentDidMount: function () {},
-	  render: function () {
-	    var info = this.props.info;
-	    if (this.props.isAutoState) {
-	      return React.createElement(
-	        'div',
-	        { className: 'app-holder', onClick: this.props.select },
-	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
-	        React.createElement(
-	          'div',
-	          { className: 'app-brief', id: info.id + '-app' },
-	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
-	          React.createElement(
-	            'div',
-	            { className: 'app-info' },
-	            React.createElement(
-	              'span',
-	              { className: 'app-version', title: info.version },
-	              info.version
-	            ),
-	            info.name
-	          )
-	        ),
-	        React.createElement('div', { className: this.props.dimmer })
-	      );
-	    } else {
-	      var options = null;
-	      if (this.props.optionsUrl) {
-	        options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
-	      }
-	      var toggle = null;
-	      if (!info.type.match('theme')) {
-	        toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
-	      }
-	      return React.createElement(
-	        'div',
-	        { className: 'app-holder' },
-	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
-	        React.createElement(
-	          'div',
-	          { className: 'app-brief', id: info.id + '-app' },
-	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
-	          React.createElement(
-	            'div',
-	            { className: 'app-info' },
-	            toggle,
-	            options,
-	            React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
-	            React.createElement(
-	              'span',
-	              { className: 'app-version', title: info.version },
-	              info.version
-	            ),
-	            React.createElement(
-	              Link,
-	              { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
-	              info.name
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }
-	});
-
-/***/ },
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
-	var AppBrief = __webpack_require__(253);
+	var AppBrief = __webpack_require__(251);
 	var Link = __webpack_require__(183).Link;
 	var browserHistory = __webpack_require__(183).browserHistory;
 	module.exports = React.createClass({

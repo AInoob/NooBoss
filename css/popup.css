@@ -67,6 +67,10 @@ body::-webkit-scrollbar-track {
 #discover .header {
   font-size: 22px;
 }
+#discover .noReco {
+  margin-left: 33px;
+  font-size: 18px;
+}
 #discover .reco {
   padding-top: 3px;
   overflow: hidden;

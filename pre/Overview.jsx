@@ -1,10 +1,18 @@
 var React = require('react');
 var Helmet = require('react-helmet');
+var AppBrief = require('./AppBrief.jsx');
 var Link = require('react-router').Link;
 module.exports = React.createClass({
   displayName: 'Overview',
   getInitialState: function(){
-    return {joinCommunity:false,infosGoogle:{}};
+    return {
+      joinCommunity:false,
+      filter:{type:'all',keyword: ''},
+      reco:{
+        selected:{}
+      },
+      infosGoogle:{}
+    };
   },
   componentDidMount: function(){
     chrome.management.getAll(function(appInfoList){
@@ -36,6 +44,32 @@ module.exports = React.createClass({
           },this.getInfosGoogle);
         }.bind(this));
       }.bind(this));
+    }.bind(this));
+  },
+  select: function(id){
+    this.setState(function(prevState){
+      prevState.reco.selected[id]=!prevState.reco.selected[id];
+      return prevState;
+    });
+  },
+  updateFilter: function(e){
+    var id=e.target.id;
+    var value=e.target.value;
+    this.setState(function(prevState){
+      prevState.filter[id]=value;
+      return prevState;
+    });
+  },
+  getFilteredList: function(){
+    return (this.state.appInfoList||[]).map(function(appInfo){
+      var filter=this.state.filter;
+      var pattern=new RegExp(filter.keyword,'i');
+      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
+        return appInfo;
+      }
+      else{
+        return null;
+      }
     }.bind(this));
   },
   getInfosGoogle: function(){
@@ -90,6 +124,31 @@ module.exports = React.createClass({
     }
     return iconUrl;
   },
+  addReco: function(appId,action){
+    var reco;
+    get('userId',function(userId){
+      reco={
+        userId: userId,
+        website: this.state.website,
+      };
+      if(appId){
+        reco.action=action;
+        reco.appIds=[appId];
+      }
+      else{
+        reco.action='up';
+        reco.appIds=this.state.reco.selected;
+      }
+      $.ajax({
+        type:'POST',
+        url:"https://ainoob.com/api/nooboss/reco/website",
+        contentType: "application/json",
+        data: JSON.stringify(reco)
+      }).done(function(data){
+        console.log(data);
+      });
+    }.bind(this));
+  },
   render: function(){
     var appInfoList=this.state.appInfoList||[];
     var overview={};
@@ -118,31 +177,38 @@ module.exports = React.createClass({
         </div>;
     }
     else{
-      var recoList=(this.state.recoList||[]).map(function(elem,index){
-        var app=null;
-        var appInfo=null;
-        if(this.state.appInfosWeb){
-          appInfo=this.state.appInfosWeb[elem.id];
-        }
-        if(appInfo){
+      var recoList;
+      if((this.state.recoList||[]).length>0){
+        recoList=(this.state.recoList||[]).map(function(elem,index){
+          var app=null;
+          var appInfo=null;
+          var id=elem.id;
+          if(this.state.appInfosWeb){
+            appInfo=this.state.appInfosWeb[id];
+          }
+          appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
           var tags=Object.keys(appInfo.tags).map(function(tag,index2){
             var counter=appInfo.tags[tag];
             return <div key={index2} className="tag">{tag}:{counter}</div>;
           });
+          var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
+          if(appInfo.upVotes!=0||appInfo.downVotes!=0){
+            ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
+          }
           app=
             <div className="app">
-              <Link className="appBrief flip" to={"/appWeb?id="+elem.id}>
+              <Link className="appBrief flip" to={"/appWeb?id="+id}>
                 <div className="front">
-                  <div className="name">{(this.state.infosGoogle[elem.id]||{}).name}</div>
-                  <img src={(this.state.infosGoogle[elem.id]||{}).imgUrl} />
+                  <div className="name">{(this.state.infosGoogle[id]||{}).name}</div>
+                  <img src={(this.state.infosGoogle[id]||{}).imgUrl} />
                 </div>
                 <div className="description back">
-                  {(this.state.infosGoogle[elem.id]||{}).description}
+                  {(this.state.infosGoogle[id]||{}).description}
                 </div>
               </Link>
               <div className="appReview">
                 <div className="flip rating">
-                  <div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
+                  {ratingBar}
                   <div className="back ratingDetail">
                     <div className="upVotes">up<br/>{appInfo.upVotes}</div>
                     <div className="downVotes">down<br/>{appInfo.downVotes}</div>
@@ -153,29 +219,64 @@ module.exports = React.createClass({
                 </div>
               </div>
             </div>;
-        }
-        return(
-          <div className="reco" key={index}>
-            <div className="votes">
-              <div className="upVotes flip">
-                <div className="front arrowUp"></div>
-                <div className="back">{elem.upVotes}</div>
+          return(
+            <div className="reco" key={index}>
+              <div className="votes">
+                <div className="upVotes flip" onClick={this.addReco.bind(this,id,'up')}>
+                  <div className="front arrowUp"></div>
+                  <div className="back">{elem.upVotes}</div>
+                </div>
+                <div className="score">{elem.upVotes-elem.downVotes}</div>
+                <div className="downVotes flip" onClick={this.addReco.bind(this,id,'down')}>
+                  <div className="front arrowDown"></div>
+                  <div className="back">{elem.downVotes}</div>
+                </div>
               </div>
-              <div className="score">{elem.upVotes-elem.downVotes}</div>
-              <div className="downVotes flip">
-                <div className="front arrowDown"></div>
-                <div className="back">{elem.downVotes}</div>
-              </div>
-            </div>
-            {app}
-          </div>);
-      }.bind(this));
-      discover=
-        <div id="discover">
-          <div className="header">Apps for <span className="website">{this.state.website}</span>:</div>
-          {recoList}
-        </div>;
+              {app}
+            </div>);
+        }.bind(this));
+      }
+      else{
+        recoList=<div className="noReco">No one has recommended any extensions for this website yet, do you have a wonderful extension for {this.state.website}?</div>
+      }
     }
+    var appList=this.getFilteredList().map(function(appInfo,index){
+      if(appInfo){
+        var dimmer='dimmer';
+        if(this.state.reco.selected[appInfo.id]){
+          dimmer='nonDimmer';
+        }
+        return (
+            <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
+        );
+      }
+    }.bind(this));
+    var recoApps=(
+      <div className="recoApp">
+        <input type="checkbox" className="goReco" />
+        <div className="recoBoard">
+          <div className="actionBar">
+            <div className="type">
+              Type: 
+              <select onChange={this.updateFilter} id="type">
+                <option value="all">All</option>
+                <option value="app">App</option>
+                <option value="extension">Extension</option>
+                <option value="theme">Theme</option>
+              </select>
+            </div>
+            <input id="keyword" onChange={this.updateFilter} type="text" /><br/>
+            <button className="addReco" onClick={this.addReco.bind(this,null)}>Recommend</button>
+          </div>
+          {appList}
+        </div>
+      </div>);
+    discover=
+      <div id="discover">
+        <div className="header">Apps for <span className="website">{this.state.website}</span>:</div>
+        {recoList}
+        {recoApps}
+      </div>;
     return(
       <div className="NooBox-body">
         <Helmet
