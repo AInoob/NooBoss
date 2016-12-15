@@ -65,7 +65,6 @@ module.exports = React.createClass({
         overview.theme++;
       }
     }
-    console.log();
     return(
       <div className="NooBox-body">
         <Helmet

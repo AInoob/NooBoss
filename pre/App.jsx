@@ -21,24 +21,19 @@ module.exports = React.createClass({
       this.setState({rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5'});
     }.bind(this));
     getDB(id,function(appInfo){
-      if(appInfo.state!='removed'){
-        if(appInfo.enabled){
-          appInfo.state='enabled';
+      chrome.management.get(id,function(){
+        if(chrome.runtime.lastError){
+          appInfo.state='removed';
         }
         else{
-          appInfo.state='disabled';
-        }
-        chrome.management.get(id,function(){
-          if(chrome.runtime.lastError){
-            appInfo.state='removed';
-            setDB(id,appInfo);
-            this.setState(function(prevState){
-              prevState.appInfo.state='removed';
-              return prevState;
-            });
+          if(appInfo.enabled){
+            appInfo.state='enabled';
           }
-        }.bind(this));
-      }
+          else{
+            appInfo.state='disabled';
+          }
+        }
+      });
       this.setState({appInfo: appInfo});
       console.log(appInfo);
     }.bind(this));

@@ -280,8 +280,37 @@ h2 {
   width: 100%;
   font-size: 27px;
 }
+@keyframes spinRightAnime {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinLeftAnime {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
+.spinRight {
+  animation: spinRightAnime 3s linear infinite;
+}
+.spinLeft {
+  animation: spinLeftAnime 3s linear infinite;
+}
 #About h1 {
   text-align: center;
+}
+#About #icon1,
+#About #icon2 {
+  width: 69px;
+  height: 69px;
+  top: 49px;
+  position: absolute;
+  margin-left: 80px;
+}
+#About #icon2 {
+  margin-left: 430px;
 }
 #About section p {
   margin-left: 22px;

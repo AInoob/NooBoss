@@ -87,12 +87,10 @@ NooBoss.Management.autoState.enable=function(){
   chrome.tabs.onReplaced.addListener(function(addedTabId,removedTabId){
     chrome.tabs.get(addedTabId,function(tab){
       NooBoss.Management.autoState.newTab(tab);
-      console.log('replaced');
     });
   });
 }
 NooBoss.Management.autoState.newTab=function(tab){
-  console.log(tab);
   NooBoss.Management.autoState.tabs[tab.id]=tab.url;
   NooBoss.Management.autoState.manage(tab.id);
 }
@@ -117,7 +115,6 @@ NooBoss.Management.autoState.disable=function(){
 }
 NooBoss.Management.autoState.manage=function(tabId){
   var autoState=NooBoss.Management.autoState;
-  console.log(autoState.rules);
   var tabs=autoState.tabs;
   var nextPhases={};
   for(var i=0;i<autoState.rules.length;i++){
@@ -133,7 +130,6 @@ NooBoss.Management.autoState.manage=function(tabId){
         break;
       }
     }
-    console.log(rule.action);
     switch(rule.action){
       case 'enableOnly':
         if(matched){
@@ -183,7 +179,6 @@ NooBoss.Management.autoState.manage=function(tabId){
     }
   }
   var ids=Object.keys(nextPhases);
-  console.log(nextPhases);
   for(var i=0;i<ids.length;i++){
     var id=ids[i];
     var phase=nextPhases[id];
@@ -228,7 +223,6 @@ NooBoss.Management.autoState.init=function(){
       var tabInfo=tabList[i];
       NooBoss.Management.autoState.tabs[tabInfo.id]=tabInfo.url;
     }
-    console.log(NooBoss.Management.autoState.tabs);
   });
 }
 NooBoss.Management.autoState.updateRules=function(){
@@ -292,7 +286,7 @@ NooBoss.History.addRecord=function(record){
 }
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
-    NooBoss.Management.apps[appInfo.id]=appInfo;
+    NooBoss.Management.apps[appInfo.id]={enabled:appInfo.enabled,name:appInfo.name};
     var time=new Date().getTime();
     NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
       getDB(appInfo.id,function(appInfo){
@@ -313,7 +307,6 @@ NooBoss.History.listen=function(){
   chrome.management.onUninstalled.addListener(function(id){
     NooBoss.Management.apps[id]=null;
     var recordUninstall=function(times,appInfo){
-      console.log('recordUninstall '+times);
       if(!appInfo){
         if(times<9){
           setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
@@ -340,7 +333,6 @@ NooBoss.History.listen=function(){
     var id=appInfoOld.id;
     NooBoss.Management.apps[id].enabled=true;
     var recordEnable=function(times,appInfo){
-      console.log('recordEnable'+times);
       if(!appInfo){
         if(times<9){
           setTimeout(getDB.bind(null,id,recordEnable.bind(null,times+1)),1000);
@@ -364,7 +356,6 @@ NooBoss.History.listen=function(){
     var id=appInfoOld.id;
     NooBoss.Management.apps[id].enabled=false;
     var recordDisable=function(times,appInfo){
-      console.log('recordDisable'+times);
       if(!appInfo){
         if(times<9){
           setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);

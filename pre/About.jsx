@@ -13,6 +13,8 @@ module.exports = React.createClass({
           title="About"
         />
         <h1>About</h1>
+        <a target="_blank" href="https://ainoob.com/project/nooboss"><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
+        <a target="_blank" href="https://ainoob.com/project/noobox"><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
         <section>
           <h2>What can NooBoss do?</h2>
           <p>Right now, NooBoss can (apps/extensions/theme will be called apps down below)</p>

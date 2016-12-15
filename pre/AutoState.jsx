@@ -100,7 +100,6 @@ module.exports = React.createClass({
   updateRule: function(e){
     var id=e.target.id;
     var value=e.target.value;
-    console.log(value);
     this.setState(function(prevState){
       prevState.rule[id]=value;
       return prevState;
@@ -178,9 +177,6 @@ module.exports = React.createClass({
     }
     var ruleList=(preRuleList).map(function(rule,index){
       var icons=rule.ids.map(function(id,index){
-        console.log(id);
-        console.log(this.state.names);
-        console.log(this.state.names[id]);
         return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
       }.bind(this));
       return(

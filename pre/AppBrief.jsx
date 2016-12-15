@@ -9,7 +9,6 @@ module.exports = React.createClass({
   render: function(){
     var info=this.props.info;
     if(this.props.isAutoState){
-      console.log('yay');
       return(
         <div className="app-holder" onClick={this.props.select}>
           <input type="checkbox" className="app-status-checkbox" readOnly id={info.id+'-status'} checked={info.enabled} />

@@ -88,8 +88,6 @@ module.exports = React.createClass({
       action='disable';
     }
     if(newAction&&newAction!=action){
-      console.log(newAction);
-      console.log(action);
       return;
     }
     newCommunityRecord(true,['_trackEvent', 'manage', action, info.id]);

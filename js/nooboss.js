@@ -28010,7 +28010,6 @@
 	        overview.theme++;
 	      }
 	    }
-	    console.log();
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBox-body' },
@@ -28093,23 +28092,17 @@
 	      this.setState({ rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3) + ' / 5' });
 	    }.bind(this));
 	    getDB(id, function (appInfo) {
-	      if (appInfo.state != 'removed') {
-	        if (appInfo.enabled) {
-	          appInfo.state = 'enabled';
+	      chrome.management.get(id, function () {
+	        if (chrome.runtime.lastError) {
+	          appInfo.state = 'removed';
 	        } else {
-	          appInfo.state = 'disabled';
-	        }
-	        chrome.management.get(id, function () {
-	          if (chrome.runtime.lastError) {
-	            appInfo.state = 'removed';
-	            setDB(id, appInfo);
-	            this.setState(function (prevState) {
-	              prevState.appInfo.state = 'removed';
-	              return prevState;
-	            });
+	          if (appInfo.enabled) {
+	            appInfo.state = 'enabled';
+	          } else {
+	            appInfo.state = 'disabled';
 	          }
-	        }.bind(this));
-	      }
+	        }
+	      });
 	      this.setState({ appInfo: appInfo });
 	      console.log(appInfo);
 	    }.bind(this));
@@ -28698,8 +28691,6 @@
 	      action = 'disable';
 	    }
 	    if (newAction && newAction != action) {
-	      console.log(newAction);
-	      console.log(action);
 	      return;
 	    }
 	    newCommunityRecord(true, ['_trackEvent', 'manage', action, info.id]);
@@ -28847,7 +28838,6 @@
 	  render: function () {
 	    var info = this.props.info;
 	    if (this.props.isAutoState) {
-	      console.log('yay');
 	      return React.createElement(
 	        'div',
 	        { className: 'app-holder', onClick: this.props.select },
@@ -29014,7 +29004,6 @@
 	  updateRule: function (e) {
 	    var id = e.target.id;
 	    var value = e.target.value;
-	    console.log(value);
 	    this.setState(function (prevState) {
 	      prevState.rule[id] = value;
 	      return prevState;
@@ -29090,9 +29079,6 @@
 	    }
 	    var ruleList = preRuleList.map(function (rule, index) {
 	      var icons = rule.ids.map(function (id, index) {
-	        console.log(id);
-	        console.log(this.state.names);
-	        console.log(this.state.names[id]);
 	        return React.createElement('img', { key: index, title: this.state.names[id], src: this.state.icons[id] });
 	      }.bind(this));
 	      return React.createElement(
@@ -29667,6 +29653,16 @@
 	        'h1',
 	        null,
 	        'About'
+	      ),
+	      React.createElement(
+	        'a',
+	        { target: '_blank', href: 'https://ainoob.com/project/nooboss' },
+	        React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
+	      ),
+	      React.createElement(
+	        'a',
+	        { target: '_blank', href: 'https://ainoob.com/project/noobox' },
+	        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
 	      ),
 	      React.createElement(
 	        'section',
