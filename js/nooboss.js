@@ -26806,8 +26806,8 @@
 	            { className: activeList.discover },
 	            React.createElement(
 	              Link,
-	              { to: '/discover' },
-	              'Discover'
+	              { to: '/autoState' },
+	              'Auto State'
 	            )
 	          ),
 	          React.createElement(
@@ -27983,8 +27983,14 @@
 	        var website = extractDomain(url);
 	        $.ajax({ url: 'https://ainoob.com/api/nooboss/website/' + website
 	        }).done(function (data) {
+	          var recoList = [];
+	          var temp = Object.keys(data.recos);
+	          for (var i = 0; i < temp.length; i++) {
+	            var id = temp[i];
+	            recoList.push({ id: id, upVotes: data.recos[id].upVotes, downVotes: data.recos[id].downVotes });
+	          }
 	          this.setState({
-	            recoList: data.recoList,
+	            recoList: recoList,
 	            appInfosWeb: data.appInfos,
 	            website: website
 	          }, this.getInfosGoogle);
@@ -28081,7 +28087,7 @@
 	        reco.appIds = [appId];
 	      } else {
 	        reco.action = 'up';
-	        reco.appIds = this.state.reco.selected;
+	        reco.appIds = Object.keys(this.state.reco.selected);
 	      }
 	      $.ajax({
 	        type: 'POST',
@@ -28158,7 +28164,7 @@
 	            { className: 'app' },
 	            React.createElement(
 	              Link,
-	              { className: 'appBrief flip', to: "/appWeb?id=" + id },
+	              { className: 'appBrief flip', to: "/app?id=" + id },
 	              React.createElement(
 	                'div',
 	                { className: 'front' },
@@ -29206,11 +29212,6 @@
 	          'span',
 	          { id: 'undo', onClick: this.undoAll },
 	          'Undo all'
-	        ),
-	        React.createElement(
-	          Link,
-	          { to: '/autoState' },
-	          'Auto state'
 	        )
 	      ),
 	      appList

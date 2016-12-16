@@ -37,8 +37,14 @@ module.exports = React.createClass({
         var website=extractDomain(url);
         $.ajax({url:'https://ainoob.com/api/nooboss/website/'+website
         }).done(function(data){
+          var recoList=[];
+          var temp=Object.keys(data.recos);
+          for(var i=0;i<temp.length;i++){
+            var id=temp[i];
+            recoList.push({id:id,upVotes:data.recos[id].upVotes,downVotes:data.recos[id].downVotes});
+          }
           this.setState({
-            recoList: data.recoList,
+            recoList: recoList,
             appInfosWeb: data.appInfos,
             website: website
           },this.getInfosGoogle);
@@ -137,7 +143,7 @@ module.exports = React.createClass({
       }
       else{
         reco.action='up';
-        reco.appIds=this.state.reco.selected;
+        reco.appIds=Object.keys(this.state.reco.selected);
       }
       $.ajax({
         type:'POST',
@@ -197,7 +203,7 @@ module.exports = React.createClass({
           }
           app=
             <div className="app">
-              <Link className="appBrief flip" to={"/appWeb?id="+id}>
+              <Link className="appBrief flip" to={"/app?id="+id}>
                 <div className="front">
                   <div className="name">{(this.state.infosGoogle[id]||{}).name}</div>
                   <img src={(this.state.infosGoogle[id]||{}).imgUrl} />
