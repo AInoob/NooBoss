@@ -27954,7 +27954,7 @@
 	  getInitialState: function () {
 	    return {
 	      joinCommunity: false,
-	      filter: { type: 'all', keyword: '' },
+	      filter: { type: 'extension', keyword: '' },
 	      reco: {
 	        selected: {}
 	      },
@@ -27981,19 +27981,43 @@
 	        var url = "";
 	        if (tabs[0]) url = tabs[0].url;
 	        var website = extractDomain(url);
-	        $.ajax({ url: 'https://ainoob.com/api/nooboss/website/' + website
-	        }).done(function (data) {
-	          var recoList = [];
-	          var temp = Object.keys(data.recos);
-	          for (var i = 0; i < temp.length; i++) {
-	            var id = temp[i];
-	            recoList.push({ id: id, upVotes: data.recos[id].upVotes, downVotes: data.recos[id].downVotes });
-	          }
-	          this.setState({
-	            recoList: recoList,
-	            appInfosWeb: data.appInfos,
-	            website: website
-	          }, this.getInfosGoogle);
+	        get('userId', function (userId) {
+	          $.ajax({
+	            type: 'POST',
+	            contentType: "application/json",
+	            data: JSON.stringify({ website: website, userId: userId }),
+	            url: 'https://ainoob.com/api/nooboss/website'
+	          }).done(function (data) {
+	            var appInfos = {};
+	            for (var i = 0; i < data.appInfos.length; i++) {
+	              var id = data.appInfos[i].id;
+	              appInfos[id] = data.appInfos[i];
+	            }
+	            var votes = {};
+	            for (var i = 0; i < data.votes.length; i++) {
+	              var id = data.votes[i].appId;
+	              votes[id] = data.votes[i].action;
+	            }
+	            var recoList = [];
+	            var temp = Object.keys(data.recos);
+	            for (var i = 0; i < temp.length; i++) {
+	              var id = temp[i];
+	              var upVoted = 0;
+	              var downVoted = 0;
+	              if (votes[id] == 'up') {
+	                upVoted = 1;
+	              } else if (votes[id] == 'down') {
+	                downVoted = 1;
+	              }
+	              recoList.push({ id: id, upVotes: data.recos[id].upVotes - upVoted, downVotes: data.recos[id].downVotes - downVoted });
+	            }
+	            this.setState({
+	              recoList: recoList,
+	              appInfosWeb: appInfos,
+	              website: website,
+	              votes: votes
+	            }, this.getInfosGoogle);
+	          }.bind(this));
 	        }.bind(this));
 	      }.bind(this));
 	    }.bind(this));
@@ -28083,12 +28107,24 @@
 	        website: this.state.website
 	      };
 	      if (appId) {
-	        reco.action = action;
+	        if (this.state.votes[appId] != action) {
+	          reco.action = action;
+	        } else {
+	          reco.action = null;
+	        }
 	        reco.appIds = [appId];
 	      } else {
 	        reco.action = 'up';
-	        reco.appIds = Object.keys(this.state.reco.selected);
+	        reco.appIds = Object.keys(this.state.reco.selected).filter(function (appId) {
+	          return this.state.votes[appId] != 'up' && this.state.reco.selected[appId];
+	        }.bind(this));
 	      }
+	      this.setState(function (prevState) {
+	        for (var i = 0; i < reco.appIds.length; i++) {
+	          var appId = reco.appIds[i];
+	          prevState.votes[appId] = reco.action;
+	        }
+	      });
 	      $.ajax({
 	        type: 'POST',
 	        url: "https://ainoob.com/api/nooboss/reco/website",
@@ -28096,7 +28132,7 @@
 	        data: JSON.stringify(reco)
 	      }).done(function (data) {
 	        console.log(data);
-	      });
+	      }.bind(this));
 	    }.bind(this));
 	  },
 	  render: function () {
@@ -28141,6 +28177,17 @@
 	          var app = null;
 	          var appInfo = null;
 	          var id = elem.id;
+	          var upActive = '';
+	          var downActive = '';
+	          var upCount = 0;
+	          var downCount = 0;
+	          if (this.state.votes[id] == 'up') {
+	            upActive = 'active';
+	            upCount = 1;
+	          } else if (this.state.votes[id] == 'down') {
+	            downActive = 'active';
+	            downCount = 1;
+	          }
 	          if (this.state.appInfosWeb) {
 	            appInfo = this.state.appInfosWeb[id];
 	          }
@@ -28223,26 +28270,26 @@
 	              React.createElement(
 	                'div',
 	                { className: 'upVotes flip', onClick: this.addReco.bind(this, id, 'up') },
-	                React.createElement('div', { className: 'front arrowUp' }),
+	                React.createElement('div', { className: "front arrowUp " + upActive }),
 	                React.createElement(
 	                  'div',
 	                  { className: 'back' },
-	                  elem.upVotes
+	                  elem.upVotes + upCount
 	                )
 	              ),
 	              React.createElement(
 	                'div',
 	                { className: 'score' },
-	                elem.upVotes - elem.downVotes
+	                elem.upVotes - elem.downVotes + upCount - downCount
 	              ),
 	              React.createElement(
 	                'div',
 	                { className: 'downVotes flip', onClick: this.addReco.bind(this, id, 'down') },
-	                React.createElement('div', { className: 'front arrowDown' }),
+	                React.createElement('div', { className: "front arrowDown " + downActive }),
 	                React.createElement(
 	                  'div',
 	                  { className: 'back' },
-	                  elem.downVotes
+	                  elem.downVotes + downCount
 	                )
 	              )
 	            ),
@@ -28271,44 +28318,19 @@
 	    var recoApps = React.createElement(
 	      'div',
 	      { className: 'recoApp' },
-	      React.createElement('input', { type: 'checkbox', className: 'goReco' }),
+	      React.createElement(
+	        'label',
+	        { className: 'goRecoLabel', htmlFor: 'goReco' },
+	        'Recommend Extensions'
+	      ),
+	      React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
 	      React.createElement(
 	        'div',
 	        { className: 'recoBoard' },
 	        React.createElement(
 	          'div',
 	          { className: 'actionBar' },
-	          React.createElement(
-	            'div',
-	            { className: 'type' },
-	            'Type:',
-	            React.createElement(
-	              'select',
-	              { onChange: this.updateFilter, id: 'type' },
-	              React.createElement(
-	                'option',
-	                { value: 'all' },
-	                'All'
-	              ),
-	              React.createElement(
-	                'option',
-	                { value: 'app' },
-	                'App'
-	              ),
-	              React.createElement(
-	                'option',
-	                { value: 'extension' },
-	                'Extension'
-	              ),
-	              React.createElement(
-	                'option',
-	                { value: 'theme' },
-	                'Theme'
-	              )
-	            )
-	          ),
 	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
-	          React.createElement('br', null),
 	          React.createElement(
 	            'button',
 	            { className: 'addReco', onClick: this.addReco.bind(this, null) },

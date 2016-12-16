@@ -35,6 +35,29 @@ body::-webkit-scrollbar-track {
   color: #f927cd;
   text-decoration: underline;
 }
+#overview .recoApp .goReco {
+  display: none;
+}
+#overview .recoApp .goRecoLabel {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 21px;
+  color: #d72de1;
+  margin-left: 30px;
+}
+#overview .recoApp .recoBoard {
+  display: none;
+}
+#overview .recoApp .recoBoard .actionBar {
+  overflow: hidden;
+}
+#overview .recoApp .recoBoard .actionBar * {
+  float: left;
+  margin-left: 13px;
+}
+#overview .recoApp .goReco:checked + .recoBoard {
+  display: block;
+}
 .flip .front,
 .flip .back {
   -webkit-backface-visibility: hidden;
@@ -69,7 +92,7 @@ body::-webkit-scrollbar-track {
 }
 #discover .noReco {
   margin-left: 33px;
-  font-size: 18px;
+  font-size: 17px;
 }
 #discover .reco {
   padding-top: 3px;
