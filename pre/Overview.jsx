@@ -106,6 +106,9 @@ module.exports = React.createClass({
   getInfosGoogle: function(){
     for(var i=0;i<this.state.recoList.length;i++){
       var id=this.state.recoList[i].id;
+      if(this.state.infosGoogle[id]){
+        continue;
+      }
       $.ajax({
         url:'https://chrome.google.com/webstore/detail/'+id
       }).done(function(id,data){
@@ -181,8 +184,18 @@ module.exports = React.createClass({
         for(var i=0;i<reco.appIds.length;i++){
           var appId=reco.appIds[i];
           prevState.votes[appId]=reco.action;
+          var listed=false;
+          for(var j=0;j<prevState.recoList.length;j++){
+            if(prevState.recoList[j].id==appId){
+              listed=true;
+            }
+          }
+          if(!listed){
+            prevState.recoList.push({id:appId,upVotes:0,downVotes:0});
+          }
         }
-      });
+        return prevState;
+      },this.getInfosGoogle);
       $.ajax({
         type:'POST',
         url:"https://ainoob.com/api/nooboss/reco/website",
