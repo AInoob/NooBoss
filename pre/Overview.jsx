@@ -28,6 +28,12 @@ module.exports = React.createClass({
       }
       this.setState({rules:rules});
     }.bind(this));
+    get('userId',function(userId){
+      this.setState(function(prevState){
+        prevState.userId=userId;
+        return prevState;
+      });
+    }.bind(this));
     isOn('joinCommunity',function(){
       this.setState({joinCommunity:true});
       chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
@@ -35,43 +41,73 @@ module.exports = React.createClass({
         if(tabs[0])
           url = tabs[0].url;
         var website=extractDomain(url);
-        get('userId',function(userId){
-          $.ajax({
-            type:'POST',
-            contentType: "application/json",
-            data: JSON.stringify({website:website,userId:userId}),
-            url:'https://ainoob.com/api/nooboss/website'
-          }).done(function(data){
-            var appInfos={};
-            for(var i=0;i<data.appInfos.length;i++){
-              var id=data.appInfos[i].id;
-              appInfos[id]=data.appInfos[i];
+        $.ajax({
+          type:'POST',
+          contentType: "application/json",
+          data: JSON.stringify({website:website,userId:this.state.userId}),
+          url:'https://ainoob.com/api/nooboss/website'
+        }).done(function(data){
+          var appInfos={};
+          for(var i=0;i<data.appInfos.length;i++){
+            var id=data.appInfos[i].appId;
+            appInfos[id]=data.appInfos[i];
+          }
+          var votes={};
+          var tags={};
+          for(var i=0;i<data.votes.length;i++){
+            var id=data.votes[i].appId;
+            votes[id]=data.votes[i].action;
+            tags[id]={};
+          }
+          for(var i=0;i<data.tags.length;i++){
+            if(!tags[data.tags[i].appId]){
+              tags[data.tags[i].appId]={};
             }
-            var votes={};
-            for(var i=0;i<data.votes.length;i++){
-              var id=data.votes[i].appId;
-              votes[id]=data.votes[i].action;
+            tags[data.tags[i].appId][data.tags[i].tag]=data.tags[i].tagged;
+          }
+          var recoList=[];
+          var temp=Object.keys(data.recos);
+          for(var i=0;i<temp.length;i++){
+            var id=temp[i];
+            var upVoted=0;
+            var downVoted=0;
+            if(votes[id]=='up'){
+              upVoted=1;
             }
-            var recoList=[];
-            var temp=Object.keys(data.recos);
-            for(var i=0;i<temp.length;i++){
-              var id=temp[i];
-              var upVoted=0;
-              var downVoted=0;
-              if(votes[id]=='up'){
-                upVoted=1;
-              }
-              else if(votes[id]=='down'){
-                downVoted=1;
-              }
-              recoList.push({id:id,upVotes:data.recos[id].upVotes-upVoted,downVotes:data.recos[id].downVotes-downVoted});
+            else if(votes[id]=='down'){
+              downVoted=1;
             }
-            this.setState({
-              recoList: recoList,
-              appInfosWeb: appInfos,
-              website: website,
-              votes: votes
-            },this.getInfosGoogle);
+            recoList.push({id:id,upVotes:data.recos[id].upVotes-upVoted,downVotes:data.recos[id].downVotes-downVoted});
+          }
+          this.setState({
+            recoList: recoList,
+            appInfosWeb: appInfos,
+            website: website,
+            votes: votes,
+            tags: tags
+          },function(){
+            this.getInfosGoogle();
+            this.setState(function(prevState){
+              prevState.recoList.sort(function(a,b){
+                var upCountA=0;
+                var downCountA=0;
+                var upCountB=0;
+                var downCountB=0;
+                if(this.state.votes[a.id]=='up'){
+                  upCountA=1;
+                }
+                else if(this.state.votes[a.id]=='down'){
+                  downCountA=1;
+                }
+                if(this.state.votes[b.id]=='up'){
+                  upCountB=1;
+                }
+                else if(this.state.votes[b.id]=='down'){
+                  downCountB=1;
+                }
+                return (a.upVotes-a.downVotes+upCountA-downCountB)<(b.upVotes-b.downVotes+upCountB-downCountB);
+              }.bind(this));
+            });
           }.bind(this));
         }.bind(this));
       }.bind(this));
@@ -95,7 +131,7 @@ module.exports = React.createClass({
     return (this.state.appInfoList||[]).map(function(appInfo){
       var filter=this.state.filter;
       var pattern=new RegExp(filter.keyword,'i');
-      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
+      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))&&appInfo.installType!='development'){
         return appInfo;
       }
       else{
@@ -158,28 +194,75 @@ module.exports = React.createClass({
     }
     return iconUrl;
   },
-  addReco: function(appId,action){
-    var reco;
-    get('userId',function(userId){
-      reco={
-        userId: userId,
-        website: this.state.website,
-      };
-      if(appId){
-        if(this.state.votes[appId]!=action){
-          reco.action=action;
+  appTags:[
+    "useful",'functioning','laggy','buggy','not working','ADs/Spam/Malware'
+  ],
+  addTag: function(appId,tag){
+    var inc=1;
+    var tagged=true;
+    var action='tag';
+    if(this.state.tags[appId]&&this.state.tags[appId][tag]){
+      action='unTag';
+      tagged=false;
+      inc=-1;
+    }
+    var reco={
+      appId:appId,
+      userId:this.state.userId,
+      tag:tag,
+      action:action
+    };
+    $.ajax({
+      type:'POST',
+      url:"https://ainoob.com/api/nooboss/reco/app/tag",
+      contentType: "application/json",
+      data: JSON.stringify(reco)
+    }).done(function(data){
+      this.setState(function(prevState){
+        if(!prevState.appInfosWeb[appId]){
+          prevState.appInfosWeb[appId]={appId:appId,tags:{}};
+        }
+        if(!prevState.appInfosWeb[appId].tags[tag]){
+          prevState.appInfosWeb[appId].tags[tag]=1;
         }
         else{
-          reco.action=null;
+          prevState.appInfosWeb[appId].tags[tag]+=inc;
         }
-        reco.appIds=[appId];
+        if(!prevState.tags[appId]){
+          prevState.tags[appId]={};
+        }
+        prevState.tags[appId][tag]=tagged;
+        return prevState;
+      });
+    }.bind(this));
+  },
+  addReco: function(appId,action){
+    var reco;
+    reco={
+      userId: this.state.userId,
+      website: this.state.website,
+    };
+    if(appId){
+      if(this.state.votes[appId]!=action){
+        reco.action=action;
       }
       else{
-        reco.action='up';
-        reco.appIds=Object.keys(this.state.reco.selected).filter(function(appId){
-          return this.state.votes[appId]!='up'&&this.state.reco.selected[appId];
-        }.bind(this));
+        reco.action=null;
       }
+      reco.appIds=[appId];
+    }
+    else{
+      reco.action='up';
+      reco.appIds=Object.keys(this.state.reco.selected).filter(function(appId){
+        return this.state.votes[appId]!='up'&&this.state.reco.selected[appId];
+      }.bind(this));
+    }
+    $.ajax({
+      type:'POST',
+      url:"https://ainoob.com/api/nooboss/reco/website",
+      contentType: "application/json",
+      data: JSON.stringify(reco)
+    }).done(function(data){
       this.setState(function(prevState){
         for(var i=0;i<reco.appIds.length;i++){
           var appId=reco.appIds[i];
@@ -195,15 +278,7 @@ module.exports = React.createClass({
           }
         }
         return prevState;
-      },this.getInfosGoogle);
-      $.ajax({
-        type:'POST',
-        url:"https://ainoob.com/api/nooboss/reco/website",
-        contentType: "application/json",
-        data: JSON.stringify(reco)
-      }).done(function(data){
-        console.log(data);
-      }.bind(this));
+      }.bind(this),this.getInfosGoogle);
     }.bind(this));
   },
   render: function(){
@@ -256,17 +331,41 @@ module.exports = React.createClass({
             appInfo=this.state.appInfosWeb[id];
           }
           appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
-          var tags=Object.keys(appInfo.tags).map(function(tag,index2){
-            var counter=appInfo.tags[tag];
-            return <div key={index2} className="tag">{tag}:{counter}</div>;
-          });
+          var active={};
+          var temp=Object.keys(this.state.tags[id]||{});
+          for(var j=0;j<temp.length;j++){
+            if(this.state.tags[id][temp[j]]){
+              active[temp[j]]='active'
+            }
+          }
+          var tags=<div className="tags">
+            <div className="tagColumn">
+              <div onClick={this.addTag.bind(this,id,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
+              <div onClick={this.addTag.bind(this,id,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
+            </div>
+            <div className="tagColumn">
+              <div onClick={this.addTag.bind(this,id,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
+              <div onClick={this.addTag.bind(this,id,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
+            </div>
+            <div className="tagColumn">
+              <div onClick={this.addTag.bind(this,id,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
+              <div onClick={this.addTag.bind(this,id,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
+            </div>
+          </div>;
           var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
           if(appInfo.upVotes!=0||appInfo.downVotes!=0){
             ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
           }
+          var rating=<div className="flip rating">
+            {ratingBar}
+            <div className="back ratingDetail">
+              <div className="upVotes">up<br/>{appInfo.upVotes}</div>
+              <div className="downVotes">down<br/>{appInfo.downVotes}</div>
+            </div>
+          </div>;
           app=
             <div className="app">
-              <Link className="appBrief flip" to={"/app?id="+id}>
+              <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+id}>
                 <div className="front">
                   <div className="name">{(this.state.infosGoogle[id]||{}).name}</div>
                   <img src={(this.state.infosGoogle[id]||{}).imgUrl} />
@@ -274,18 +373,9 @@ module.exports = React.createClass({
                 <div className="description back">
                   {(this.state.infosGoogle[id]||{}).description}
                 </div>
-              </Link>
+              </a>
               <div className="appReview">
-                <div className="flip rating">
-                  {ratingBar}
-                  <div className="back ratingDetail">
-                    <div className="upVotes">up<br/>{appInfo.upVotes}</div>
-                    <div className="downVotes">down<br/>{appInfo.downVotes}</div>
-                  </div>
-                </div>
-                <div className="tags">
-                  {tags}
-                </div>
+                {tags}
               </div>
             </div>;
           return(
@@ -322,7 +412,7 @@ module.exports = React.createClass({
     }.bind(this));
     var recoApps=(
       <div className="recoApp">
-        <label className="goRecoLabel" htmlFor="goReco">Recommend Extensions</label>
+        <label className="goRecoLabel" htmlFor="goReco">Recommend Extensions for this website</label>
         <input type="checkbox" className="goReco" id="goReco" />
         <div className="recoBoard">
           <div className="actionBar">

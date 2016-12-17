@@ -80,7 +80,7 @@ body::-webkit-scrollbar-track {
   transform: rotateY(180deg);
 }
 #discover {
-  background-color: #f7f1ac;
+  background-color: #fae3e7;
   overflow: hidden;
 }
 #discover .website {
@@ -102,11 +102,13 @@ body::-webkit-scrollbar-track {
   border-top: solid 3px pink;
 }
 #discover .reco .appBrief {
+  position: relative;
   float: left;
   width: 200px;
 }
 #discover .reco .appBrief .description {
-  margin-top: -44px;
+  position: absolute;
+  top: 0;
 }
 #discover .reco .appReview {
   float: left;
@@ -124,6 +126,18 @@ body::-webkit-scrollbar-track {
 }
 #discover .reco .appReview .tags {
   float: left;
+}
+#discover .reco .appReview .tags .tagColumn {
+  float: left;
+  margin-left: 22px;
+}
+#discover .reco .appReview .tags .tag + .tag {
+  margin-top: 10px;
+}
+#discover .reco .appReview .tags .tag.active {
+  -webkit-box-shadow: 1px 1px 6px 2px #ff40f0;
+  box-shadow: 1px 1px 6px 2px #ff40f0;
+  background-color: #fff4f6;
 }
 #discover .reco .votes {
   width: 66px;
@@ -653,18 +667,18 @@ h2 {
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid grey;
+  border-bottom: 10px solid rgba(128, 128, 128, 0.46);
 }
 .arrowUp.active {
-  border-bottom: 10px solid pink;
+  border-bottom: 10px solid #ff24b2;
 }
 .arrowDown {
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid grey;
+  border-top: 10px solid rgba(128, 128, 128, 0.46);
 }
 .arrowDown.active {
-  border-top: 10px solid pink;
+  border-top: 10px solid #73196c;
 }

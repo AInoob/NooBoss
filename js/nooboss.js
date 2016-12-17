@@ -27975,48 +27975,82 @@
 	      }
 	      this.setState({ rules: rules });
 	    }.bind(this));
+	    get('userId', function (userId) {
+	      this.setState(function (prevState) {
+	        prevState.userId = userId;
+	        return prevState;
+	      });
+	    }.bind(this));
 	    isOn('joinCommunity', function () {
 	      this.setState({ joinCommunity: true });
 	      chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	        var url = "";
 	        if (tabs[0]) url = tabs[0].url;
 	        var website = extractDomain(url);
-	        get('userId', function (userId) {
-	          $.ajax({
-	            type: 'POST',
-	            contentType: "application/json",
-	            data: JSON.stringify({ website: website, userId: userId }),
-	            url: 'https://ainoob.com/api/nooboss/website'
-	          }).done(function (data) {
-	            var appInfos = {};
-	            for (var i = 0; i < data.appInfos.length; i++) {
-	              var id = data.appInfos[i].id;
-	              appInfos[id] = data.appInfos[i];
+	        $.ajax({
+	          type: 'POST',
+	          contentType: "application/json",
+	          data: JSON.stringify({ website: website, userId: this.state.userId }),
+	          url: 'https://ainoob.com/api/nooboss/website'
+	        }).done(function (data) {
+	          var appInfos = {};
+	          for (var i = 0; i < data.appInfos.length; i++) {
+	            var id = data.appInfos[i].appId;
+	            appInfos[id] = data.appInfos[i];
+	          }
+	          var votes = {};
+	          var tags = {};
+	          for (var i = 0; i < data.votes.length; i++) {
+	            var id = data.votes[i].appId;
+	            votes[id] = data.votes[i].action;
+	            tags[id] = {};
+	          }
+	          for (var i = 0; i < data.tags.length; i++) {
+	            if (!tags[data.tags[i].appId]) {
+	              tags[data.tags[i].appId] = {};
 	            }
-	            var votes = {};
-	            for (var i = 0; i < data.votes.length; i++) {
-	              var id = data.votes[i].appId;
-	              votes[id] = data.votes[i].action;
+	            tags[data.tags[i].appId][data.tags[i].tag] = data.tags[i].tagged;
+	          }
+	          var recoList = [];
+	          var temp = Object.keys(data.recos);
+	          for (var i = 0; i < temp.length; i++) {
+	            var id = temp[i];
+	            var upVoted = 0;
+	            var downVoted = 0;
+	            if (votes[id] == 'up') {
+	              upVoted = 1;
+	            } else if (votes[id] == 'down') {
+	              downVoted = 1;
 	            }
-	            var recoList = [];
-	            var temp = Object.keys(data.recos);
-	            for (var i = 0; i < temp.length; i++) {
-	              var id = temp[i];
-	              var upVoted = 0;
-	              var downVoted = 0;
-	              if (votes[id] == 'up') {
-	                upVoted = 1;
-	              } else if (votes[id] == 'down') {
-	                downVoted = 1;
-	              }
-	              recoList.push({ id: id, upVotes: data.recos[id].upVotes - upVoted, downVotes: data.recos[id].downVotes - downVoted });
-	            }
-	            this.setState({
-	              recoList: recoList,
-	              appInfosWeb: appInfos,
-	              website: website,
-	              votes: votes
-	            }, this.getInfosGoogle);
+	            recoList.push({ id: id, upVotes: data.recos[id].upVotes - upVoted, downVotes: data.recos[id].downVotes - downVoted });
+	          }
+	          this.setState({
+	            recoList: recoList,
+	            appInfosWeb: appInfos,
+	            website: website,
+	            votes: votes,
+	            tags: tags
+	          }, function () {
+	            this.getInfosGoogle();
+	            this.setState(function (prevState) {
+	              prevState.recoList.sort(function (a, b) {
+	                var upCountA = 0;
+	                var downCountA = 0;
+	                var upCountB = 0;
+	                var downCountB = 0;
+	                if (this.state.votes[a.id] == 'up') {
+	                  upCountA = 1;
+	                } else if (this.state.votes[a.id] == 'down') {
+	                  downCountA = 1;
+	                }
+	                if (this.state.votes[b.id] == 'up') {
+	                  upCountB = 1;
+	                } else if (this.state.votes[b.id] == 'down') {
+	                  downCountB = 1;
+	                }
+	                return a.upVotes - a.downVotes + upCountA - downCountB < b.upVotes - b.downVotes + upCountB - downCountB;
+	              }.bind(this));
+	            });
 	          }.bind(this));
 	        }.bind(this));
 	      }.bind(this));
@@ -28040,7 +28074,7 @@
 	    return (this.state.appInfoList || []).map(function (appInfo) {
 	      var filter = this.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
-	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
+	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name)) && appInfo.installType != 'development') {
 	        return appInfo;
 	      } else {
 	        return null;
@@ -28102,26 +28136,70 @@
 	    }
 	    return iconUrl;
 	  },
+	  appTags: ["useful", 'functioning', 'laggy', 'buggy', 'not working', 'ADs/Spam/Malware'],
+	  addTag: function (appId, tag) {
+	    var inc = 1;
+	    var tagged = true;
+	    var action = 'tag';
+	    if (this.state.tags[appId] && this.state.tags[appId][tag]) {
+	      action = 'unTag';
+	      tagged = false;
+	      inc = -1;
+	    }
+	    var reco = {
+	      appId: appId,
+	      userId: this.state.userId,
+	      tag: tag,
+	      action: action
+	    };
+	    $.ajax({
+	      type: 'POST',
+	      url: "https://ainoob.com/api/nooboss/reco/app/tag",
+	      contentType: "application/json",
+	      data: JSON.stringify(reco)
+	    }).done(function (data) {
+	      this.setState(function (prevState) {
+	        if (!prevState.appInfosWeb[appId]) {
+	          prevState.appInfosWeb[appId] = { appId: appId, tags: {} };
+	        }
+	        if (!prevState.appInfosWeb[appId].tags[tag]) {
+	          prevState.appInfosWeb[appId].tags[tag] = 1;
+	        } else {
+	          prevState.appInfosWeb[appId].tags[tag] += inc;
+	        }
+	        if (!prevState.tags[appId]) {
+	          prevState.tags[appId] = {};
+	        }
+	        prevState.tags[appId][tag] = tagged;
+	        return prevState;
+	      });
+	    }.bind(this));
+	  },
 	  addReco: function (appId, action) {
 	    var reco;
-	    get('userId', function (userId) {
-	      reco = {
-	        userId: userId,
-	        website: this.state.website
-	      };
-	      if (appId) {
-	        if (this.state.votes[appId] != action) {
-	          reco.action = action;
-	        } else {
-	          reco.action = null;
-	        }
-	        reco.appIds = [appId];
+	    reco = {
+	      userId: this.state.userId,
+	      website: this.state.website
+	    };
+	    if (appId) {
+	      if (this.state.votes[appId] != action) {
+	        reco.action = action;
 	      } else {
-	        reco.action = 'up';
-	        reco.appIds = Object.keys(this.state.reco.selected).filter(function (appId) {
-	          return this.state.votes[appId] != 'up' && this.state.reco.selected[appId];
-	        }.bind(this));
+	        reco.action = null;
 	      }
+	      reco.appIds = [appId];
+	    } else {
+	      reco.action = 'up';
+	      reco.appIds = Object.keys(this.state.reco.selected).filter(function (appId) {
+	        return this.state.votes[appId] != 'up' && this.state.reco.selected[appId];
+	      }.bind(this));
+	    }
+	    $.ajax({
+	      type: 'POST',
+	      url: "https://ainoob.com/api/nooboss/reco/website",
+	      contentType: "application/json",
+	      data: JSON.stringify(reco)
+	    }).done(function (data) {
 	      this.setState(function (prevState) {
 	        for (var i = 0; i < reco.appIds.length; i++) {
 	          var appId = reco.appIds[i];
@@ -28137,15 +28215,7 @@
 	          }
 	        }
 	        return prevState;
-	      }, this.getInfosGoogle);
-	      $.ajax({
-	        type: 'POST',
-	        url: "https://ainoob.com/api/nooboss/reco/website",
-	        contentType: "application/json",
-	        data: JSON.stringify(reco)
-	      }).done(function (data) {
-	        console.log(data);
-	      }.bind(this));
+	      }.bind(this), this.getInfosGoogle);
 	    }.bind(this));
 	  },
 	  render: function () {
@@ -28205,26 +28275,98 @@
 	            appInfo = this.state.appInfosWeb[id];
 	          }
 	          appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
-	          var tags = Object.keys(appInfo.tags).map(function (tag, index2) {
-	            var counter = appInfo.tags[tag];
-	            return React.createElement(
+	          var active = {};
+	          var temp = Object.keys(this.state.tags[id] || {});
+	          for (var j = 0; j < temp.length; j++) {
+	            if (this.state.tags[id][temp[j]]) {
+	              active[temp[j]] = 'active';
+	            }
+	          }
+	          var tags = React.createElement(
+	            'div',
+	            { className: 'tags' },
+	            React.createElement(
 	              'div',
-	              { key: index2, className: 'tag' },
-	              tag,
-	              ':',
-	              counter
-	            );
-	          });
+	              { className: 'tagColumn' },
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'useful'), className: "tag " + active['useful'] },
+	                'useful:',
+	                appInfo.tags['useful'] || 0
+	              ),
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'working'), className: "tag " + active['working'] },
+	                'working:',
+	                appInfo.tags['working'] || 0
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'tagColumn' },
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'laggy'), className: "tag " + active['laggy'] },
+	                'laggy:',
+	                appInfo.tags['laggy'] || 0
+	              ),
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'buggy'), className: "tag " + active['buggy'] },
+	                'buggy:',
+	                appInfo.tags['buggy'] || 0
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'tagColumn' },
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'not_working'), className: "tag " + active['not_working'] },
+	                'not working:',
+	                appInfo.tags['not_working'] || 0
+	              ),
+	              React.createElement(
+	                'div',
+	                { onClick: this.addTag.bind(this, id, 'ASM'), className: "tag " + active['ASM'] },
+	                'ADs/Spam/Malware:',
+	                appInfo.tags['ASM'] || 0
+	              )
+	            )
+	          );
 	          var ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
 	          if (appInfo.upVotes != 0 || appInfo.downVotes != 0) {
 	            ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
 	          }
+	          var rating = React.createElement(
+	            'div',
+	            { className: 'flip rating' },
+	            ratingBar,
+	            React.createElement(
+	              'div',
+	              { className: 'back ratingDetail' },
+	              React.createElement(
+	                'div',
+	                { className: 'upVotes' },
+	                'up',
+	                React.createElement('br', null),
+	                appInfo.upVotes
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'downVotes' },
+	                'down',
+	                React.createElement('br', null),
+	                appInfo.downVotes
+	              )
+	            )
+	          );
 	          app = React.createElement(
 	            'div',
 	            { className: 'app' },
 	            React.createElement(
-	              Link,
-	              { className: 'appBrief flip', to: "/app?id=" + id },
+	              'a',
+	              { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + id },
 	              React.createElement(
 	                'div',
 	                { className: 'front' },
@@ -28244,34 +28386,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'appReview' },
-	              React.createElement(
-	                'div',
-	                { className: 'flip rating' },
-	                ratingBar,
-	                React.createElement(
-	                  'div',
-	                  { className: 'back ratingDetail' },
-	                  React.createElement(
-	                    'div',
-	                    { className: 'upVotes' },
-	                    'up',
-	                    React.createElement('br', null),
-	                    appInfo.upVotes
-	                  ),
-	                  React.createElement(
-	                    'div',
-	                    { className: 'downVotes' },
-	                    'down',
-	                    React.createElement('br', null),
-	                    appInfo.downVotes
-	                  )
-	                )
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'tags' },
-	                tags
-	              )
+	              tags
 	            )
 	          );
 	          return React.createElement(
@@ -28334,7 +28449,7 @@
 	      React.createElement(
 	        'label',
 	        { className: 'goRecoLabel', htmlFor: 'goReco' },
-	        'Recommend Extensions'
+	        'Recommend Extensions for this website'
 	      ),
 	      React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
 	      React.createElement(
@@ -28529,11 +28644,11 @@
 	      this.setState({ rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3) + ' / 5' });
 	    }.bind(this));
 	    getDB(id, function (appInfo) {
-	      chrome.management.get(id, function () {
+	      chrome.management.get(id, function (appInfo2) {
 	        if (chrome.runtime.lastError) {
 	          appInfo.state = 'removed';
 	        } else {
-	          if (appInfo.enabled) {
+	          if (appInfo2.enabled) {
 	            appInfo.state = 'enabled';
 	          } else {
 	            appInfo.state = 'disabled';

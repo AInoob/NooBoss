@@ -21,12 +21,12 @@ module.exports = React.createClass({
       this.setState({rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5'});
     }.bind(this));
     getDB(id,function(appInfo){
-      chrome.management.get(id,function(){
+      chrome.management.get(id,function(appInfo2){
         if(chrome.runtime.lastError){
           appInfo.state='removed';
         }
         else{
-          if(appInfo.enabled){
+          if(appInfo2.enabled){
             appInfo.state='enabled';
           }
           else{

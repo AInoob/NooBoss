@@ -90,7 +90,7 @@ body {
 }
 
 #discover{
-  background-color: #f7f1ac;
+  background-color: #fae3e7;
   .website{
     color: #f927cd;
     font-weight: bold;
@@ -133,6 +133,20 @@ body {
       }
       .tags{
         float: left;
+        .tagColumn{
+          float: left;
+          margin-left: 22px;
+        }
+        .tag{
+          & + .tag{
+            margin-top: 10px;
+          }
+        }
+        .tag.active{
+          -webkit-box-shadow: 1px 1px 6px 2px #ff40f0;
+          box-shadow: 1px 1px 6px 2px #ff40f0;
+          background-color: #fff4f6;
+        }
       }
     }
     .votes{
@@ -707,11 +721,11 @@ h2{
   height: 0; 
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid grey;
+  border-bottom: 10px solid rgba(128, 128, 128, 0.46);
 }
 
 .arrowUp.active{
-  border-bottom: 10px solid pink;
+  border-bottom: 10px solid #ff24b2;
 }
 
 .arrowDown {
@@ -719,9 +733,9 @@ h2{
   height: 0; 
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid grey;
+  border-top: 10px solid rgba(128, 128, 128, 0.46);
 }
 
 .arrowDown.active{
-  border-top: 10px solid pink;
+  border-top: 10px solid #73196c;
 }
