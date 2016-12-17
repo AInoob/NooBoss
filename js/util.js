@@ -1,3 +1,27 @@
+//Community wrapper
+function CW(callback,category,action,label,e){
+  newCommunityRecord(true,['_trackEvent', category, action,label]);
+  console.log(['_trackEvent', category, action,label]);
+  callback(e);
+}
+
+//Click link rich
+function CLR(url,category,action,label,e){
+  e.preventDefault();
+  newCommunityRecord(true,['_trackEvent', category, action,label]);
+  setTimeout(function(){
+    chrome.tabs.create({url:url});
+  },100);
+}
+
+function CL(url,category,action,e){
+  e.preventDefault();
+  newCommunityRecord(true,['_trackEvent', category, action,url]);
+  setTimeout(function(){
+    chrome.tabs.create({url:url});
+  },100);
+}
+
 function getChromeVersion(){
   var match = window.navigator.userAgent.match(/Chrom(?:e|ium)\/([0-9\.]+)/);
   return match ? match[1] : null;

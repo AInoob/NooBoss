@@ -38,22 +38,18 @@ module.exports = React.createClass({
       console.log(appInfo);
     }.bind(this));
   },
-  openUrl: function(url){
-    chrome.tabs.create({url: url});
-  },
   toggleState: function(info){
     var info=this.state.appInfo;
     var action='enable';
     if(info.enabled){
       action='disable';
     }
-    newCommunityRecord(true,['_trackEvent', 'manage', action, info.id]);
+    newCommunityRecord(true,['_trackEvent', 'manage', action]);
     chrome.management.setEnabled(info.id,!info.enabled,function(){
       var result='enabled';
       if(info.enabled){
         result='disabled';
       }
-      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
       this.setState(function(prevState){
         prevState.appInfo.enabled=!info.enabled;
         if(prevState.appInfo.enabled){
@@ -99,7 +95,7 @@ module.exports = React.createClass({
     var appInfo=this.state.appInfo||{};
     var launch=null;
     if(appInfo.isApp){
-      launch=<div className="app-launcher" onClick={this.launchApp}>Launch</div>;
+      launch=<div className="app-launcher" onClick={CW.bind(null,this.launchApp,'App','launch','')}>Launch</div>;
     }
     var launchType=null;
     if(appInfo.launchType){
@@ -117,11 +113,11 @@ module.exports = React.createClass({
     hostPermissions=<tr><td>{capFirst('host permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
     var options=null;
     if(appInfo.optionsUrl){
-      options=<span className="app-options" onClick={this.openUrl.bind(null,appInfo.optionsUrl)}></span>
+      options=<span className="app-options" onClick={CLR.bind(null,appInfo.optionsUrl,'Manage','option','')}></span>
     }
     var toggle=null;
     if(appInfo.type&&!appInfo.type.match('theme')){
-        toggle=<label onClick={this.toggleState} className="app-switch"></label>
+        toggle=<label onClick={CW.bind(null,this.toggleState,'Manage','switch','')} className="app-switch"></label>
     }
     var config=null;
     if(appInfo.state!='removed'){
@@ -129,13 +125,13 @@ module.exports = React.createClass({
         <div className="config">
           {toggle}
           {options}
-          <label onClick={this.uninstall} className="app-remove"></label>
+          <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
         </div>
     }
     else{
       config=
         <div className="config">
-          <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id}><label className='app-add'></label></a>
+          <a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} title={'https://chrome.google.com/webstore/detail/'+appInfo.id}><label className='app-add'></label></a>
         </div>
     }
     var crxName=null;
@@ -151,11 +147,11 @@ module.exports = React.createClass({
         />
         <div className="app">
           <div className="app-icon">
-            <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id}><img src={appInfo.icon} /></a>
+            <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')}><img src={appInfo.icon} /></a>
             {config}
           </div>
           <div className="app-main">
-            <a target="_blank" title={'https://chrome.google.com/webstore/detail/'+appInfo.id} href={'https://chrome.google.com/webstore/detail/'+appInfo.id} className="app-name">{appInfo.name}</a>
+            <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} className="app-name">{appInfo.name}</a>
             {launch}
             <table className="app-brief">
               <tbody>
@@ -170,15 +166,15 @@ module.exports = React.createClass({
                 <tr><td>{capFirst('last update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
                 <tr><td>{capFirst('first installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
                 <tr><td>{capFirst('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
-                <tr><td>{capFirst('homepage url')}</td><td><a target="_blank" title={appInfo.homepageUrl} href={appInfo.homepageUrl}>{appInfo.homepageUrl}</a></td></tr>
+                <tr><td>{capFirst('homepage url')}</td><td><a title={appInfo.homepageUrl} onClick={CL.bind(null,appInfo.homepageUrl,'App','app-link')}>{appInfo.homepageUrl}</a></td></tr>
                 <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
                 <tr><td>{capFirst('short name')}</td><td>{appInfo.shortName}</td></tr>
                 <tr><td>{capFirst('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
                 {launchType}
                 <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
-                <tr><td>{capFirst('download crx')}</td><td><a target="_blank" title={this.state.crxUrl} href={this.state.crxUrl}>{crxName}</a></td></tr>
-                <tr><td>{capFirst('update url')}</td><td><a target="_blank" title={appInfo.updateUrl} href={appInfo.updateUrl}>{appInfo.updateUrl}</a></td></tr>
-                <tr><td>{capFirst('manifest file')}</td><td><a onClick={this.openUrl.bind(null,manifestUrl)} href="" title={manifestUrl}>manifest.json</a></td></tr>
+                <tr><td>{capFirst('download crx')}</td><td><a title={this.state.crxUrl} onClick={CL.bind(null,this.state.crxUrl,'App','app-link')}>{crxName}</a></td></tr>
+                <tr><td>{capFirst('update url')}</td><td><a title={appInfo.updateUrl} onClick={CL.bind(null,appInfo.updateUrl,'App','app-link')}>{appInfo.updateUrl}</a></td></tr>
+                <tr><td>{capFirst('manifest file')}</td><td><a onClick={CL.bind(null,manifestUrl,'App','manifest')} title={manifestUrl}>manifest.json</a></td></tr>
                 <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
                 <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
                 {hostPermissions}

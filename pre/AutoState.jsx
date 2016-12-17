@@ -13,6 +13,7 @@ module.exports = React.createClass({
         action: 'enableOnly',
         match: ''
       },
+      rules: [],
       icons: {},
       names: {}
     };
@@ -34,11 +35,7 @@ module.exports = React.createClass({
       }
       this.setState({appInfoList:appInfoList,names:names});
     }.bind(this));
-    get('autoStateRules',function(data){
-      var rules=[];
-      if(data){
-        rules=JSON.parse(data);
-      }
+    getDB('autoStateRules',function(rules){
       this.setState({rules:rules});
     }.bind(this));
   },
@@ -115,6 +112,9 @@ module.exports = React.createClass({
       }
     }
     this.setState(function(prevState){
+      if(!prevState.rules){
+        prevState.rules=[];
+      }
       prevState.rules.push({
         ids: ids,
         action: prevState.rule.action,
@@ -127,7 +127,7 @@ module.exports = React.createClass({
       prevState.rule.match='';
       return prevState;
     },function(){
-      set('autoStateRules',JSON.stringify(this.state.rules),function(){
+      setDB('autoStateRules',this.state.rules,function(){
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
       });
     });
@@ -138,7 +138,7 @@ module.exports = React.createClass({
       this.setState(function(prevState){
         prevState.rules.splice(index,1);
       },function(){
-        set('autoStateRules',JSON.stringify(this.state.rules),function(){
+        setDB('autoStateRules',this.state.rules,function(){
           chrome.runtime.sendMessage({job:'updateAutoStateRules'});
         });
       });
@@ -154,7 +154,7 @@ module.exports = React.createClass({
       prevState.rule.action=rule.action;
       prevState.rule.match=rule.match.url;
     },function(){
-      set('autoStateRules',JSON.stringify(this.state.rules),function(){
+      setDB('autoStateRules',this.state.rules,function(){
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
       });
     });
@@ -185,8 +185,8 @@ module.exports = React.createClass({
           <td>{icons}</td>
           <td>{rule.action}</td>
           <td>{rule.match.url}</td>
-          <td onClick={this.editRule.bind(this,index)}>Edit</td>
-          <td onClick={this.deleteRule.bind(this,index)}>Delete</td>
+          <td onClick={CW.bind(this.editRule.bind(this,index),'AutoState','editRule','')}>Edit</td>
+          <td onClick={CW.bind(this.deleteRule.bind(this,index),'AutoState','deleteRule')}>Delete</td>
         </tr>
       );
     }.bind(this));
@@ -224,7 +224,7 @@ module.exports = React.createClass({
             <option value="disable">Disable when matched</option>
           </select>
           &nbsp;Url:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
-          <button className="addRule" onClick={this.addRule}>Add rule</button>
+          <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>Add rule</button>
         </div>
         <div className="actionBar autoState">
           <div className="type">

@@ -7,7 +7,6 @@ var IndexRoute = ReactRouter.IndexRoute;
 var Link = require('react-router').Link;
 var browserHistory = ReactRouter.browserHistory;
 
-
 function logPageView(){
   newCommunityRecord(true,['_trackPageview']);
 }
@@ -15,6 +14,7 @@ function logPageView(){
 ReactDOM.render(
   <Router history={browserHistory} onUpdate={logPageView}>
     <Route component={require('./Core.jsx')}>
+      <Route path="popup.html" component={require('./Overview.jsx')} />
       <Route path="overview" component={require('./Overview.jsx')} />
       <Route path="app" component={require('./App.jsx')} />
       <Route path="manage" component={require('./Manage.jsx')} />

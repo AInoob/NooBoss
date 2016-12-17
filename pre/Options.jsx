@@ -3,9 +3,15 @@ var Helmet = require('react-helmet');
 module.exports = React.createClass({
   displayName: 'Options',
   getInitialState: function(){
-    return {setting:{joinCommunity:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false}};
+    return {setting:{joinCommunity:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
   },
   componentDidMount: function(){
+    get('defaultPage',function(url){
+      this.setState(function(prevState){
+        this.state.setting.defaultPage=url;
+        return prevState;
+      });
+    }.bind(this));
     var switchList=['joinCommunity','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
     for(var i=0;i<switchList.length;i++){
       isOn(
@@ -25,15 +31,15 @@ module.exports = React.createClass({
       );
     }
   },
-  clearHistory: function(){
-    var result=confirm('Do you want to clear the History?');
+  cleanHistory: function(){
+    var result=confirm('Do you want to clean the History?');
     if(result){
       setDB('history_records',null,function(){
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
           title: 'History cleaned',
-          message: 'App history cleared',
+          message: 'App history cleaned',
         });
       });
     }
@@ -47,14 +53,8 @@ module.exports = React.createClass({
       });
     }.bind(this));
   },
-  reset: function(){
-    var result=confirm('Do you want to reset and clearn everything?');
-    if(result){
-      chrome.runtime.sendMessage({job:'reset'});
-    }
-  },
   getSwitch: function(id,handler){
-    return <div className="switch"><input type="checkbox" onChange={handler||this.toggleSetting.bind(this,id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
+    return <div className="switch"><input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
   },
   showAds: function(){
     alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
@@ -70,6 +70,24 @@ module.exports = React.createClass({
   },
   autoState: function(){
     var change=function(value){
+      if(value){
+        newCommunityRecord(true,['_trackEvent', 'AutoState', 'on']);
+        chrome.notifications.create({
+          type:'basic',
+          iconUrl: '/images/icon_128.png',
+          title: 'Auto state manage: Enabled',
+          message: 'Now you can set rules for NooBoss to auto manage your extensions'
+        });
+      }
+      else{
+        newCommunityRecord(true,['_trackEvent', 'AutoState', 'off']);
+        chrome.notifications.create({
+          type:'basic',
+          iconUrl: '/images/icon_128.png',
+          title: 'Auto state manage: Disabled',
+          message: 'Now NooBoss will not auto manage your extensions'
+        });
+      }
       set('autoState',value,function(){
         this.setState(function(prevState){
           prevState.setting.autoState=value;
@@ -83,12 +101,6 @@ module.exports = React.createClass({
       },function(result){
         if(result){
           change(true);
-          chrome.notifications.create({
-            type:'basic',
-            iconUrl: '/images/icon_128.png',
-            title: 'Auto state manage: Enabled',
-            message: 'Now you can set rules so NooBoss will enable extensions only when they are needed'
-          });
         }
         else{
           chrome.notifications.create({
@@ -102,21 +114,9 @@ module.exports = React.createClass({
           },function(granted){
             if(granted){
               change(true);
-              chrome.notifications.create({
-                type:'basic',
-                iconUrl: '/images/icon_128.png',
-                title: 'Auto state manage: Enabled',
-                message: 'Now you can set rules so NooBoss will enable extensions only when they are needed'
-              });
             }
             else{
               change(false);
-              chrome.notifications.create({
-                type:'basic',
-                iconUrl: '/images/icon_128.png',
-                title: 'Auto state manage: Disabled',
-                message: 'Now NooBoss will not audo manage your extensions'
-              });
             }
           });
         }
@@ -124,13 +124,16 @@ module.exports = React.createClass({
     }
     else{
       change(false);
-      chrome.notifications.create({
-        type:'basic',
-        iconUrl: '/images/icon_128.png',
-        title: 'Auto state manage: Disabled',
-        message: 'Now NooBoss will not audo manage your extensions'
-      });
     }
+  },
+  updateDefaultPage: function(e){
+    var url=e.target.value;
+    this.setState(function(prevState){
+      prevState.setting.defaultPage=url;
+      return prevState;
+    });
+    newCommunityRecord(true,['_trackEvent', 'Options', 'defaultPage', url]);
+    set('defaultPage',url);
   },
   render: function(){
     return(
@@ -139,8 +142,7 @@ module.exports = React.createClass({
           title="Options"
         />
         <div className="header">Clean</div>
-        <div className="button" onClick={this.clearHistory}>Clear History</div>
-        <div className="button" onClick={this.reset}>Reset everything (careful!)</div>
+        <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>Clean History</div>
         <div className="header">Notification</div>
         {this.getSwitch('notifyStateChange')}
         {this.getSwitch('notifyInstallation')}
@@ -149,6 +151,14 @@ module.exports = React.createClass({
         <div className="header">Functions</div>
         {this.getSwitch('autoState',this.autoState)}
         <div className="header">Experience</div>
+        <div className="selector">
+          Default page: <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
+            <option value="overview">Overview</option>
+            <option value="manage">Manage</option>
+            <option value="autoState">Auto state</option>
+            <option value="history">History</option>
+          </select>
+        </div>
         {this.getSwitch('joinCommunity',this.joinCommunity)}
         {this.getSwitch('showAds',this.showAds)}
       </div>

@@ -7,8 +7,8 @@ NooBoss.defaultValues=[
   ['notifyStateChange','-1'],
   ['notifyInstallation','1'],
   ['notifyRemoval','1'],
-  ['autoState','-1'],
-  ['autoState','1']
+  ['autoState','1'],
+  ['autoStateRules','[]'],
 ];
 
 NooBoss.resetSettings=function(){

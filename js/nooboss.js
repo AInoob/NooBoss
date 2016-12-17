@@ -63,6 +63,7 @@
 	  React.createElement(
 	    Route,
 	    { component: __webpack_require__(239) },
+	    React.createElement(Route, { path: 'popup.html', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'overview', component: __webpack_require__(250) }),
 	    React.createElement(Route, { path: 'app', component: __webpack_require__(252) }),
 	    React.createElement(Route, { path: 'manage', component: __webpack_require__(253) }),
@@ -26773,7 +26774,7 @@
 
 	  render: function () {
 	    var activeList = {};
-	    activeList[this.props.location.pathname.match(/\/(\w+)/)[1]] = 'active';
+	    activeList[(this.props.location.pathname.match(/(\w+)/) || [null, null])[1]] = 'active';
 	    return React.createElement(
 	      'div',
 	      { id: 'NooBoss-Core' },
@@ -26803,7 +26804,7 @@
 	          ),
 	          React.createElement(
 	            'li',
-	            { className: activeList.discover },
+	            { className: activeList.autoState },
 	            React.createElement(
 	              Link,
 	              { to: '/autoState' },
@@ -27962,17 +27963,18 @@
 	    };
 	  },
 	  componentDidMount: function () {
+	    if (window.location.pathname.indexOf('popup') != -1) {
+	      get('defaultPage', function (url) {
+	        this.props.router.push(url || 'overview');
+	      }.bind(this));
+	    }
 	    chrome.management.getAll(function (appInfoList) {
 	      for (var i = 0; i < appInfoList.length; i++) {
 	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
 	      }
 	      this.setState({ appInfoList: appInfoList });
 	    }.bind(this));
-	    get('autoStateRules', function (data) {
-	      var rules = [];
-	      if (data) {
-	        rules = JSON.parse(data);
-	      }
+	    getDB('autoStateRules', function (rules) {
 	      this.setState({ rules: rules });
 	    }.bind(this));
 	    get('userId', function (userId) {
@@ -27987,6 +27989,9 @@
 	        var url = "";
 	        if (tabs[0]) url = tabs[0].url;
 	        var website = extractDomain(url);
+	        if (website.match(/^undefined/)) {
+	          website = "General";
+	        }
 	        $.ajax({
 	          type: 'POST',
 	          contentType: "application/json",
@@ -27995,15 +28000,15 @@
 	        }).done(function (data) {
 	          var appInfos = {};
 	          for (var i = 0; i < data.appInfos.length; i++) {
-	            var id = data.appInfos[i].appId;
-	            appInfos[id] = data.appInfos[i];
+	            var appId = data.appInfos[i].appId;
+	            appInfos[appId] = data.appInfos[i];
 	          }
 	          var votes = {};
 	          var tags = {};
 	          for (var i = 0; i < data.votes.length; i++) {
-	            var id = data.votes[i].appId;
-	            votes[id] = data.votes[i].action;
-	            tags[id] = {};
+	            var appId = data.votes[i].appId;
+	            votes[appId] = data.votes[i].action;
+	            tags[appId] = {};
 	          }
 	          for (var i = 0; i < data.tags.length; i++) {
 	            if (!tags[data.tags[i].appId]) {
@@ -28014,15 +28019,15 @@
 	          var recoList = [];
 	          var temp = Object.keys(data.recos);
 	          for (var i = 0; i < temp.length; i++) {
-	            var id = temp[i];
+	            var appId = temp[i];
 	            var upVoted = 0;
 	            var downVoted = 0;
-	            if (votes[id] == 'up') {
+	            if (votes[appId] == 'up') {
 	              upVoted = 1;
-	            } else if (votes[id] == 'down') {
+	            } else if (votes[appId] == 'down') {
 	              downVoted = 1;
 	            }
-	            recoList.push({ id: id, upVotes: data.recos[id].upVotes - upVoted, downVotes: data.recos[id].downVotes - downVoted });
+	            recoList.push({ appId: appId, upVotes: data.recos[appId].upVotes - upVoted, downVotes: data.recos[appId].downVotes - downVoted });
 	          }
 	          this.setState({
 	            recoList: recoList,
@@ -28038,14 +28043,14 @@
 	                var downCountA = 0;
 	                var upCountB = 0;
 	                var downCountB = 0;
-	                if (this.state.votes[a.id] == 'up') {
+	                if (this.state.votes[a.appId] == 'up') {
 	                  upCountA = 1;
-	                } else if (this.state.votes[a.id] == 'down') {
+	                } else if (this.state.votes[a.appId] == 'down') {
 	                  downCountA = 1;
 	                }
-	                if (this.state.votes[b.id] == 'up') {
+	                if (this.state.votes[b.appId] == 'up') {
 	                  upCountB = 1;
-	                } else if (this.state.votes[b.id] == 'down') {
+	                } else if (this.state.votes[b.appId] == 'down') {
 	                  downCountB = 1;
 	                }
 	                return a.upVotes - a.downVotes + upCountA - downCountB < b.upVotes - b.downVotes + upCountB - downCountB;
@@ -28056,9 +28061,9 @@
 	      }.bind(this));
 	    }.bind(this));
 	  },
-	  select: function (id) {
+	  select: function (appId) {
 	    this.setState(function (prevState) {
-	      prevState.reco.selected[id] = !prevState.reco.selected[id];
+	      prevState.reco.selected[appId] = !prevState.reco.selected[appId];
 	      return prevState;
 	    });
 	  },
@@ -28083,13 +28088,13 @@
 	  },
 	  getInfosGoogle: function () {
 	    for (var i = 0; i < this.state.recoList.length; i++) {
-	      var id = this.state.recoList[i].id;
-	      if (this.state.infosGoogle[id]) {
+	      var appId = this.state.recoList[i].appId;
+	      if (this.state.infosGoogle[appId]) {
 	        continue;
 	      }
 	      $.ajax({
-	        url: 'https://chrome.google.com/webstore/detail/' + id
-	      }).done(function (id, data) {
+	        url: 'https://chrome.google.com/webstore/detail/' + appId
+	      }).done(function (appId, data) {
 	        var a = data.indexOf('src="', data.indexOf('<img  alt="Extension"')) + 5;
 	        var b = data.indexOf('"', a);
 	        var imgUrl = data.slice(a, b);
@@ -28100,14 +28105,14 @@
 	        b = data.indexOf('</', a);
 	        var description = data.slice(a, b);
 	        this.setState(function (prevState) {
-	          prevState.infosGoogle[id] = {
+	          prevState.infosGoogle[appId] = {
 	            imgUrl: imgUrl,
 	            name: name,
 	            description: description
 	          };
 	          return prevState;
 	        });
-	      }.bind(this, id));
+	      }.bind(this, appId));
 	    }
 	  },
 	  getIconUrl: function (appInfo) {
@@ -28136,8 +28141,7 @@
 	    }
 	    return iconUrl;
 	  },
-	  appTags: ["useful", 'functioning', 'laggy', 'buggy', 'not working', 'ADs/Spam/Malware'],
-	  addTag: function (appId, tag) {
+	  toggleTag: function (appId, tag) {
 	    var inc = 1;
 	    var tagged = true;
 	    var action = 'tag';
@@ -28146,6 +28150,7 @@
 	      tagged = false;
 	      inc = -1;
 	    }
+	    CW(function () {}, 'Community', 'addTag', action);
 	    var reco = {
 	      appId: appId,
 	      userId: this.state.userId,
@@ -28189,10 +28194,15 @@
 	      }
 	      reco.appIds = [appId];
 	    } else {
+	      $('#goReco').prop('checked', false);
 	      reco.action = 'up';
 	      reco.appIds = Object.keys(this.state.reco.selected).filter(function (appId) {
 	        return this.state.votes[appId] != 'up' && this.state.reco.selected[appId];
 	      }.bind(this));
+	      this.setState(function (prevState) {
+	        prevState.reco.selected = {};
+	        return prevState;
+	      });
 	    }
 	    $.ajax({
 	      type: 'POST',
@@ -28206,12 +28216,12 @@
 	          prevState.votes[appId] = reco.action;
 	          var listed = false;
 	          for (var j = 0; j < prevState.recoList.length; j++) {
-	            if (prevState.recoList[j].id == appId) {
+	            if (prevState.recoList[j].appId == appId) {
 	              listed = true;
 	            }
 	          }
 	          if (!listed) {
-	            prevState.recoList.push({ id: appId, upVotes: 0, downVotes: 0 });
+	            prevState.recoList.push({ appId: appId, upVotes: 0, downVotes: 0 });
 	          }
 	        }
 	        return prevState;
@@ -28240,18 +28250,13 @@
 	      discover = React.createElement(
 	        'div',
 	        { id: 'discover' },
-	        'Community feature is off.',
+	        'Community feature is off. You will not see apps recommended by users for various websites or community details for each app(turn it on ',
 	        React.createElement(
-	          'p',
-	          null,
-	          'You will not see apps recommended by users for various websites or community details for each app(turn it on ',
-	          React.createElement(
-	            Link,
-	            { to: '/options' },
-	            'here'
-	          ),
-	          ').'
-	        )
+	          Link,
+	          { to: '/options' },
+	          'here'
+	        ),
+	        ').'
 	      );
 	    } else {
 	      var recoList;
@@ -28259,26 +28264,26 @@
 	        recoList = (this.state.recoList || []).map(function (elem, index) {
 	          var app = null;
 	          var appInfo = null;
-	          var id = elem.id;
+	          var appId = elem.appId;
 	          var upActive = '';
 	          var downActive = '';
 	          var upCount = 0;
 	          var downCount = 0;
-	          if (this.state.votes[id] == 'up') {
+	          if (this.state.votes[appId] == 'up') {
 	            upActive = 'active';
 	            upCount = 1;
-	          } else if (this.state.votes[id] == 'down') {
+	          } else if (this.state.votes[appId] == 'down') {
 	            downActive = 'active';
 	            downCount = 1;
 	          }
 	          if (this.state.appInfosWeb) {
-	            appInfo = this.state.appInfosWeb[id];
+	            appInfo = this.state.appInfosWeb[appId];
 	          }
 	          appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
 	          var active = {};
-	          var temp = Object.keys(this.state.tags[id] || {});
+	          var temp = Object.keys(this.state.tags[appId] || {});
 	          for (var j = 0; j < temp.length; j++) {
-	            if (this.state.tags[id][temp[j]]) {
+	            if (this.state.tags[appId][temp[j]]) {
 	              active[temp[j]] = 'active';
 	            }
 	          }
@@ -28290,13 +28295,13 @@
 	              { className: 'tagColumn' },
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'useful'), className: "tag " + active['useful'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'useful'), className: "tag " + active['useful'] },
 	                'useful:',
 	                appInfo.tags['useful'] || 0
 	              ),
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'working'), className: "tag " + active['working'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'working'), className: "tag " + active['working'] },
 	                'working:',
 	                appInfo.tags['working'] || 0
 	              )
@@ -28306,13 +28311,13 @@
 	              { className: 'tagColumn' },
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'laggy'), className: "tag " + active['laggy'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'laggy'), className: "tag " + active['laggy'] },
 	                'laggy:',
 	                appInfo.tags['laggy'] || 0
 	              ),
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'buggy'), className: "tag " + active['buggy'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'buggy'), className: "tag " + active['buggy'] },
 	                'buggy:',
 	                appInfo.tags['buggy'] || 0
 	              )
@@ -28322,13 +28327,13 @@
 	              { className: 'tagColumn' },
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'not_working'), className: "tag " + active['not_working'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'not_working'), className: "tag " + active['not_working'] },
 	                'not working:',
 	                appInfo.tags['not_working'] || 0
 	              ),
 	              React.createElement(
 	                'div',
-	                { onClick: this.addTag.bind(this, id, 'ASM'), className: "tag " + active['ASM'] },
+	                { onClick: this.toggleTag.bind(this, appId, 'ASM'), className: "tag " + active['ASM'] },
 	                'ADs/Spam/Malware:',
 	                appInfo.tags['ASM'] || 0
 	              )
@@ -28366,21 +28371,21 @@
 	            { className: 'app' },
 	            React.createElement(
 	              'a',
-	              { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + id },
+	              { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + appId },
 	              React.createElement(
 	                'div',
 	                { className: 'front' },
 	                React.createElement(
 	                  'div',
 	                  { className: 'name' },
-	                  (this.state.infosGoogle[id] || {}).name
+	                  (this.state.infosGoogle[appId] || {}).name
 	                ),
-	                React.createElement('img', { src: (this.state.infosGoogle[id] || {}).imgUrl })
+	                React.createElement('img', { src: (this.state.infosGoogle[appId] || {}).imgUrl })
 	              ),
 	              React.createElement(
 	                'div',
 	                { className: 'description back' },
-	                (this.state.infosGoogle[id] || {}).description
+	                (this.state.infosGoogle[appId] || {}).description
 	              )
 	            ),
 	            React.createElement(
@@ -28397,7 +28402,7 @@
 	              { className: 'votes' },
 	              React.createElement(
 	                'div',
-	                { className: 'upVotes flip', onClick: this.addReco.bind(this, id, 'up') },
+	                { className: 'upVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'up'), 'Community', 'addReco', 'up') },
 	                React.createElement('div', { className: "front arrowUp " + upActive }),
 	                React.createElement(
 	                  'div',
@@ -28412,7 +28417,7 @@
 	              ),
 	              React.createElement(
 	                'div',
-	                { className: 'downVotes flip', onClick: this.addReco.bind(this, id, 'down') },
+	                { className: 'downVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'down'), 'Community', 'addReco', 'down') },
 	                React.createElement('div', { className: "front arrowDown " + downActive }),
 	                React.createElement(
 	                  'div',
@@ -28433,58 +28438,58 @@
 	          '?'
 	        );
 	      }
-	    }
-	    var appList = this.getFilteredList().map(function (appInfo, index) {
-	      if (appInfo) {
-	        var dimmer = 'dimmer';
-	        if (this.state.reco.selected[appInfo.id]) {
-	          dimmer = 'nonDimmer';
+	      var appList = this.getFilteredList().map(function (appInfo, index) {
+	        if (appInfo) {
+	          var dimmer = 'dimmer';
+	          if (this.state.reco.selected[appInfo.id]) {
+	            dimmer = 'nonDimmer';
+	          }
+	          return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	        }
-	        return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
-	      }
-	    }.bind(this));
-	    var recoApps = React.createElement(
-	      'div',
-	      { className: 'recoApp' },
-	      React.createElement(
-	        'label',
-	        { className: 'goRecoLabel', htmlFor: 'goReco' },
-	        'Recommend Extensions for this website'
-	      ),
-	      React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
-	      React.createElement(
+	      }.bind(this));
+	      var recoApps = React.createElement(
 	        'div',
-	        { className: 'recoBoard' },
+	        { className: 'recoApp' },
+	        React.createElement(
+	          'label',
+	          { className: 'goRecoLabel', htmlFor: 'goReco' },
+	          'Recommend Extensions for this website'
+	        ),
+	        React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
 	        React.createElement(
 	          'div',
-	          { className: 'actionBar' },
-	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
+	          { className: 'recoBoard' },
 	          React.createElement(
-	            'button',
-	            { className: 'addReco', onClick: this.addReco.bind(this, null) },
-	            'Recommend'
-	          )
-	        ),
-	        appList
-	      )
-	    );
-	    discover = React.createElement(
-	      'div',
-	      { id: 'discover' },
-	      React.createElement(
+	            'div',
+	            { className: 'actionBar' },
+	            React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
+	            React.createElement(
+	              'button',
+	              { className: 'addReco', onClick: CW.bind(null, this.addReco.bind(this, null), 'Community', 'addReco', 'up') },
+	              'Recommend'
+	            )
+	          ),
+	          appList
+	        )
+	      );
+	      discover = React.createElement(
 	        'div',
-	        { className: 'header' },
-	        'Apps for ',
+	        { id: 'discover' },
 	        React.createElement(
-	          'span',
-	          { className: 'website' },
-	          this.state.website
+	          'div',
+	          { className: 'header' },
+	          'Extensions for ',
+	          React.createElement(
+	            'span',
+	            { className: 'website' },
+	            this.state.website
+	          ),
+	          ':'
 	        ),
-	        ':'
-	      ),
-	      recoList,
-	      recoApps
-	    );
+	        recoList,
+	        recoApps
+	      );
+	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'NooBox-body' },
@@ -28547,10 +28552,6 @@
 	module.exports = React.createClass({
 	  displayName: 'exports',
 
-	  getInitialState: function () {
-	    return null;
-	  },
-	  componentDidMount: function () {},
 	  render: function () {
 	    var info = this.props.info;
 	    if (this.props.isAutoState) {
@@ -28578,11 +28579,11 @@
 	    } else {
 	      var options = null;
 	      if (this.props.optionsUrl) {
-	        options = React.createElement('label', { onClick: this.props.openOptions, className: 'app-options' });
+	        options = React.createElement('label', { onClick: CW.bind(null, this.props.openOptions, 'Manage', 'options', ''), className: 'app-options' });
 	      }
 	      var toggle = null;
 	      if (!info.type.match('theme')) {
-	        toggle = React.createElement('label', { data: info.id, onClick: this.props.toggle, className: 'app-switch' });
+	        toggle = React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.toggle, 'Manage', 'switch', ''), className: 'app-switch' });
 	      }
 	      return React.createElement(
 	        'div',
@@ -28597,7 +28598,7 @@
 	            { className: 'app-info' },
 	            toggle,
 	            options,
-	            React.createElement('label', { data: info.id, onClick: this.props.uninstall, className: 'app-remove' }),
+	            React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
 	            React.createElement(
 	              'span',
 	              { className: 'app-version', title: info.version },
@@ -28659,22 +28660,18 @@
 	      console.log(appInfo);
 	    }.bind(this));
 	  },
-	  openUrl: function (url) {
-	    chrome.tabs.create({ url: url });
-	  },
 	  toggleState: function (info) {
 	    var info = this.state.appInfo;
 	    var action = 'enable';
 	    if (info.enabled) {
 	      action = 'disable';
 	    }
-	    newCommunityRecord(true, ['_trackEvent', 'manage', action, info.id]);
+	    newCommunityRecord(true, ['_trackEvent', 'manage', action]);
 	    chrome.management.setEnabled(info.id, !info.enabled, function () {
 	      var result = 'enabled';
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	      this.setState(function (prevState) {
 	        prevState.appInfo.enabled = !info.enabled;
 	        if (prevState.appInfo.enabled) {
@@ -28720,7 +28717,7 @@
 	    if (appInfo.isApp) {
 	      launch = React.createElement(
 	        'div',
-	        { className: 'app-launcher', onClick: this.launchApp },
+	        { className: 'app-launcher', onClick: CW.bind(null, this.launchApp, 'App', 'launch', '') },
 	        'Launch'
 	      );
 	    }
@@ -28795,11 +28792,11 @@
 	    );
 	    var options = null;
 	    if (appInfo.optionsUrl) {
-	      options = React.createElement('span', { className: 'app-options', onClick: this.openUrl.bind(null, appInfo.optionsUrl) });
+	      options = React.createElement('span', { className: 'app-options', onClick: CLR.bind(null, appInfo.optionsUrl, 'Manage', 'option', '') });
 	    }
 	    var toggle = null;
 	    if (appInfo.type && !appInfo.type.match('theme')) {
-	      toggle = React.createElement('label', { onClick: this.toggleState, className: 'app-switch' });
+	      toggle = React.createElement('label', { onClick: CW.bind(null, this.toggleState, 'Manage', 'switch', ''), className: 'app-switch' });
 	    }
 	    var config = null;
 	    if (appInfo.state != 'removed') {
@@ -28808,7 +28805,7 @@
 	        { className: 'config' },
 	        toggle,
 	        options,
-	        React.createElement('label', { onClick: this.uninstall, className: 'app-remove' })
+	        React.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' })
 	      );
 	    } else {
 	      config = React.createElement(
@@ -28816,7 +28813,7 @@
 	        { className: 'config' },
 	        React.createElement(
 	          'a',
-	          { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
+	          { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), title: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
 	          React.createElement('label', { className: 'app-add' })
 	        )
 	      );
@@ -28854,7 +28851,7 @@
 	          { className: 'app-icon' },
 	          React.createElement(
 	            'a',
-	            { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
+	            { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link') },
 	            React.createElement('img', { src: appInfo.icon })
 	          ),
 	          config
@@ -28864,7 +28861,7 @@
 	          { className: 'app-main' },
 	          React.createElement(
 	            'a',
-	            { target: '_blank', title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, href: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-name' },
+	            { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), className: 'app-name' },
 	            appInfo.name
 	          ),
 	          launch,
@@ -28997,7 +28994,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', title: appInfo.homepageUrl, href: appInfo.homepageUrl },
+	                    { title: appInfo.homepageUrl, onClick: CL.bind(null, appInfo.homepageUrl, 'App', 'app-link') },
 	                    appInfo.homepageUrl
 	                  )
 	                )
@@ -29072,7 +29069,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', title: this.state.crxUrl, href: this.state.crxUrl },
+	                    { title: this.state.crxUrl, onClick: CL.bind(null, this.state.crxUrl, 'App', 'app-link') },
 	                    crxName
 	                  )
 	                )
@@ -29090,7 +29087,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { target: '_blank', title: appInfo.updateUrl, href: appInfo.updateUrl },
+	                    { title: appInfo.updateUrl, onClick: CL.bind(null, appInfo.updateUrl, 'App', 'app-link') },
 	                    appInfo.updateUrl
 	                  )
 	                )
@@ -29108,7 +29105,7 @@
 	                  null,
 	                  React.createElement(
 	                    'a',
-	                    { onClick: this.openUrl.bind(null, manifestUrl), href: '', title: manifestUrl },
+	                    { onClick: CL.bind(null, manifestUrl, 'App', 'manifest'), title: manifestUrl },
 	                    'manifest.json'
 	                  )
 	                )
@@ -29208,18 +29205,21 @@
 	    return iconUrl;
 	  },
 	  enableAll: function () {
+	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'enableAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
 	      this.toggleState(appList[i], 'enable');
 	    }
 	  },
 	  disableAll: function () {
+	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'disableAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
 	      this.toggleState(appList[i], 'disable');
 	    }
 	  },
 	  undoAll: function () {
+	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'undoAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
 	      this.toggleState(appList[i], this.state.originalStates[appList[i].id]);
@@ -29245,13 +29245,11 @@
 	    if (newAction && newAction != action) {
 	      return;
 	    }
-	    newCommunityRecord(true, ['_trackEvent', 'manage', action, info.id]);
 	    chrome.management.setEnabled(info.id, !info.enabled, function () {
 	      var result = 'enabled';
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	      this.setState(function (prevState) {
 	        for (var i = 0; i < prevState.appInfoList.length; i++) {
 	          if (info.id == prevState.appInfoList[i].id) {
@@ -29265,7 +29263,6 @@
 	  },
 	  uninstall: function (info) {
 	    var result = 'removal_success';
-	    newCommunityRecord(true, ['_trackEvent', 'manage', 'removal', info.id]);
 	    chrome.management.uninstall(info.id, function () {
 	      if (chrome.runtime.lastError) {
 	        action = 'removal_fail';
@@ -29288,7 +29285,6 @@
 	          return prevState;
 	        });
 	      }
-	      newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	    }.bind(this));
 	  },
 	  openOptions: function (url) {
@@ -29388,6 +29384,7 @@
 	        action: 'enableOnly',
 	        match: ''
 	      },
+	      rules: [],
 	      icons: {},
 	      names: {}
 	    };
@@ -29409,11 +29406,7 @@
 	      }
 	      this.setState({ appInfoList: appInfoList, names: names });
 	    }.bind(this));
-	    get('autoStateRules', function (data) {
-	      var rules = [];
-	      if (data) {
-	        rules = JSON.parse(data);
-	      }
+	    getDB('autoStateRules', function (rules) {
 	      this.setState({ rules: rules });
 	    }.bind(this));
 	  },
@@ -29489,6 +29482,9 @@
 	      }
 	    }
 	    this.setState(function (prevState) {
+	      if (!prevState.rules) {
+	        prevState.rules = [];
+	      }
 	      prevState.rules.push({
 	        ids: ids,
 	        action: prevState.rule.action,
@@ -29501,7 +29497,7 @@
 	      prevState.rule.match = '';
 	      return prevState;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	      setDB('autoStateRules', this.state.rules, function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
@@ -29512,7 +29508,7 @@
 	      this.setState(function (prevState) {
 	        prevState.rules.splice(index, 1);
 	      }, function () {
-	        set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	        setDB('autoStateRules', this.state.rules, function () {
 	          chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	        });
 	      });
@@ -29528,7 +29524,7 @@
 	      prevState.rule.action = rule.action;
 	      prevState.rule.match = rule.match.url;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	      setDB('autoStateRules', this.state.rules, function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
@@ -29576,12 +29572,12 @@
 	        ),
 	        React.createElement(
 	          'td',
-	          { onClick: this.editRule.bind(this, index) },
+	          { onClick: CW.bind(this.editRule.bind(this, index), 'AutoState', 'editRule', '') },
 	          'Edit'
 	        ),
 	        React.createElement(
 	          'td',
-	          { onClick: this.deleteRule.bind(this, index) },
+	          { onClick: CW.bind(this.deleteRule.bind(this, index), 'AutoState', 'deleteRule') },
 	          'Delete'
 	        )
 	      );
@@ -29675,7 +29671,7 @@
 	        React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, type: 'text' }),
 	        React.createElement(
 	          'button',
-	          { className: 'addRule', onClick: this.addRule },
+	          { className: 'addRule', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
 	          'Add rule'
 	        )
 	      ),
@@ -29757,9 +29753,15 @@
 	module.exports = React.createClass({
 	  displayName: 'Options',
 	  getInitialState: function () {
-	    return { setting: { joinCommunity: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false } };
+	    return { setting: { joinCommunity: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
 	  },
 	  componentDidMount: function () {
+	    get('defaultPage', function (url) {
+	      this.setState(function (prevState) {
+	        this.state.setting.defaultPage = url;
+	        return prevState;
+	      });
+	    }.bind(this));
 	    var switchList = ['joinCommunity', 'showAds', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification'];
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
@@ -29775,15 +29777,15 @@
 	      }.bind(this, i));
 	    }
 	  },
-	  clearHistory: function () {
-	    var result = confirm('Do you want to clear the History?');
+	  cleanHistory: function () {
+	    var result = confirm('Do you want to clean the History?');
 	    if (result) {
 	      setDB('history_records', null, function () {
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
 	          title: 'History cleaned',
-	          message: 'App history cleared'
+	          message: 'App history cleaned'
 	        });
 	      });
 	    }
@@ -29797,17 +29799,11 @@
 	      });
 	    }.bind(this));
 	  },
-	  reset: function () {
-	    var result = confirm('Do you want to reset and clearn everything?');
-	    if (result) {
-	      chrome.runtime.sendMessage({ job: 'reset' });
-	    }
-	  },
 	  getSwitch: function (id, handler) {
 	    return React.createElement(
 	      'div',
 	      { className: 'switch' },
-	      React.createElement('input', { type: 'checkbox', onChange: handler || this.toggleSetting.bind(this, id), checked: this.state.setting[id] }),
+	      React.createElement('input', { type: 'checkbox', onChange: CW.bind(null, handler || this.toggleSetting.bind(this, id), 'Options', 'option-switch', id), checked: this.state.setting[id] }),
 	      getTextFromId(id)
 	    );
 	  },
@@ -29825,6 +29821,23 @@
 	  },
 	  autoState: function () {
 	    var change = function (value) {
+	      if (value) {
+	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'on']);
+	        chrome.notifications.create({
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'Auto state manage: Enabled',
+	          message: 'Now you can set rules for NooBoss to auto manage your extensions'
+	        });
+	      } else {
+	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'off']);
+	        chrome.notifications.create({
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'Auto state manage: Disabled',
+	          message: 'Now NooBoss will not auto manage your extensions'
+	        });
+	      }
 	      set('autoState', value, function () {
 	        this.setState(function (prevState) {
 	          prevState.setting.autoState = value;
@@ -29838,12 +29851,6 @@
 	      }, function (result) {
 	        if (result) {
 	          change(true);
-	          chrome.notifications.create({
-	            type: 'basic',
-	            iconUrl: '/images/icon_128.png',
-	            title: 'Auto state manage: Enabled',
-	            message: 'Now you can set rules so NooBoss will enable extensions only when they are needed'
-	          });
 	        } else {
 	          chrome.notifications.create({
 	            type: 'basic',
@@ -29856,33 +29863,24 @@
 	          }, function (granted) {
 	            if (granted) {
 	              change(true);
-	              chrome.notifications.create({
-	                type: 'basic',
-	                iconUrl: '/images/icon_128.png',
-	                title: 'Auto state manage: Enabled',
-	                message: 'Now you can set rules so NooBoss will enable extensions only when they are needed'
-	              });
 	            } else {
 	              change(false);
-	              chrome.notifications.create({
-	                type: 'basic',
-	                iconUrl: '/images/icon_128.png',
-	                title: 'Auto state manage: Disabled',
-	                message: 'Now NooBoss will not audo manage your extensions'
-	              });
 	            }
 	          });
 	        }
 	      });
 	    } else {
 	      change(false);
-	      chrome.notifications.create({
-	        type: 'basic',
-	        iconUrl: '/images/icon_128.png',
-	        title: 'Auto state manage: Disabled',
-	        message: 'Now NooBoss will not audo manage your extensions'
-	      });
 	    }
+	  },
+	  updateDefaultPage: function (e) {
+	    var url = e.target.value;
+	    this.setState(function (prevState) {
+	      prevState.setting.defaultPage = url;
+	      return prevState;
+	    });
+	    newCommunityRecord(true, ['_trackEvent', 'Options', 'defaultPage', url]);
+	    set('defaultPage', url);
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -29898,13 +29896,8 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'button', onClick: this.clearHistory },
-	        'Clear History'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: this.reset },
-	        'Reset everything (careful!)'
+	        { className: 'button', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
+	        'Clean History'
 	      ),
 	      React.createElement(
 	        'div',
@@ -29926,6 +29919,35 @@
 	        { className: 'header' },
 	        'Experience'
 	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'selector' },
+	        'Default page: ',
+	        React.createElement(
+	          'select',
+	          { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
+	          React.createElement(
+	            'option',
+	            { value: 'overview' },
+	            'Overview'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'manage' },
+	            'Manage'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'autoState' },
+	            'Auto state'
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'history' },
+	            'History'
+	          )
+	        )
+	      ),
 	      this.getSwitch('joinCommunity', this.joinCommunity),
 	      this.getSwitch('showAds', this.showAds)
 	    );
@@ -29940,8 +29962,7 @@
 	var Link = __webpack_require__(183).Link;
 	var Helmet = __webpack_require__(240);
 	module.exports = React.createClass({
-	  displayName: 'exports',
-
+	  displayName: 'History',
 	  getInitialState: function () {
 	    return {
 	      recordList: [],
@@ -30121,12 +30142,12 @@
 	      ),
 	      React.createElement(
 	        'a',
-	        { target: '_blank', href: 'https://ainoob.com/project/nooboss' },
+	        { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	        React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
 	      ),
 	      React.createElement(
 	        'a',
-	        { target: '_blank', href: 'https://ainoob.com/project/noobox' },
+	        { onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
 	        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
 	      ),
 	      React.createElement(
@@ -30251,7 +30272,7 @@
 	          'If you have questions about how to use NooBoss, you can find instructions here: ',
 	          React.createElement(
 	            'a',
-	            { target: '_blank', href: 'https://ainoob.com/project/nooboss' },
+	            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	            'NooBoss project'
 	          )
 	        )
@@ -30270,13 +30291,13 @@
 	          'NooBoss is an open sourced project under GPL-V3 made by ',
 	          React.createElement(
 	            'a',
-	            { target: '_blank', href: 'https://ainoob.com' },
+	            { onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
 	            'AInoob'
 	          ),
 	          ', you can check the project progress ',
 	          React.createElement(
 	            'a',
-	            { target: '_blank', href: 'https://ainoob.com/project/nooboss' },
+	            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	            'here'
 	          )
 	        )

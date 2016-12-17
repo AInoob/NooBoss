@@ -23,6 +23,9 @@ body::-webkit-scrollbar-track {
   height: 37px;
   width: 100%;
 }
+a:hover {
+  cursor: pointer;
+}
 #overview .manage {
   font-size: 22px;
   font-weight: bold;
@@ -80,12 +83,16 @@ body::-webkit-scrollbar-track {
   transform: rotateY(180deg);
 }
 #discover {
-  background-color: #fae3e7;
+  background-color: #f5f5dc;
   overflow: hidden;
 }
 #discover .website {
   color: #f927cd;
   font-weight: bold;
+}
+#discover .recoApp {
+  overflow: hidden;
+  background-color: #fae3e7;
 }
 #discover .header {
   font-size: 22px;
@@ -130,6 +137,9 @@ body::-webkit-scrollbar-track {
 #discover .reco .appReview .tags .tagColumn {
   float: left;
   margin-left: 22px;
+}
+#discover .reco .appReview .tags .tag {
+  cursor: pointer;
 }
 #discover .reco .appReview .tags .tag + .tag {
   margin-top: 10px;
@@ -223,6 +233,7 @@ a:visited {
   color: #4016d9;
 }
 nav {
+  z-index: 10;
   position: fixed;
   top: 0px;
   height: 37px;
@@ -645,6 +656,12 @@ h2 {
 }
 .Options .switch,
 .Options .button {
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 120px;
+}
+.Options .selector {
   height: 30px;
   font-size: 20px;
   font-weight: bold;

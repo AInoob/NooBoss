@@ -5,14 +5,14 @@ var Link = require('react-router').Link;
 module.exports = React.createClass({
   render: function(){
     var activeList={};
-    activeList[this.props.location.pathname.match(/\/(\w+)/)[1]]='active'
+    activeList[(this.props.location.pathname.match(/(\w+)/)||[null,null])[1]]='active'
     return(
       <div id="NooBoss-Core">
         <nav>
           <ul>
             <li className={activeList.overview}><Link to="/overview">Overview</Link></li>
             <li className={activeList.manage}><Link to="/manage">Manage</Link></li>
-            <li className={activeList.discover}><Link to="/autoState">Auto State</Link></li>
+            <li className={activeList.autoState}><Link to="/autoState">Auto State</Link></li>
             <li className={activeList.history}><Link to="/history">History</Link></li>
           </ul>
         </nav>

@@ -23,6 +23,12 @@ body {
   width: 100%;
 }
 
+a{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 #overview{
   .manage{
     font-size: 22px;
@@ -90,10 +96,14 @@ body {
 }
 
 #discover{
-  background-color: #fae3e7;
+  background-color: #f5f5dc;
   .website{
     color: #f927cd;
     font-weight: bold;
+  }
+  .recoApp{
+    overflow: hidden;
+    background-color: #fae3e7;
   }
   .header{
     font-size: 22px;
@@ -138,6 +148,7 @@ body {
           margin-left: 22px;
         }
         .tag{
+          cursor: pointer;
           & + .tag{
             margin-top: 10px;
           }
@@ -236,6 +247,7 @@ a:visited{
 }
 
 nav {
+  z-index: 10;
   height: 37px;
   position: fixed;
   top: 0px;
@@ -697,6 +709,12 @@ h2{
     font-style: italic;
   }
   .switch, .button{
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 120px;
+  }
+  .selector{
     height: 30px;
     font-size: 20px;
     font-weight: bold;

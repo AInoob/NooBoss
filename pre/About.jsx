@@ -13,17 +13,17 @@ module.exports = React.createClass({
           title="About"
         />
         <h1>About</h1>
-        <a target="_blank" href="https://ainoob.com/project/nooboss"><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
-        <a target="_blank" href="https://ainoob.com/project/noobox"><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
+        <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
+        <a onClick={CL.bind(null,'https://ainoob.com/project/noobox','About-link','link')}><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
         <section>
           <h2>What can NooBoss do?</h2>
           <p>Right now, NooBoss can (apps/extensions/theme will be called apps down below)</p>
           <ul><li>Manage your apps<ul><li>enable/disable/remove one or a bunch of apps</li></ul></li><li>Auto state management<ul><li>automatically enable/disable apps base on auto state rules<ul><li>(you can save memory)</li><li>(enable apps only when you need them)</li></ul></li></ul></li><li>Show history of&nbsp;apps<ul><li>installation, removal, enabling, disabling</li><li>show the version change<ul><li>(you can tell when did apps got updated)</li></ul></li></ul></li><li>Show detailed information of&nbsp;apps<ul><li>download crx file</li><li>open manifest file</li><li>see permissions</li><li>And a lot more informations</li></ul></li></ul>
-          <p>If you have questions about how to use NooBoss, you can find instructions here: <a target="_blank" href="https://ainoob.com/project/nooboss">NooBoss project</a></p>
+          <p>If you have questions about how to use NooBoss, you can find instructions here: <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>NooBoss project</a></p>
         </section>
         <section>
           <h2>Who made NooBoss</h2>
-          <p>NooBoss is an open sourced project under GPL-V3 made by <a target="_blank" href="https://ainoob.com">AInoob</a>, you can check the project progress <a target="_blank" href="https://ainoob.com/project/nooboss">here</a></p>
+          <p>NooBoss is an open sourced project under GPL-V3 made by <a onClick={CL.bind(null,'https://ainoob.com','About-link','link')}>AInoob</a>, you can check the project progress <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>here</a></p>
         </section>
         <section>
           <h2>Privacy</h2>

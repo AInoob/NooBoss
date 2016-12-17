@@ -51,18 +51,21 @@ module.exports = React.createClass({
     return iconUrl;
   },
   enableAll: function(){
+    newCommunityRecord(true,['_trackEvent', 'Manage', 'enableAll','']);
     var appList=this.getFilteredList();
     for(var i=0;i<appList.length;i++){
       this.toggleState(appList[i],'enable');
     }
   },
   disableAll: function(){
+    newCommunityRecord(true,['_trackEvent', 'Manage', 'disableAll','']);
     var appList=this.getFilteredList();
     for(var i=0;i<appList.length;i++){
       this.toggleState(appList[i],'disable');
     }
   },
   undoAll: function(){
+    newCommunityRecord(true,['_trackEvent', 'Manage', 'undoAll','']);
     var appList=this.getFilteredList();
     for(var i=0;i<appList.length;i++){
       this.toggleState(appList[i],this.state.originalStates[appList[i].id]);
@@ -90,13 +93,11 @@ module.exports = React.createClass({
     if(newAction&&newAction!=action){
       return;
     }
-    newCommunityRecord(true,['_trackEvent', 'manage', action, info.id]);
     chrome.management.setEnabled(info.id,!info.enabled,function(){
       var result='enabled';
       if(info.enabled){
         result='disabled';
       }
-      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
       this.setState(function(prevState){
         for(var i=0;i<prevState.appInfoList.length;i++){
           if(info.id==prevState.appInfoList[i].id){
@@ -110,7 +111,6 @@ module.exports = React.createClass({
   },
   uninstall: function(info){
     var result='removal_success';
-    newCommunityRecord(true,['_trackEvent', 'manage', 'removal', info.id]);
     chrome.management.uninstall(info.id,function(){
       if(chrome.runtime.lastError){
         action='removal_fail';
@@ -134,7 +134,6 @@ module.exports = React.createClass({
           return prevState;
         });
       }
-      newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
     }.bind(this));
   },
   openOptions:function(url){

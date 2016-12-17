@@ -2,6 +2,7 @@ var React = require('react');
 var Link = require('react-router').Link;
 var Helmet = require('react-helmet');
 module.exports = React.createClass({
+  displayName:'History',
   getInitialState: function(){
     return {
       recordList:[],

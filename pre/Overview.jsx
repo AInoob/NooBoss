@@ -15,17 +15,18 @@ module.exports = React.createClass({
     };
   },
   componentDidMount: function(){
+    if(window.location.pathname.indexOf('popup')!=-1){
+      get('defaultPage',function(url){
+        this.props.router.push((url||'overview'));
+      }.bind(this));
+    }
     chrome.management.getAll(function(appInfoList){
       for(var i=0;i<appInfoList.length;i++){
         appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
       }
       this.setState({appInfoList:appInfoList});
     }.bind(this));
-    get('autoStateRules',function(data){
-      var rules=[];
-      if(data){
-        rules=JSON.parse(data);
-      }
+    getDB('autoStateRules',function(rules){
       this.setState({rules:rules});
     }.bind(this));
     get('userId',function(userId){
@@ -41,6 +42,9 @@ module.exports = React.createClass({
         if(tabs[0])
           url = tabs[0].url;
         var website=extractDomain(url);
+        if(website.match(/^undefined/)){
+          website="General";
+        }
         $.ajax({
           type:'POST',
           contentType: "application/json",
@@ -49,15 +53,15 @@ module.exports = React.createClass({
         }).done(function(data){
           var appInfos={};
           for(var i=0;i<data.appInfos.length;i++){
-            var id=data.appInfos[i].appId;
-            appInfos[id]=data.appInfos[i];
+            var appId=data.appInfos[i].appId;
+            appInfos[appId]=data.appInfos[i];
           }
           var votes={};
           var tags={};
           for(var i=0;i<data.votes.length;i++){
-            var id=data.votes[i].appId;
-            votes[id]=data.votes[i].action;
-            tags[id]={};
+            var appId=data.votes[i].appId;
+            votes[appId]=data.votes[i].action;
+            tags[appId]={};
           }
           for(var i=0;i<data.tags.length;i++){
             if(!tags[data.tags[i].appId]){
@@ -68,16 +72,16 @@ module.exports = React.createClass({
           var recoList=[];
           var temp=Object.keys(data.recos);
           for(var i=0;i<temp.length;i++){
-            var id=temp[i];
+            var appId=temp[i];
             var upVoted=0;
             var downVoted=0;
-            if(votes[id]=='up'){
+            if(votes[appId]=='up'){
               upVoted=1;
             }
-            else if(votes[id]=='down'){
+            else if(votes[appId]=='down'){
               downVoted=1;
             }
-            recoList.push({id:id,upVotes:data.recos[id].upVotes-upVoted,downVotes:data.recos[id].downVotes-downVoted});
+            recoList.push({appId:appId,upVotes:data.recos[appId].upVotes-upVoted,downVotes:data.recos[appId].downVotes-downVoted});
           }
           this.setState({
             recoList: recoList,
@@ -93,16 +97,16 @@ module.exports = React.createClass({
                 var downCountA=0;
                 var upCountB=0;
                 var downCountB=0;
-                if(this.state.votes[a.id]=='up'){
+                if(this.state.votes[a.appId]=='up'){
                   upCountA=1;
                 }
-                else if(this.state.votes[a.id]=='down'){
+                else if(this.state.votes[a.appId]=='down'){
                   downCountA=1;
                 }
-                if(this.state.votes[b.id]=='up'){
+                if(this.state.votes[b.appId]=='up'){
                   upCountB=1;
                 }
-                else if(this.state.votes[b.id]=='down'){
+                else if(this.state.votes[b.appId]=='down'){
                   downCountB=1;
                 }
                 return (a.upVotes-a.downVotes+upCountA-downCountB)<(b.upVotes-b.downVotes+upCountB-downCountB);
@@ -113,9 +117,9 @@ module.exports = React.createClass({
       }.bind(this));
     }.bind(this));
   },
-  select: function(id){
+  select: function(appId){
     this.setState(function(prevState){
-      prevState.reco.selected[id]=!prevState.reco.selected[id];
+      prevState.reco.selected[appId]=!prevState.reco.selected[appId];
       return prevState;
     });
   },
@@ -141,13 +145,13 @@ module.exports = React.createClass({
   },
   getInfosGoogle: function(){
     for(var i=0;i<this.state.recoList.length;i++){
-      var id=this.state.recoList[i].id;
-      if(this.state.infosGoogle[id]){
+      var appId=this.state.recoList[i].appId;
+      if(this.state.infosGoogle[appId]){
         continue;
       }
       $.ajax({
-        url:'https://chrome.google.com/webstore/detail/'+id
-      }).done(function(id,data){
+        url:'https://chrome.google.com/webstore/detail/'+appId
+      }).done(function(appId,data){
         var a=data.indexOf('src="',data.indexOf('<img  alt="Extension"'))+5;
         var b=data.indexOf('"',a);
         var imgUrl=data.slice(a,b);
@@ -158,14 +162,14 @@ module.exports = React.createClass({
         b=data.indexOf('</',a);
         var description=data.slice(a,b);
         this.setState(function(prevState){
-          prevState.infosGoogle[id]={
+          prevState.infosGoogle[appId]={
             imgUrl:imgUrl,
             name: name,
             description: description
           }
           return prevState;
         });
-      }.bind(this,id));
+      }.bind(this,appId));
     }
   },
   getIconUrl: function(appInfo){
@@ -194,10 +198,7 @@ module.exports = React.createClass({
     }
     return iconUrl;
   },
-  appTags:[
-    "useful",'functioning','laggy','buggy','not working','ADs/Spam/Malware'
-  ],
-  addTag: function(appId,tag){
+  toggleTag: function(appId,tag){
     var inc=1;
     var tagged=true;
     var action='tag';
@@ -206,6 +207,7 @@ module.exports = React.createClass({
       tagged=false;
       inc=-1;
     }
+    CW(function(){},'Community','addTag',action);
     var reco={
       appId:appId,
       userId:this.state.userId,
@@ -252,10 +254,15 @@ module.exports = React.createClass({
       reco.appIds=[appId];
     }
     else{
+      $('#goReco').prop('checked',false);
       reco.action='up';
       reco.appIds=Object.keys(this.state.reco.selected).filter(function(appId){
         return this.state.votes[appId]!='up'&&this.state.reco.selected[appId];
       }.bind(this));
+      this.setState(function(prevState){
+        prevState.reco.selected={};
+        return prevState;
+      });
     }
     $.ajax({
       type:'POST',
@@ -269,12 +276,12 @@ module.exports = React.createClass({
           prevState.votes[appId]=reco.action;
           var listed=false;
           for(var j=0;j<prevState.recoList.length;j++){
-            if(prevState.recoList[j].id==appId){
+            if(prevState.recoList[j].appId==appId){
               listed=true;
             }
           }
           if(!listed){
-            prevState.recoList.push({id:appId,upVotes:0,downVotes:0});
+            prevState.recoList.push({appId:appId,upVotes:0,downVotes:0});
           }
         }
         return prevState;
@@ -304,8 +311,7 @@ module.exports = React.createClass({
     if(!this.state.joinCommunity){
       discover=
         <div id="discover">
-          Community feature is off.
-          <p>You will not see apps recommended by users for various websites or community details for each app(turn it on <Link to="/options">here</Link>).</p>
+          Community feature is off. You will not see apps recommended by users for various websites or community details for each app(turn it on <Link to="/options">here</Link>).
         </div>;
     }
     else{
@@ -314,42 +320,42 @@ module.exports = React.createClass({
         recoList=(this.state.recoList||[]).map(function(elem,index){
           var app=null;
           var appInfo=null;
-          var id=elem.id;
+          var appId=elem.appId;
           var upActive='';
           var downActive='';
           var upCount=0;
           var downCount=0;
-          if(this.state.votes[id]=='up'){
+          if(this.state.votes[appId]=='up'){
             upActive='active';
             upCount=1;
           }
-          else if(this.state.votes[id]=='down'){
+          else if(this.state.votes[appId]=='down'){
             downActive='active';
             downCount=1;
           }
           if(this.state.appInfosWeb){
-            appInfo=this.state.appInfosWeb[id];
+            appInfo=this.state.appInfosWeb[appId];
           }
           appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
           var active={};
-          var temp=Object.keys(this.state.tags[id]||{});
+          var temp=Object.keys(this.state.tags[appId]||{});
           for(var j=0;j<temp.length;j++){
-            if(this.state.tags[id][temp[j]]){
+            if(this.state.tags[appId][temp[j]]){
               active[temp[j]]='active'
             }
           }
           var tags=<div className="tags">
             <div className="tagColumn">
-              <div onClick={this.addTag.bind(this,id,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
-              <div onClick={this.addTag.bind(this,id,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
             </div>
             <div className="tagColumn">
-              <div onClick={this.addTag.bind(this,id,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
-              <div onClick={this.addTag.bind(this,id,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
             </div>
             <div className="tagColumn">
-              <div onClick={this.addTag.bind(this,id,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
-              <div onClick={this.addTag.bind(this,id,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
+              <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
             </div>
           </div>;
           var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
@@ -365,13 +371,13 @@ module.exports = React.createClass({
           </div>;
           app=
             <div className="app">
-              <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+id}>
+              <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+appId}>
                 <div className="front">
-                  <div className="name">{(this.state.infosGoogle[id]||{}).name}</div>
-                  <img src={(this.state.infosGoogle[id]||{}).imgUrl} />
+                  <div className="name">{(this.state.infosGoogle[appId]||{}).name}</div>
+                  <img src={(this.state.infosGoogle[appId]||{}).imgUrl} />
                 </div>
                 <div className="description back">
-                  {(this.state.infosGoogle[id]||{}).description}
+                  {(this.state.infosGoogle[appId]||{}).description}
                 </div>
               </a>
               <div className="appReview">
@@ -381,12 +387,12 @@ module.exports = React.createClass({
           return(
             <div className="reco" key={index}>
               <div className="votes">
-                <div className="upVotes flip" onClick={this.addReco.bind(this,id,'up')}>
+                <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
                   <div className={"front arrowUp "+upActive}></div>
                   <div className="back">{elem.upVotes+upCount}</div>
                 </div>
                 <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
-                <div className="downVotes flip" onClick={this.addReco.bind(this,id,'down')}>
+                <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
                   <div className={"front arrowDown "+downActive}></div>
                   <div className="back">{elem.downVotes+downCount}</div>
                 </div>
@@ -398,7 +404,6 @@ module.exports = React.createClass({
       else{
         recoList=<div className="noReco">No one has recommended any extensions for this website yet, do you have a wonderful extension for {this.state.website}?</div>
       }
-    }
     var appList=this.getFilteredList().map(function(appInfo,index){
       if(appInfo){
         var dimmer='dimmer';
@@ -417,17 +422,18 @@ module.exports = React.createClass({
         <div className="recoBoard">
           <div className="actionBar">
             <input id="keyword" onChange={this.updateFilter} type="text" />
-            <button className="addReco" onClick={this.addReco.bind(this,null)}>Recommend</button>
+            <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>Recommend</button>
           </div>
           {appList}
         </div>
       </div>);
     discover=
       <div id="discover">
-        <div className="header">Apps for <span className="website">{this.state.website}</span>:</div>
+        <div className="header">Extensions for <span className="website">{this.state.website}</span>:</div>
         {recoList}
         {recoApps}
       </div>;
+    }
     return(
       <div className="NooBox-body">
         <Helmet
