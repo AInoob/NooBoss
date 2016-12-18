@@ -236,6 +236,27 @@
   "history_cleaned":{
 	"message":"History cleaned"
   },
+  "enabled":{
+	"message":"enabled"
+  },
+  "disabled":{
+	"message":"disabled"
+  },
+  "installed":{
+	"message":"installed"
+  },
+  "removed":{
+	"message":"removed"
+  },
+  "enableWhen":{
+	"message":"enable when"
+  },
+  "disableWhen":{
+	"message":"disable when"
+  },
+  "enableOnly":{
+	"message":"enable only"
+  },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },

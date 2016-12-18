@@ -171,7 +171,7 @@ module.exports = React.createClass({
         );
       }
     }.bind(this));
-    var preRuleList=[{ids:[],action:"Hello",match:{url:'You do not have any rule yet'}}];
+    var preRuleList=[{ids:[],action:"Hello",match:{url:GL('ls_3')}}];
     if(this.state.rules&&this.state.rules.length>0){
       preRuleList=this.state.rules;
     }
@@ -183,7 +183,7 @@ module.exports = React.createClass({
         <tr className="rule" key={index}>
           <td>{index+1}</td>
           <td>{icons}</td>
-          <td>{rule.action}</td>
+          <td>{GL(rule.action)}</td>
           <td>{rule.match.url}</td>
           <td onClick={CW.bind(null,this.editRule.bind(this,index),'AutoState','editRule','')}>{GL('edit')}</td>
           <td onClick={CW.bind(null,this.deleteRule.bind(this,index),'AutoState','deleteRule')}>{GL('delete')}</td>

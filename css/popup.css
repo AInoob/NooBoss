@@ -134,7 +134,7 @@ button {
 #discover .reco .appBrief {
   position: relative;
   float: left;
-  width: 200px;
+  width: 190px;
 }
 #discover .reco .appBrief .description {
   position: absolute;
@@ -531,7 +531,7 @@ h2 {
   width: 100px;
 }
 .AutoStateRules tbody tr td:nth-child(4) {
-  width: 260px;
+  width: 195px;
   text-align: center;
 }
 .History-table tbody tr td {
@@ -548,15 +548,17 @@ h2 {
 .History-table tbody tr td:nth-child(2) {
   text-transform: capitalize;
   font-weight: bold;
+  width: 35px;
 }
 .History-table tbody tr td:nth-child(3) {
   text-align: center;
+  width: 35px;
 }
 .History-table tbody tr td:nth-child(4) {
   display: block;
   overflow: hidden;
   white-space: nowrap;
-  width: 260px;
+  width: 242px;
 }
 .History-table tbody tr .disabled {
   color: grey;

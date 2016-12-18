@@ -236,6 +236,27 @@
   "history_cleaned":{
 	"message":"清空历史"
   },
+  "enabled":{
+	"message":"开启"
+  },
+  "disabled":{
+	"message":"关闭"
+  },
+  "installed":{
+	"message":"安装"
+  },
+  "removed":{
+	"message":"卸载"
+  },
+  "enableWhen":{
+	"message":"匹配后开启"
+  },
+  "disableWhen":{
+	"message":"匹配后关闭"
+  },
+  "enableOnly":{
+	"message":"匹配才开启"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },

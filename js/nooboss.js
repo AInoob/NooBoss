@@ -29604,7 +29604,7 @@
 	        return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	      }
 	    }.bind(this));
-	    var preRuleList = [{ ids: [], action: "Hello", match: { url: 'You do not have any rule yet' } }];
+	    var preRuleList = [{ ids: [], action: "Hello", match: { url: GL('ls_3') } }];
 	    if (this.state.rules && this.state.rules.length > 0) {
 	      preRuleList = this.state.rules;
 	    }
@@ -29628,7 +29628,7 @@
 	        React.createElement(
 	          'td',
 	          null,
-	          rule.action
+	          GL(rule.action)
 	        ),
 	        React.createElement(
 	          'td',
@@ -30098,7 +30098,7 @@
 	          React.createElement(
 	            'td',
 	            { className: record.event },
-	            record.event
+	            GL(record.event)
 	          ),
 	          React.createElement(
 	            'td',

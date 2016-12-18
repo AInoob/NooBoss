@@ -30,7 +30,7 @@ module.exports = React.createClass({
         return(
           <tr key={index}>
             <td>{new timeago(null,chrome.i18n.getUILanguage()).format(record.date)}</td>
-            <td className={record.event}>{record.event}</td>
+            <td className={record.event}>{GL(record.event)}</td>
             <td><img src={record.icon} /></td>
             <td><Link title={record.name} to={"/app?id="+record.id}>{record.name}</Link></td>
             <td>{record.version}</td>
