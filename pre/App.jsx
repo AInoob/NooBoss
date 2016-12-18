@@ -95,22 +95,22 @@ module.exports = React.createClass({
     var appInfo=this.state.appInfo||{};
     var launch=null;
     if(appInfo.isApp){
-      launch=<div className="app-launcher" onClick={CW.bind(null,this.launchApp,'App','launch','')}>Launch</div>;
+      launch=<div className="app-launcher" onClick={CW.bind(null,this.launchApp,'App','launch','')}>{GL('Launch')}</div>;
     }
     var launchType=null;
     if(appInfo.launchType){
-      launchType=<tr><td>{'launch type'}</td><td>{appInfo.launchType}</td></tr>
+      launchType=<tr><td>{GL('launch_type')}</td><td>{appInfo.launchType}</td></tr>
     }
     var permissions=null;
     var permissionList=(appInfo.permissions||[]).map(function(elem,index){
       return <li key={index}>{elem}</li>
     });
-    permissions=<tr><td>{capFirst('permissions')}</td><td><ul>{permissionList}</ul></td></tr>
+    permissions=<tr><td>{GL('permissions')}</td><td><ul>{permissionList}</ul></td></tr>
     var hostPermissions=null;
     var hostPermissionList=(appInfo.hostPermissions||[]).map(function(elem,index){
       return <li key={index}>{elem}</li>
     });
-    hostPermissions=<tr><td>{capFirst('host permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
+    hostPermissions=<tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
     var options=null;
     if(appInfo.optionsUrl){
       options=<span className="app-options" onClick={CLR.bind(null,appInfo.optionsUrl,'Manage','option','')}></span>
@@ -155,28 +155,28 @@ module.exports = React.createClass({
             {launch}
             <table className="app-brief">
               <tbody>
-                <tr><td>{capFirst('version')}</td><td>{appInfo.version}</td></tr>
-                <tr><td>{capFirst('state')}</td><td><span className={'noTransTime '+(this.state.appInfo||{}).state}>{capFirst((this.state.appInfo||{}).state)}</span></td></tr>
-                <tr><td>{capFirst('rating')}</td><td>{this.state.rating}</td></tr>
-                <tr><td>{capFirst('description')}</td><td>{appInfo.description}</td></tr>
+                <tr><td>{GL('version')}</td><td>{appInfo.version}</td></tr>
+                <tr><td>{GL('state')}</td><td><span className={'noTransTime '+(this.state.appInfo||{}).state}>{capFirst((this.state.appInfo||{}).state)}</span></td></tr>
+                <tr><td>{GL('rating')}</td><td>{this.state.rating}</td></tr>
+                <tr><td>{GL('description')}</td><td>{appInfo.description}</td></tr>
               </tbody>
             </table>
             <table className="app-detail">
               <tbody>
-                <tr><td>{capFirst('last update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
-                <tr><td>{capFirst('first installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
-                <tr><td>{capFirst('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
-                <tr><td>{capFirst('homepage url')}</td><td><a title={appInfo.homepageUrl} onClick={CL.bind(null,appInfo.homepageUrl,'App','app-link')}>{appInfo.homepageUrl}</a></td></tr>
+                <tr><td>{GL('last_update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
+                <tr><td>{GL('first_installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
+                <tr><td>{GL('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
+                <tr><td>{GL('homepage_url')}</td><td><a title={appInfo.homepageUrl} onClick={CL.bind(null,appInfo.homepageUrl,'App','app-link')}>{appInfo.homepageUrl}</a></td></tr>
                 <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
-                <tr><td>{capFirst('short name')}</td><td>{appInfo.shortName}</td></tr>
-                <tr><td>{capFirst('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
+                <tr><td>{GL('short_name')}</td><td>{appInfo.shortName}</td></tr>
+                <tr><td>{GL('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
                 {launchType}
-                <tr><td>{capFirst('offline enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
-                <tr><td>{capFirst('download crx')}</td><td><a title={this.state.crxUrl} onClick={CL.bind(null,this.state.crxUrl,'App','app-link')}>{crxName}</a></td></tr>
-                <tr><td>{capFirst('update url')}</td><td><a title={appInfo.updateUrl} onClick={CL.bind(null,appInfo.updateUrl,'App','app-link')}>{appInfo.updateUrl}</a></td></tr>
-                <tr><td>{capFirst('manifest file')}</td><td><a onClick={CL.bind(null,manifestUrl,'App','manifest')} title={manifestUrl}>manifest.json</a></td></tr>
-                <tr><td>{capFirst('may disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
-                <tr><td>{capFirst('install type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
+                <tr><td>{GL('offline_enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
+                <tr><td>{GL('download_crx')}</td><td><a title={this.state.crxUrl} onClick={CL.bind(null,this.state.crxUrl,'App','app-link')}>{crxName}</a></td></tr>
+                <tr><td>{capFirst('update_url')}</td><td><a title={appInfo.updateUrl} onClick={CL.bind(null,appInfo.updateUrl,'App','app-link')}>{appInfo.updateUrl}</a></td></tr>
+                <tr><td>{capFirst('manifest_file')}</td><td><a onClick={CL.bind(null,manifestUrl,'App','manifest')} title={manifestUrl}>manifest.json</a></td></tr>
+                <tr><td>{capFirst('may_disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
+                <tr><td>{capFirst('install_type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
                 {hostPermissions}
                 {permissions}
               </tbody>

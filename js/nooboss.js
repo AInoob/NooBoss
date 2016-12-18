@@ -26790,7 +26790,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/overview' },
-	              'Overview'
+	              capFirst(GL('overview'))
 	            )
 	          ),
 	          React.createElement(
@@ -26799,7 +26799,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/manage' },
-	              'Manage'
+	              capFirst(GL('manage'))
 	            )
 	          ),
 	          React.createElement(
@@ -26808,7 +26808,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/autoState' },
-	              'Auto State'
+	              capFirst(GL('autoState'))
 	            )
 	          ),
 	          React.createElement(
@@ -26817,7 +26817,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/history' },
-	              'History'
+	              capFirst(GL('history'))
 	            )
 	          )
 	        )
@@ -26840,7 +26840,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/options' },
-	              'Options'
+	              capFirst(GL('options'))
 	            )
 	          ),
 	          React.createElement(
@@ -26849,7 +26849,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/about' },
-	              'About'
+	              capFirst(GL('about'))
 	            )
 	          )
 	        )
@@ -28284,10 +28284,12 @@
 	      discover = React.createElement(
 	        'div',
 	        { id: 'discover' },
-	        'Community feature is off. You will not see apps recommended by users for various websites or community details for each app(turn it on ',
+	        GL('ls_0'),
+	        '(turn it on ',
 	        React.createElement(
 	          Link,
 	          { to: '/options' },
+	          GL('join_community'),
 	          'here'
 	        ),
 	        ').'
@@ -28331,13 +28333,15 @@
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'useful'), className: "tag " + active['useful'] },
-	                  'useful:',
+	                  GL('useful'),
+	                  ':',
 	                  appInfo.tags['useful'] || 0
 	                ),
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'working'), className: "tag " + active['working'] },
-	                  'working:',
+	                  GL('working'),
+	                  ':',
 	                  appInfo.tags['working'] || 0
 	                )
 	              ),
@@ -28347,13 +28351,15 @@
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'laggy'), className: "tag " + active['laggy'] },
-	                  'laggy:',
+	                  GL('laggy'),
+	                  ':',
 	                  appInfo.tags['laggy'] || 0
 	                ),
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'buggy'), className: "tag " + active['buggy'] },
-	                  'buggy:',
+	                  GL('buggy'),
+	                  ':',
 	                  appInfo.tags['buggy'] || 0
 	                )
 	              ),
@@ -28363,13 +28369,15 @@
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'not_working'), className: "tag " + active['not_working'] },
-	                  'not working:',
+	                  GL('not_working'),
+	                  ':',
 	                  appInfo.tags['not_working'] || 0
 	                ),
 	                React.createElement(
 	                  'div',
 	                  { onClick: this.toggleTag.bind(this, appId, 'ASM'), className: "tag " + active['ASM'] },
-	                  'ADs/Spam/Malware:',
+	                  GL('ASM'),
+	                  ':',
 	                  appInfo.tags['ASM'] || 0
 	                )
 	              )
@@ -28388,14 +28396,14 @@
 	                React.createElement(
 	                  'div',
 	                  { className: 'upVotes' },
-	                  'up',
+	                  GL('up'),
 	                  React.createElement('br', null),
 	                  appInfo.upVotes
 	                ),
 	                React.createElement(
 	                  'div',
 	                  { className: 'downVotes' },
-	                  'down',
+	                  GL('down'),
 	                  React.createElement('br', null),
 	                  appInfo.downVotes
 	                )
@@ -28468,7 +28476,8 @@
 	          recoList = React.createElement(
 	            'div',
 	            { className: 'noReco' },
-	            'No one has recommended any extensions for this website yet, do you have a wonderful extension for ',
+	            GL('ls_1'),
+	            ' ',
 	            this.state.website,
 	            '?'
 	          );
@@ -28488,7 +28497,7 @@
 	          React.createElement(
 	            'label',
 	            { className: 'goRecoLabel', htmlFor: 'goReco' },
-	            'Recommend Extensions for this website'
+	            GL('recommend_extensions_for_this_website')
 	          ),
 	          React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
 	          React.createElement(
@@ -28501,7 +28510,7 @@
 	              React.createElement(
 	                'button',
 	                { className: 'addReco', onClick: CW.bind(null, this.addReco.bind(this, null), 'Community', 'addReco', 'up') },
-	                'Recommend'
+	                capFirst(GL('recommend'))
 	              )
 	            ),
 	            appList
@@ -28513,7 +28522,8 @@
 	          React.createElement(
 	            'div',
 	            { className: 'header' },
-	            'Extensions for ',
+	            GL('extensions_for'),
+	            ' ',
 	            React.createElement(
 	              'span',
 	              { className: 'website' },
@@ -28528,11 +28538,12 @@
 	        discover = React.createElement(
 	          'div',
 	          { id: 'discover' },
-	          'Community recommendation is off. You will not see apps recommended by users nor can you share your favorite extension to NooBoss. ',
+	          GL('ls_2'),
+	          ' ',
 	          React.createElement(
 	            'button',
 	            { onClick: this.requestTabsPermission },
-	            'Enable it'
+	            GL('enable')
 	          )
 	        );
 	      }
@@ -28552,7 +28563,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'sectionHeader' },
-	            'You have'
+	            GL('you_have')
 	          ),
 	          React.createElement(
 	            'div',
@@ -28562,26 +28573,33 @@
 	              { to: '/manage/app' },
 	              overview.app
 	            ),
-	            ' app(s),\xA0',
+	            ' ',
+	            GL('app_s'),
+	            ',\xA0',
 	            React.createElement(
 	              Link,
 	              { to: '/manage/extension' },
 	              overview.extension
 	            ),
-	            ' extension(s),\xA0',
+	            ' ',
+	            GL('extension_s'),
+	            'extension(s),\xA0',
 	            React.createElement(
 	              Link,
 	              { to: '/manage/theme' },
 	              overview.theme
 	            ),
-	            ' theme',
+	            ' ',
+	            GL('theme'),
+	            'theme',
 	            React.createElement('br', null),
 	            React.createElement(
 	              Link,
 	              { to: '/autoState' },
 	              (this.state.rules || []).length
 	            ),
-	            '\xA0auto state rule(s).'
+	            '\xA0',
+	            GL('auto_state_rule_s')
 	          )
 	        ),
 	        discover
@@ -28765,7 +28783,7 @@
 	      launch = React.createElement(
 	        'div',
 	        { className: 'app-launcher', onClick: CW.bind(null, this.launchApp, 'App', 'launch', '') },
-	        'Launch'
+	        GL('Launch')
 	      );
 	    }
 	    var launchType = null;
@@ -28776,7 +28794,7 @@
 	        React.createElement(
 	          'td',
 	          null,
-	          'launch type'
+	          GL('launch_type')
 	        ),
 	        React.createElement(
 	          'td',
@@ -28799,7 +28817,7 @@
 	      React.createElement(
 	        'td',
 	        null,
-	        capFirst('permissions')
+	        GL('permissions')
 	      ),
 	      React.createElement(
 	        'td',
@@ -28825,7 +28843,7 @@
 	      React.createElement(
 	        'td',
 	        null,
-	        capFirst('host permissions')
+	        GL('host_permissions')
 	      ),
 	      React.createElement(
 	        'td',
@@ -28924,7 +28942,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('version')
+	                  GL('version')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28938,7 +28956,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('state')
+	                  GL('state')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28956,7 +28974,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('rating')
+	                  GL('rating')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28970,7 +28988,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('description')
+	                  GL('description')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -28992,7 +29010,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('last update')
+	                  GL('last_update')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29006,7 +29024,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('first installed')
+	                  GL('first_installed')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29020,7 +29038,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('enabled')
+	                  GL('enabled')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29034,7 +29052,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('homepage url')
+	                  GL('homepage_url')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29066,7 +29084,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('short name')
+	                  GL('short_name')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29080,7 +29098,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('type')
+	                  GL('type')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29095,7 +29113,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('offline enabled')
+	                  GL('offline_enabled')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29109,7 +29127,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('download crx')
+	                  GL('download_crx')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29127,7 +29145,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('update url')
+	                  capFirst('update_url')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29145,7 +29163,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('manifest file')
+	                  capFirst('manifest_file')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29163,7 +29181,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('may disable')
+	                  capFirst('may_disable')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29177,7 +29195,7 @@
 	                React.createElement(
 	                  'td',
 	                  null,
-	                  capFirst('install type')
+	                  capFirst('install_type')
 	                ),
 	                React.createElement(
 	                  'td',
@@ -29364,29 +29382,30 @@
 	        React.createElement(
 	          'div',
 	          { className: 'type' },
-	          'Type:',
+	          GL('type'),
+	          ':',
 	          React.createElement(
 	            'select',
 	            { defaultValue: type, onChange: this.updateFilter, id: 'type' },
 	            React.createElement(
 	              'option',
 	              { value: 'all' },
-	              'All'
+	              GL('all')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'app' },
-	              'App'
+	              GL('app')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'extension' },
-	              'Extension'
+	              GL('extension')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'theme' },
-	              'Theme'
+	              GL('theme')
 	            )
 	          )
 	        ),
@@ -29394,17 +29413,17 @@
 	        React.createElement(
 	          'span',
 	          { id: 'enableAll', onClick: this.enableAll },
-	          'Enable all'
+	          GL('enable_all')
 	        ),
 	        React.createElement(
 	          'span',
 	          { id: 'disableAll', onClick: this.disableAll },
-	          'Disable all'
+	          GL('disable_all')
 	        ),
 	        React.createElement(
 	          'span',
 	          { id: 'undo', onClick: this.undoAll },
-	          'Undo all'
+	          GL('undo_all')
 	        )
 	      ),
 	      appList
@@ -29655,22 +29674,22 @@
 	            React.createElement(
 	              'th',
 	              null,
-	              'Number'
+	              GL('number')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Extensions'
+	              GL('extension_s')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Action'
+	              GL('action')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Match'
+	              GL('match')
 	            )
 	          )
 	        ),
@@ -29683,43 +29702,47 @@
 	      React.createElement(
 	        'h2',
 	        null,
-	        'New rule'
+	        GL('new_rule')
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'newRule' },
-	        'Apps: ',
+	        GL('app_s'),
+	        ': ',
 	        React.createElement(
 	          'div',
 	          { className: 'selected' },
 	          selectedIcons
 	        ),
-	        'Action:\xA0',
+	        GL('action'),
+	        ':\xA0',
 	        React.createElement(
 	          'select',
 	          { value: this.state.rule.action, onChange: this.updateRule, id: 'action' },
 	          React.createElement(
 	            'option',
 	            { value: 'enableOnly' },
-	            'Only Enable when matched'
+	            GL('only_enable_when_matched')
 	          ),
 	          React.createElement(
 	            'option',
 	            { value: 'enable' },
-	            'Enable when matched'
+	            GL('enable_when_matched')
 	          ),
 	          React.createElement(
 	            'option',
 	            { value: 'disable' },
-	            'Disable when matched'
+	            GL('disable_when_matched')
 	          )
 	        ),
-	        '\xA0Url:\xA0',
+	        '\xA0',
+	        GL('url'),
+	        ':\xA0',
 	        React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, type: 'text' }),
 	        React.createElement(
 	          'button',
 	          { className: 'addRule', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
-	          'Add rule'
+	          GL('add_rule')
 	        )
 	      ),
 	      React.createElement(
@@ -29735,22 +29758,22 @@
 	            React.createElement(
 	              'option',
 	              { value: 'all' },
-	              'All'
+	              GL('all')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'app' },
-	              'App'
+	              GL('app')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'extension' },
-	              'Extension'
+	              GL('extension')
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'theme' },
-	              'Theme'
+	              GL('theme')
 	            )
 	          )
 	        ),
@@ -29851,7 +29874,7 @@
 	      'div',
 	      { className: 'switch' },
 	      React.createElement('input', { type: 'checkbox', onChange: CW.bind(null, handler || this.toggleSetting.bind(this, id), 'Options', 'option-switch', id), checked: this.state.setting[id] }),
-	      getTextFromId(id)
+	      GL(id)
 	    );
 	  },
 	  showAds: function () {
@@ -29939,17 +29962,17 @@
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
-	        'Clean'
+	        capFirst(GL('clean'))
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'button', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
-	        'Clean History'
+	        GL('clean_history')
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
-	        'Notification'
+	        GL('notification')
 	      ),
 	      this.getSwitch('notifyStateChange'),
 	      this.getSwitch('notifyInstallation'),
@@ -29958,13 +29981,13 @@
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
-	        'Functions'
+	        GL('functions')
 	      ),
 	      this.getSwitch('autoState', this.autoState),
 	      React.createElement(
 	        'div',
 	        { className: 'header' },
-	        'Experience'
+	        GL('experience')
 	      ),
 	      React.createElement(
 	        'div',
@@ -29976,22 +29999,22 @@
 	          React.createElement(
 	            'option',
 	            { value: 'overview' },
-	            'Overview'
+	            GL('overview')
 	          ),
 	          React.createElement(
 	            'option',
 	            { value: 'manage' },
-	            'Manage'
+	            GL('manage')
 	          ),
 	          React.createElement(
 	            'option',
 	            { value: 'autoState' },
-	            'Auto state'
+	            GL('autoState')
 	          ),
 	          React.createElement(
 	            'option',
 	            { value: 'history' },
-	            'History'
+	            GL('history')
 	          )
 	        )
 	      ),
@@ -30040,7 +30063,7 @@
 	          React.createElement(
 	            'td',
 	            null,
-	            new timeago().format(record.date)
+	            new timeago(null, chrome.i18n.getUILanguage()).format(record.date)
 	          ),
 	          React.createElement(
 	            'td',
@@ -30128,27 +30151,27 @@
 	            React.createElement(
 	              'th',
 	              null,
-	              'Date'
+	              GL('date')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Event'
+	              GL('event')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Icon'
+	              GL('icon')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Name'
+	              GL('name')
 	            ),
 	            React.createElement(
 	              'th',
 	              null,
-	              'Version'
+	              GL('version')
 	            )
 	          )
 	        ),
@@ -30169,235 +30192,511 @@
 	var React = __webpack_require__(1);
 	var Helmet = __webpack_require__(240);
 	module.exports = React.createClass({
-	  displayName: 'exports',
+		displayName: 'exports',
 
-	  getInitialState: function () {
-	    return null;
-	  },
-	  componentDidMount: function () {},
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { id: 'About' },
-	      React.createElement(Helmet, {
-	        title: 'About'
-	      }),
-	      React.createElement(
-	        'h1',
-	        null,
-	        'About'
-	      ),
-	      React.createElement(
-	        'a',
-	        { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
-	        React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
-	      ),
-	      React.createElement(
-	        'a',
-	        { onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
-	        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
-	      ),
-	      React.createElement(
-	        'section',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'What can NooBoss do?'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'Right now, NooBoss can (apps/extensions/theme will be called apps down below)'
-	        ),
-	        React.createElement(
-	          'ul',
-	          null,
-	          React.createElement(
-	            'li',
-	            null,
-	            'Manage your apps',
-	            React.createElement(
-	              'ul',
-	              null,
-	              React.createElement(
-	                'li',
-	                null,
-	                'enable/disable/remove one or a bunch of apps'
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            'Auto state management',
-	            React.createElement(
-	              'ul',
-	              null,
-	              React.createElement(
-	                'li',
-	                null,
-	                'automatically enable/disable apps base on auto state rules',
-	                React.createElement(
-	                  'ul',
-	                  null,
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    '(you can save memory)'
-	                  ),
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    '(enable apps only when you need them)'
-	                  )
-	                )
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            'Show history of\xA0apps',
-	            React.createElement(
-	              'ul',
-	              null,
-	              React.createElement(
-	                'li',
-	                null,
-	                'installation, removal, enabling, disabling'
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                'show the version change',
-	                React.createElement(
-	                  'ul',
-	                  null,
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    '(you can tell when did apps got updated)'
-	                  )
-	                )
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            'li',
-	            null,
-	            'Show detailed information of\xA0apps',
-	            React.createElement(
-	              'ul',
-	              null,
-	              React.createElement(
-	                'li',
-	                null,
-	                'download crx file'
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                'open manifest file'
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                'see permissions'
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                'And a lot more informations'
-	              )
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'If you have questions about how to use NooBoss, you can find instructions here: ',
-	          React.createElement(
-	            'a',
-	            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
-	            'NooBoss project'
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Who made NooBoss'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'NooBoss is an open sourced project under GPL-V3 made by ',
-	          React.createElement(
-	            'a',
-	            { onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
-	            'AInoob'
-	          ),
-	          ', you can check the project progress ',
-	          React.createElement(
-	            'a',
-	            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
-	            'here'
-	          )
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Privacy'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'NooBoss is a software with proud, it will never steal your private information, and it will never show ADs without asking you.'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'By default, NooBoss will share you usage of NooBoss and Apps you installed on Chrome to NooBoss community, please leave this on if you want to support NooBoss or you want AInoob to keep developing NooBoss. Your personal information will not be shared.'
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'How to support NooBoss?'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'If you love NooBoss, you can choose to show ADs(it\'s off by default), so I will be more motivated to maintain and upgrade NooBoss. If you turn this on, NooBoss will show ADs only when you open NooBoss, and will only show ADs within NooBoss. Feel free to turn it on or off, as long as you turned on the joinCommunity, AInoob will know that sommeone else, not just him, is using NooBoss, and that feels good man/woman.'
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Any suggestions?'
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'If you have any suggestions about how to make NooBoss better, plese comment on support page in Chrome web store.'
-	        )
-	      )
-	    );
-	  }
+		getInitialState: function () {
+			return null;
+		},
+		componentDidMount: function () {},
+		render: function () {
+			if (chrome.i18n.getUILanguage().indexOf('zh') != -1) {
+				return React.createElement(
+					'div',
+					{ id: 'About' },
+					React.createElement(Helmet, {
+						title: 'About'
+					}),
+					React.createElement(
+						'h1',
+						null,
+						'\u5173\u4E8E'
+					),
+					React.createElement(
+						'a',
+						{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+						React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
+					),
+					React.createElement(
+						'a',
+						{ onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
+						React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'\u4E8C\u7BA1\u5BB6\u80FD\u5E72\u4EC0\u4E48\uFF1F'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u76EE\u524D\uFF0C\u4E8C\u7BA1\u5BB6\u53EF\u4EE5 (\u5E94\u7528/\u62D3\u5C55/\u4E3B\u9898 \u5728\u4E0B\u9762\u90FD\u4F1A\u53EB\u5E94\u7528)'
+						),
+						React.createElement(
+							'ul',
+							null,
+							React.createElement(
+								'li',
+								null,
+								'\u7BA1\u7406\u4F60\u7684\u5E94\u7528',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'\u5F00\u542F/\u5173\u95ED/\u5220\u9664\u4E00\u4E2A\u6216\u591A\u4E2A\u5E94\u7528'
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'\u793E\u533A\u5206\u4EAB',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'\u6839\u636E\u5F53\u524D\u7F51\u9875\u770B\u5230\u4E8C\u7BA1\u5BB6\u793E\u533A\u63A8\u8350\u7684\u9002\u7528\u4E8E\u5F53\u524D\u7F51\u9875\u7684\u62D3\u5C55'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u6BCF\u4E2A\u4EBA\u90FD\u53EF\u4EE5\u7ED9\u4EFB\u4F55\u4E00\u4E2A\u7F51\u7AD9\u63A8\u8350\u597D\u7684\u62D3\u5C55'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u6BCF\u4E2A\u4EBA\u90FD\u53EF\u4EE5\u7ED9\u4EFB\u4F55\u4E00\u4E2A\u62D3\u5C55\u6253\u6807\u7B7E'
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'\u81EA\u52A8\u5E94\u7528\u72B6\u6001\u7BA1\u7406',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'\u6839\u636E\u8BBE\u7F6E\u7684\u89C4\u5219\u81EA\u52A8\u542F\u7528\u6216\u7981\u7528\u5E94\u7528',
+										React.createElement(
+											'ul',
+											null,
+											React.createElement(
+												'li',
+												null,
+												'(\u51CF\u5C11\u5185\u5B58\u5360\u7528)'
+											),
+											React.createElement(
+												'li',
+												null,
+												'(\u53EA\u6709\u5728\u9700\u8981\u7684\u65F6\u5019\u624D\u5F00\u542F\u5E94\u7528)'
+											)
+										)
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'\u5E94\u7528\u5386\u53F2\u8BB0\u5F55',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'\u8BB0\u5F55\u5E94\u7528\u7684\u5B89\u88C5\uFF0C\u5378\u8F7D\uFF0C\u5F00\u542F\uFF0C\u548C\u5173\u95ED'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u53EF\u4EE5\u77E5\u9053\u7248\u672C\u53D8\u5316'
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'\u663E\u793A\u5E94\u7528\u8BE6\u7EC6\u4FE1\u606F',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'\u4E0B\u8F7Dcrx\u6587\u4EF6'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u6253\u5F00manifest\u6587\u4EF6'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u67E5\u770B\u6743\u9650'
+									),
+									React.createElement(
+										'li',
+										null,
+										'\u548C\u5404\u79CD\u5404\u6837\u7684\u8BE6\u7EC6\u4FE1\u606F'
+									)
+								)
+							)
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u5982\u679C\u4F60\u6709\u5404\u79CD\u5173\u4E8E\u4E8C\u7BA1\u5BB6\u4F7F\u7528\u65B9\u9762\u7684\u95EE\u9898\uFF0C\u4F60\u53EF\u4EE5\u5728\u8FD9\u91CC\u67E5\u770B\u4F7F\u7528\u4ECB\u7ECD: ',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+								'\u4E8C\u7BA1\u5BB6\u9879\u76EE'
+							)
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'\u8C01\u5F04\u7684\u4E8C\u7BA1\u5BB6'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
+								'AInoob'
+							),
+							'\u5199\u7684\u5F00\u6E90\u7684\u9879\u76EE(GPL-V3)\u3002\u4F60\u53EF\u4EE5\u5728',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+								'\u8FD9\u91CC'
+							),
+							'\u67E5\u770B\u4E8C\u7BA1\u5BB6\u7684\u8FDB\u5C55'
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'\u9690\u79C1\uFF1F'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A\u50B2\u5A07\u7684\u8F6F\u4EF6\uFF0C\u4E0D\u4F1A\u5077\u53D6\u4F60\u7684\u9690\u79C1\u4FE1\u606F\uFF0C\u4E5F\u7EDD\u5BF9\u4E0D\u4F1A\u5728\u672A\u7ECF\u8FC7\u4F60\u8981\u6C42\u7684\u60C5\u51B5\u4E0B\u5728\u4E8C\u7BA1\u5BB6\u754C\u9762\u5185\u51FA\u73B0\u5E7F\u544A\u3002'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u9ED8\u8BA4\u60C5\u51B5\u4E0B\uFF0C\u4E8C\u7BA1\u5BB6\u4F1A\u628A\u4F60\u4F7F\u7528\u4E8C\u7BA1\u5BB6\u7684\u60C5\u51B5\u548C\u4F60\u5B89\u88C5\u7684\u5E94\u7528\u5206\u4EAB\u5230\u4E8C\u7BA1\u5BB6\u793E\u533A\uFF0C\u5982\u679C\u4F60\u5E0C\u671B\u652F\u6301\u4E8C\u7BA1\u5BB6\u6216\u8005\u4E0D\u8BA8\u538C\u4E8C\u7BA1\u5BB6\uFF0C\u8BF7\u4E0D\u8981\u5173\u95ED\u793E\u533A\u529F\u80FD\u3002'
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'\u600E\u4E48\u652F\u6301\u4E8C\u7BA1\u5BB6\uFF1F'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u5982\u679C\u4F60\u771F\u7684\u90A3\u4E48\u559C\u6B22\u4E8C\u7BA1\u5BB6\uFF0C\u4F60\u53EF\u4EE5\u5728\u9009\u9879\u91CC\u5F00\u542F\u663E\u793A\u5E7F\u544A\uFF08\u9ED8\u8BA4\u5173\u95ED\uFF09\uFF0C\u8FD9\u6837\u4E8C\u7BA1\u5BB6\u754C\u9762\u5C31\u4F1A\u51FA\u73B0\u5E7F\u544A\u3002\u8FD9\u4E2A\u770B\u4E2A\u4EBA\u559C\u597D\uFF0C\u4E8C\u7BA1\u5BB6\u7ED9\u4F60\u7EDD\u5BF9\u7684\u6743\u5229\u3002\u4E0D\u8FC7\u5982\u679C\u53EF\u4EE5\uFF0C\u8BF7\u4E0D\u8981\u5173\u95ED\u793E\u533A\u529F\u80FD\uFF0C\u4E0D\u7136AInoob\u5C31\u6CA1\u6CD5\u77E5\u9053\u6709\u6CA1\u6709\u4EBA\u5728\u7528\u4E8C\u7BA1\u5BB6\u4E86\uFF0C\u90A3\u5C31\u5F88\u53EF\u80FD\u505C\u6B62\u66F4\u65B0\u3002'
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'\u5EFA\u8BAE\uFF1F'
+						),
+						React.createElement(
+							'p',
+							null,
+							'\u5982\u679C\u4F60\u6709\u4EFB\u4F55\u597D\u7684\u5EFA\u8BAE\uFF0C\u8BF7\u53BB',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support', 'About-link', 'link') },
+								'Chrome\u7F51\u4E0A\u5E94\u7528\u5E97'
+							),
+							'\u8BC4\u8BBA\u548C\u63D0\u5EFA\u8BAE\u3002'
+						)
+					)
+				);
+			} else {
+				return React.createElement(
+					'div',
+					{ id: 'About' },
+					React.createElement(Helmet, {
+						title: 'About'
+					}),
+					React.createElement(
+						'h1',
+						null,
+						'About'
+					),
+					React.createElement(
+						'a',
+						{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+						React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
+					),
+					React.createElement(
+						'a',
+						{ onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
+						React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'What can NooBoss do?'
+						),
+						React.createElement(
+							'p',
+							null,
+							'Right now, NooBoss can (apps/extensions/theme will be called apps down below)'
+						),
+						React.createElement(
+							'ul',
+							null,
+							React.createElement(
+								'li',
+								null,
+								'Manage your apps',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'enable/disable/remove one or a bunch of apps'
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'NooBoss community',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'get apps recommended by NooBoss community for the website you are visiting'
+									),
+									React.createElement(
+										'li',
+										null,
+										'you can recommend useful apps to NooBoss community'
+									),
+									React.createElement(
+										'li',
+										null,
+										'you can tag useful or spammy apps'
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'Auto state management',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'automatically enable/disable apps base on auto state rules',
+										React.createElement(
+											'ul',
+											null,
+											React.createElement(
+												'li',
+												null,
+												'(you can save memory)'
+											),
+											React.createElement(
+												'li',
+												null,
+												'(enable apps only when you need them)'
+											)
+										)
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'Show history of\xA0apps',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'installation, removal, enabling, disabling'
+									),
+									React.createElement(
+										'li',
+										null,
+										'show the version change',
+										React.createElement(
+											'ul',
+											null,
+											React.createElement(
+												'li',
+												null,
+												'(you can tell when did apps got updated)'
+											)
+										)
+									)
+								)
+							),
+							React.createElement(
+								'li',
+								null,
+								'Show detailed information of\xA0apps',
+								React.createElement(
+									'ul',
+									null,
+									React.createElement(
+										'li',
+										null,
+										'download crx file'
+									),
+									React.createElement(
+										'li',
+										null,
+										'open manifest file'
+									),
+									React.createElement(
+										'li',
+										null,
+										'see permissions'
+									),
+									React.createElement(
+										'li',
+										null,
+										'And a lot more informations'
+									)
+								)
+							)
+						),
+						React.createElement(
+							'p',
+							null,
+							'If you have questions about how to use NooBoss, you can find instructions here: ',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+								'NooBoss project'
+							)
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'Who made NooBoss'
+						),
+						React.createElement(
+							'p',
+							null,
+							'NooBoss is an open sourced project under GPL-V3 made by ',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
+								'AInoob'
+							),
+							', you can check the project progress ',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
+								'here'
+							)
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'Privacy'
+						),
+						React.createElement(
+							'p',
+							null,
+							'NooBoss is a software with proud, it will never steal your private information, and it will never show ADs unless you told NooBoss to do so.'
+						),
+						React.createElement(
+							'p',
+							null,
+							'By default, NooBoss will share you usage of NooBoss and Apps you installed on Chrome to NooBoss community, please leave this on if you want to support NooBoss or you want AInoob to keep developing NooBoss. Your personal information will not be shared.'
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'How to support NooBoss?'
+						),
+						React.createElement(
+							'p',
+							null,
+							'If you love NooBoss, you can choose to show ADs(it\'s off by default), so I will be more motivated to maintain and upgrade NooBoss. If you turn this on, NooBoss will show ADs only when you open NooBoss, and will only show ADs within NooBoss. Feel free to turn it on or off, as long as you turned on the joinCommunity, AInoob will know that sommeone else, not just him, is using NooBoss, and that feels good man/woman.'
+						)
+					),
+					React.createElement(
+						'section',
+						null,
+						React.createElement(
+							'h2',
+							null,
+							'Any suggestions?'
+						),
+						React.createElement(
+							'p',
+							null,
+							'If you have any suggestions about NooBoss, plese comment on support page in ',
+							React.createElement(
+								'a',
+								{ onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support', 'About-link', 'link') },
+								'Chrome web store'
+							),
+							'.'
+						)
+					)
+				);
+			}
+		}
 	});
 
 /***/ }

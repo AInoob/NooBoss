@@ -10,10 +10,10 @@ module.exports = React.createClass({
       <div id="NooBoss-Core">
         <nav>
           <ul>
-            <li className={activeList.overview}><Link to="/overview">Overview</Link></li>
-            <li className={activeList.manage}><Link to="/manage">Manage</Link></li>
-            <li className={activeList.autoState}><Link to="/autoState">Auto State</Link></li>
-            <li className={activeList.history}><Link to="/history">History</Link></li>
+            <li className={activeList.overview}><Link to="/overview">{capFirst(GL('overview'))}</Link></li>
+            <li className={activeList.manage}><Link to="/manage">{capFirst(GL('manage'))}</Link></li>
+            <li className={activeList.autoState}><Link to="/autoState">{capFirst(GL('autoState'))}</Link></li>
+            <li className={activeList.history}><Link to="/history">{capFirst(GL('history'))}</Link></li>
           </ul>
         </nav>
         <div className="headerPad"></div>
@@ -24,8 +24,8 @@ module.exports = React.createClass({
         <div className="footerPad"></div>
         <div className="footer">
           <ul>
-            <li className={activeList.options}><Link to="/options">Options</Link></li>
-            <li className={activeList.about}><Link to="/about">About</Link></li>
+            <li className={activeList.options}><Link to="/options">{capFirst(GL('options'))}</Link></li>
+            <li className={activeList.about}><Link to="/about">{capFirst(GL('about'))}</Link></li>
           </ul>
         </div>
       </div>

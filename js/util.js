@@ -1,3 +1,9 @@
+function getLocale(string){
+  return chrome.i18n.getMessage(string);
+}
+
+var GL=getLocale;
+
 //Community wrapper
 function CW(callback,category,action,label,e){
   newCommunityRecord(true,['_trackEvent', category, action,label]);

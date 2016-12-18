@@ -29,7 +29,7 @@ module.exports = React.createClass({
       if((filter.event=='all'||record.event==filter.event)&&(filter.keyword==''||pattern.exec(record.name))){
         return(
           <tr key={index}>
-            <td>{new timeago().format(record.date)}</td>
+            <td>{new timeago(null,chrome.i18n.getUILanguage()).format(record.date)}</td>
             <td className={record.event}>{record.event}</td>
             <td><img src={record.icon} /></td>
             <td><Link title={record.name} to={"/app?id="+record.id}>{record.name}</Link></td>
@@ -61,11 +61,11 @@ module.exports = React.createClass({
         <table className="History-table">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Event</th>
-              <th>Icon</th>
-              <th>Name</th>
-              <th>Version</th>
+              <th>{GL('date')}</th>
+              <th>{GL('event')}</th>
+              <th>{GL('icon')}</th>
+              <th>{GL('name')}</th>
+              <th>{GL('version')}</th>
             </tr>
           </thead>
           <tbody>

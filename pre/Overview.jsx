@@ -346,7 +346,7 @@ module.exports = React.createClass({
     if(!this.state.joinCommunity){
       discover=
         <div id="discover">
-          Community feature is off. You will not see apps recommended by users for various websites or community details for each app(turn it on <Link to="/options">here</Link>).
+          {GL('ls_0')}(turn it on <Link to="/options">{GL('join_community')}here</Link>).
         </div>;
     }
     else{
@@ -382,16 +382,16 @@ module.exports = React.createClass({
             }
             var tags=<div className="tags">
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>{GL('useful')}:{appInfo.tags['useful']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>{GL('working')}:{appInfo.tags['working']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}:{appInfo.tags['laggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}:{appInfo.tags['buggy']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}:{appInfo.tags['not_working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}:{appInfo.tags['ASM']||0}</div>
               </div>
             </div>;
             var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
@@ -401,8 +401,8 @@ module.exports = React.createClass({
             var rating=<div className="flip rating">
               {ratingBar}
               <div className="back ratingDetail">
-                <div className="upVotes">up<br/>{appInfo.upVotes}</div>
-                <div className="downVotes">down<br/>{appInfo.downVotes}</div>
+                <div className="upVotes">{GL('up')}<br/>{appInfo.upVotes}</div>
+                <div className="downVotes">{GL('down')}<br/>{appInfo.downVotes}</div>
               </div>
             </div>;
             app=
@@ -438,7 +438,7 @@ module.exports = React.createClass({
           }.bind(this));
         }
         else{
-          recoList=<div className="noReco">No one has recommended any extensions for this website yet, do you have a wonderful extension for {this.state.website}?</div>
+          recoList=<div className="noReco">{GL('ls_1')} {this.state.website}?</div>
         }
         var appList=this.getFilteredList().map(function(appInfo,index){
           if(appInfo){
@@ -453,19 +453,19 @@ module.exports = React.createClass({
         }.bind(this));
         var recoApps=(
           <div className="recoApp">
-            <label className="goRecoLabel" htmlFor="goReco">Recommend Extensions for this website</label>
+            <label className="goRecoLabel" htmlFor="goReco">{GL('recommend_extensions_for_this_website')}</label>
             <input type="checkbox" className="goReco" id="goReco" />
             <div className="recoBoard">
               <div className="actionBar">
                 <input id="keyword" onChange={this.updateFilter} type="text" />
-                <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>Recommend</button>
+                <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>{capFirst(GL('recommend'))}</button>
               </div>
               {appList}
             </div>
           </div>);
         discover=(
           <div id="discover">
-            <div className="header">Extensions for <span className="website">{this.state.website}</span>:</div>
+            <div className="header">{GL('extensions_for')} <span className="website">{this.state.website}</span>:</div>
             {recoList}
             {recoApps}
           </div>);
@@ -473,7 +473,7 @@ module.exports = React.createClass({
       else{
         discover=(
         <div id="discover">
-          Community recommendation is off. You will not see apps recommended by users nor can you share your favorite extension to NooBoss. <button onClick={this.requestTabsPermission}>Enable it</button>
+          {GL('ls_2')} <button onClick={this.requestTabsPermission}>{GL('enable')}</button>
         </div>);
       }
     }
@@ -484,21 +484,21 @@ module.exports = React.createClass({
         />
         <div id="overview">
           <div className="manage">
-            <div className="sectionHeader">You have</div>
+            <div className="sectionHeader">{GL('you_have')}</div>
             <div className="status">
               <Link to="/manage/app">
                 {overview.app}
-              </Link> app(s),&nbsp;
+              </Link> {GL('app_s')},&nbsp;
               <Link to="/manage/extension">
                 {overview.extension}
-              </Link> extension(s),&nbsp;
+              </Link> {GL('extension_s')}extension(s),&nbsp;
               <Link to="/manage/theme">
                 {overview.theme}
-              </Link> theme<br/>
+              </Link> {GL('theme')}theme<br/>
               <Link to="/autoState">
                 {(this.state.rules||[]).length}
               </Link>
-              &nbsp;auto state rule(s).
+              &nbsp;{GL('auto_state_rule_s')}
             </div>
           </div>
           {discover}

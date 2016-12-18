@@ -163,18 +163,18 @@ module.exports = React.createClass({
         />
         <div className="actionBar">
           <div className="type">
-            Type: 
+            {GL('type')}: 
             <select defaultValue={type} onChange={this.updateFilter} id="type">
-              <option value="all">All</option>
-              <option value="app">App</option>
-              <option value="extension">Extension</option>
-              <option value="theme">Theme</option>
+              <option value="all">{GL('all')}</option>
+              <option value="app">{GL('app')}</option>
+              <option value="extension">{GL('extension')}</option>
+              <option value="theme">{GL('theme')}</option>
             </select>
           </div>
           <input id="keyword" onChange={this.updateFilter} type="text" />
-          <span id="enableAll" onClick={this.enableAll}>Enable all</span>
-          <span id="disableAll" onClick={this.disableAll}>Disable all</span>
-          <span id="undo" onClick={this.undoAll}>Undo all</span>
+          <span id="enableAll" onClick={this.enableAll}>{GL('enable_all')}</span>
+          <span id="disableAll" onClick={this.disableAll}>{GL('disable_all')}</span>
+          <span id="undo" onClick={this.undoAll}>{GL('undo_all')}</span>
         </div>
         {appList}
       </div>

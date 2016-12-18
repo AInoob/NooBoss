@@ -203,37 +203,37 @@ module.exports = React.createClass({
         <table className="AutoStateRules">
           <thead>
             <tr>
-              <th>Number</th>
-              <th>Extensions</th>
-              <th>Action</th>
-              <th>Match</th>
+              <th>{GL('number')}</th>
+              <th>{GL('extension_s')}</th>
+              <th>{GL('action')}</th>
+              <th>{GL('match')}</th>
             </tr>
           </thead>
           <tbody>
             {ruleList}
           </tbody>
         </table>
-        <h2>New rule</h2>
+        <h2>{GL('new_rule')}</h2>
         <div className="newRule">
-          Apps: <div className="selected">
+          {GL('app_s')}: <div className="selected">
           {selectedIcons}
           </div>
-          Action:&nbsp;<select value={this.state.rule.action} onChange={this.updateRule} id="action">
-            <option value="enableOnly">Only Enable when matched</option>
-            <option value="enable">Enable when matched</option>
-            <option value="disable">Disable when matched</option>
+          {GL('action')}:&nbsp;<select value={this.state.rule.action} onChange={this.updateRule} id="action">
+            <option value="enableOnly">{GL('only_enable_when_matched')}</option>
+            <option value="enable">{GL('enable_when_matched')}</option>
+            <option value="disable">{GL('disable_when_matched')}</option>
           </select>
-          &nbsp;Url:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
-          <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>Add rule</button>
+          &nbsp;{GL('url')}:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
+          <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</button>
         </div>
         <div className="actionBar autoState">
           <div className="type">
             Type: 
             <select onChange={this.updateFilter} id="type">
-              <option value="all">All</option>
-              <option value="app">App</option>
-              <option value="extension">Extension</option>
-              <option value="theme">Theme</option>
+              <option value="all">{GL('all')}</option>
+              <option value="app">{GL('app')}</option>
+              <option value="extension">{GL('extension')}</option>
+              <option value="theme">{GL('theme')}</option>
             </select>
           </div>
           <input id="keyword" onChange={this.updateFilter} type="text" />

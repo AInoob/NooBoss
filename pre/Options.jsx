@@ -54,7 +54,7 @@ module.exports = React.createClass({
     }.bind(this));
   },
   getSwitch: function(id,handler){
-    return <div className="switch"><input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} />{getTextFromId(id)}</div>
+    return <div className="switch"><input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} />{GL(id)}</div>
   },
   showAds: function(){
     alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
@@ -141,22 +141,22 @@ module.exports = React.createClass({
         <Helmet
           title="Options"
         />
-        <div className="header">Clean</div>
-        <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>Clean History</div>
-        <div className="header">Notification</div>
+        <div className="header">{capFirst(GL('clean'))}</div>
+        <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div>
+        <div className="header">{GL('notification')}</div>
         {this.getSwitch('notifyStateChange')}
         {this.getSwitch('notifyInstallation')}
         {this.getSwitch('notifyRemoval')}
         {this.getSwitch('autoStateNotification')}
-        <div className="header">Functions</div>
+        <div className="header">{GL('functions')}</div>
         {this.getSwitch('autoState',this.autoState)}
-        <div className="header">Experience</div>
+        <div className="header">{GL('experience')}</div>
         <div className="selector">
           Default page: <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
-            <option value="overview">Overview</option>
-            <option value="manage">Manage</option>
-            <option value="autoState">Auto state</option>
-            <option value="history">History</option>
+            <option value="overview">{GL('overview')}</option>
+            <option value="manage">{GL('manage')}</option>
+            <option value="autoState">{GL('autoState')}</option>
+            <option value="history">{GL('history')}</option>
           </select>
         </div>
         {this.getSwitch('joinCommunity',this.joinCommunity)}
