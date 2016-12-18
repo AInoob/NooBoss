@@ -362,6 +362,8 @@ ul li.active {
   margin-top: 20px;
 }
 .app-holder .app-brief .app-icon {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   margin: 7px;

@@ -35,8 +35,8 @@ module.exports = React.createClass({
       }
       this.setState({appInfoList:appInfoList,names:names});
     }.bind(this));
-    getDB('autoStateRules',function(rules){
-      this.setState({rules:rules});
+    get('autoStateRules',function(rules){
+      this.setState({rules:JSON.parse(rules)});
     }.bind(this));
   },
   getIconUrl: function(appInfo){
@@ -127,7 +127,7 @@ module.exports = React.createClass({
       prevState.rule.match='';
       return prevState;
     },function(){
-      setDB('autoStateRules',this.state.rules,function(){
+      set('autoStateRules',JSON.stringify(this.state.rules),function(){
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
       });
     });
@@ -138,7 +138,7 @@ module.exports = React.createClass({
       this.setState(function(prevState){
         prevState.rules.splice(index,1);
       },function(){
-        setDB('autoStateRules',this.state.rules,function(){
+        set('autoStateRules',JSON.stringify(this.state.rules),function(){
           chrome.runtime.sendMessage({job:'updateAutoStateRules'});
         });
       });
@@ -154,7 +154,7 @@ module.exports = React.createClass({
       prevState.rule.action=rule.action;
       prevState.rule.match=rule.match.url;
     },function(){
-      setDB('autoStateRules',this.state.rules,function(){
+      set('autoStateRules',JSON.stringify(this.state.rules),function(){
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
       });
     });
@@ -185,8 +185,8 @@ module.exports = React.createClass({
           <td>{icons}</td>
           <td>{rule.action}</td>
           <td>{rule.match.url}</td>
-          <td onClick={CW.bind(this.editRule.bind(this,index),'AutoState','editRule','')}>Edit</td>
-          <td onClick={CW.bind(this.deleteRule.bind(this,index),'AutoState','deleteRule')}>Delete</td>
+          <td onClick={CW.bind(null,this.editRule.bind(this,index),'AutoState','editRule','')}>Edit</td>
+          <td onClick={CW.bind(null,this.deleteRule.bind(this,index),'AutoState','deleteRule')}>Delete</td>
         </tr>
       );
     }.bind(this));

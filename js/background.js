@@ -7,7 +7,7 @@ NooBoss.defaultValues=[
   ['notifyStateChange','-1'],
   ['notifyInstallation','1'],
   ['notifyRemoval','1'],
-  ['autoState','1'],
+  ['autoState','-1'],
   ['autoStateRules','[]'],
 ];
 
@@ -178,6 +178,7 @@ NooBoss.Management.autoState.manage=function(tabId){
         break;
     }
   }
+  console.log(nextPhases);
   var ids=Object.keys(nextPhases);
   for(var i=0;i<ids.length;i++){
     var id=ids[i];
@@ -215,14 +216,13 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
 NooBoss.Management.autoState.init=function(){
   //{[id],condition,match}
   NooBoss.Management.autoState.rules=[];
-//  NooBoss.Management.autoState.rules=[{ids:['kbmfpngjjgdllneeigpgjifpgocmfgmb'],action:'onlyEnable',match:{url:'^https://www.reddit.com'}},{ids:['eogeabecipmckmihpmkgjbghbffcebcf'],action:'onlyEnable',match:{url:'^http://slither.io'}}];
   NooBoss.Management.autoState.tabs={};
-  NooBoss.Management.autoState.updateRules();
   chrome.tabs.query({},function(tabList){
     for(var i=0;i<tabList.length;i++){
       var tabInfo=tabList[i];
       NooBoss.Management.autoState.tabs[tabInfo.id]=tabInfo.url;
     }
+    NooBoss.Management.autoState.updateRules();
   });
 }
 NooBoss.Management.autoState.updateRules=function(){

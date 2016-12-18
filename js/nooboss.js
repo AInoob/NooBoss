@@ -27984,6 +27984,13 @@
 	      });
 	    }.bind(this));
 	    isOn('joinCommunity', function () {
+	      chrome.permissions.contains({
+	        permissions: ['tabs']
+	      }, function (result) {
+	        if (result) {
+	          this.setState({ tabPerm: true });
+	        }
+	      }.bind(this));
 	      this.setState({ joinCommunity: true });
 	      chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	        var url = "";
@@ -28079,7 +28086,7 @@
 	    return (this.state.appInfoList || []).map(function (appInfo) {
 	      var filter = this.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
-	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name)) && appInfo.installType != 'development') {
+	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name)) && appInfo.installType != 'development' && appInfo.updateUrl && appInfo.updateUrl.indexOf('https://clients2.google.com') != -1 && appInfo.homepageUrl && appInfo.homepageUrl.indexOf('https://ext.chrome.360.cn') == -1) {
 	        return appInfo;
 	      } else {
 	        return null;
@@ -28095,7 +28102,7 @@
 	      $.ajax({
 	        url: 'https://chrome.google.com/webstore/detail/' + appId
 	      }).done(function (appId, data) {
-	        var a = data.indexOf('src="', data.indexOf('<img  alt="Extension"')) + 5;
+	        var a = data.indexOf('src="', data.indexOf('od-s-wa')) + 5;
 	        var b = data.indexOf('"', a);
 	        var imgUrl = data.slice(a, b);
 	        a = data.indexOf('<h1 class="e-f-w">') + 18;
@@ -28228,6 +28235,33 @@
 	      }.bind(this), this.getInfosGoogle);
 	    }.bind(this));
 	  },
+	  requestTabsPermission: function () {
+	    chrome.notifications.create('', {
+	      type: 'basic',
+	      iconUrl: '/images/icon_128.png',
+	      title: 'NooBoss: Requesting permission',
+	      message: 'NooBoss needs tags permission to show you extensions recommended by NooBoss users based on current page'
+	    }, function () {});
+	    chrome.permissions.request({
+	      permissions: ['tabs']
+	    }, function (granted) {
+	      if (granted) {
+	        chrome.notifications.create('', {
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'NooBoss: Ready to go',
+	          message: 'Now NooBoss will show you recommended'
+	        }, function () {});
+	      } else {
+	        chrome.notifications.create('', {
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: 'NooBoss: Community recommendation not enabled',
+	          message: 'You chose not to receive any recommendations from NooBoss community nor recommend any extension to NooBoss community'
+	        }, function () {});
+	      }
+	    });
+	  },
 	  render: function () {
 	    var appInfoList = this.state.appInfoList || [];
 	    var overview = {};
@@ -28259,236 +28293,249 @@
 	        ').'
 	      );
 	    } else {
-	      var recoList;
-	      if ((this.state.recoList || []).length > 0) {
-	        recoList = (this.state.recoList || []).map(function (elem, index) {
-	          var app = null;
-	          var appInfo = null;
-	          var appId = elem.appId;
-	          var upActive = '';
-	          var downActive = '';
-	          var upCount = 0;
-	          var downCount = 0;
-	          if (this.state.votes[appId] == 'up') {
-	            upActive = 'active';
-	            upCount = 1;
-	          } else if (this.state.votes[appId] == 'down') {
-	            downActive = 'active';
-	            downCount = 1;
-	          }
-	          if (this.state.appInfosWeb) {
-	            appInfo = this.state.appInfosWeb[appId];
-	          }
-	          appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
-	          var active = {};
-	          var temp = Object.keys(this.state.tags[appId] || {});
-	          for (var j = 0; j < temp.length; j++) {
-	            if (this.state.tags[appId][temp[j]]) {
-	              active[temp[j]] = 'active';
+	      if (this.state.tabPerm) {
+	        var recoList;
+	        if ((this.state.recoList || []).length > 0) {
+	          recoList = (this.state.recoList || []).map(function (elem, index) {
+	            var app = null;
+	            var appInfo = null;
+	            var appId = elem.appId;
+	            var upActive = '';
+	            var downActive = '';
+	            var upCount = 0;
+	            var downCount = 0;
+	            if (this.state.votes[appId] == 'up') {
+	              upActive = 'active';
+	              upCount = 1;
+	            } else if (this.state.votes[appId] == 'down') {
+	              downActive = 'active';
+	              downCount = 1;
 	            }
-	          }
-	          var tags = React.createElement(
-	            'div',
-	            { className: 'tags' },
-	            React.createElement(
+	            if (this.state.appInfosWeb) {
+	              appInfo = this.state.appInfosWeb[appId];
+	            }
+	            appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
+	            var active = {};
+	            var temp = Object.keys(this.state.tags[appId] || {});
+	            for (var j = 0; j < temp.length; j++) {
+	              if (this.state.tags[appId][temp[j]]) {
+	                active[temp[j]] = 'active';
+	              }
+	            }
+	            var tags = React.createElement(
 	              'div',
-	              { className: 'tagColumn' },
+	              { className: 'tags' },
 	              React.createElement(
 	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'useful'), className: "tag " + active['useful'] },
-	                'useful:',
-	                appInfo.tags['useful'] || 0
-	              ),
-	              React.createElement(
-	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'working'), className: "tag " + active['working'] },
-	                'working:',
-	                appInfo.tags['working'] || 0
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'tagColumn' },
-	              React.createElement(
-	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'laggy'), className: "tag " + active['laggy'] },
-	                'laggy:',
-	                appInfo.tags['laggy'] || 0
-	              ),
-	              React.createElement(
-	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'buggy'), className: "tag " + active['buggy'] },
-	                'buggy:',
-	                appInfo.tags['buggy'] || 0
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'tagColumn' },
-	              React.createElement(
-	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'not_working'), className: "tag " + active['not_working'] },
-	                'not working:',
-	                appInfo.tags['not_working'] || 0
-	              ),
-	              React.createElement(
-	                'div',
-	                { onClick: this.toggleTag.bind(this, appId, 'ASM'), className: "tag " + active['ASM'] },
-	                'ADs/Spam/Malware:',
-	                appInfo.tags['ASM'] || 0
-	              )
-	            )
-	          );
-	          var ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
-	          if (appInfo.upVotes != 0 || appInfo.downVotes != 0) {
-	            ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
-	          }
-	          var rating = React.createElement(
-	            'div',
-	            { className: 'flip rating' },
-	            ratingBar,
-	            React.createElement(
-	              'div',
-	              { className: 'back ratingDetail' },
-	              React.createElement(
-	                'div',
-	                { className: 'upVotes' },
-	                'up',
-	                React.createElement('br', null),
-	                appInfo.upVotes
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'downVotes' },
-	                'down',
-	                React.createElement('br', null),
-	                appInfo.downVotes
-	              )
-	            )
-	          );
-	          app = React.createElement(
-	            'div',
-	            { className: 'app' },
-	            React.createElement(
-	              'a',
-	              { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + appId },
-	              React.createElement(
-	                'div',
-	                { className: 'front' },
+	                { className: 'tagColumn' },
 	                React.createElement(
 	                  'div',
-	                  { className: 'name' },
-	                  (this.state.infosGoogle[appId] || {}).name
+	                  { onClick: this.toggleTag.bind(this, appId, 'useful'), className: "tag " + active['useful'] },
+	                  'useful:',
+	                  appInfo.tags['useful'] || 0
 	                ),
-	                React.createElement('img', { src: (this.state.infosGoogle[appId] || {}).imgUrl })
+	                React.createElement(
+	                  'div',
+	                  { onClick: this.toggleTag.bind(this, appId, 'working'), className: "tag " + active['working'] },
+	                  'working:',
+	                  appInfo.tags['working'] || 0
+	                )
 	              ),
 	              React.createElement(
 	                'div',
-	                { className: 'description back' },
-	                (this.state.infosGoogle[appId] || {}).description
+	                { className: 'tagColumn' },
+	                React.createElement(
+	                  'div',
+	                  { onClick: this.toggleTag.bind(this, appId, 'laggy'), className: "tag " + active['laggy'] },
+	                  'laggy:',
+	                  appInfo.tags['laggy'] || 0
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { onClick: this.toggleTag.bind(this, appId, 'buggy'), className: "tag " + active['buggy'] },
+	                  'buggy:',
+	                  appInfo.tags['buggy'] || 0
+	                )
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'tagColumn' },
+	                React.createElement(
+	                  'div',
+	                  { onClick: this.toggleTag.bind(this, appId, 'not_working'), className: "tag " + active['not_working'] },
+	                  'not working:',
+	                  appInfo.tags['not_working'] || 0
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { onClick: this.toggleTag.bind(this, appId, 'ASM'), className: "tag " + active['ASM'] },
+	                  'ADs/Spam/Malware:',
+	                  appInfo.tags['ASM'] || 0
+	                )
 	              )
-	            ),
-	            React.createElement(
+	            );
+	            var ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
+	            if (appInfo.upVotes != 0 || appInfo.downVotes != 0) {
+	              ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
+	            }
+	            var rating = React.createElement(
 	              'div',
-	              { className: 'appReview' },
-	              tags
-	            )
-	          );
-	          return React.createElement(
+	              { className: 'flip rating' },
+	              ratingBar,
+	              React.createElement(
+	                'div',
+	                { className: 'back ratingDetail' },
+	                React.createElement(
+	                  'div',
+	                  { className: 'upVotes' },
+	                  'up',
+	                  React.createElement('br', null),
+	                  appInfo.upVotes
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { className: 'downVotes' },
+	                  'down',
+	                  React.createElement('br', null),
+	                  appInfo.downVotes
+	                )
+	              )
+	            );
+	            app = React.createElement(
+	              'div',
+	              { className: 'app' },
+	              React.createElement(
+	                'a',
+	                { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + appId },
+	                React.createElement(
+	                  'div',
+	                  { className: 'front' },
+	                  React.createElement(
+	                    'div',
+	                    { className: 'name' },
+	                    (this.state.infosGoogle[appId] || {}).name
+	                  ),
+	                  React.createElement('img', { src: (this.state.infosGoogle[appId] || {}).imgUrl })
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { className: 'description back' },
+	                  (this.state.infosGoogle[appId] || {}).description
+	                )
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'appReview' },
+	                tags
+	              )
+	            );
+	            return React.createElement(
+	              'div',
+	              { className: 'reco', key: index },
+	              React.createElement(
+	                'div',
+	                { className: 'votes' },
+	                React.createElement(
+	                  'div',
+	                  { className: 'upVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'up'), 'Community', 'addReco', 'up') },
+	                  React.createElement('div', { className: "front arrowUp " + upActive }),
+	                  React.createElement(
+	                    'div',
+	                    { className: 'back' },
+	                    elem.upVotes + upCount
+	                  )
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { className: 'score' },
+	                  elem.upVotes - elem.downVotes + upCount - downCount
+	                ),
+	                React.createElement(
+	                  'div',
+	                  { className: 'downVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'down'), 'Community', 'addReco', 'down') },
+	                  React.createElement('div', { className: "front arrowDown " + downActive }),
+	                  React.createElement(
+	                    'div',
+	                    { className: 'back' },
+	                    elem.downVotes + downCount
+	                  )
+	                )
+	              ),
+	              app
+	            );
+	          }.bind(this));
+	        } else {
+	          recoList = React.createElement(
 	            'div',
-	            { className: 'reco', key: index },
+	            { className: 'noReco' },
+	            'No one has recommended any extensions for this website yet, do you have a wonderful extension for ',
+	            this.state.website,
+	            '?'
+	          );
+	        }
+	        var appList = this.getFilteredList().map(function (appInfo, index) {
+	          if (appInfo) {
+	            var dimmer = 'dimmer';
+	            if (this.state.reco.selected[appInfo.id]) {
+	              dimmer = 'nonDimmer';
+	            }
+	            return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	          }
+	        }.bind(this));
+	        var recoApps = React.createElement(
+	          'div',
+	          { className: 'recoApp' },
+	          React.createElement(
+	            'label',
+	            { className: 'goRecoLabel', htmlFor: 'goReco' },
+	            'Recommend Extensions for this website'
+	          ),
+	          React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
+	          React.createElement(
+	            'div',
+	            { className: 'recoBoard' },
 	            React.createElement(
 	              'div',
-	              { className: 'votes' },
+	              { className: 'actionBar' },
+	              React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
 	              React.createElement(
-	                'div',
-	                { className: 'upVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'up'), 'Community', 'addReco', 'up') },
-	                React.createElement('div', { className: "front arrowUp " + upActive }),
-	                React.createElement(
-	                  'div',
-	                  { className: 'back' },
-	                  elem.upVotes + upCount
-	                )
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'score' },
-	                elem.upVotes - elem.downVotes + upCount - downCount
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'downVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'down'), 'Community', 'addReco', 'down') },
-	                React.createElement('div', { className: "front arrowDown " + downActive }),
-	                React.createElement(
-	                  'div',
-	                  { className: 'back' },
-	                  elem.downVotes + downCount
-	                )
+	                'button',
+	                { className: 'addReco', onClick: CW.bind(null, this.addReco.bind(this, null), 'Community', 'addReco', 'up') },
+	                'Recommend'
 	              )
 	            ),
-	            app
-	          );
-	        }.bind(this));
-	      } else {
-	        recoList = React.createElement(
+	            appList
+	          )
+	        );
+	        discover = React.createElement(
 	          'div',
-	          { className: 'noReco' },
-	          'No one has recommended any extensions for this website yet, do you have a wonderful extension for ',
-	          this.state.website,
-	          '?'
+	          { id: 'discover' },
+	          React.createElement(
+	            'div',
+	            { className: 'header' },
+	            'Extensions for ',
+	            React.createElement(
+	              'span',
+	              { className: 'website' },
+	              this.state.website
+	            ),
+	            ':'
+	          ),
+	          recoList,
+	          recoApps
+	        );
+	      } else {
+	        discover = React.createElement(
+	          'div',
+	          { id: 'discover' },
+	          'Community recommendation is off. You will not see apps recommended by users nor can you share your favorite extension to NooBoss. ',
+	          React.createElement(
+	            'button',
+	            { onClick: this.requestTabsPermission },
+	            'Enable it'
+	          )
 	        );
 	      }
-	      var appList = this.getFilteredList().map(function (appInfo, index) {
-	        if (appInfo) {
-	          var dimmer = 'dimmer';
-	          if (this.state.reco.selected[appInfo.id]) {
-	            dimmer = 'nonDimmer';
-	          }
-	          return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
-	        }
-	      }.bind(this));
-	      var recoApps = React.createElement(
-	        'div',
-	        { className: 'recoApp' },
-	        React.createElement(
-	          'label',
-	          { className: 'goRecoLabel', htmlFor: 'goReco' },
-	          'Recommend Extensions for this website'
-	        ),
-	        React.createElement('input', { type: 'checkbox', className: 'goReco', id: 'goReco' }),
-	        React.createElement(
-	          'div',
-	          { className: 'recoBoard' },
-	          React.createElement(
-	            'div',
-	            { className: 'actionBar' },
-	            React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
-	            React.createElement(
-	              'button',
-	              { className: 'addReco', onClick: CW.bind(null, this.addReco.bind(this, null), 'Community', 'addReco', 'up') },
-	              'Recommend'
-	            )
-	          ),
-	          appList
-	        )
-	      );
-	      discover = React.createElement(
-	        'div',
-	        { id: 'discover' },
-	        React.createElement(
-	          'div',
-	          { className: 'header' },
-	          'Extensions for ',
-	          React.createElement(
-	            'span',
-	            { className: 'website' },
-	            this.state.website
-	          ),
-	          ':'
-	        ),
-	        recoList,
-	        recoApps
-	      );
 	    }
 	    return React.createElement(
 	      'div',
@@ -29406,8 +29453,8 @@
 	      }
 	      this.setState({ appInfoList: appInfoList, names: names });
 	    }.bind(this));
-	    getDB('autoStateRules', function (rules) {
-	      this.setState({ rules: rules });
+	    get('autoStateRules', function (rules) {
+	      this.setState({ rules: JSON.parse(rules) });
 	    }.bind(this));
 	  },
 	  getIconUrl: function (appInfo) {
@@ -29497,7 +29544,7 @@
 	      prevState.rule.match = '';
 	      return prevState;
 	    }, function () {
-	      setDB('autoStateRules', this.state.rules, function () {
+	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
@@ -29508,7 +29555,7 @@
 	      this.setState(function (prevState) {
 	        prevState.rules.splice(index, 1);
 	      }, function () {
-	        setDB('autoStateRules', this.state.rules, function () {
+	        set('autoStateRules', JSON.stringify(this.state.rules), function () {
 	          chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	        });
 	      });
@@ -29524,7 +29571,7 @@
 	      prevState.rule.action = rule.action;
 	      prevState.rule.match = rule.match.url;
 	    }, function () {
-	      setDB('autoStateRules', this.state.rules, function () {
+	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
@@ -29572,12 +29619,12 @@
 	        ),
 	        React.createElement(
 	          'td',
-	          { onClick: CW.bind(this.editRule.bind(this, index), 'AutoState', 'editRule', '') },
+	          { onClick: CW.bind(null, this.editRule.bind(this, index), 'AutoState', 'editRule', '') },
 	          'Edit'
 	        ),
 	        React.createElement(
 	          'td',
-	          { onClick: CW.bind(this.deleteRule.bind(this, index), 'AutoState', 'deleteRule') },
+	          { onClick: CW.bind(null, this.deleteRule.bind(this, index), 'AutoState', 'deleteRule') },
 	          'Delete'
 	        )
 	      );

@@ -36,6 +36,13 @@ module.exports = React.createClass({
       });
     }.bind(this));
     isOn('joinCommunity',function(){
+      chrome.permissions.contains({
+        permissions: ['tabs']
+      },function(result){
+        if(result){
+          this.setState({tabPerm:true});
+        }
+      }.bind(this));
       this.setState({joinCommunity:true});
       chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
         var url="";
@@ -135,7 +142,7 @@ module.exports = React.createClass({
     return (this.state.appInfoList||[]).map(function(appInfo){
       var filter=this.state.filter;
       var pattern=new RegExp(filter.keyword,'i');
-      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))&&appInfo.installType!='development'){
+      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))&&appInfo.installType!='development'&&appInfo.updateUrl&&appInfo.updateUrl.indexOf('https://clients2.google.com')!=-1&&appInfo.homepageUrl&&appInfo.homepageUrl.indexOf('https://ext.chrome.360.cn')==-1){
         return appInfo;
       }
       else{
@@ -152,7 +159,7 @@ module.exports = React.createClass({
       $.ajax({
         url:'https://chrome.google.com/webstore/detail/'+appId
       }).done(function(appId,data){
-        var a=data.indexOf('src="',data.indexOf('<img  alt="Extension"'))+5;
+        var a=data.indexOf('src="',data.indexOf('od-s-wa'))+5;
         var b=data.indexOf('"',a);
         var imgUrl=data.slice(a,b);
         a=data.indexOf('<h1 class="e-f-w">')+18;
@@ -288,6 +295,34 @@ module.exports = React.createClass({
       }.bind(this),this.getInfosGoogle);
     }.bind(this));
   },
+  requestTabsPermission: function(){
+    chrome.notifications.create('',{
+      type:'basic',
+      iconUrl: '/images/icon_128.png',
+      title: 'NooBoss: Requesting permission',
+      message: 'NooBoss needs tags permission to show you extensions recommended by NooBoss users based on current page'
+    },function() {});
+    chrome.permissions.request({
+      permissions: ['tabs']
+    },function(granted){
+      if(granted){
+        chrome.notifications.create('',{
+          type:'basic',
+          iconUrl: '/images/icon_128.png',
+          title: 'NooBoss: Ready to go',
+          message: 'Now NooBoss will show you recommended'
+        },function() {});
+      }
+      else{
+        chrome.notifications.create('',{
+          type:'basic',
+          iconUrl: '/images/icon_128.png',
+          title: 'NooBoss: Community recommendation not enabled',
+          message: 'You chose not to receive any recommendations from NooBoss community nor recommend any extension to NooBoss community'
+        },function() {});
+      }
+    });
+  },
   render: function(){
     var appInfoList=this.state.appInfoList||[];
     var overview={};
@@ -315,124 +350,132 @@ module.exports = React.createClass({
         </div>;
     }
     else{
-      var recoList;
-      if((this.state.recoList||[]).length>0){
-        recoList=(this.state.recoList||[]).map(function(elem,index){
-          var app=null;
-          var appInfo=null;
-          var appId=elem.appId;
-          var upActive='';
-          var downActive='';
-          var upCount=0;
-          var downCount=0;
-          if(this.state.votes[appId]=='up'){
-            upActive='active';
-            upCount=1;
-          }
-          else if(this.state.votes[appId]=='down'){
-            downActive='active';
-            downCount=1;
-          }
-          if(this.state.appInfosWeb){
-            appInfo=this.state.appInfosWeb[appId];
-          }
-          appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
-          var active={};
-          var temp=Object.keys(this.state.tags[appId]||{});
-          for(var j=0;j<temp.length;j++){
-            if(this.state.tags[appId][temp[j]]){
-              active[temp[j]]='active'
+      if(this.state.tabPerm){
+        var recoList;
+        if((this.state.recoList||[]).length>0){
+          recoList=(this.state.recoList||[]).map(function(elem,index){
+            var app=null;
+            var appInfo=null;
+            var appId=elem.appId;
+            var upActive='';
+            var downActive='';
+            var upCount=0;
+            var downCount=0;
+            if(this.state.votes[appId]=='up'){
+              upActive='active';
+              upCount=1;
             }
-          }
-          var tags=<div className="tags">
-            <div className="tagColumn">
-              <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
-              <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
-            </div>
-            <div className="tagColumn">
-              <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
-              <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
-            </div>
-            <div className="tagColumn">
-              <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
-              <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
-            </div>
-          </div>;
-          var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
-          if(appInfo.upVotes!=0||appInfo.downVotes!=0){
-            ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
-          }
-          var rating=<div className="flip rating">
-            {ratingBar}
-            <div className="back ratingDetail">
-              <div className="upVotes">up<br/>{appInfo.upVotes}</div>
-              <div className="downVotes">down<br/>{appInfo.downVotes}</div>
-            </div>
-          </div>;
-          app=
-            <div className="app">
-              <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+appId}>
-                <div className="front">
-                  <div className="name">{(this.state.infosGoogle[appId]||{}).name}</div>
-                  <img src={(this.state.infosGoogle[appId]||{}).imgUrl} />
-                </div>
-                <div className="description back">
-                  {(this.state.infosGoogle[appId]||{}).description}
-                </div>
-              </a>
-              <div className="appReview">
-                {tags}
+            else if(this.state.votes[appId]=='down'){
+              downActive='active';
+              downCount=1;
+            }
+            if(this.state.appInfosWeb){
+              appInfo=this.state.appInfosWeb[appId];
+            }
+            appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
+            var active={};
+            var temp=Object.keys(this.state.tags[appId]||{});
+            for(var j=0;j<temp.length;j++){
+              if(this.state.tags[appId][temp[j]]){
+                active[temp[j]]='active'
+              }
+            }
+            var tags=<div className="tags">
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>useful:{appInfo.tags['useful']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>working:{appInfo.tags['working']||0}</div>
+              </div>
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>laggy:{appInfo.tags['laggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>buggy:{appInfo.tags['buggy']||0}</div>
+              </div>
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>not working:{appInfo.tags['not_working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>ADs/Spam/Malware:{appInfo.tags['ASM']||0}</div>
               </div>
             </div>;
-          return(
-            <div className="reco" key={index}>
-              <div className="votes">
-                <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
-                  <div className={"front arrowUp "+upActive}></div>
-                  <div className="back">{elem.upVotes+upCount}</div>
-                </div>
-                <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
-                <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
-                  <div className={"front arrowDown "+downActive}></div>
-                  <div className="back">{elem.downVotes+downCount}</div>
-                </div>
+            var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
+            if(appInfo.upVotes!=0||appInfo.downVotes!=0){
+              ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
+            }
+            var rating=<div className="flip rating">
+              {ratingBar}
+              <div className="back ratingDetail">
+                <div className="upVotes">up<br/>{appInfo.upVotes}</div>
+                <div className="downVotes">down<br/>{appInfo.downVotes}</div>
               </div>
-              {app}
-            </div>);
+            </div>;
+            app=
+              <div className="app">
+                <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+appId}>
+                  <div className="front">
+                    <div className="name">{(this.state.infosGoogle[appId]||{}).name}</div>
+                    <img src={(this.state.infosGoogle[appId]||{}).imgUrl} />
+                  </div>
+                  <div className="description back">
+                    {(this.state.infosGoogle[appId]||{}).description}
+                  </div>
+                </a>
+                <div className="appReview">
+                  {tags}
+                </div>
+              </div>;
+            return(
+              <div className="reco" key={index}>
+                <div className="votes">
+                  <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
+                    <div className={"front arrowUp "+upActive}></div>
+                    <div className="back">{elem.upVotes+upCount}</div>
+                  </div>
+                  <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
+                  <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
+                    <div className={"front arrowDown "+downActive}></div>
+                    <div className="back">{elem.downVotes+downCount}</div>
+                  </div>
+                </div>
+                {app}
+              </div>);
+          }.bind(this));
+        }
+        else{
+          recoList=<div className="noReco">No one has recommended any extensions for this website yet, do you have a wonderful extension for {this.state.website}?</div>
+        }
+        var appList=this.getFilteredList().map(function(appInfo,index){
+          if(appInfo){
+            var dimmer='dimmer';
+            if(this.state.reco.selected[appInfo.id]){
+              dimmer='nonDimmer';
+            }
+            return (
+                <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
+            );
+          }
         }.bind(this));
+        var recoApps=(
+          <div className="recoApp">
+            <label className="goRecoLabel" htmlFor="goReco">Recommend Extensions for this website</label>
+            <input type="checkbox" className="goReco" id="goReco" />
+            <div className="recoBoard">
+              <div className="actionBar">
+                <input id="keyword" onChange={this.updateFilter} type="text" />
+                <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>Recommend</button>
+              </div>
+              {appList}
+            </div>
+          </div>);
+        discover=(
+          <div id="discover">
+            <div className="header">Extensions for <span className="website">{this.state.website}</span>:</div>
+            {recoList}
+            {recoApps}
+          </div>);
       }
       else{
-        recoList=<div className="noReco">No one has recommended any extensions for this website yet, do you have a wonderful extension for {this.state.website}?</div>
+        discover=(
+        <div id="discover">
+          Community recommendation is off. You will not see apps recommended by users nor can you share your favorite extension to NooBoss. <button onClick={this.requestTabsPermission}>Enable it</button>
+        </div>);
       }
-    var appList=this.getFilteredList().map(function(appInfo,index){
-      if(appInfo){
-        var dimmer='dimmer';
-        if(this.state.reco.selected[appInfo.id]){
-          dimmer='nonDimmer';
-        }
-        return (
-            <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
-        );
-      }
-    }.bind(this));
-    var recoApps=(
-      <div className="recoApp">
-        <label className="goRecoLabel" htmlFor="goReco">Recommend Extensions for this website</label>
-        <input type="checkbox" className="goReco" id="goReco" />
-        <div className="recoBoard">
-          <div className="actionBar">
-            <input id="keyword" onChange={this.updateFilter} type="text" />
-            <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>Recommend</button>
-          </div>
-          {appList}
-        </div>
-      </div>);
-    discover=
-      <div id="discover">
-        <div className="header">Extensions for <span className="website">{this.state.website}</span>:</div>
-        {recoList}
-        {recoApps}
-      </div>;
     }
     return(
       <div className="NooBox-body">

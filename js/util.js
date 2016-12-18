@@ -38,6 +38,9 @@ var textIdMap={
 }
 
 function extractDomain(url) {
+  if(!url){
+    return 'error';
+  }
   var domain;
   if (url.indexOf("://") > -1) {
     domain = url.split('/')[2];
