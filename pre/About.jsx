@@ -9,7 +9,7 @@ module.exports = React.createClass({
   render: function(){
     if(chrome.i18n.getUILanguage().indexOf('zh')!=-1){
       return(
-        <div id="About">
+        <div id="About" className="section">
           <Helmet
             title="About"
           />
@@ -89,7 +89,7 @@ module.exports = React.createClass({
     }
     else{
       return(
-        <div id="About">
+        <div id="About" className="section">
           <Helmet
             title="About"
           />

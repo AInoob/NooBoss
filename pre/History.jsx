@@ -41,7 +41,7 @@ module.exports = React.createClass({
       }
     }).reverse();
     return(
-      <div className="NooBoss-body">
+      <div className="NooBoss-body section" id="history">
         <Helmet
           title="History"
         />

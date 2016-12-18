@@ -199,22 +199,24 @@ module.exports = React.createClass({
         <Helmet
           title="Manage"
         />
-        <h2>Rules</h2>
-        <table className="AutoStateRules">
-          <thead>
-            <tr>
-              <th>{GL('number')}</th>
-              <th>{GL('extension_s')}</th>
-              <th>{GL('action')}</th>
-              <th>{GL('match')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ruleList}
-          </tbody>
-        </table>
-        <h2>{GL('new_rule')}</h2>
-        <div className="newRule">
+        <div className="rules section">
+          <h2>Rules</h2>
+          <table className="AutoStateRules">
+            <thead>
+              <tr>
+                <th>{GL('number')}</th>
+                <th>{GL('extension_s')}</th>
+                <th>{GL('action')}</th>
+                <th>{GL('match')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ruleList}
+            </tbody>
+          </table>
+        </div>
+        <div className="newRule section">
+          <h2>{GL('new_rule')}</h2>
           {GL('app_s')}: <div className="selected">
           {selectedIcons}
           </div>
@@ -225,20 +227,20 @@ module.exports = React.createClass({
           </select>
           &nbsp;{GL('url')}:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
           <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</button>
-        </div>
-        <div className="actionBar autoState">
-          <div className="type">
-            Type: 
-            <select onChange={this.updateFilter} id="type">
-              <option value="all">{GL('all')}</option>
-              <option value="app">{GL('app')}</option>
-              <option value="extension">{GL('extension')}</option>
-              <option value="theme">{GL('theme')}</option>
-            </select>
+          <div className="actionBar autoState">
+            <div className="type">
+              Type: 
+              <select onChange={this.updateFilter} id="type">
+                <option value="all">{GL('all')}</option>
+                <option value="app">{GL('app')}</option>
+                <option value="extension">{GL('extension')}</option>
+                <option value="theme">{GL('theme')}</option>
+              </select>
+            </div>
+            <input id="keyword" onChange={this.updateFilter} type="text" />
           </div>
-          <input id="keyword" onChange={this.updateFilter} type="text" />
+          {appList}
         </div>
-        {appList}
       </div>
     );
   }

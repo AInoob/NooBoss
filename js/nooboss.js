@@ -28283,7 +28283,7 @@
 	    if (!this.state.joinCommunity) {
 	      discover = React.createElement(
 	        'div',
-	        { id: 'discover' },
+	        { id: 'discover', className: 'section' },
 	        GL('ls_0'),
 	        '(turn it on ',
 	        React.createElement(
@@ -28518,7 +28518,7 @@
 	        );
 	        discover = React.createElement(
 	          'div',
-	          { id: 'discover' },
+	          { id: 'discover', className: 'section' },
 	          React.createElement(
 	            'div',
 	            { className: 'header' },
@@ -28537,7 +28537,7 @@
 	      } else {
 	        discover = React.createElement(
 	          'div',
-	          { id: 'discover' },
+	          { id: 'discover', className: 'section' },
 	          GL('ls_2'),
 	          ' ',
 	          React.createElement(
@@ -28559,7 +28559,7 @@
 	        { id: 'overview' },
 	        React.createElement(
 	          'div',
-	          { className: 'manage' },
+	          { className: 'manage section' },
 	          React.createElement(
 	            'div',
 	            { className: 'sectionHeader' },
@@ -29371,7 +29371,7 @@
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return React.createElement(
 	      'div',
-	      { className: 'NooBoss-body' },
+	      { className: 'NooBoss-body section' },
 	      React.createElement(Helmet, {
 	        title: 'Manage'
 	      }),
@@ -29657,55 +29657,59 @@
 	        title: 'Manage'
 	      }),
 	      React.createElement(
-	        'h2',
-	        null,
-	        'Rules'
-	      ),
-	      React.createElement(
-	        'table',
-	        { className: 'AutoStateRules' },
+	        'div',
+	        { className: 'rules section' },
 	        React.createElement(
-	          'thead',
+	          'h2',
 	          null,
-	          React.createElement(
-	            'tr',
-	            null,
-	            React.createElement(
-	              'th',
-	              null,
-	              GL('number')
-	            ),
-	            React.createElement(
-	              'th',
-	              null,
-	              GL('extension_s')
-	            ),
-	            React.createElement(
-	              'th',
-	              null,
-	              GL('action')
-	            ),
-	            React.createElement(
-	              'th',
-	              null,
-	              GL('match')
-	            )
-	          )
+	          'Rules'
 	        ),
 	        React.createElement(
-	          'tbody',
-	          null,
-	          ruleList
+	          'table',
+	          { className: 'AutoStateRules' },
+	          React.createElement(
+	            'thead',
+	            null,
+	            React.createElement(
+	              'tr',
+	              null,
+	              React.createElement(
+	                'th',
+	                null,
+	                GL('number')
+	              ),
+	              React.createElement(
+	                'th',
+	                null,
+	                GL('extension_s')
+	              ),
+	              React.createElement(
+	                'th',
+	                null,
+	                GL('action')
+	              ),
+	              React.createElement(
+	                'th',
+	                null,
+	                GL('match')
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'tbody',
+	            null,
+	            ruleList
+	          )
 	        )
 	      ),
 	      React.createElement(
-	        'h2',
-	        null,
-	        GL('new_rule')
-	      ),
-	      React.createElement(
 	        'div',
-	        { className: 'newRule' },
+	        { className: 'newRule section' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          GL('new_rule')
+	        ),
 	        GL('app_s'),
 	        ': ',
 	        React.createElement(
@@ -29742,43 +29746,43 @@
 	          'button',
 	          { className: 'addRule', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
 	          GL('add_rule')
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'actionBar autoState' },
+	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'type' },
-	          'Type:',
+	          { className: 'actionBar autoState' },
 	          React.createElement(
-	            'select',
-	            { onChange: this.updateFilter, id: 'type' },
+	            'div',
+	            { className: 'type' },
+	            'Type:',
 	            React.createElement(
-	              'option',
-	              { value: 'all' },
-	              GL('all')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'app' },
-	              GL('app')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'extension' },
-	              GL('extension')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'theme' },
-	              GL('theme')
+	              'select',
+	              { onChange: this.updateFilter, id: 'type' },
+	              React.createElement(
+	                'option',
+	                { value: 'all' },
+	                GL('all')
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'app' },
+	                GL('app')
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'extension' },
+	                GL('extension')
+	              ),
+	              React.createElement(
+	                'option',
+	                { value: 'theme' },
+	                GL('theme')
+	              )
 	            )
-	          )
+	          ),
+	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
 	        ),
-	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
-	      ),
-	      appList
+	        appList
+	      )
 	    );
 	  }
 	});
@@ -29966,70 +29970,86 @@
 	      }),
 	      React.createElement(
 	        'div',
-	        { className: 'header' },
-	        capFirst(GL('clean'))
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
-	        GL('clean_history')
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'button', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
-	        'Reset everything (careful!)'
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'header' },
-	        GL('notification')
-	      ),
-	      this.getSwitch('notifyStateChange'),
-	      this.getSwitch('notifyInstallation'),
-	      this.getSwitch('notifyRemoval'),
-	      this.getSwitch('autoStateNotification'),
-	      React.createElement(
-	        'div',
-	        { className: 'header' },
-	        GL('functions')
-	      ),
-	      this.getSwitch('autoState', this.autoState),
-	      React.createElement(
-	        'div',
-	        { className: 'header' },
-	        GL('experience')
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'selector' },
-	        'Default page: ',
+	        { className: 'section' },
 	        React.createElement(
-	          'select',
-	          { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
-	          React.createElement(
-	            'option',
-	            { value: 'overview' },
-	            GL('overview')
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: 'manage' },
-	            GL('manage')
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: 'autoState' },
-	            GL('autoState')
-	          ),
-	          React.createElement(
-	            'option',
-	            { value: 'history' },
-	            GL('history')
-	          )
+	          'div',
+	          { className: 'header' },
+	          capFirst(GL('clean'))
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'button', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
+	          GL('clean_history')
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'button', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
+	          'Reset everything (careful!)'
 	        )
 	      ),
-	      this.getSwitch('joinCommunity', this.joinCommunity),
-	      this.getSwitch('showAds', this.showAds)
+	      React.createElement(
+	        'div',
+	        { className: 'section' },
+	        React.createElement(
+	          'div',
+	          { className: 'header' },
+	          GL('notification')
+	        ),
+	        this.getSwitch('notifyStateChange'),
+	        this.getSwitch('notifyInstallation'),
+	        this.getSwitch('notifyRemoval'),
+	        this.getSwitch('autoStateNotification')
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'section' },
+	        React.createElement(
+	          'div',
+	          { className: 'header' },
+	          GL('functions')
+	        ),
+	        this.getSwitch('autoState', this.autoState)
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'section' },
+	        React.createElement(
+	          'div',
+	          { className: 'header' },
+	          GL('experience')
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'selector' },
+	          'Default page: ',
+	          React.createElement(
+	            'select',
+	            { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
+	            React.createElement(
+	              'option',
+	              { value: 'overview' },
+	              GL('overview')
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'manage' },
+	              GL('manage')
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'autoState' },
+	              GL('autoState')
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'history' },
+	              GL('history')
+	            )
+	          )
+	        ),
+	        this.getSwitch('joinCommunity', this.joinCommunity),
+	        this.getSwitch('showAds', this.showAds)
+	      )
 	    );
 	  }
 	});
@@ -30106,7 +30126,7 @@
 	    }).reverse();
 	    return React.createElement(
 	      'div',
-	      { className: 'NooBoss-body' },
+	      { className: 'NooBoss-body section', id: 'history' },
 	      React.createElement(Helmet, {
 	        title: 'History'
 	      }),
@@ -30212,7 +30232,7 @@
 			if (chrome.i18n.getUILanguage().indexOf('zh') != -1) {
 				return React.createElement(
 					'div',
-					{ id: 'About' },
+					{ id: 'About', className: 'section' },
 					React.createElement(Helmet, {
 						title: 'About'
 					}),
@@ -30456,7 +30476,7 @@
 			} else {
 				return React.createElement(
 					'div',
-					{ id: 'About' },
+					{ id: 'About', className: 'section' },
 					React.createElement(Helmet, {
 						title: 'About'
 					}),

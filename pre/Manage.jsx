@@ -157,7 +157,7 @@ module.exports = React.createClass({
     }.bind(this));
     var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return(
-      <div className="NooBoss-body">
+      <div className="NooBoss-body section">
         <Helmet
           title="Manage"
         />

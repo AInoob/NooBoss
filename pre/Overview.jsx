@@ -345,7 +345,7 @@ module.exports = React.createClass({
     var recoList;
     if(!this.state.joinCommunity){
       discover=
-        <div id="discover">
+        <div id="discover" className="section">
           {GL('ls_0')}(turn it on <Link to="/options">{GL('join_community')}here</Link>).
         </div>;
     }
@@ -464,7 +464,7 @@ module.exports = React.createClass({
             </div>
           </div>);
         discover=(
-          <div id="discover">
+          <div id="discover" className="section">
             <div className="header">{GL('extensions_for')} <span className="website">{this.state.website}</span>:</div>
             {recoList}
             {recoApps}
@@ -472,7 +472,7 @@ module.exports = React.createClass({
       }
       else{
         discover=(
-        <div id="discover">
+        <div id="discover" className="section">
           {GL('ls_2')} <button onClick={this.requestTabsPermission}>{GL('enable')}</button>
         </div>);
       }
@@ -483,7 +483,7 @@ module.exports = React.createClass({
           title="Home"
         />
         <div id="overview">
-          <div className="manage">
+          <div className="manage section">
             <div className="sectionHeader">{GL('you_have')}</div>
             <div className="status">
               <Link to="/manage/app">

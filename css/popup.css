@@ -1,5 +1,5 @@
 body {
-  background-color: beige;
+  background-color: #eee9ed;
   margin: 0px;
   width: 588px;
 }
@@ -26,6 +26,24 @@ body::-webkit-scrollbar-track {
 a:hover {
   cursor: pointer;
 }
+.section {
+  overflow: hidden;
+  margin: 6px;
+  background-color: #ffecf0;
+  box-shadow: 1px 1px 4px 1px grey;
+  padding: 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+button {
+  border-radius: 3px;
+  border: none;
+  height: 22px;
+  font-weight: bold;
+  color: white;
+  background-color: #ff95a8;
+  cursor: pointer;
+}
 #overview .manage {
   font-size: 22px;
   font-weight: bold;
@@ -37,6 +55,9 @@ a:hover {
 #overview a:visited {
   color: #f927cd;
   text-decoration: underline;
+}
+#overview .recoApp {
+  border-top: 3px solid #e88bcf;
 }
 #overview .recoApp .goReco {
   display: none;
@@ -53,6 +74,7 @@ a:hover {
 }
 #overview .recoApp .recoBoard .actionBar {
   overflow: hidden;
+  padding: 3px;
 }
 #overview .recoApp .recoBoard .actionBar * {
   float: left;
@@ -82,8 +104,10 @@ a:hover {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
+#history {
+  background-color: #ffecf0;
+}
 #discover {
-  background-color: #f5f5dc;
   overflow: hidden;
 }
 #discover .website {
@@ -92,7 +116,6 @@ a:hover {
 }
 #discover .recoApp {
   overflow: hidden;
-  background-color: #fae3e7;
 }
 #discover .header {
   font-size: 22px;
@@ -182,20 +205,19 @@ a:hover {
 .NooBoss-body {
   height: auto;
   overflow: hidden;
-  width: 100%;
 }
 .NooBoss-body .actionBar {
   font-size: 14px;
   font-weight: bold;
   overflow: hidden;
+  background-color: #ffecf0;
+  padding: 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 .NooBoss-body .actionBar .type,
 .NooBoss-body .actionBar .event {
   float: left;
-}
-.NooBoss-body .actionBar .type select,
-.NooBoss-body .actionBar .event select {
-  height: 33px;
 }
 .NooBoss-body .actionBar a {
   margin-left: 10px;
@@ -205,10 +227,8 @@ a:hover {
 .NooBoss-body .actionBar #keyword {
   float: left;
   margin-left: 13px;
-  height: 26px;
 }
 .NooBoss-body .actionBar span {
-  line-height: 30px;
   margin-left: 8px;
 }
 .NooBoss-body .actionBar span:hover {
@@ -293,8 +313,8 @@ ul li.active {
 .dimmer,
 .nonDimmer {
   position: absolute;
-  height: 98px;
-  width: 98px;
+  height: 90px;
+  width: 90px;
   top: 0;
   background-color: rgba(0, 0, 0, 0.64);
   pointer-events: none;
@@ -305,8 +325,8 @@ ul li.active {
 .app-holder {
   position: relative;
   float: left;
-  height: 98px;
-  width: 98px;
+  height: 90px;
+  width: 90px;
 }
 .app-holder .app-status-checkbox {
   display: none;
@@ -347,8 +367,7 @@ ul li.active {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   background-color: beige;
-  height: 98px;
-  padding-top: 15px;
+  height: 90px;
   position: absolute;
   text-align: center;
   -webkit-transform: rotateY(180deg);
@@ -359,16 +378,17 @@ ul li.active {
   font-weight: bold;
   font-style: italic;
   display: block;
-  margin-top: 20px;
+  margin-top: 13px;
 }
 .app-holder .app-brief .app-icon {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  margin: 7px;
+  margin: 3px;
   position: absolute;
-  width: 86px;
+  left: 0px;
+  width: 84px;
 }
 .app-holder .app-brief .app-switch {
   background-image: url("/thirdParty/power-button-on.svg");
@@ -409,8 +429,8 @@ ul li.active {
   color: #2d40b6;
 }
 .newRule {
-  width: 100%;
   text-align: center;
+  overflow: hidden;
 }
 .newRule .selected {
   min-height: 13px;
@@ -418,6 +438,9 @@ ul li.active {
 .newRule .selected img {
   height: 15px;
   width: 15px;
+}
+.newRule .addRule {
+  margin-left: 6px;
 }
 h2 {
   text-align: center;

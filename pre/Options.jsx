@@ -147,27 +147,35 @@ module.exports = React.createClass({
         <Helmet
           title="Options"
         />
-        <div className="header">{capFirst(GL('clean'))}</div>
-        <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div>
-        <div className="button" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
-        <div className="header">{GL('notification')}</div>
-        {this.getSwitch('notifyStateChange')}
-        {this.getSwitch('notifyInstallation')}
-        {this.getSwitch('notifyRemoval')}
-        {this.getSwitch('autoStateNotification')}
-        <div className="header">{GL('functions')}</div>
-        {this.getSwitch('autoState',this.autoState)}
-        <div className="header">{GL('experience')}</div>
-        <div className="selector">
-          Default page: <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
-            <option value="overview">{GL('overview')}</option>
-            <option value="manage">{GL('manage')}</option>
-            <option value="autoState">{GL('autoState')}</option>
-            <option value="history">{GL('history')}</option>
-          </select>
+        <div className="section">
+          <div className="header">{capFirst(GL('clean'))}</div>
+          <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div>
+          <div className="button" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
         </div>
-        {this.getSwitch('joinCommunity',this.joinCommunity)}
-        {this.getSwitch('showAds',this.showAds)}
+        <div className="section">
+          <div className="header">{GL('notification')}</div>
+          {this.getSwitch('notifyStateChange')}
+          {this.getSwitch('notifyInstallation')}
+          {this.getSwitch('notifyRemoval')}
+          {this.getSwitch('autoStateNotification')}
+        </div>
+        <div className="section">
+          <div className="header">{GL('functions')}</div>
+          {this.getSwitch('autoState',this.autoState)}
+        </div>
+        <div className="section">
+          <div className="header">{GL('experience')}</div>
+          <div className="selector">
+            Default page: <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
+              <option value="overview">{GL('overview')}</option>
+              <option value="manage">{GL('manage')}</option>
+              <option value="autoState">{GL('autoState')}</option>
+              <option value="history">{GL('history')}</option>
+            </select>
+          </div>
+          {this.getSwitch('joinCommunity',this.joinCommunity)}
+          {this.getSwitch('showAds',this.showAds)}
+        </div>
       </div>
     );
   }
