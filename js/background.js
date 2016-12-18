@@ -13,7 +13,7 @@ NooBoss.defaultValues=[
 
 NooBoss.resetSettings=function(){
   var temp;
-  for(var i=0;i<NooBoss.defaultValues.length;i++){
+  for(var i=1;i<NooBoss.defaultValues.length;i++){
     temp=NooBoss.defaultValues[i];
     set(temp[0],temp[1]);
   }

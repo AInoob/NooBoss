@@ -61,7 +61,7 @@ module.exports = React.createClass({
         <table className="History-table">
           <thead>
             <tr>
-              <th>{GL('date')}</th>
+              <th>{GL('when')}</th>
               <th>{GL('event')}</th>
               <th>{GL('icon')}</th>
               <th>{GL('name')}</th>

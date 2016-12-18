@@ -27974,8 +27974,8 @@
 	      }
 	      this.setState({ appInfoList: appInfoList });
 	    }.bind(this));
-	    getDB('autoStateRules', function (rules) {
-	      this.setState({ rules: rules });
+	    get('autoStateRules', function (rules) {
+	      this.setState({ rules: JSON.parse(rules) });
 	    }.bind(this));
 	    get('userId', function (userId) {
 	      this.setState(function (prevState) {
@@ -28239,8 +28239,8 @@
 	    chrome.notifications.create('', {
 	      type: 'basic',
 	      iconUrl: '/images/icon_128.png',
-	      title: 'NooBoss: Requesting permission',
-	      message: 'NooBoss needs tags permission to show you extensions recommended by NooBoss users based on current page'
+	      title: GL('ls_11'),
+	      message: GL('ls_12')
 	    }, function () {});
 	    chrome.permissions.request({
 	      permissions: ['tabs']
@@ -28249,15 +28249,15 @@
 	        chrome.notifications.create('', {
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: 'NooBoss: Ready to go',
-	          message: 'Now NooBoss will show you recommended'
+	          title: GL('ls_15'),
+	          message: GL('ls_16')
 	        }, function () {});
 	      } else {
 	        chrome.notifications.create('', {
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: 'NooBoss: Community recommendation not enabled',
-	          message: 'You chose not to receive any recommendations from NooBoss community nor recommend any extension to NooBoss community'
+	          title: GL('ls_17'),
+	          message: GL('ls_18')
 	        }, function () {});
 	      }
 	    });
@@ -28583,7 +28583,7 @@
 	            ),
 	            ' ',
 	            GL('extension_s'),
-	            'extension(s),\xA0',
+	            ',\xA0',
 	            React.createElement(
 	              Link,
 	              { to: '/manage/theme' },
@@ -28591,7 +28591,6 @@
 	            ),
 	            ' ',
 	            GL('theme'),
-	            'theme',
 	            React.createElement('br', null),
 	            React.createElement(
 	              Link,
@@ -29457,7 +29456,7 @@
 	  },
 	  componentDidMount: function () {
 	    isOn('autoState', null, function () {
-	      alert('Auto state managment is disabled, please turn it on in options page to use this feature');
+	      alert(GL('ls_20'));
 	      browserHistory.push('/options');
 	    });
 	    chrome.management.getAll(function (appInfoList) {
@@ -29639,12 +29638,12 @@
 	        React.createElement(
 	          'td',
 	          { onClick: CW.bind(null, this.editRule.bind(this, index), 'AutoState', 'editRule', '') },
-	          'Edit'
+	          GL('edit')
 	        ),
 	        React.createElement(
 	          'td',
 	          { onClick: CW.bind(null, this.deleteRule.bind(this, index), 'AutoState', 'deleteRule') },
-	          'Delete'
+	          GL('delete')
 	        )
 	      );
 	    }.bind(this));
@@ -29847,15 +29846,21 @@
 	      }.bind(this, i));
 	    }
 	  },
+	  reset: function () {
+	    var result = confirm(GL('ls_4'));
+	    if (result) {
+	      chrome.runtime.sendMessage({ job: 'reset' });
+	    }
+	  },
 	  cleanHistory: function () {
-	    var result = confirm('Do you want to clean the History?');
+	    var result = confirm(GL('ls_5'));
 	    if (result) {
 	      setDB('history_records', null, function () {
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: 'History cleaned',
-	          message: 'App history cleaned'
+	          title: GL('history_cleaned'),
+	          message: GL('ls_6')
 	        });
 	      });
 	    }
@@ -29878,11 +29883,11 @@
 	    );
 	  },
 	  showAds: function () {
-	    alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
+	    alert(GL('ls_13'));
 	  },
 	  joinCommunity: function () {
 	    if (this.state.setting.joinCommunity) {
-	      var sadMove = confirm('You are about to leave NooBoss community, by doing so: AInoob(author) will no longer know if anyone is using NooBoss or not, thus he might slows down the NooBoss project or even shuts it down. However, this is your choice, click "OK" if you do not want to send your NooBoss usage data and extensions you are using to NooBox community.(NooBoss never track your personal information)');
+	      var sadMove = confirm(GL('ls_19'));
 	      if (!sadMove) {
 	        return;
 	      }
@@ -29896,16 +29901,16 @@
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: 'Auto state manage: Enabled',
-	          message: 'Now you can set rules for NooBoss to auto manage your extensions'
+	          title: GL('ls_7'),
+	          message: GL('ls_8')
 	        });
 	      } else {
 	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'off']);
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: 'Auto state manage: Disabled',
-	          message: 'Now NooBoss will not auto manage your extensions'
+	          title: GL('ls_9'),
+	          message: GL('ls_10')
 	        });
 	      }
 	      set('autoState', value, function () {
@@ -29925,8 +29930,8 @@
 	          chrome.notifications.create({
 	            type: 'basic',
 	            iconUrl: '/images/icon_128.png',
-	            title: 'Auto state manage: Requesting permission',
-	            message: 'NooBoss needs to see which page you are visiting to dicide whether enable or disable an extension'
+	            title: GL('ls_11'),
+	            message: GL('ls_12')
 	          });
 	          chrome.permissions.request({
 	            permissions: ['tabs']
@@ -29968,6 +29973,11 @@
 	        'div',
 	        { className: 'button', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
 	        GL('clean_history')
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'button', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
+	        'Reset everything (careful!)'
 	      ),
 	      React.createElement(
 	        'div',
@@ -30151,7 +30161,7 @@
 	            React.createElement(
 	              'th',
 	              null,
-	              GL('date')
+	              GL('when')
 	            ),
 	            React.createElement(
 	              'th',

@@ -31,15 +31,21 @@ module.exports = React.createClass({
       );
     }
   },
+  reset: function(){
+    var result=confirm(GL('ls_4'));
+    if(result){
+      chrome.runtime.sendMessage({job:'reset'});
+    }
+  },
   cleanHistory: function(){
-    var result=confirm('Do you want to clean the History?');
+    var result=confirm(GL('ls_5'));
     if(result){
       setDB('history_records',null,function(){
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'History cleaned',
-          message: 'App history cleaned',
+          title: GL('history_cleaned'),
+          message: GL('ls_6'),
         });
       });
     }
@@ -57,11 +63,11 @@ module.exports = React.createClass({
     return <div className="switch"><input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} />{GL(id)}</div>
   },
   showAds: function(){
-    alert('wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future');
+    alert(GL('ls_13'));
   },
   joinCommunity: function(){
     if(this.state.setting.joinCommunity){
-      var sadMove=confirm('You are about to leave NooBoss community, by doing so: AInoob(author) will no longer know if anyone is using NooBoss or not, thus he might slows down the NooBoss project or even shuts it down. However, this is your choice, click "OK" if you do not want to send your NooBoss usage data and extensions you are using to NooBox community.(NooBoss never track your personal information)');
+      var sadMove=confirm(GL('ls_19'));
       if(!sadMove){
         return;
       }
@@ -75,8 +81,8 @@ module.exports = React.createClass({
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'Auto state manage: Enabled',
-          message: 'Now you can set rules for NooBoss to auto manage your extensions'
+          title: GL('ls_7'),
+          message: GL('ls_8')
         });
       }
       else{
@@ -84,8 +90,8 @@ module.exports = React.createClass({
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'Auto state manage: Disabled',
-          message: 'Now NooBoss will not auto manage your extensions'
+          title: GL('ls_9'),
+          message: GL('ls_10')
         });
       }
       set('autoState',value,function(){
@@ -106,8 +112,8 @@ module.exports = React.createClass({
           chrome.notifications.create({
             type:'basic',
             iconUrl: '/images/icon_128.png',
-            title: 'Auto state manage: Requesting permission',
-            message: 'NooBoss needs to see which page you are visiting to dicide whether enable or disable an extension'
+            title: GL('ls_11'),
+            message: GL('ls_12')
           });
           chrome.permissions.request({
             permissions: ['tabs']
@@ -143,6 +149,7 @@ module.exports = React.createClass({
         />
         <div className="header">{capFirst(GL('clean'))}</div>
         <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div>
+        <div className="button" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
         <div className="header">{GL('notification')}</div>
         {this.getSwitch('notifyStateChange')}
         {this.getSwitch('notifyInstallation')}

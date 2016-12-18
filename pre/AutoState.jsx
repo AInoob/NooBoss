@@ -20,7 +20,7 @@ module.exports = React.createClass({
   },
   componentDidMount: function(){
     isOn('autoState',null,function(){
-      alert('Auto state managment is disabled, please turn it on in options page to use this feature');
+      alert(GL('ls_20'));
       browserHistory.push('/options');
     })
     chrome.management.getAll(function(appInfoList){
@@ -185,8 +185,8 @@ module.exports = React.createClass({
           <td>{icons}</td>
           <td>{rule.action}</td>
           <td>{rule.match.url}</td>
-          <td onClick={CW.bind(null,this.editRule.bind(this,index),'AutoState','editRule','')}>Edit</td>
-          <td onClick={CW.bind(null,this.deleteRule.bind(this,index),'AutoState','deleteRule')}>Delete</td>
+          <td onClick={CW.bind(null,this.editRule.bind(this,index),'AutoState','editRule','')}>{GL('edit')}</td>
+          <td onClick={CW.bind(null,this.deleteRule.bind(this,index),'AutoState','deleteRule')}>{GL('delete')}</td>
         </tr>
       );
     }.bind(this));

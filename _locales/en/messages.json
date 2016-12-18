@@ -131,8 +131,8 @@
   "undo_all":{
 	"message":"Undo all"
   },
-  "date":{
-	"message":"date"
+  "when":{
+	"message":"when"
   },
   "event":{
 	"message":"event"
@@ -227,6 +227,15 @@
   "permissions":{
 	"message":"Permissions"
   },
+  "edit":{
+	"message":"edit"
+  },
+  "delete":{
+	"message":"delete"
+  },
+  "history_cleaned":{
+	"message":"History cleaned"
+  },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },
@@ -235,5 +244,59 @@
   },
   "ls_2":{
 	"message":"NooBoss needs to see which domain are you visiting in order to get recommendations from NooBoss community(for those who concern about this, you can ask one of your coding friend to check the code of NooBoss, it's open sourced.)."
+  },
+  "ls_3":{
+	"message":"You do not have any rule yet"
+  },
+  "ls_4":{
+	"message":"Do you really want to clean and reset everything?"
+  },
+  "ls_5":{
+	"message":"Do you want to clean the history?"
+  },
+  "ls_6":{
+	"message":"All logged apps/extensions history has been cleaned"
+  },
+  "ls_7":{
+	"message":"Auto state management: Enabled"
+  },
+  "ls_8":{
+	"message":"Now you can set rules for NooBoss to auto manage your apps/extensions"
+  },
+  "ls_9":{
+	"message":"Auto state management: Disabled"
+  },
+  "ls_10":{
+	"message":"Now NooBoss will not auto manage your apps/extensions"
+  },
+  "ls_11":{
+	"message":"NooBoss: Requesting permission"
+  },
+  "ls_12":{
+	"message":"NooBoss needs tabs permission to auto manage your apps/extensions"
+  },
+  "ls_13":{
+	"message":"wow, thank you for clicking this, but NooBoss is not in stable version yet, so no ADs will be shown! NooBoss is an open-sourced software with proud, you will always have the right to show or hide ADs that NooBoss might bring in the future"
+  },
+  "ls_14":{
+	"message":"NooBoss needs tabs permission to show your extensions recommened by NooBoss users based on current website"
+  },
+  "ls_15":{
+	"message":"NooBoss: Ready to go"
+  },
+  "ls_16":{
+	"message":"Now NooBoss is ready to serve you"
+  },
+  "ls_17":{
+	"message":"Community recommendation: Disabled"
+  },
+  "ls_18":{
+	"message":"You chose not to receive any recommendations from NooBoss users nor do you want to recommend and useful extensions"
+  },
+  "ls_19":{
+	"message":"You are about to leave NooBoss community, by doing so: AInoob(author) will no longer know if anyone is using NooBoss or not, thus he might slows down the NooBoss project or even shuts it down. However, this is your choice, click \"OK\" if you do not want to send your NooBoss usage data and extensions you are using to NooBox community.(NooBoss never track your personal information)"
+  },
+  "ls_20":{
+	"message":"Auto state management is disabled, please turn it on in options page to use this feature"
   }
 }

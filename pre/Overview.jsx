@@ -26,8 +26,8 @@ module.exports = React.createClass({
       }
       this.setState({appInfoList:appInfoList});
     }.bind(this));
-    getDB('autoStateRules',function(rules){
-      this.setState({rules:rules});
+    get('autoStateRules',function(rules){
+      this.setState({rules:JSON.parse(rules)});
     }.bind(this));
     get('userId',function(userId){
       this.setState(function(prevState){
@@ -299,8 +299,8 @@ module.exports = React.createClass({
     chrome.notifications.create('',{
       type:'basic',
       iconUrl: '/images/icon_128.png',
-      title: 'NooBoss: Requesting permission',
-      message: 'NooBoss needs tags permission to show you extensions recommended by NooBoss users based on current page'
+      title: GL('ls_11'),
+      message: GL('ls_12')
     },function() {});
     chrome.permissions.request({
       permissions: ['tabs']
@@ -309,16 +309,16 @@ module.exports = React.createClass({
         chrome.notifications.create('',{
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'NooBoss: Ready to go',
-          message: 'Now NooBoss will show you recommended'
+          title: GL('ls_15'),
+          message: GL('ls_16')
         },function() {});
       }
       else{
         chrome.notifications.create('',{
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'NooBoss: Community recommendation not enabled',
-          message: 'You chose not to receive any recommendations from NooBoss community nor recommend any extension to NooBoss community'
+          title: GL('ls_17'),
+          message: GL('ls_18')
         },function() {});
       }
     });
@@ -491,10 +491,10 @@ module.exports = React.createClass({
               </Link> {GL('app_s')},&nbsp;
               <Link to="/manage/extension">
                 {overview.extension}
-              </Link> {GL('extension_s')}extension(s),&nbsp;
+              </Link> {GL('extension_s')},&nbsp;
               <Link to="/manage/theme">
                 {overview.theme}
-              </Link> {GL('theme')}theme<br/>
+              </Link> {GL('theme')}<br/>
               <Link to="/autoState">
                 {(this.state.rules||[]).length}
               </Link>
