@@ -144,6 +144,7 @@ button{
       border-top: solid 3px pink;
     }
     .appBrief{
+      margin-top: 10px;
       position: relative;
       float: left;
       width: 190px;
@@ -173,13 +174,11 @@ button{
         }
         .tag{
           cursor: pointer;
-          & + .tag{
-            margin-top: 10px;
-          }
+          margin: 3px;
         }
         .tag.active{
-          -webkit-box-shadow: 1px 1px 6px 2px #ff40f0;
-          box-shadow: 1px 1px 6px 2px #ff40f0;
+          -webkit-box-shadow: 1px 1px 2px 1px #ff40f0;
+          box-shadow: 1px 1px 2px 1px #ff40f0;
           background-color: #fff4f6;
         }
       }
@@ -187,6 +186,7 @@ button{
     .votes{
       width:66px;
       float:left;
+      margin-top: 13px;
       .score{
         width: 66px;
         text-align: center;
@@ -386,6 +386,7 @@ ul {
       }
     }
     .app-info {
+      margin-top: 8px;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
       background-color: beige;
@@ -617,6 +618,8 @@ h2{
 }
 
 .app{
+  overflow: hidden;
+  background-color: #ffecf0;
   .app-icon{
     width: 100px;
     height: 100%;
@@ -661,6 +664,23 @@ h2{
       color: #2d40b6;
       width: 400px;
       float: left;
+    }
+    .tags{
+      border-top: 2px solid pink;
+      float: left;
+      .tagColumn{
+        float: left;
+        margin-left: 22px;
+      }
+      .tag{
+        cursor: pointer;
+        margin: 3px;
+      }
+      .tag.active{
+        -webkit-box-shadow: 1px 1px 2px 1px #ff40f0;
+        box-shadow: 1px 1px 2px 1px #ff40f0;
+        background-color: #fff4f6;
+      }
     }
     .app-brief{
       width: 400px;
@@ -787,4 +807,19 @@ h2{
 
 .arrowDown.active{
   border-top: 10px solid #73196c;
+}
+
+.share{
+  .shareIcon{
+    float: left;
+    width: 66px;
+    margin: 2px;
+  }
+}
+
+.tag{
+  background-color: #fff8f8;
+  border: 1px solid pink;
+  border-radius: 3px;
+  padding: 1px;
 }

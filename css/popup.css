@@ -132,6 +132,7 @@ button {
   border-top: solid 3px pink;
 }
 #discover .reco .appBrief {
+  margin-top: 10px;
   position: relative;
   float: left;
   width: 190px;
@@ -163,18 +164,17 @@ button {
 }
 #discover .reco .appReview .tags .tag {
   cursor: pointer;
-}
-#discover .reco .appReview .tags .tag + .tag {
-  margin-top: 10px;
+  margin: 3px;
 }
 #discover .reco .appReview .tags .tag.active {
-  -webkit-box-shadow: 1px 1px 6px 2px #ff40f0;
-  box-shadow: 1px 1px 6px 2px #ff40f0;
+  -webkit-box-shadow: 1px 1px 2px 1px #ff40f0;
+  box-shadow: 1px 1px 2px 1px #ff40f0;
   background-color: #fff4f6;
 }
 #discover .reco .votes {
   width: 66px;
   float: left;
+  margin-top: 13px;
 }
 #discover .reco .votes .score {
   width: 66px;
@@ -364,6 +364,7 @@ ul li.active {
   transform: rotateY(180deg);
 }
 .app-holder .app-brief .app-info {
+  margin-top: 8px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   background-color: beige;
@@ -572,6 +573,10 @@ h2 {
 .History-table tbody tr .removed {
   color: red;
 }
+.app {
+  overflow: hidden;
+  background-color: #ffecf0;
+}
 .app .app-icon {
   width: 100px;
   height: 100%;
@@ -617,6 +622,23 @@ h2 {
   color: #2d40b6;
   width: 400px;
   float: left;
+}
+.app .app-main .tags {
+  border-top: 2px solid pink;
+  float: left;
+}
+.app .app-main .tags .tagColumn {
+  float: left;
+  margin-left: 22px;
+}
+.app .app-main .tags .tag {
+  cursor: pointer;
+  margin: 3px;
+}
+.app .app-main .tags .tag.active {
+  -webkit-box-shadow: 1px 1px 2px 1px #ff40f0;
+  box-shadow: 1px 1px 2px 1px #ff40f0;
+  background-color: #fff4f6;
 }
 .app .app-main .app-brief {
   width: 400px;
@@ -725,4 +747,15 @@ h2 {
 }
 .arrowDown.active {
   border-top: 10px solid #73196c;
+}
+.share .shareIcon {
+  float: left;
+  width: 66px;
+  margin: 2px;
+}
+.tag {
+  background-color: #fff8f8;
+  border: 1px solid pink;
+  border-radius: 3px;
+  padding: 1px;
 }

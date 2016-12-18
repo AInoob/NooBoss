@@ -16,74 +16,87 @@ module.exports = React.createClass({
           <h1>关于</h1>
           <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
           <a onClick={CL.bind(null,'https://ainoob.com/project/noobox','About-link','link')}><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
-			<section>
-			   <h2>二管家能干什么？</h2>
-			   <p>目前，二管家可以 (应用/拓展/主题 在下面都会叫应用)</p>
-			   <ul>
-				  <li>
-					 管理你的应用
-					 <ul>
-						<li>开启/关闭/删除一个或多个应用</li>
-					 </ul>
-				  </li>
-				  <li>
-					 社区分享
-					 <ul>
-					    <li>根据当前网页看到二管家社区推荐的适用于当前网页的拓展</li>
-						<li>每个人都可以给任何一个网站推荐好的拓展</li>
-						<li>每个人都可以给任何一个拓展打标签</li>
-					 </ul>
-				  </li>
-				  <li>
-					 自动应用状态管理
-					 <ul>
-						<li>
-						   根据设置的规则自动启用或禁用应用
-						   <ul>
-							  <li>(减少内存占用)</li>
-							  <li>(只有在需要的时候才开启应用)</li>
-						   </ul>
-						</li>
-					 </ul>
-				  </li>
-				  <li>
-					 应用历史记录
-					 <ul>
-						<li>记录应用的安装，卸载，开启，和关闭</li>
-						<li>
-						   可以知道版本变化
-						</li>
-					 </ul>
-				  </li>
-				  <li>
-					 显示应用详细信息
-					 <ul>
-						<li>下载crx文件</li>
-						<li>打开manifest文件</li>
-						<li>查看权限</li>
-						<li>和各种各样的详细信息</li>
-					 </ul>
-				  </li>
-			   </ul>
-			   <p>如果你有各种关于二管家使用方面的问题，你可以在这里查看使用介绍: <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>二管家项目</a></p>
-			</section>
-			<section>
-			   <h2>谁弄的二管家</h2>
-			   <p>二管家是一个<a onClick={CL.bind(null,'https://ainoob.com','About-link','link')}>AInoob</a>写的开源的项目(GPL-V3)。你可以在<a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>这里</a>查看二管家的进展</p>
-			</section>
-			<section>
-			   <h2>隐私？</h2>
-			   <p>二管家是一个傲娇的软件，不会偷取你的隐私信息，也绝对不会在未经过你要求的情况下在二管家界面内出现广告。</p>
-			   <p>默认情况下，二管家会把你使用二管家的情况和你安装的应用分享到二管家社区，如果你希望支持二管家或者不讨厌二管家，请不要关闭社区功能。</p>
-			</section>
-			<section>
-			   <h2>怎么支持二管家？</h2>
-			   <p>如果你真的那么喜欢二管家，你可以在选项里开启显示广告（默认关闭），这样二管家界面就会出现广告。这个看个人喜好，二管家给你绝对的权利。不过如果可以，请不要关闭社区功能，不然AInoob就没法知道有没有人在用二管家了，那就很可能停止更新。</p>
-			</section>
-			<section>
-			   <h2>建议？</h2>
-			   <p>如果你有任何好的建议，请去<a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support','About-link','link')}>Chrome网上应用店</a>评论和提建议。</p>
-			</section>
+            <section>
+               <h2>二管家能干什么？</h2>
+               <p>目前，二管家可以 (应用/拓展/主题 在下面都会叫应用)</p>
+               <ul>
+                      <li>
+                             管理你的应用
+                             <ul>
+                                    <li>开启/关闭/删除一个或多个应用</li>
+                             </ul>
+                      </li>
+                      <li>
+                             社区分享
+                             <ul>
+                                <li>根据当前网页看到二管家社区推荐的适用于当前网页的拓展</li>
+                                    <li>每个人都可以给任何一个网站推荐好的拓展</li>
+                                    <li>每个人都可以给任何一个拓展打标签</li>
+                             </ul>
+                      </li>
+                      <li>
+                             自动应用状态管理
+                             <ul>
+                                    <li>
+                                       根据设置的规则自动启用或禁用应用
+                                       <ul>
+                                              <li>(减少内存占用)</li>
+                                              <li>(只有在需要的时候才开启应用)</li>
+                                       </ul>
+                                    </li>
+                             </ul>
+                      </li>
+                      <li>
+                             应用历史记录
+                             <ul>
+                                    <li>记录应用的安装，卸载，开启，和关闭</li>
+                                    <li>
+                                       可以知道版本变化
+                                    </li>
+                             </ul>
+                      </li>
+                      <li>
+                             显示应用详细信息
+                             <ul>
+                                    <li>下载crx文件</li>
+                                    <li>打开manifest文件</li>
+                                    <li>查看权限</li>
+                                    <li>和各种各样的详细信息</li>
+                             </ul>
+                      </li>
+               </ul>
+               <p>如果你有各种关于二管家使用方面的问题，你可以在这里查看使用介绍: <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>二管家项目</a></p>
+            </section>
+            <section>
+               <h2>谁弄的二管家</h2>
+               <p>二管家是一个<a onClick={CL.bind(null,'https://ainoob.com','About-link','link')}>AInoob</a>写的开源的项目(GPL-V3)。你可以在<a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>这里</a>查看二管家的进展</p>
+            </section>
+            <section>
+               <h2>隐私？</h2>
+               <p>二管家是一个傲娇的软件，不会偷取你的隐私信息，也绝对不会在未经过你要求的情况下在二管家界面内出现广告。</p>
+               <p>默认情况下，二管家会把你使用二管家的情况和你安装的应用分享到二管家社区，如果你希望支持二管家或者不讨厌二管家，请不要关闭社区功能。</p>
+            </section>
+            <section>
+               <h2>怎么支持二管家？</h2>
+               <p>如果你真的那么喜欢二管家，你可以在选项里开启显示广告（默认关闭），这样二管家界面就会出现广告。这个看个人喜好，二管家给你绝对的权利。不过如果可以，请不要关闭社区功能，不然AInoob就没法知道有没有人在用二管家了，那就很可能停止更新。</p>
+            </section>
+            <section>
+               <h2>建议？</h2>
+               <p>如果你有任何好的建议，请去<a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support','About-link','link')}>Chrome网上应用店</a>评论和提建议。</p>
+            </section>
+          <section>
+          <div className="section share">
+            <h2>分享二管家</h2>
+            <p>你喜欢二管家吗？如果觉得还不错，那就考虑一下分享二管家吧~</p>
+			<a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
+            <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
+            <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
+            <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
+            <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
+          </div>
+          </section>
 			</div>
       );
     }
@@ -166,6 +179,19 @@ module.exports = React.createClass({
 				<section>
 				<h2>Any suggestions?</h2>
 				<p>If you have any suggestions about NooBoss, plese comment on support page in <a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support','About-link','link')}>Chrome web store</a>.</p>
+          </section>
+          <section>
+          <div className="section share">
+            <h2>Share NooBoss</h2>
+            <p>Do you like NooBoss? If so, please consider sharing NooBoss!</p>
+            <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
+            <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
+            <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
+            <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
+          </div>
           </section>
         </div>
       );

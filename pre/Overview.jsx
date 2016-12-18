@@ -382,16 +382,16 @@ module.exports = React.createClass({
             }
             var tags=<div className="tags">
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>{GL('useful')}:{appInfo.tags['useful']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>{GL('working')}:{appInfo.tags['working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>{GL('useful')}<br />{appInfo.tags['useful']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>{GL('working')}<br />{appInfo.tags['working']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}:{appInfo.tags['laggy']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}:{appInfo.tags['buggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}<br />{appInfo.tags['laggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}<br />{appInfo.tags['buggy']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}:{appInfo.tags['not_working']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}:{appInfo.tags['ASM']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}<br />{appInfo.tags['not_working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}<br />{appInfo.tags['ASM']||0}</div>
               </div>
             </div>;
             var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;

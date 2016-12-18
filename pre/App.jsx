@@ -2,11 +2,32 @@ var React = require('react');
 var Helmet = require('react-helmet');
 module.exports = React.createClass({
   getInitialState: function(){
-    return this.state||{};
+    return {tags:{},joinCommunity:false};
   },
   componentDidMount: function(){
     var id=getParameterByName('id');
     var chromeVersion=getChromeVersion();
+    isOn('joinCommunity',function(){
+      this.setState(function(prevState){
+        prevState.joinCommunity=true;
+        return;
+      });
+      get('userId',function(userId){
+        this.setState({userId:userId});
+        $.ajax({
+          type:'POST',
+          contentType: "application/json",
+          data: JSON.stringify({userId:userId,appId:id}),
+          url:'https://ainoob.com/api/nooboss/app'
+        }).done(function(data){
+          var tags={};
+          for(var i=0;i<data.tags.length;i++){
+            tags[data.tags[i].tag]=data.tags[i].tagged;
+          }
+          this.setState({appInfoWeb:data.appInfo,tags:tags});
+        }.bind(this));
+      }.bind(this));
+    }.bind(this));
     $.ajax({
       dataType: 'xml',
       url:'https://clients2.google.com/service/update2/crx?prodversion='+chromeVersion+'&x=id%3D'+id+'%26installsource%3Dondemand%26uc'
@@ -58,6 +79,47 @@ module.exports = React.createClass({
         else{
           prevState.appInfo.state='disabled';
         }
+        return prevState;
+      });
+    }.bind(this));
+  },
+  toggleTag: function(tag){
+    var inc=1;
+    var tagged=true;
+    var action='tag';
+    var appId=this.state.appInfo.id;
+    if(this.state.tags&&this.state.tags[tag]){
+      action='unTag';
+      tagged=false;
+      inc=-1;
+    }
+    CW(function(){},'Community','addTag',action);
+    var reco={
+      appId:appId,
+      userId:this.state.userId,
+      tag:tag,
+      action:action
+    };
+    $.ajax({
+      type:'POST',
+      url:"https://ainoob.com/api/nooboss/reco/app/tag",
+      contentType: "application/json",
+      data: JSON.stringify(reco)
+    }).done(function(data){
+      this.setState(function(prevState){
+        if(!prevState.appInfoWeb){
+          prevState.appInfoWeb={appId:appId,tags:{}};
+        }
+        if(!prevState.appInfoWeb.tags[tag]){
+          prevState.appInfoWeb.tags[tag]=1;
+        }
+        else{
+          prevState.appInfoWeb.tags[tag]+=inc;
+        }
+        if(!prevState.tags){
+          prevState.tags={};
+        }
+        prevState.tags[tag]=tagged;
         return prevState;
       });
     }.bind(this));
@@ -140,6 +202,31 @@ module.exports = React.createClass({
     }
     var manifestUrl='chrome-extension://'+appInfo.id+'/manifest.json';
     var nb_rating=<tr><td>{capFirst('NB-Rating')}</td><td>{this.state.nb_rating}</td></tr>;
+    var tags=null;
+    if(this.state.joinCommunity){
+      appInfoWeb=this.state.appInfoWeb||{tags:[],upVotes:0,downVotes:0};
+      var active={};
+      var temp=Object.keys(this.state.tags||{});
+      for(var j=0;j<temp.length;j++){
+        if(this.state.tags[temp[j]]){
+          active[temp[j]]='active'
+        }
+      }
+      var tags=<div className="tags">
+        <div className="tagColumn">
+          <div onClick={this.toggleTag.bind(this,'useful')} className={"tag "+active['useful']}>{GL('useful')}<br />{appInfoWeb.tags['useful']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'working')} className={"tag "+active['working']}>{GL('working')}<br />{appInfoWeb.tags['working']||0}</div>
+        </div>
+        <div className="tagColumn">
+          <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}<br />{appInfoWeb.tags['laggy']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}<br />{appInfoWeb.tags['buggy']||0}</div>
+        </div>
+        <div className="tagColumn">
+          <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}<br />{appInfoWeb.tags['not_working']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}<br />{appInfoWeb.tags['ASM']||0}</div>
+        </div>
+      </div>;
+    }
     return(
       <div className="NooBoss-body">
         <Helmet
@@ -161,6 +248,7 @@ module.exports = React.createClass({
                 <tr><td>{GL('description')}</td><td>{appInfo.description}</td></tr>
               </tbody>
             </table>
+            {tags}
             <table className="app-detail">
               <tbody>
                 <tr><td>{GL('last_update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
