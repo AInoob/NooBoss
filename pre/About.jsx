@@ -97,7 +97,26 @@ module.exports = React.createClass({
             <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
           </div>
           </section>
-			</div>
+		  <section>
+          <div className="section">
+		    <h2>鸣谢</h2>
+			<ul>
+			   <li>二箱使用了Facebook的<a href="https://github.com/facebook/react" target="_blank">React(BSD协议)</a>作为底层建筑</li>
+			   <li>二箱使用了JS Foundation的<a href="https://github.com/hustcc/timeago.js" target="_blank">jQuery(MIT协议)</a>来处理一些DOM和Ajax请求</li>
+			   <li>二箱使用了Hust.cc的<a href="https://github.com/hustcc/timeago.js" target="_blank">Timeago(MIT协议)</a>来显示时间</li>
+			   <li>
+				  一些图标来自与<a title="Flaticon" href="http://www.flaticon.com" target="_blank">www.flaticon.com</a>(<a title="Creative Commons BY 3.0" href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC 3.0 BY</a>)
+				  <ul>
+					 <li><img src="/thirdParty/options.svg" alt="" width="20" height="20" />来自于作者<a title="Gregor Cresnar" href="http://www.flaticon.com/authors/gregor-cresnar" target="_blank">Gregor Cresnar</a></li>
+					 <li><img src="/thirdParty/remove.svg" alt="" width="20" height="20" />来自于作者<a title="Freepik" href="http://www.freepik.com" target="_blank">Freepik</a></li>
+					 <li><img src="/thirdParty/add.svg" alt="" width="20" height="20" />来自于作者<a title="Madebyoliver" href="http://www.flaticon.com/authors/madebyoliver" target="_blank">Madebyoliver</a></li>
+					 <li><img src="/thirdParty/power-button-on.svg" alt="" width="20" height="20" /><img src="/thirdParty/power-button-off.svg" alt="" width="20" height="20" />来自于作者<a title="Chanut is Industries" href="http://www.flaticon.com/authors/chanut-is-industries" target="_blank">Chanut is Industries</a></li>
+				  </ul>
+			   </li>
+			</ul>
+          </div>
+          </section>
+		</div>
       );
     }
     else{
@@ -165,7 +184,7 @@ module.exports = React.createClass({
 				</section>
 				<section>
 				   <h2>Who made NooBoss</h2>
-				   <p>NooBoss is an open sourced project under GPL-V3 made by <a onClick={CL.bind(null,'https://ainoob.com','About-link','link')}>AInoob</a>, you can check the project progress <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>here</a></p>
+				   <p>NooBoss is an open source project under GPL-V3 made by <a onClick={CL.bind(null,'https://ainoob.com','About-link','link')}>AInoob</a>, you can check the project progress <a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}>here</a></p>
 				</section>
 				<section>
 				   <h2>Privacy</h2>
@@ -191,6 +210,25 @@ module.exports = React.createClass({
             <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
             <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
             <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
+          </div>
+          </section>
+		  <section>
+          <div className="section">
+		    <h2>Acknowledgements</h2>
+			<ul>
+			   <li>NooBoss uses <a href="https://github.com/facebook/react" target="_blank">React(BSD Liscense)</a> from Facebook to build the bases</li>
+			   <li>NooBoss uses <a href="https://github.com/hustcc/timeago.js" target="_blank">jQuery(MIT Liscense)</a> from JS Foundation to handle DOM and Ajax requests</li>
+			   <li>NooBoss uses <a href="https://github.com/hustcc/timeago.js" target="_blank">Timeago(MIT Liscense)</a> from  Hust.cc to display timeago</li>
+			   <li>
+				  Some icons are from<a title="Flaticon" href="http://www.flaticon.com" target="_blank">www.flaticon.com</a>(<a title="Creative Commons BY 3.0" href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC 3.0 BY</a>)
+				  <ul>
+					 <li><img src="/thirdParty/options.svg" alt="" width="20" height="20" />is made by <a title="Gregor Cresnar" href="http://www.flaticon.com/authors/gregor-cresnar" target="_blank">Gregor Cresnar</a></li>
+					 <li><img src="/thirdParty/remove.svg" alt="" width="20" height="20" />is made by <a title="Freepik" href="http://www.freepik.com" target="_blank">Freepik</a></li>
+					 <li><img src="/thirdParty/add.svg" alt="" width="20" height="20" />is made by <a title="Madebyoliver" href="http://www.flaticon.com/authors/madebyoliver" target="_blank">Madebyoliver</a></li>
+					 <li><img src="/thirdParty/power-button-on.svg" alt="" width="20" height="20" /><img src="/thirdParty/power-button-off.svg" alt="" width="20" height="20" />is made by <a title="Chanut is Industries" href="http://www.flaticon.com/authors/chanut-is-industries" target="_blank">Chanut is Industries</a></li>
+				  </ul>
+			   </li>
+			</ul>
           </div>
           </section>
         </div>

@@ -30660,6 +30660,122 @@
 	              React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
 	            )
 	          )
+	        ),
+	        React.createElement(
+	          'section',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'section' },
+	            React.createElement(
+	              'h2',
+	              null,
+	              '\u9E23\u8C22'
+	            ),
+	            React.createElement(
+	              'ul',
+	              null,
+	              React.createElement(
+	                'li',
+	                null,
+	                '\u4E8C\u7BB1\u4F7F\u7528\u4E86Facebook\u7684',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/facebook/react', target: '_blank' },
+	                  'React(BSD\u534F\u8BAE)'
+	                ),
+	                '\u4F5C\u4E3A\u5E95\u5C42\u5EFA\u7B51'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                '\u4E8C\u7BB1\u4F7F\u7528\u4E86JS Foundation\u7684',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                  'jQuery(MIT\u534F\u8BAE)'
+	                ),
+	                '\u6765\u5904\u7406\u4E00\u4E9BDOM\u548CAjax\u8BF7\u6C42'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                '\u4E8C\u7BB1\u4F7F\u7528\u4E86Hust.cc\u7684',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                  'Timeago(MIT\u534F\u8BAE)'
+	                ),
+	                '\u6765\u663E\u793A\u65F6\u95F4'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                '\u4E00\u4E9B\u56FE\u6807\u6765\u81EA\u4E0E',
+	                React.createElement(
+	                  'a',
+	                  { title: 'Flaticon', href: 'http://www.flaticon.com', target: '_blank' },
+	                  'www.flaticon.com'
+	                ),
+	                '(',
+	                React.createElement(
+	                  'a',
+	                  { title: 'Creative Commons BY 3.0', href: 'http://creativecommons.org/licenses/by/3.0/', target: '_blank' },
+	                  'CC 3.0 BY'
+	                ),
+	                ')',
+	                React.createElement(
+	                  'ul',
+	                  null,
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
+	                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Gregor Cresnar', href: 'http://www.flaticon.com/authors/gregor-cresnar', target: '_blank' },
+	                      'Gregor Cresnar'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
+	                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Freepik', href: 'http://www.freepik.com', target: '_blank' },
+	                      'Freepik'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
+	                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Madebyoliver', href: 'http://www.flaticon.com/authors/madebyoliver', target: '_blank' },
+	                      'Madebyoliver'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
+	                    React.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
+	                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
+	                      'Chanut is Industries'
+	                    )
+	                  )
+	                )
+	              )
+	            )
+	          )
 	        )
 	      );
 	    } else {
@@ -30846,7 +30962,7 @@
 	          React.createElement(
 	            'p',
 	            null,
-	            'NooBoss is an open sourced project under GPL-V3 made by ',
+	            'NooBoss is an open source project under GPL-V3 made by ',
 	            React.createElement(
 	              'a',
 	              { onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
@@ -30963,6 +31079,122 @@
 	              'a',
 	              { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
 	              React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'section',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'section' },
+	            React.createElement(
+	              'h2',
+	              null,
+	              'Acknowledgements'
+	            ),
+	            React.createElement(
+	              'ul',
+	              null,
+	              React.createElement(
+	                'li',
+	                null,
+	                'NooBoss uses ',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/facebook/react', target: '_blank' },
+	                  'React(BSD Liscense)'
+	                ),
+	                ' from Facebook to build the bases'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                'NooBoss uses ',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                  'jQuery(MIT Liscense)'
+	                ),
+	                ' from JS Foundation to handle DOM and Ajax requests'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                'NooBoss uses ',
+	                React.createElement(
+	                  'a',
+	                  { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                  'Timeago(MIT Liscense)'
+	                ),
+	                ' from  Hust.cc to display timeago'
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                'Some icons are from',
+	                React.createElement(
+	                  'a',
+	                  { title: 'Flaticon', href: 'http://www.flaticon.com', target: '_blank' },
+	                  'www.flaticon.com'
+	                ),
+	                '(',
+	                React.createElement(
+	                  'a',
+	                  { title: 'Creative Commons BY 3.0', href: 'http://creativecommons.org/licenses/by/3.0/', target: '_blank' },
+	                  'CC 3.0 BY'
+	                ),
+	                ')',
+	                React.createElement(
+	                  'ul',
+	                  null,
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
+	                    'is made by ',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Gregor Cresnar', href: 'http://www.flaticon.com/authors/gregor-cresnar', target: '_blank' },
+	                      'Gregor Cresnar'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
+	                    'is made by ',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Freepik', href: 'http://www.freepik.com', target: '_blank' },
+	                      'Freepik'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
+	                    'is made by ',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Madebyoliver', href: 'http://www.flaticon.com/authors/madebyoliver', target: '_blank' },
+	                      'Madebyoliver'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
+	                    React.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
+	                    'is made by ',
+	                    React.createElement(
+	                      'a',
+	                      { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
+	                      'Chanut is Industries'
+	                    )
+	                  )
+	                )
+	              )
 	            )
 	          )
 	        )

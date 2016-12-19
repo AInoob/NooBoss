@@ -286,10 +286,6 @@ ul li {
   font-weight: bold;
   text-align: center;
 }
-ul li a {
-  display: block;
-  width: 100%;
-}
 ul li.active {
   background: linear-gradient(to right, pink, pink);
 }
