@@ -265,6 +265,8 @@ nav ul li {
 }
 nav ul li a {
   color: white;
+  width: 100%;
+  display: block;
 }
 nav ul li a:visited {
   color: white;
@@ -302,6 +304,8 @@ ul li.active {
 }
 .footer ul li a {
   color: white;
+  width: 100%;
+  display: block;
 }
 .footer ul li:hover {
   background: linear-gradient(to right, pink, pink);
