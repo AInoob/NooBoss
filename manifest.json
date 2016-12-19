@@ -4,6 +4,7 @@
   "description": "__MSG_appDesc__",
   "default_locale": "en",
   "version": "0.0.8",
+  "options_page": "options.html",
   "browser_action": {
     "default_icon": "images/icon_128.png",
     "default_title": "NooBoss~~~",

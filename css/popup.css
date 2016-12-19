@@ -26,6 +26,12 @@ body::-webkit-scrollbar-track {
 a:hover {
   cursor: pointer;
 }
+a {
+  color: #4016d9;
+}
+a:visited {
+  color: #4016d9;
+}
 .section {
   overflow: hidden;
   margin: 6px;
@@ -246,12 +252,6 @@ button {
 .noTransTime {
   transition-duration: 0s;
 }
-a {
-  color: #4016d9;
-}
-a:visited {
-  color: #4016d9;
-}
 nav {
   z-index: 10;
   position: fixed;
@@ -264,6 +264,9 @@ nav ul li {
   width: 25%;
 }
 nav ul li a {
+  color: white;
+}
+nav ul li a:visited {
   color: white;
 }
 nav ul li:hover {

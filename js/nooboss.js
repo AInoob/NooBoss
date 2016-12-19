@@ -27964,9 +27964,14 @@
 	  },
 	  componentDidMount: function () {
 	    if (window.location.pathname.indexOf('popup') != -1) {
-	      get('defaultPage', function (url) {
-	        this.props.router.push(url || 'overview');
-	      }.bind(this));
+	      var page = getParameterByName('page');
+	      if (page) {
+	        this.props.router.push(page);
+	      } else {
+	        get('defaultPage', function (url) {
+	          this.props.router.push(url || 'overview');
+	        }.bind(this));
+	      }
 	    }
 	    chrome.management.getAll(function (appInfoList) {
 	      for (var i = 0; i < appInfoList.length; i++) {
@@ -27997,7 +28002,7 @@
 	        if (tabs[0]) url = tabs[0].url;
 	        var website = extractDomain(url);
 	        if (website.match(/^undefined/)) {
-	          website = "General";
+	          website = GL('all_websites');
 	        }
 	        $.ajax({
 	          type: 'POST',

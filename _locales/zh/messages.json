@@ -257,6 +257,9 @@
   "enableOnly":{
 	"message":"匹配才开启"
   },
+  "all_websites":{
+	"message":"所有网站"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },
