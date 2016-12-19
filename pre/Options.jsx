@@ -78,6 +78,7 @@ module.exports = React.createClass({
     var change=function(value){
       if(value){
         newCommunityRecord(true,['_trackEvent', 'AutoState', 'on']);
+        chrome.runtime.sendMessage({job:'autoState'});
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',

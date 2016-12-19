@@ -8,6 +8,7 @@ NooBoss.defaultValues=[
   ['notifyInstallation','1'],
   ['notifyRemoval','1'],
   ['autoState','-1'],
+  ['autoStateNotification','1'],
   ['autoStateRules','[]'],
 ];
 
@@ -134,7 +135,6 @@ NooBoss.Management.autoState.manage=function(tabId){
       case 'enableOnly':
         if(matched){
           for(var k=0;k<appIds.length;k++){
-            autoState.setAppState(appIds[k],true,tabId,i);
             nextPhases[appIds[k]]={
               enabled: true,
               tabid: tabId,
@@ -152,10 +152,9 @@ NooBoss.Management.autoState.manage=function(tabId){
           }
         }
         break;
-      case 'enable':
+      case 'enableWhen':
         if(matched){
           for(var k=0;k<appIds.length;k++){
-            autoState.setAppState(appIds[k],true,tabId,i);
             nextPhases[appIds[k]]={
               enabled: true,
               tabid: tabId,
@@ -164,10 +163,9 @@ NooBoss.Management.autoState.manage=function(tabId){
           }
         }
         break;
-      case 'disable':
+      case 'disableWhen':
         if(matched){
           for(var k=0;k<appIds.length;k++){
-            autoState.setAppState(appIds[k],true,tabId,i);
             nextPhases[appIds[k]]={
               enabled: false,
               tabid: null,
@@ -178,7 +176,6 @@ NooBoss.Management.autoState.manage=function(tabId){
         break;
     }
   }
-  console.log(nextPhases);
   var ids=Object.keys(nextPhases);
   for(var i=0;i<ids.length;i++){
     var id=ids[i];
@@ -272,6 +269,35 @@ NooBoss.Management.init=function(){
     NooBoss.Management.autoState.enable);
 }
 
+NooBoss.listeners={};
+NooBoss.listeners.onEnabled=function(appInfoOld){
+  if(!NooBoss.Management.apps[id]){
+    setTimeout(NooBoss.listeners.onEnabled.bind(null,appInfoOld),900);
+    return;
+  }
+  var id=appInfoOld.id;
+  NooBoss.Management.apps[id].enabled=true;
+  var recordEnable=function(times,appInfo){
+    if(!appInfo){
+      if(times<9){
+        setTimeout(getDB.bind(null,id,recordEnable.bind(null,times+1)),1000);
+      }
+    }
+    else{
+      NooBoss.History.addRecord({event:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+    }
+  }
+  getDB(id,recordEnable.bind(null,1));
+  isOn('notifyStateChange',function(){
+    chrome.notifications.create({
+      type:'basic',
+      iconUrl: '/images/icon_128.png',
+      title: 'Enabled: '+appInfoOld.name,
+      message: appInfoOld.name+' is now enabled'
+    });
+  });
+}
+
 //History
 NooBoss.History={};
 NooBoss.History.init=function(){
@@ -329,29 +355,7 @@ NooBoss.History.listen=function(){
       });
     });
   });
-  chrome.management.onEnabled.addListener(function(appInfoOld){
-    var id=appInfoOld.id;
-    NooBoss.Management.apps[id].enabled=true;
-    var recordEnable=function(times,appInfo){
-      if(!appInfo){
-        if(times<9){
-          setTimeout(getDB.bind(null,id,recordEnable.bind(null,times+1)),1000);
-        }
-      }
-      else{
-        NooBoss.History.addRecord({event:'enabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
-      }
-    }
-    getDB(id,recordEnable.bind(null,1));
-    isOn('notifyStateChange',function(){
-      chrome.notifications.create({
-        type:'basic',
-        iconUrl: '/images/icon_128.png',
-        title: 'Enabled: '+appInfoOld.name,
-        message: appInfoOld.name+' is now enabled'
-      });
-    });
-  });
+  chrome.management.onEnabled.addListener(NooBoss.listeners.onEnabled.bind(null));
   chrome.management.onDisabled.addListener(function(appInfoOld){
     var id=appInfoOld.id;
     NooBoss.Management.apps[id].enabled=false;

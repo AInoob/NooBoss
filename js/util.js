@@ -7,7 +7,6 @@ var GL=getLocale;
 //Community wrapper
 function CW(callback,category,action,label,e){
   newCommunityRecord(true,['_trackEvent', category, action,label]);
-  console.log(['_trackEvent', category, action,label]);
   callback(e);
 }
 

@@ -19,10 +19,6 @@ module.exports = React.createClass({
     };
   },
   componentDidMount: function(){
-    isOn('autoState',null,function(){
-      alert(GL('ls_20'));
-      browserHistory.push('/options');
-    })
     chrome.management.getAll(function(appInfoList){
       var names={};
       for(var i=0;i<appInfoList.length;i++){
@@ -38,6 +34,10 @@ module.exports = React.createClass({
     get('autoStateRules',function(rules){
       this.setState({rules:JSON.parse(rules)});
     }.bind(this));
+    isOn('autoState',null,function(){
+      alert(GL('ls_20'));
+      browserHistory.push('/options');
+    })
   },
   getIconUrl: function(appInfo){
     var iconUrl=undefined;
@@ -222,8 +222,8 @@ module.exports = React.createClass({
           </div>
           {GL('action')}:&nbsp;<select value={this.state.rule.action} onChange={this.updateRule} id="action">
             <option value="enableOnly">{GL('only_enable_when_matched')}</option>
-            <option value="enable">{GL('enable_when_matched')}</option>
-            <option value="disable">{GL('disable_when_matched')}</option>
+            <option value="enableWhen">{GL('enable_when_matched')}</option>
+            <option value="disableWhen">{GL('disable_when_matched')}</option>
           </select>
           &nbsp;{GL('url')}:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
           <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</button>

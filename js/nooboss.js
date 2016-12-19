@@ -27972,106 +27972,107 @@
 	          this.props.router.push(url || 'overview');
 	        }.bind(this));
 	      }
-	    }
-	    chrome.management.getAll(function (appInfoList) {
-	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
-	      }
-	      this.setState({ appInfoList: appInfoList });
-	    }.bind(this));
-	    get('autoStateRules', function (rules) {
-	      this.setState({ rules: JSON.parse(rules) });
-	    }.bind(this));
-	    get('userId', function (userId) {
-	      this.setState(function (prevState) {
-	        prevState.userId = userId;
-	        return prevState;
-	      });
-	    }.bind(this));
-	    isOn('joinCommunity', function () {
-	      chrome.permissions.contains({
-	        permissions: ['tabs']
-	      }, function (result) {
-	        if (result) {
-	          this.setState({ tabPerm: true });
+	    } else {
+	      chrome.management.getAll(function (appInfoList) {
+	        for (var i = 0; i < appInfoList.length; i++) {
+	          appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
 	        }
+	        this.setState({ appInfoList: appInfoList });
 	      }.bind(this));
-	      this.setState({ joinCommunity: true });
-	      chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
-	        var url = "";
-	        if (tabs[0]) url = tabs[0].url;
-	        var website = extractDomain(url);
-	        if (website.match(/^undefined/)) {
-	          website = GL('all_websites');
-	        }
-	        $.ajax({
-	          type: 'POST',
-	          contentType: "application/json",
-	          data: JSON.stringify({ website: website, userId: this.state.userId }),
-	          url: 'https://ainoob.com/api/nooboss/website'
-	        }).done(function (data) {
-	          var appInfos = {};
-	          for (var i = 0; i < data.appInfos.length; i++) {
-	            var appId = data.appInfos[i].appId;
-	            appInfos[appId] = data.appInfos[i];
+	      get('autoStateRules', function (rules) {
+	        this.setState({ rules: JSON.parse(rules) });
+	      }.bind(this));
+	      get('userId', function (userId) {
+	        this.setState(function (prevState) {
+	          prevState.userId = userId;
+	          return prevState;
+	        });
+	      }.bind(this));
+	      isOn('joinCommunity', function () {
+	        chrome.permissions.contains({
+	          permissions: ['tabs']
+	        }, function (result) {
+	          if (result) {
+	            this.setState({ tabPerm: true });
 	          }
-	          var votes = {};
-	          var tags = {};
-	          for (var i = 0; i < data.votes.length; i++) {
-	            var appId = data.votes[i].appId;
-	            votes[appId] = data.votes[i].action;
-	            tags[appId] = {};
+	        }.bind(this));
+	        this.setState({ joinCommunity: true });
+	        chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
+	          var url = "";
+	          if (tabs[0]) url = tabs[0].url;
+	          var website = extractDomain(url);
+	          if (website.match(/^undefined/)) {
+	            website = GL('all_websites');
 	          }
-	          for (var i = 0; i < data.tags.length; i++) {
-	            if (!tags[data.tags[i].appId]) {
-	              tags[data.tags[i].appId] = {};
+	          $.ajax({
+	            type: 'POST',
+	            contentType: "application/json",
+	            data: JSON.stringify({ website: website, userId: this.state.userId }),
+	            url: 'https://ainoob.com/api/nooboss/website'
+	          }).done(function (data) {
+	            var appInfos = {};
+	            for (var i = 0; i < data.appInfos.length; i++) {
+	              var appId = data.appInfos[i].appId;
+	              appInfos[appId] = data.appInfos[i];
 	            }
-	            tags[data.tags[i].appId][data.tags[i].tag] = data.tags[i].tagged;
-	          }
-	          var recoList = [];
-	          var temp = Object.keys(data.recos);
-	          for (var i = 0; i < temp.length; i++) {
-	            var appId = temp[i];
-	            var upVoted = 0;
-	            var downVoted = 0;
-	            if (votes[appId] == 'up') {
-	              upVoted = 1;
-	            } else if (votes[appId] == 'down') {
-	              downVoted = 1;
+	            var votes = {};
+	            var tags = {};
+	            for (var i = 0; i < data.votes.length; i++) {
+	              var appId = data.votes[i].appId;
+	              votes[appId] = data.votes[i].action;
+	              tags[appId] = {};
 	            }
-	            recoList.push({ appId: appId, upVotes: data.recos[appId].upVotes - upVoted, downVotes: data.recos[appId].downVotes - downVoted });
-	          }
-	          this.setState({
-	            recoList: recoList,
-	            appInfosWeb: appInfos,
-	            website: website,
-	            votes: votes,
-	            tags: tags
-	          }, function () {
-	            this.getInfosGoogle();
-	            this.setState(function (prevState) {
-	              prevState.recoList.sort(function (a, b) {
-	                var upCountA = 0;
-	                var downCountA = 0;
-	                var upCountB = 0;
-	                var downCountB = 0;
-	                if (this.state.votes[a.appId] == 'up') {
-	                  upCountA = 1;
-	                } else if (this.state.votes[a.appId] == 'down') {
-	                  downCountA = 1;
-	                }
-	                if (this.state.votes[b.appId] == 'up') {
-	                  upCountB = 1;
-	                } else if (this.state.votes[b.appId] == 'down') {
-	                  downCountB = 1;
-	                }
-	                return a.upVotes - a.downVotes + upCountA - downCountB < b.upVotes - b.downVotes + upCountB - downCountB;
-	              }.bind(this));
-	            });
+	            for (var i = 0; i < data.tags.length; i++) {
+	              if (!tags[data.tags[i].appId]) {
+	                tags[data.tags[i].appId] = {};
+	              }
+	              tags[data.tags[i].appId][data.tags[i].tag] = data.tags[i].tagged;
+	            }
+	            var recoList = [];
+	            var temp = Object.keys(data.recos);
+	            for (var i = 0; i < temp.length; i++) {
+	              var appId = temp[i];
+	              var upVoted = 0;
+	              var downVoted = 0;
+	              if (votes[appId] == 'up') {
+	                upVoted = 1;
+	              } else if (votes[appId] == 'down') {
+	                downVoted = 1;
+	              }
+	              recoList.push({ appId: appId, upVotes: data.recos[appId].upVotes - upVoted, downVotes: data.recos[appId].downVotes - downVoted });
+	            }
+	            this.setState({
+	              recoList: recoList,
+	              appInfosWeb: appInfos,
+	              website: website,
+	              votes: votes,
+	              tags: tags
+	            }, function () {
+	              this.getInfosGoogle();
+	              this.setState(function (prevState) {
+	                prevState.recoList.sort(function (a, b) {
+	                  var upCountA = 0;
+	                  var downCountA = 0;
+	                  var upCountB = 0;
+	                  var downCountB = 0;
+	                  if (this.state.votes[a.appId] == 'up') {
+	                    upCountA = 1;
+	                  } else if (this.state.votes[a.appId] == 'down') {
+	                    downCountA = 1;
+	                  }
+	                  if (this.state.votes[b.appId] == 'up') {
+	                    upCountB = 1;
+	                  } else if (this.state.votes[b.appId] == 'down') {
+	                    downCountB = 1;
+	                  }
+	                  return a.upVotes - a.downVotes + upCountA - downCountB < b.upVotes - b.downVotes + upCountB - downCountB;
+	                }.bind(this));
+	              });
+	            }.bind(this));
 	          }.bind(this));
 	        }.bind(this));
 	      }.bind(this));
-	    }.bind(this));
+	    }
 	  },
 	  select: function (appId) {
 	    this.setState(function (prevState) {
@@ -29591,10 +29592,6 @@
 	    };
 	  },
 	  componentDidMount: function () {
-	    isOn('autoState', null, function () {
-	      alert(GL('ls_20'));
-	      browserHistory.push('/options');
-	    });
 	    chrome.management.getAll(function (appInfoList) {
 	      var names = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
@@ -29610,6 +29607,10 @@
 	    get('autoStateRules', function (rules) {
 	      this.setState({ rules: JSON.parse(rules) });
 	    }.bind(this));
+	    isOn('autoState', null, function () {
+	      alert(GL('ls_20'));
+	      browserHistory.push('/options');
+	    });
 	  },
 	  getIconUrl: function (appInfo) {
 	    var iconUrl = undefined;
@@ -29865,12 +29866,12 @@
 	          ),
 	          React.createElement(
 	            'option',
-	            { value: 'enable' },
+	            { value: 'enableWhen' },
 	            GL('enable_when_matched')
 	          ),
 	          React.createElement(
 	            'option',
-	            { value: 'disable' },
+	            { value: 'disableWhen' },
 	            GL('disable_when_matched')
 	          )
 	        ),
@@ -30038,6 +30039,7 @@
 	    var change = function (value) {
 	      if (value) {
 	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'on']);
+	        chrome.runtime.sendMessage({ job: 'autoState' });
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
