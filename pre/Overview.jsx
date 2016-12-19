@@ -19,15 +19,25 @@ module.exports = React.createClass({
       var page=getParameterByName('page');
       if(page){
         this.props.router.push(page);
+        if(page=='overview'){
+          this.getInitialData();
+        }
       }
       else{
         get('defaultPage',function(url){
           this.props.router.push((url||'overview'));
+          if(!url||url=='overview'){
+            this.getInitialData();
+          }
         }.bind(this));
       }
     }
     else{
-      chrome.management.getAll(function(appInfoList){
+      this.getInitialData();
+    }
+  },
+  getInitialData: function(){
+    chrome.management.getAll(function(appInfoList){
         for(var i=0;i<appInfoList.length;i++){
           appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
         }
@@ -130,7 +140,6 @@ module.exports = React.createClass({
           }.bind(this));
         }.bind(this));
       }.bind(this));
-    }
   },
   select: function(appId){
     this.setState(function(prevState){
