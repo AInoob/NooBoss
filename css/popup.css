@@ -1,5 +1,5 @@
 body {
-  background-color: #eee9ed;
+  background-color: #ffecf0;
   margin: 0px;
   width: 588px;
 }
@@ -166,7 +166,7 @@ button {
 }
 #discover .reco .appReview .tags .tagColumn {
   float: left;
-  margin-left: 22px;
+  margin-left: 0px;
 }
 #discover .reco .appReview .tags .tag {
   cursor: pointer;
@@ -346,7 +346,7 @@ ul li.active {
   background-color: #bbbbbb !important;
 }
 .app-holder .app-brief {
-  background-color: beige;
+  background-color: #ffecf0;
   border: 1px solid pink;
   font-size: 12px;
   height: 100%;
@@ -366,7 +366,7 @@ ul li.active {
   margin-top: 8px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  background-color: beige;
+  background-color: #ffecf0;
   height: 90px;
   position: absolute;
   text-align: center;
@@ -409,7 +409,7 @@ ul li.active {
   display: block;
   height: 20px;
   float: left;
-  margin-left: 11px;
+  margin-left: 7px;
   width: 20px;
 }
 .app-holder .app-brief .app-remove {
@@ -544,6 +544,7 @@ h2 {
 }
 .History-table tbody tr td:nth-child(1) {
   width: 123px;
+  font-size: 13px;
 }
 .History-table tbody tr td:nth-child(2) {
   text-transform: capitalize;
@@ -628,7 +629,7 @@ h2 {
 }
 .app .app-main .tags .tagColumn {
   float: left;
-  margin-left: 22px;
+  margin-left: 0px;
 }
 .app .app-main .tags .tag {
   cursor: pointer;
@@ -753,8 +754,7 @@ h2 {
   margin: 2px;
 }
 .tag {
-  background-color: #fff8f8;
+  background-color: #ffecf0;
   border: 1px solid pink;
-  border-radius: 3px;
   padding: 1px;
 }
