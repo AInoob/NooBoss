@@ -66,6 +66,12 @@ nav ul li.active a {
   border-radius: 0px;
   padding: 2px;
 }
+#options .defaultPage {
+  display: inline-block;
+  line-height: 16px;
+  vertical-align: middle;
+  margin-right: 7px;
+}
 #options .section .switch + .switch {
   margin-top: 8px;
 }

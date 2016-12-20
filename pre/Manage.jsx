@@ -53,8 +53,9 @@ module.exports = React.createClass({
   enableAll: function(){
     newCommunityRecord(true,['_trackEvent', 'Manage', 'enableAll','']);
     var appList=this.getFilteredList();
+    console.log(appList);
     for(var i=0;i<appList.length;i++){
-      if(appList[i].type.match(/theme/i)){
+      if(!appList[i]||appList[i].type.match(/theme/i)){
         continue;
       }
       this.toggleState(appList[i],'enable');
@@ -64,7 +65,7 @@ module.exports = React.createClass({
     newCommunityRecord(true,['_trackEvent', 'Manage', 'disableAll','']);
     var appList=this.getFilteredList();
     for(var i=0;i<appList.length;i++){
-      if(appList[i].type.match(/theme/i)){
+      if(!appList[i]||appList[i].type.match(/theme/i)){
         continue;
       }
       this.toggleState(appList[i],'disable');

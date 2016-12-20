@@ -272,6 +272,12 @@
   "detail":{
 	"message":"详情"
   },
+  "reset_everything":{
+	"message":"重置所有（小心！）"
+  },
+  "default_page":{
+	"message":"默认主页"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },

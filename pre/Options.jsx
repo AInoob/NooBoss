@@ -154,7 +154,7 @@ module.exports = React.createClass({
         <div className="section">
           <div className="header">{capFirst(GL('clean'))}</div>
           <div className="button space" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div><br />
-          <div className="button space" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
+          <div className="button space" onClick={CW.bind(null,this.reset,'Options','reset','')}>{GL('reset_everything')}</div>
         </div>
         <div className="section">
           <div className="header">{GL('notification')}</div>
@@ -170,7 +170,8 @@ module.exports = React.createClass({
         <div className="section">
           <div className="header">{GL('experience')}</div>
           <div className="selector">
-            Default page: <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
+          <span className="defaultPage">{GL('default_page')}</span>
+            <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
               <option value="overview">{GL('overview')}</option>
               <option value="manage">{GL('manage')}</option>
               <option value="autoState">{GL('autoState')}</option>

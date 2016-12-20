@@ -29419,8 +29419,9 @@
 	  enableAll: function () {
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'enableAll', '']);
 	    var appList = this.getFilteredList();
+	    console.log(appList);
 	    for (var i = 0; i < appList.length; i++) {
-	      if (appList[i].type.match(/theme/i)) {
+	      if (!appList[i] || appList[i].type.match(/theme/i)) {
 	        continue;
 	      }
 	      this.toggleState(appList[i], 'enable');
@@ -29430,7 +29431,7 @@
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'disableAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
-	      if (appList[i].type.match(/theme/i)) {
+	      if (!appList[i] || appList[i].type.match(/theme/i)) {
 	        continue;
 	      }
 	      this.toggleState(appList[i], 'disable');
@@ -30137,7 +30138,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'button space', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
-	          'Reset everything (careful!)'
+	          GL('reset_everything')
 	        )
 	      ),
 	      React.createElement(
@@ -30174,7 +30175,11 @@
 	        React.createElement(
 	          'div',
 	          { className: 'selector' },
-	          'Default page: ',
+	          React.createElement(
+	            'span',
+	            { className: 'defaultPage' },
+	            GL('default_page')
+	          ),
 	          React.createElement(
 	            'select',
 	            { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
