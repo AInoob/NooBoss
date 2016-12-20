@@ -260,6 +260,18 @@
   "all_websites":{
 	"message":"所有网站"
   },
+  "filter":{
+	"message":"筛选"
+  },
+  "rules":{
+	"message":"规则"
+  },
+  "brief":{
+	"message":"概括"
+  },
+  "detail":{
+	"message":"详情"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },

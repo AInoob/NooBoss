@@ -157,7 +157,7 @@ module.exports = React.createClass({
     var appInfo=this.state.appInfo||{};
     var launch=null;
     if(appInfo.isApp){
-      launch=<div className="app-launcher" onClick={CW.bind(null,this.launchApp,'App','launch','')}>{GL('Launch')}</div>;
+      launch=<div className="app-launcher button" onClick={CW.bind(null,this.launchApp,'App','launch','')}>{GL('Launch')}</div>;
     }
     var launchType=null;
     if(appInfo.launchType){
@@ -185,6 +185,7 @@ module.exports = React.createClass({
     if(appInfo.state!='removed'){
       config=
         <div className="config">
+          <input type="checkbox" className="app-status-checkbox" readOnly  checked={(appInfo&&appInfo.enabled)} />
           {toggle}
           {options}
           <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
@@ -214,62 +215,62 @@ module.exports = React.createClass({
       }
       var tags=<div className="tags">
         <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'useful')} className={"tag "+active['useful']}>{GL('useful')}<br />{appInfoWeb.tags['useful']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'working')} className={"tag "+active['working']}>{GL('working')}<br />{appInfoWeb.tags['working']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfoWeb.tags['useful']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfoWeb.tags['working']||0}</div>
         </div>
         <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}<br />{appInfoWeb.tags['laggy']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}<br />{appInfoWeb.tags['buggy']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfoWeb.tags['laggy']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfoWeb.tags['buggy']||0}</div>
         </div>
         <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}<br />{appInfoWeb.tags['not_working']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}<br />{appInfoWeb.tags['ASM']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfoWeb.tags['not_working']||0}</div>
+          <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfoWeb.tags['ASM']||0}</div>
         </div>
       </div>;
     }
     return(
-      <div className="NooBoss-body">
+      <div id="app">
         <Helmet
           title="App"
         />
-        <div className="app">
-          <div className="app-icon">
-            <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')}><img src={appInfo.icon} /></a>
-            {config}
-          </div>
-          <div className="app-main">
-            <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} className="app-name">{appInfo.name}</a>
-            {launch}
-            <table className="app-brief">
-              <tbody>
-                <tr><td>{GL('version')}</td><td>{appInfo.version}</td></tr>
-                <tr><td>{GL('state')}</td><td><span className={'noTransTime '+(this.state.appInfo||{}).state}>{capFirst((this.state.appInfo||{}).state)}</span></td></tr>
-                <tr><td>{GL('rating')}</td><td>{this.state.rating}</td></tr>
-                <tr><td>{GL('description')}</td><td>{appInfo.description}</td></tr>
-              </tbody>
-            </table>
-            {tags}
-            <table className="app-detail">
-              <tbody>
-                <tr><td>{GL('last_update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
-                <tr><td>{GL('first_installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
-                <tr><td>{GL('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
-                <tr><td>{GL('homepage_url')}</td><td><a title={appInfo.homepageUrl} onClick={CL.bind(null,appInfo.homepageUrl,'App','app-link')}>{appInfo.homepageUrl}</a></td></tr>
-                <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
-                <tr><td>{GL('short_name')}</td><td>{appInfo.shortName}</td></tr>
-                <tr><td>{GL('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
-                {launchType}
-                <tr><td>{GL('offline_enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
-                <tr><td>{GL('download_crx')}</td><td><a title={this.state.crxUrl} onClick={CL.bind(null,this.state.crxUrl,'App','app-link')}>{crxName}</a></td></tr>
-                <tr><td>{capFirst('update_url')}</td><td><a title={appInfo.updateUrl} onClick={CL.bind(null,appInfo.updateUrl,'App','app-link')}>{appInfo.updateUrl}</a></td></tr>
-                <tr><td>{capFirst('manifest_file')}</td><td><a onClick={CL.bind(null,manifestUrl,'App','manifest')} title={manifestUrl}>manifest.json</a></td></tr>
-                <tr><td>{capFirst('may_disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
-                <tr><td>{capFirst('install_type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
-                {hostPermissions}
-                {permissions}
-              </tbody>
-            </table>
-          </div>
+        <div className="section">
+          <div className="header">{GL('brief')}</div>
+          <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} className="app-icon" onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')}><img src={appInfo.icon} /></a>
+          {config}
+          {launch}
+          <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} className="app-name">{appInfo.name}</a>
+          <table className="app-brief">
+            <tbody>
+              <tr><td>{GL('version')}</td><td>{appInfo.version}</td></tr>
+              <tr><td>{GL('state')}</td><td><span className={'noTransTime '+(this.state.appInfo||{}).state}>{capFirst((this.state.appInfo||{}).state)}</span></td></tr>
+              <tr><td>{GL('rating')}</td><td>{this.state.rating}</td></tr>
+              <tr><td>{GL('description')}</td><td>{appInfo.description}</td></tr>
+            </tbody>
+          </table>
+          {tags}
+        </div>
+        <div className="section">
+          <div className="header">{capFirst(GL('detail'))}</div>
+          <table className="app-detail">
+            <tbody>
+              <tr><td>{GL('last_update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>
+              <tr><td>{GL('first_installed')}</td><td>{capFirst(new timeago().format(appInfo.installedDate))}</td></tr>
+              <tr><td>{GL('enabled')}</td><td>{capFirst(appInfo.enabled)}</td></tr>
+              <tr><td>{GL('homepage_url')}</td><td><a title={appInfo.homepageUrl} onClick={CL.bind(null,appInfo.homepageUrl,'App','app-link')}>{appInfo.homepageUrl}</a></td></tr>
+              <tr><td>{capFirst('id')}</td><td>{appInfo.id}</td></tr>
+              <tr><td>{GL('short_name')}</td><td>{appInfo.shortName}</td></tr>
+              <tr><td>{GL('type')}</td><td>{capFirst(appInfo.type)}</td></tr>
+              {launchType}
+              <tr><td>{GL('offline_enabled')}</td><td>{capFirst(getString(appInfo.offlineEnabled))}</td></tr>
+              <tr><td>{GL('download_crx')}</td><td><a title={this.state.crxUrl} onClick={CL.bind(null,this.state.crxUrl,'App','app-link')}>{crxName}</a></td></tr>
+              <tr><td>{capFirst('update_url')}</td><td><a title={appInfo.updateUrl} onClick={CL.bind(null,appInfo.updateUrl,'App','app-link')}>{appInfo.updateUrl}</a></td></tr>
+              <tr><td>{capFirst('manifest_file')}</td><td><a onClick={CL.bind(null,manifestUrl,'App','manifest')} title={manifestUrl}>manifest.json</a></td></tr>
+              <tr><td>{capFirst('may_disable')}</td><td>{capFirst(getString(appInfo.mayDisable))}</td></tr>
+              <tr><td>{capFirst('install_type')}</td><td>{capFirst(appInfo.installType)}</td></tr>
+              {hostPermissions}
+              {permissions}
+            </tbody>
+          </table>
         </div>
       </div>
     );

@@ -15,6 +15,7 @@ module.exports = React.createClass({
     };
   },
   componentDidMount: function(){
+    shared.goTo=this.props.router.push;
     if(window.location.pathname.indexOf('popup')!=-1){
       var page=getParameterByName('page');
       if(page){
@@ -399,16 +400,16 @@ module.exports = React.createClass({
             }
             var tags=<div className="tags">
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag "+active['useful']}>{GL('useful')}<br />{appInfo.tags['useful']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag "+active['working']}>{GL('working')}<br />{appInfo.tags['working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfo.tags['useful']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfo.tags['working']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag "+active['laggy']}>{GL('laggy')}<br />{appInfo.tags['laggy']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag "+active['buggy']}>{GL('buggy')}<br />{appInfo.tags['buggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfo.tags['laggy']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfo.tags['buggy']||0}</div>
               </div>
               <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag "+active['not_working']}>{GL('not_working')}<br />{appInfo.tags['not_working']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag "+active['ASM']}>{GL('ASM')}<br />{appInfo.tags['ASM']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfo.tags['not_working']||0}</div>
+                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfo.tags['ASM']||0}</div>
               </div>
             </div>;
             var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
@@ -442,12 +443,12 @@ module.exports = React.createClass({
                 <div className="votes">
                   <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
                     <div className={"front arrowUp "+upActive}></div>
-                    <div className="back">{elem.upVotes+upCount}</div>
+                    <div className="back count">{elem.upVotes+upCount}</div>
                   </div>
                   <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
                   <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
                     <div className={"front arrowDown "+downActive}></div>
-                    <div className="back">{elem.downVotes+downCount}</div>
+                    <div className="back count">{elem.downVotes+downCount}</div>
                   </div>
                 </div>
                 {app}
@@ -470,12 +471,12 @@ module.exports = React.createClass({
         }.bind(this));
         var recoApps=(
           <div className="recoApp">
-            <label className="goRecoLabel" htmlFor="goReco">{GL('recommend_extensions_for_this_website')}</label>
             <input type="checkbox" className="goReco" id="goReco" />
+            <label className="goRecoLabel button" htmlFor="goReco">{GL('recommend_extensions_for_this_website')}</label>
             <div className="recoBoard">
               <div className="actionBar">
                 <input id="keyword" onChange={this.updateFilter} type="text" />
-                <button className="addReco" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>{capFirst(GL('recommend'))}</button>
+                <div className="addReco button" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>{capFirst(GL('recommend'))}</div>
               </div>
               {appList}
             </div>
@@ -490,18 +491,18 @@ module.exports = React.createClass({
       else{
         discover=(
         <div id="discover" className="section">
-          {GL('ls_2')} <button onClick={this.requestTabsPermission}>{GL('enable')}</button>
+          {GL('ls_2')} <div className="button" onClick={this.requestTabsPermission}>{GL('enable')}</div>
         </div>);
       }
     }
     return(
-      <div className="NooBox-body">
+      <div id="overview">
         <Helmet
           title="Home"
         />
         <div id="overview">
           <div className="manage section">
-            <div className="sectionHeader">{GL('you_have')}</div>
+            <div className="header">{GL('you_have')}</div>
             <div className="status">
               <Link to="/manage/app">
                 {overview.app}

@@ -1,3 +1,5 @@
+var shared={};
+
 function getLocale(string){
   return chrome.i18n.getMessage(string);
 }

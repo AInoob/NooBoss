@@ -195,19 +195,19 @@ module.exports = React.createClass({
         return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
     }.bind(this));
     return(
-      <div className="NooBoss-body">
+      <div id="autoState">
         <Helmet
           title="Manage"
         />
         <div className="rules section">
-          <h2>Rules</h2>
-          <table className="AutoStateRules">
+          <div className="header">{GL('rules')}</div>
+          <table className="autoState-table">
             <thead>
               <tr>
-                <th>{GL('number')}</th>
-                <th>{GL('extension_s')}</th>
-                <th>{GL('action')}</th>
-                <th>{GL('match')}</th>
+                <th>{capFirst(GL('number'))}</th>
+                <th>{capFirst(GL('extension_s'))}</th>
+                <th>{capFirst(GL('action'))}</th>
+                <th>{capFirst(GL('match'))}</th>
               </tr>
             </thead>
             <tbody>
@@ -216,20 +216,25 @@ module.exports = React.createClass({
           </table>
         </div>
         <div className="newRule section">
-          <h2>{GL('new_rule')}</h2>
-          {GL('app_s')}: <div className="selected">
-          {selectedIcons}
+          <div className="header">{GL('new_rule')}</div>
+          <div className="selectedApps">
+            <div className="input-header">{capFirst(GL('app_s'))}:</div> <div className="selected">
+            {selectedIcons}
+            </div>
           </div>
-          {GL('action')}:&nbsp;<select value={this.state.rule.action} onChange={this.updateRule} id="action">
-            <option value="enableOnly">{GL('only_enable_when_matched')}</option>
-            <option value="enableWhen">{GL('enable_when_matched')}</option>
-            <option value="disableWhen">{GL('disable_when_matched')}</option>
-          </select>
-          &nbsp;{GL('url')}:&nbsp;<input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
-          <button className="addRule" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</button>
+          <div className="selectedAction">
+            <div className="input-header">{capFirst(GL('action'))}:</div><select value={this.state.rule.action} onChange={this.updateRule} id="action">
+              <option value="enableOnly">{GL('only_enable_when_matched')}</option>
+              <option value="enableWhen">{GL('enable_when_matched')}</option>
+              <option value="disableWhen">{GL('disable_when_matched')}</option>
+            </select>
+          </div>
+          <div className="match">
+            <div className="input-header">{capFirst(GL('url'))}:</div><input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
+          </div>
+          <div className="addRule button" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</div>
           <div className="actionBar autoState">
             <div className="type">
-              Type: 
               <select onChange={this.updateFilter} id="type">
                 <option value="all">{GL('all')}</option>
                 <option value="app">{GL('app')}</option>

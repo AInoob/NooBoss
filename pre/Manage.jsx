@@ -157,13 +157,13 @@ module.exports = React.createClass({
     }.bind(this));
     var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return(
-      <div className="NooBoss-body section">
+      <div id="manage" className="section">
         <Helmet
           title="Manage"
         />
+        <div className="header">{capFirst(GL('manage'))}</div>
         <div className="actionBar">
           <div className="type">
-            {GL('type')}: 
             <select defaultValue={type} onChange={this.updateFilter} id="type">
               <option value="all">{GL('all')}</option>
               <option value="app">{GL('app')}</option>
@@ -172,9 +172,9 @@ module.exports = React.createClass({
             </select>
           </div>
           <input id="keyword" onChange={this.updateFilter} type="text" />
-          <span id="enableAll" onClick={this.enableAll}>{GL('enable_all')}</span>
-          <span id="disableAll" onClick={this.disableAll}>{GL('disable_all')}</span>
-          <span id="undo" onClick={this.undoAll}>{GL('undo_all')}</span>
+          <span id="enableAll" className="button" onClick={this.enableAll}>{GL('enable_all')}</span>
+          <span id="disableAll" className="button" onClick={this.disableAll}>{GL('disable_all')}</span>
+          <span id="undo" className="button" onClick={this.undoAll}>{GL('undo_all')}</span>
         </div>
         {appList}
       </div>

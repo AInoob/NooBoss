@@ -60,7 +60,10 @@ module.exports = React.createClass({
     }.bind(this));
   },
   getSwitch: function(id,handler){
-    return <div className="switch"><input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} />{GL(id)}</div>
+    return <div className="switch">
+      <input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} id={id} />
+      <label htmlFor={id} className="checkbox"></label>{GL(id)}
+    </div>;
   },
   showAds: function(){
     alert(GL('ls_13'));
@@ -144,14 +147,14 @@ module.exports = React.createClass({
   },
   render: function(){
     return(
-      <div className="Options">
+      <div id="options">
         <Helmet
           title="Options"
         />
         <div className="section">
           <div className="header">{capFirst(GL('clean'))}</div>
-          <div className="button" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div>
-          <div className="button" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
+          <div className="button space" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div><br />
+          <div className="button space" onClick={CW.bind(null,this.reset,'Options','reset','')}>Reset everything (careful!)</div>
         </div>
         <div className="section">
           <div className="header">{GL('notification')}</div>

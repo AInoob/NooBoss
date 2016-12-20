@@ -41,13 +41,12 @@ module.exports = React.createClass({
       }
     }).reverse();
     return(
-      <div className="NooBoss-body section" id="history">
+      <div className="section" id="history">
         <Helmet
           title="History"
         />
         <div className="actionBar">
           <div className="event">
-            Event: 
             <select onChange={this.updateFilter} id="event">
               <option value="all">All</option>
               <option value="installed">Installed</option>
@@ -58,14 +57,14 @@ module.exports = React.createClass({
           </div>
           <input id="keyword" onChange={this.updateFilter} type="text" />
         </div>
-        <table className="History-table">
+        <table className="history-table">
           <thead>
             <tr>
-              <th>{GL('when')}</th>
-              <th>{GL('event')}</th>
-              <th>{GL('icon')}</th>
-              <th>{GL('name')}</th>
-              <th>{GL('version')}</th>
+              <th>{capFirst(GL('when'))}</th>
+              <th>{capFirst(GL('event'))}</th>
+              <th>{capFirst(GL('icon'))}</th>
+              <th>{capFirst(GL('name'))}</th>
+              <th>{capFirst(GL('version'))}</th>
             </tr>
           </thead>
           <tbody>
