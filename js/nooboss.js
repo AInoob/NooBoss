@@ -29455,7 +29455,9 @@
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'undoAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
-	      this.toggleState(appList[i], this.state.originalStates[appList[i].id]);
+	      if (appList[i]) {
+	        this.toggleState(appList[i], this.state.originalStates[appList[i].id]);
+	      }
 	    }
 	  },
 	  getFilteredList: function () {

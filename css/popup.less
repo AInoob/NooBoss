@@ -415,11 +415,14 @@ nav{
     .app-info{
       top: -10px;
       left: -6px;
-      width: 0px;
+      width: 100px;
+      height: 100px;
+      pointer-events:none;
       .app-name,.app-version{
         display:none;
       }
       .app-switch, .app-options, .app-remove{
+        pointer-events:all;
         background-size: 17px 17px;
         margin-left: 96px;
         width: 22px;

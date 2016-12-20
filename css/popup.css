@@ -360,7 +360,9 @@ nav ul li.active a {
 #manage .app-holder .app-info {
   top: -10px;
   left: -6px;
-  width: 0px;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
 }
 #manage .app-holder .app-info .app-name,
 #manage .app-holder .app-info .app-version {
@@ -369,6 +371,7 @@ nav ul li.active a {
 #manage .app-holder .app-info .app-switch,
 #manage .app-holder .app-info .app-options,
 #manage .app-holder .app-info .app-remove {
+  pointer-events: all;
   background-size: 17px 17px;
   margin-left: 96px;
   width: 22px;
