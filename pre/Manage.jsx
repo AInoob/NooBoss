@@ -84,7 +84,7 @@ module.exports = React.createClass({
     }.bind(this));
   },
   toggleState: function(info,newAction){
-    if(!info||info.id=='mgehojanhfgnndgffijeglgahakgmgkj')
+    if(!info||info.id=='aajodjghehmlpahhboidcpfjcncmcklf')
       return;
     var action='enable';
     if(info.enabled){

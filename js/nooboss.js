@@ -28700,7 +28700,7 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
-	    return { tags: {}, joinCommunity: false };
+	    return { tags: {}, joinCommunity: false, appInfo: { enabled: true } };
 	  },
 	  componentDidMount: function () {
 	    var id = getParameterByName('id');
@@ -28847,7 +28847,7 @@
 	    window.close();
 	  },
 	  render: function () {
-	    var appInfo = this.state.appInfo || {};
+	    var appInfo = this.state.appInfo;
 	    var launch = null;
 	    if (appInfo.isApp) {
 	      launch = React.createElement(
@@ -28938,7 +28938,7 @@
 	      config = React.createElement(
 	        'div',
 	        { className: 'config' },
-	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, checked: appInfo && appInfo.enabled }),
+	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, checked: appInfo.enabled }),
 	        toggle,
 	        options,
 	        React.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' })
@@ -29449,7 +29449,7 @@
 	    }.bind(this));
 	  },
 	  toggleState: function (info, newAction) {
-	    if (!info || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') return;
+	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf') return;
 	    var action = 'enable';
 	    if (info.enabled) {
 	      action = 'disable';

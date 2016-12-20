@@ -158,7 +158,7 @@ nav ul li.active a {
 #app .config {
   position: absolute;
   margin-left: 200px;
-  top: 32px;
+  top: 66px;
 }
 #app .config * {
   float: left;
@@ -188,6 +188,7 @@ nav ul li.active a {
   position: absolute;
   top: 179px;
   left: 504px;
+  padding: 9px;
 }
 #app ul {
   list-style: none;

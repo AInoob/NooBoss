@@ -2,7 +2,7 @@ var React = require('react');
 var Helmet = require('react-helmet');
 module.exports = React.createClass({
   getInitialState: function(){
-    return {tags:{},joinCommunity:false};
+    return {tags:{},joinCommunity:false,appInfo:{enabled:true}};
   },
   componentDidMount: function(){
     var id=getParameterByName('id');
@@ -154,7 +154,7 @@ module.exports = React.createClass({
     window.close();
   },
   render: function(){
-    var appInfo=this.state.appInfo||{};
+    var appInfo=this.state.appInfo;
     var launch=null;
     if(appInfo.isApp){
       launch=<div className="app-launcher button" onClick={CW.bind(null,this.launchApp,'App','launch','')}>{GL('Launch')}</div>;
@@ -185,7 +185,7 @@ module.exports = React.createClass({
     if(appInfo.state!='removed'){
       config=
         <div className="config">
-          <input type="checkbox" className="app-status-checkbox" readOnly  checked={(appInfo&&appInfo.enabled)} />
+          <input type="checkbox" className="app-status-checkbox" readOnly  checked={(appInfo.enabled)} />
           {toggle}
           {options}
           <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
