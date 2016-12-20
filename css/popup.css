@@ -19,6 +19,7 @@ body::-webkit-scrollbar-track {
   background-color: #fafafa;
 }
 body a {
+  text-decoration: none;
   color: #9c3aff;
   cursor: pointer;
 }
@@ -57,6 +58,9 @@ nav ul li a:visited {
 nav ul li.active a {
   color: #9c3aff;
   border-bottom-color: #9c3aff;
+}
+#manage img.app-icon {
+  cursor: pointer;
 }
 #manage .actionBar #type {
   margin-left: 13px;
