@@ -110,6 +110,8 @@ module.exports = React.createClass({
 					 <li><img src="/thirdParty/remove.svg" alt="" width="20" height="20" />来自于作者<a title="Freepik" href="http://www.freepik.com" target="_blank">Freepik</a></li>
 					 <li><img src="/thirdParty/add.svg" alt="" width="20" height="20" />来自于作者<a title="Madebyoliver" href="http://www.flaticon.com/authors/madebyoliver" target="_blank">Madebyoliver</a></li>
 					 <li><img src="/thirdParty/power-button-on.svg" alt="" width="20" height="20" /><img src="/thirdParty/power-button-off.svg" alt="" width="20" height="20" />来自于作者<a title="Chanut is Industries" href="http://www.flaticon.com/authors/chanut-is-industries" target="_blank">Chanut is Industries</a></li>
+					 <li><img src="/thirdParty/view-list.svg" alt="" width="20" height="20" />来自于作者<a href="http://www.freepik.com" title="Freepik" target="_blank">Freepik</a></li>
+					 <li><img src="/thirdParty/view-grid.svg" alt="" width="20" height="20" />来自于作者<a href="http://www.flaticon.com/authors/elegant-themes" title="Elegant Themes" target="_blank">Elegant Themes</a></li>
 				  </ul>
 			   </li>
 			</ul>
@@ -223,6 +225,8 @@ module.exports = React.createClass({
                 <li><img src="/thirdParty/remove.svg" alt="" width="20" height="20" />is made by <a title="Freepik" href="http://www.freepik.com" target="_blank">Freepik</a></li>
                 <li><img src="/thirdParty/add.svg" alt="" width="20" height="20" />is made by <a title="Madebyoliver" href="http://www.flaticon.com/authors/madebyoliver" target="_blank">Madebyoliver</a></li>
                 <li><img src="/thirdParty/power-button-on.svg" alt="" width="20" height="20" /><img src="/thirdParty/power-button-off.svg" alt="" width="20" height="20" />is made by <a title="Chanut is Industries" href="http://www.flaticon.com/authors/chanut-is-industries" target="_blank">Chanut is Industries</a></li>
+				<li><img src="/thirdParty/view-list.svg" alt="" width="20" height="20" />is made by <a href="http://www.freepik.com" title="Freepik" target="_blank">Freepik</a></li>
+				<li><img src="/thirdParty/view-grid.svg" alt="" width="20" height="20" />is made by <a href="http://www.flaticon.com/authors/elegant-themes" title="Elegant Themes" target="_blank">Elegant Themes</a></li>
             </ul>
         </li>
     </ul>

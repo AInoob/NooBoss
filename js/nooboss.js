@@ -29388,6 +29388,9 @@
 	    };
 	  },
 	  componentDidMount: function () {
+	    isOn('listView', function () {
+	      this.setState({ listView: true });
+	    }.bind(this));
 	    chrome.management.getAll(function (appInfoList) {
 	      var originalStates = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
@@ -29543,6 +29546,15 @@
 	      return prevState;
 	    });
 	  },
+	  toggleView: function () {
+	    var listView = !this.state.listView;
+	    if (listView) {
+	      set('listView', '1');
+	    } else {
+	      set('listView', '-1');
+	    }
+	    this.setState({ listView: listView });
+	  },
 	  render: function () {
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
@@ -29607,6 +29619,13 @@
 	          'span',
 	          { id: 'undo', className: 'button', onClick: this.undoAll },
 	          GL('undo_all')
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'changeView' },
+	          React.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
+	          React.createElement('label', { className: 'viewGrid', onClick: this.toggleView }),
+	          React.createElement('label', { className: 'viewList', onClick: this.toggleView })
 	        )
 	      ),
 	      React.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
@@ -30826,6 +30845,28 @@
 	                                        { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
 	                                        'Chanut is Industries'
 	                                    )
+	                                ),
+	                                React.createElement(
+	                                    'li',
+	                                    null,
+	                                    React.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
+	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                                    React.createElement(
+	                                        'a',
+	                                        { href: 'http://www.freepik.com', title: 'Freepik', target: '_blank' },
+	                                        'Freepik'
+	                                    )
+	                                ),
+	                                React.createElement(
+	                                    'li',
+	                                    null,
+	                                    React.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
+	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
+	                                    React.createElement(
+	                                        'a',
+	                                        { href: 'http://www.flaticon.com/authors/elegant-themes', title: 'Elegant Themes', target: '_blank' },
+	                                        'Elegant Themes'
+	                                    )
 	                                )
 	                            )
 	                        )
@@ -31242,6 +31283,28 @@
 	                                        'a',
 	                                        { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
 	                                        'Chanut is Industries'
+	                                    )
+	                                ),
+	                                React.createElement(
+	                                    'li',
+	                                    null,
+	                                    React.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
+	                                    'is made by ',
+	                                    React.createElement(
+	                                        'a',
+	                                        { href: 'http://www.freepik.com', title: 'Freepik', target: '_blank' },
+	                                        'Freepik'
+	                                    )
+	                                ),
+	                                React.createElement(
+	                                    'li',
+	                                    null,
+	                                    React.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
+	                                    'is made by ',
+	                                    React.createElement(
+	                                        'a',
+	                                        { href: 'http://www.flaticon.com/authors/elegant-themes', title: 'Elegant Themes', target: '_blank' },
+	                                        'Elegant Themes'
 	                                    )
 	                                )
 	                            )

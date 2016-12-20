@@ -12,6 +12,9 @@ module.exports = React.createClass({
     };
   },
   componentDidMount: function(){
+    isOn('listView',function(){
+      this.setState({listView:true});
+    }.bind(this));
     chrome.management.getAll(function(appInfoList){
       var originalStates={};
       for(var i=0;i<appInfoList.length;i++){
@@ -172,6 +175,16 @@ module.exports = React.createClass({
       return prevState;
     });
   },
+  toggleView: function(){
+    var listView=!this.state.listView;
+    if(listView){
+      set('listView','1');
+    }
+    else{
+      set('listView','-1');
+    }
+    this.setState({listView:listView});
+  },
   render: function(){
     var appList=this.getFilteredList().map(function(appInfo,index){
       if(appInfo){
@@ -200,8 +213,13 @@ module.exports = React.createClass({
           <span id="enableAll" className="button" onClick={this.enableAll}>{GL('enable_all')}</span>
           <span id="disableAll" className="button" onClick={this.disableAll}>{GL('disable_all')}</span>
           <span id="undo" className="button" onClick={this.undoAll}>{GL('undo_all')}</span>
+          <div className="changeView">
+            <input type="checkbox" className="listView" checked={this.state.listView}  />
+            <label className="viewGrid" onClick={this.toggleView}></label>
+            <label className="viewList" onClick={this.toggleView}></label>
+          </div>
         </div>
-        <input type="checkbox" className="listView" checked={this.state.listView} />
+        <input type="checkbox" className="listView" checked={this.state.listView}  />
         {appList}
       </div>
     );

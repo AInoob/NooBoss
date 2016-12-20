@@ -469,6 +469,46 @@ nav ul li.active a {
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
+.listView:checked ~ .app-holder {
+  width: 100% !important;
+  height: 33px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-name {
+  margin-top: -36px;
+  width: 256px;
+  margin-left: 66px;
+  text-align: left;
+  margin-top: -15px;
+}
+.listView:checked ~ .app-holder .app-brief .app-version {
+  margin-top: -22px;
+  margin-left: 336px;
+}
+.listView:checked ~ .app-holder .app-brief .app-icon {
+  width: 23px !important;
+  height: 23px !important;
+  position: absolute;
+  margin-left: 36px !important;
+  top: 0px;
+  left: 0px;
+}
+.listView:checked ~ .app-holder .app-brief .app-switch {
+  margin-left: 6px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-remove {
+  margin-top: -25px;
+  margin-left: 457px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-options {
+  margin-top: -25px;
+  margin-left: 424px !important;
+}
+.listView:checked ~ .app-holder * {
+  display: block !important;
+}
+.listView:checked ~ .app-holder .app-status-checkbox {
+  display: none !important;
+}
 .autoState-table {
   text-align: left;
   line-height: 33px;
@@ -702,7 +742,9 @@ select {
 .app-switch,
 .app-options,
 .app-remove,
-.app-add {
+.app-add,
+.viewGrid,
+.viewList {
   background-repeat: no-repeat;
   cursor: pointer;
   display: block;
@@ -721,4 +763,30 @@ select {
 }
 .app-add {
   background-image: url("/thirdParty/add.svg");
+}
+.changeView {
+  float: right;
+  width: 44px;
+}
+.changeView .listView:checked ~ .viewGrid {
+  filter: invert(50%);
+}
+.changeView .listView:checked ~ .viewList {
+  filter: invert(0%);
+}
+.changeView .viewGrid {
+  background-size: 18px 18px;
+  background-image: url("/thirdParty/view-grid.svg");
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  float: left;
+}
+.changeView .viewList {
+  background-size: 20px 20px;
+  background-image: url("/thirdParty/view-list.svg");
+  width: 20px;
+  float: right;
+  height: 20px;
+  filter: invert(50%);
 }
