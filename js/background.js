@@ -118,6 +118,7 @@ NooBoss.Management.autoState.manage=function(tabId){
   var autoState=NooBoss.Management.autoState;
   var tabs=autoState.tabs;
   var nextPhases={};
+  var enableOnlys={};
   for(var i=0;i<autoState.rules.length;i++){
     var rule=autoState.rules[i];
     var appIds=rule.ids;
@@ -140,12 +141,13 @@ NooBoss.Management.autoState.manage=function(tabId){
               tabid: tabId,
               ruleId: i
             }
+            enableOnlys[appIds[k]]=true;
           }
         }
         else{
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
-              enabled: false,
+              enabled: enableOnlys[appIds[k]]||false,
               tabid: null,
               ruleId: i
             }
