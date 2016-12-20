@@ -340,5 +340,14 @@
   },
   "ls_20":{
 	"message":"Auto state management is disabled, please turn it on in options page to use this feature"
+  },
+  "ls_21":{
+	"message":"Are you sure that you want to remove NooBoss?"
+  },
+  "ls_22":{
+	"message":"Removal cancelled"
+  },
+  "ls_23":{
+	"message":"You have cancelled the removal of "
   }
 }

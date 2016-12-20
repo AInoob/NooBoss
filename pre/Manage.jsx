@@ -118,6 +118,11 @@ module.exports = React.createClass({
   },
   uninstall: function(info){
     var result='removal_success';
+    if(info.id=='aajodjghehmlpahhboidcpfjcncmcklf'||info.id=='mgehojanhfgnndgffijeglgahakgmgkj'){
+      if(!confirm(GL('ls_21'))){
+        return;
+      }
+    }
     chrome.management.uninstall(info.id,function(){
       if(chrome.runtime.lastError){
         action='removal_fail';
@@ -125,8 +130,8 @@ module.exports = React.createClass({
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'Removal calcelled',
-          message: 'You have cancelled the removal of '+info.name,
+          title: (GL('ls_22')),
+          message: (GL('ls_23'))+info.name,
           imageUrl: info.icon
         });
       }
