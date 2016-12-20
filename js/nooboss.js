@@ -29420,6 +29420,9 @@
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'enableAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
+	      if (appList[i].type.match(/theme/i)) {
+	        continue;
+	      }
 	      this.toggleState(appList[i], 'enable');
 	    }
 	  },
@@ -29427,6 +29430,9 @@
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'disableAll', '']);
 	    var appList = this.getFilteredList();
 	    for (var i = 0; i < appList.length; i++) {
+	      if (appList[i].type.match(/theme/i)) {
+	        continue;
+	      }
 	      this.toggleState(appList[i], 'disable');
 	    }
 	  },
@@ -29449,7 +29455,7 @@
 	    }.bind(this));
 	  },
 	  toggleState: function (info, newAction) {
-	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf') return;
+	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') return;
 	    var action = 'enable';
 	    if (info.enabled) {
 	      action = 'disable';
