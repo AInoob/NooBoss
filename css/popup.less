@@ -394,16 +394,22 @@ nav{
 }
 
 #manage{
+  .app-options{
+    filter: invert(70%);
+  }
+  .app-remove{
+    filter: invert(50%);
+  }
   .app-holder{
     margin-right: 10px;
     width: 130px;
     .app-status-checkbox:not(:checked) + .app-brief{
-      background: grey;
-      .app-info .app-switch{
+      .app-switch{
         background-image: url("/thirdParty/power-button-off.svg");
+        filter: invert(50%);
       }
       img{
-        filter: invert(10%);
+        filter: invert(23%);
       }
     }
     .app-info{
@@ -414,7 +420,7 @@ nav{
         display:none;
       }
       .app-switch, .app-options, .app-remove{
-        background-size: 22px 22px;
+        background-size: 17px 17px;
         margin-left: 96px;
         width: 22px;
         height: 22px;

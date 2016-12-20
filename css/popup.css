@@ -340,18 +340,22 @@ nav ul li.active a {
 #discover .app-holder {
   transition-duration: 0.618s;
 }
+#manage .app-options {
+  filter: invert(70%);
+}
+#manage .app-remove {
+  filter: invert(50%);
+}
 #manage .app-holder {
   margin-right: 10px;
   width: 130px;
 }
-#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief {
-  background: grey;
-}
-#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief .app-info .app-switch {
+#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief .app-switch {
   background-image: url("/thirdParty/power-button-off.svg");
+  filter: invert(50%);
 }
 #manage .app-holder .app-status-checkbox:not(:checked) + .app-brief img {
-  filter: invert(10%);
+  filter: invert(23%);
 }
 #manage .app-holder .app-info {
   top: -10px;
@@ -365,7 +369,7 @@ nav ul li.active a {
 #manage .app-holder .app-info .app-switch,
 #manage .app-holder .app-info .app-options,
 #manage .app-holder .app-info .app-remove {
-  background-size: 22px 22px;
+  background-size: 17px 17px;
   margin-left: 96px;
   width: 22px;
   height: 22px;

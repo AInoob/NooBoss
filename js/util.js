@@ -1,5 +1,26 @@
 var shared={};
 
+function compare(a,b){
+  var cursor=0;
+  var lenA=a.length;
+  var lenB=b.length;
+  var aa=a.toLowerCase();
+  var bb=b.toLowerCase();
+  var tempA,tempB;
+  while(lenA>cursor&&lenB>cursor){
+    tempA=aa.charCodeAt(cursor);
+    tempB=bb.charCodeAt(cursor);
+    if(tempA==tempB){
+      cursor++;
+      continue;
+    }
+    else{
+      return tempA-tempB;
+    }
+  }
+  return lenA-lenB;
+}
+
 function getLocale(string){
   return chrome.i18n.getMessage(string);
 }

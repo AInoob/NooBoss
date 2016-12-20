@@ -157,7 +157,19 @@ module.exports = React.createClass({
     });
   },
   getFilteredList: function(){
-    return (this.state.appInfoList||[]).map(function(appInfo){
+    return (this.state.appInfoList||[]).sort(function(a,b){
+      if(a.enabled!=b.enabled){
+        if(a.enabled){
+          return -1;
+        }
+        else{
+          return 1;
+        }
+      }
+      else{
+        return compare(a.name.toLowerCase(),b.name.toLowerCase());
+      }
+    }).map(function(appInfo){
       var filter=this.state.filter;
       var pattern=new RegExp(filter.keyword,'i');
       if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))&&appInfo.installType!='development'&&appInfo.updateUrl&&appInfo.updateUrl.indexOf('https://clients2.google.com')!=-1&&appInfo.homepageUrl&&appInfo.homepageUrl.indexOf('https://ext.chrome.360.cn')==-1){

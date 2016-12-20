@@ -7,7 +7,8 @@ module.exports = React.createClass({
   getInitialState: function(){
     var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return {
-      filter:{type:type,keyword: ''}
+      filter:{type:type,keyword: ''},
+      listView: false
     };
   },
   componentDidMount: function(){
@@ -79,7 +80,19 @@ module.exports = React.createClass({
     }
   },
   getFilteredList: function(){
-    return (this.state.appInfoList||[]).map(function(appInfo){
+    return (this.state.appInfoList||[]).sort(function(a,b){
+      if(a.enabled!=b.enabled){
+        if(a.enabled){
+          return -1;
+        }
+        else{
+          return 1;
+        }
+      }
+      else{
+        return compare(a.name.toLowerCase(),b.name.toLowerCase());
+      }
+    }).map(function(appInfo){
       var filter=this.state.filter;
       var pattern=new RegExp(filter.keyword,'i');
       if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
@@ -188,6 +201,7 @@ module.exports = React.createClass({
           <span id="disableAll" className="button" onClick={this.disableAll}>{GL('disable_all')}</span>
           <span id="undo" className="button" onClick={this.undoAll}>{GL('undo_all')}</span>
         </div>
+        <input type="checkbox" className="listView" checked={this.state.listView} />
         {appList}
       </div>
     );
