@@ -139,7 +139,7 @@ function dataUrlFromUrl(link, callback){
 
 function isOn(key,callbackTrue,callbackFalse,param){
   get(key,function(value){
-    if(value=='1'){
+    if(value=='1'||value==true){
       if(callbackTrue){
         callbackTrue(param);
       }
@@ -154,7 +154,7 @@ function isOn(key,callbackTrue,callbackFalse,param){
 
 function setIfNull(key,setValue,callback){
   get(key,function(value){
-    if(!value){
+    if(value==undefined||value==null){
       set(key,setValue,callback);
     }
     else{
