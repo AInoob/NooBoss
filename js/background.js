@@ -204,6 +204,9 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
             message: appInfo.name+' has been '+enabledStr+' because of rule #'+(ruleId+1)
           });
         });
+        get('userId',function(userId){
+          newCommunityRecord(false,{userId:userId,category:'autoState',event:enabledStr});
+        });
         if(tabId){
           chrome.tabs.reload(tabId);
         }
@@ -273,11 +276,12 @@ NooBoss.Management.init=function(){
 
 NooBoss.listeners={};
 NooBoss.listeners.onEnabled=function(appInfoOld){
+  var id=appInfoOld.id;
   if(!NooBoss.Management.apps[id]){
+    console.log('a');
     setTimeout(NooBoss.listeners.onEnabled.bind(null,appInfoOld),900);
     return;
   }
-  var id=appInfoOld.id;
   NooBoss.Management.apps[id].enabled=true;
   var recordEnable=function(times,appInfo){
     if(!appInfo){

@@ -30309,7 +30309,7 @@
 	          React.createElement(
 	            'td',
 	            null,
-	            new timeago(null, chrome.i18n.getUILanguage()).format(record.date)
+	            timeagoInstance.format(record.date, 'locale')
 	          ),
 	          React.createElement(
 	            'td',

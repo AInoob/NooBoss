@@ -29,7 +29,7 @@ module.exports = React.createClass({
       if((filter.event=='all'||record.event==filter.event)&&(filter.keyword==''||pattern.exec(record.name))){
         return(
           <tr key={index}>
-            <td>{new timeago(null,chrome.i18n.getUILanguage()).format(record.date)}</td>
+            <td>{timeagoInstance.format(record.date,'locale')}</td>
             <td className={record.event}>{GL(record.event)}</td>
             <td><img src={record.icon} /></td>
             <td><Link title={record.name} to={"/app?id="+record.id}>{record.name}</Link></td>
