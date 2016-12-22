@@ -62,6 +62,9 @@ nav ul li.active a {
 #manage img.app-icon {
   cursor: pointer;
 }
+#manage .app-name {
+  cursor: pointer;
+}
 #manage .actionBar #type {
   margin-left: 13px;
 }
@@ -377,6 +380,9 @@ nav ul li.active a {
   width: 22px;
   height: 22px;
   margin-bottom: 3px;
+}
+#manage .app-holder .app-info .app-name {
+  pointer-events: all;
 }
 #manage .app-holder .app-brief {
   padding: 0px;

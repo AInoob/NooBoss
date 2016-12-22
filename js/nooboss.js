@@ -28679,7 +28679,7 @@
 	          React.createElement('img', { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'manage', 'app-detail', info.id), className: 'app-icon', src: info.iconUrl }),
 	          React.createElement(
 	            'div',
-	            { className: 'app-info' },
+	            { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'manage', 'app-detail', info.id), className: 'app-info' },
 	            toggle,
 	            options,
 	            React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
