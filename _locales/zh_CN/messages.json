@@ -278,10 +278,10 @@
   "default_page":{
 	"message":"默认主页"
   },
-  "import_options":{
+  "import_settings":{
 	"message":"导入设置"
   },
-  "export_options":{
+  "export_settings":{
 	"message":"导出设置"
   },
   "ls_0":{
