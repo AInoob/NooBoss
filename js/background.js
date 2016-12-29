@@ -2,13 +2,13 @@ var NooBoss={};
 
 NooBoss.defaultValues=[
   ['userId',(Math.random().toString(36)+'00000000000000000').slice(2, 19)],
-  ['joinCommunity','1'],
-  ['showAds','-1'],
-  ['notifyStateChange','-1'],
-  ['notifyInstallation','1'],
-  ['notifyRemoval','1'],
-  ['autoState','-1'],
-  ['autoStateNotification','1'],
+  ['joinCommunity',true],
+  ['showAds',false],
+  ['notifyStateChange',false],
+  ['notifyInstallation',true],
+  ['notifyRemoval',true],
+  ['autoState',false],
+  ['autoStateNotification',true],
   ['autoStateRules','[]'],
 ];
 
@@ -205,7 +205,7 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
           });
         });
         get('userId',function(userId){
-          newCommunityRecord(false,{userId:userId,category:'autoState',event:enabledStr});
+          newCommunityRecord(false,{userId:userId,category:'AutoState',event:enabledStr});
         });
         if(tabId){
           chrome.tabs.reload(tabId);

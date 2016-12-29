@@ -37,6 +37,60 @@ module.exports = React.createClass({
       chrome.runtime.sendMessage({job:'reset'});
     }
   },
+  importOptions: function(e){
+    var f=e.target.files[0];
+    var r=new FileReader();
+    var error=function(){
+      chrome.notifications.create({
+        type:'basic',
+        iconUrl: '/images/icon_128.png',
+        title: GL('options'),
+        message: GL('ls_24'),
+      });
+    }
+    var success=function(){
+      chrome.notifications.create({
+        type:'basic',
+        iconUrl: '/images/icon_128.png',
+        title: GL('options'),
+        message: GL('ls_25'),
+      });
+      window.location.href = "/popup.html?page=options";
+    }
+    r.onload=function(e) {
+      var options=null;
+      if(!e.target.result.match(/^NooBoss-Options/)){
+        error();
+        return;
+      }
+      try{
+        options=JSON.parse(e.target.result.substr(16));
+      }
+      catch(e){
+        console.log(e);
+        error();
+        return;
+      }
+      if(!options){
+        error();
+        return;
+      }
+      chrome.storage.sync.set(options);
+      success();
+    }
+    r.readAsText(f);
+  },
+  exportOptions: function(){
+    chrome.storage.sync.get(function(data){
+      dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
+      var a = document.createElement('a');
+      a.href = dataURI;
+      a.download = 'NooBoss.options';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+    });
+  },
   cleanHistory: function(){
     var result=confirm(GL('ls_5'));
     if(result){
@@ -180,6 +234,8 @@ module.exports = React.createClass({
           </div>
           {this.getSwitch('joinCommunity',this.joinCommunity)}
           {this.getSwitch('showAds',this.showAds)}
+          <div className="button space">{GL('import_settings')}<input id="upload" type="file" onChange={CW.bind(null,this.importOptions,'Options','importOptions','')}/></div><br />
+          <div className="button space" onClick={CW.bind(null,this.exportOptions,'Options','exportOptions','')}>{GL('export_settings')}</div><br />
         </div>
       </div>
     );

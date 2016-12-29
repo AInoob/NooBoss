@@ -278,6 +278,12 @@
   "default_page":{
 	"message":"Default page"
   },
+  "import_settings":{
+	"message":"Import settings"
+  },
+  "export_settings":{
+	"message":"Export settings"
+  },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },
@@ -349,5 +355,11 @@
   },
   "ls_23":{
 	"message":"You have cancelled the removal of "
+  },
+  "ls_24":{
+	"message":"NooBoss cannot import your settings"
+  },
+  "ls_25":{
+	"message":"You have successfully imported settings"
   }
 }

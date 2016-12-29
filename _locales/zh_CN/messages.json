@@ -278,6 +278,12 @@
   "default_page":{
 	"message":"默认主页"
   },
+  "import_options":{
+	"message":"导入设置"
+  },
+  "export_options":{
+	"message":"导出设置"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },
@@ -349,5 +355,11 @@
   },
   "ls_23":{
 	"message":"你并没有选择删除 "
+  },
+  "ls_24":{
+	"message":"导入失败"
+  },
+  "ls_25":{
+	"message":"导入成功"
   }
 }
