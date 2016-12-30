@@ -28679,7 +28679,7 @@
 	          React.createElement('img', { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'Manage', 'app-detail', info.id), className: 'app-icon', src: info.iconUrl }),
 	          React.createElement(
 	            'div',
-	            { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'Manage', 'app-detail', info.id), className: 'app-info' },
+	            { className: 'app-info' },
 	            toggle,
 	            options,
 	            React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
@@ -28690,7 +28690,7 @@
 	            ),
 	            React.createElement(
 	              Link,
-	              { to: '/app?id=' + info.id, className: 'app-name', title: info.name },
+	              { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'Manage', 'app-detail', info.id), className: 'app-name', title: info.name },
 	              info.name
 	            )
 	          )
