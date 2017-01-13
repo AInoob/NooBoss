@@ -29393,7 +29393,7 @@
 	      this.setState({ listView: true });
 	    }.bind(this));
 	    get('sortOrder', function (sortOrder) {
-	      this.setState(sortOrder);
+	      this.setState({ sortOrder: sortOrder });
 	    }.bind(this));
 	    chrome.management.getAll(function (appInfoList) {
 	      var originalStates = {};

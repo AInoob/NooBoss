@@ -16,7 +16,7 @@ module.exports = React.createClass({
     isOn('listView',function(){
       this.setState({listView:true});
     }.bind(this));
-    get('sortOrder',function(sortOrder){this.setState(sortOrder:sortOrder);}.bind(this));
+    get('sortOrder',function(sortOrder){this.setState({sortOrder:sortOrder});}.bind(this));
     chrome.management.getAll(function(appInfoList){
       var originalStates={};
       for(var i=0;i<appInfoList.length;i++){
