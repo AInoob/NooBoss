@@ -562,10 +562,13 @@ nav ul li.active a {
   color: grey;
 }
 .autoState-table tbody tr .enabled {
-  color: green;
+  color: limegreen;
 }
 .autoState-table tbody tr .installed {
-  color: limegreen;
+  color: green;
+}
+.autoState-table tbody tr .updated {
+  color: #6d8aff;
 }
 .autoState-table tbody tr .removed {
   color: red;
@@ -607,10 +610,13 @@ nav ul li.active a {
   color: grey;
 }
 .history-table tbody tr .enabled {
-  color: green;
+  color: limegreen;
 }
 .history-table tbody tr .installed {
-  color: limegreen;
+  color: green;
+}
+.history-table tbody tr .updated {
+  color: #6d8aff;
 }
 .history-table tbody tr .removed {
   color: red;

@@ -29384,12 +29384,16 @@
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return {
 	      filter: { type: type, keyword: '' },
-	      listView: false
+	      listView: false,
+	      sortOrder: 'nameState'
 	    };
 	  },
 	  componentDidMount: function () {
 	    isOn('listView', function () {
 	      this.setState({ listView: true });
+	    }.bind(this));
+	    get('sortOrder', function (sortOrder) {
+	      this.setState(sortOrder);
 	    }.bind(this));
 	    chrome.management.getAll(function (appInfoList) {
 	      var originalStates = {};
@@ -29460,18 +29464,20 @@
 	      }
 	    }
 	  },
-	  getFilteredList: function () {
-	    return (this.state.appInfoList || []).sort(function (a, b) {
-	      if (a.enabled != b.enabled) {
-	        if (a.enabled) {
-	          return -1;
-	        } else {
-	          return 1;
-	        }
+	  orderByNameState: function (a, b) {
+	    if (a.enabled != b.enabled) {
+	      if (a.enabled) {
+	        return -1;
 	      } else {
-	        return compare(a.name.toLowerCase(), b.name.toLowerCase());
+	        return 1;
 	      }
-	    }).map(function (appInfo) {
+	    } else {
+	      return compare(a.name.toLowerCase(), b.name.toLowerCase());
+	    }
+	  },
+	  getFilteredList: function () {
+	    var orderFunc = this.orderByNameState;
+	    return (this.state.appInfoList || []).sort(orderFunc).map(function (appInfo) {
 	      var filter = this.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
@@ -30424,27 +30430,32 @@
 	            React.createElement(
 	              'option',
 	              { value: 'all' },
-	              'All'
+	              capFirst(GL('all'))
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'installed' },
-	              'Installed'
+	              capFirst(GL('installed'))
+	            ),
+	            React.createElement(
+	              'option',
+	              { value: 'updated' },
+	              capFirst(GL('updated'))
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'removed' },
-	              'Removed'
+	              capFirst(GL('removed'))
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'enabled' },
-	              'Enabled'
+	              capFirst(GL('enabled'))
 	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'disabled' },
-	              'Disabled'
+	              capFirst(GL('disabled'))
 	            )
 	          )
 	        ),
@@ -30834,7 +30845,7 @@
 	                            '\u4E8C\u7BB1\u4F7F\u7528\u4E86JS Foundation\u7684',
 	                            React.createElement(
 	                                'a',
-	                                { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                                { href: 'https://jquery.com/', target: '_blank' },
 	                                'jQuery(MIT\u534F\u8BAE)'
 	                            ),
 	                            '\u6765\u5904\u7406\u4E00\u4E9BDOM\u548CAjax\u8BF7\u6C42'
@@ -31273,7 +31284,7 @@
 	                            'NooBoss uses ',
 	                            React.createElement(
 	                                'a',
-	                                { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
+	                                { href: 'https://jquery.com/', target: '_blank' },
 	                                'jQuery(MIT Liscense)'
 	                            ),
 	                            ' from JS Foundation to handle DOM and Ajax requests'

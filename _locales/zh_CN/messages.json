@@ -99,7 +99,7 @@
 	"message":"通知应用的开启/关闭"
   },
   "notifyInstallation":{
-	"message":"通知应用的安装"
+	"message":"通知应用的安装和更新"
   },
   "notifyRemoval":{
 	"message":"通知应用的卸载"
@@ -284,6 +284,12 @@
   "export_settings":{
 	"message":"导出设置"
   },
+  "updated":{
+	"message":"更新"
+  },
+  "installed":{
+	"message":"安装"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },
@@ -361,5 +367,14 @@
   },
   "ls_25":{
 	"message":"导入成功"
+  },
+  "ls_26":{
+    "message":" 安装完成！"
+  },
+  "ls_27":{
+    "message":" 成功更新！"
+  },
+  "ls_28":{
+    "message":" 已被卸载！"
   }
 }

@@ -101,7 +101,7 @@ module.exports = React.createClass({
 		    <div className="header">鸣谢</div>
 			<ul>
 			   <li>二箱使用了Facebook的<a href="https://github.com/facebook/react" target="_blank">React(BSD协议)</a>作为底层建筑</li>
-			   <li>二箱使用了JS Foundation的<a href="https://github.com/hustcc/timeago.js" target="_blank">jQuery(MIT协议)</a>来处理一些DOM和Ajax请求</li>
+			   <li>二箱使用了JS Foundation的<a href="https://jquery.com/" target="_blank">jQuery(MIT协议)</a>来处理一些DOM和Ajax请求</li>
 			   <li>二箱使用了Hust.cc的<a href="https://github.com/hustcc/timeago.js" target="_blank">Timeago(MIT协议)</a>来显示时间</li>
 			   <li>
 				  一些图标来自与<a title="Flaticon" href="http://www.flaticon.com" target="_blank">www.flaticon.com</a>(<a title="Creative Commons BY 3.0" href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC 3.0 BY</a>)
@@ -216,7 +216,7 @@ module.exports = React.createClass({
     <div className="header">Acknowledgements</div>
     <ul>
         <li>NooBoss uses <a href="https://github.com/facebook/react" target="_blank">React(BSD Liscense)</a> from Facebook to build the bases</li>
-        <li>NooBoss uses <a href="https://github.com/hustcc/timeago.js" target="_blank">jQuery(MIT Liscense)</a> from JS Foundation to handle DOM and Ajax requests</li>
+        <li>NooBoss uses <a href="https://jquery.com/" target="_blank">jQuery(MIT Liscense)</a> from JS Foundation to handle DOM and Ajax requests</li>
         <li>NooBoss uses <a href="https://github.com/hustcc/timeago.js" target="_blank">Timeago(MIT Liscense)</a> from Hust.cc to display timeago</li>
         <li>
             Some icons are from<a title="Flaticon" href="http://www.flaticon.com" target="_blank">www.flaticon.com</a>(<a title="Creative Commons BY 3.0" href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC 3.0 BY</a>)

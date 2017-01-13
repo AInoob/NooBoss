@@ -99,7 +99,7 @@
 	"message":"Nofity state change"
   },
   "notifyInstallation":{
-	"message":"Notify installation"
+	"message":"Notify installation/update"
   },
   "notifyRemoval":{
 	"message":"Notify removal"
@@ -284,6 +284,12 @@
   "export_settings":{
 	"message":"Export settings"
   },
+  "updated":{
+	"message":"updated"
+  },
+  "installed":{
+	"message":"installed"
+  },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },
@@ -361,5 +367,14 @@
   },
   "ls_25":{
 	"message":"You have successfully imported settings"
+  },
+  "ls_26":{
+    "message":" was installed!"
+  },
+  "ls_27":{
+    "message":" has been updated!"
+  },
+  "ls_28":{
+    "message":" was removed!"
   }
 }

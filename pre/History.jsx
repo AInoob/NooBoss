@@ -48,11 +48,12 @@ module.exports = React.createClass({
         <div className="actionBar">
           <div className="event">
             <select onChange={this.updateFilter} id="event">
-              <option value="all">All</option>
-              <option value="installed">Installed</option>
-              <option value="removed">Removed</option>
-              <option value="enabled">Enabled</option>
-              <option value="disabled">Disabled</option>
+              <option value="all">{capFirst(GL('all'))}</option>
+              <option value="installed">{capFirst(GL('installed'))}</option>
+              <option value="updated">{capFirst(GL('updated'))}</option>
+              <option value="removed">{capFirst(GL('removed'))}</option>
+              <option value="enabled">{capFirst(GL('enabled'))}</option>
+              <option value="disabled">{capFirst(GL('disabled'))}</option>
             </select>
           </div>
           <input id="keyword" onChange={this.updateFilter} type="text" />

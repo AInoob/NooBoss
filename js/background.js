@@ -10,6 +10,7 @@ NooBoss.defaultValues=[
   ['autoState',false],
   ['autoStateNotification',true],
   ['autoStateRules','[]'],
+  ['sortOrder','nameState']
 ];
 
 NooBoss.resetSettings=function(){
@@ -319,20 +320,30 @@ NooBoss.History.addRecord=function(record){
 NooBoss.History.listen=function(){
   chrome.management.onInstalled.addListener(function(appInfo){
     NooBoss.Management.apps[appInfo.id]={enabled:appInfo.enabled,name:appInfo.name};
-    var time=new Date().getTime();
-    NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
-      getDB(appInfo.id,function(appInfo){
-        NooBoss.History.addRecord({event:'installed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
-        isOn('joinCommunity',function(){
+    getDB(appInfo.id,function(appInfoRecord){
+      if(!appInfoRecord){
+        appInfoRecord={};
+      }
+      var time=new Date().getTime();
+      var event='installed';
+      var message=GL('ls_26');
+      console.log(appInfoRecord);
+      if((!appInfoRecord.lastUpdateDate)||(!appInfoRecord.uninstalledDate)||appInfoRecord.lastUpdateDate>appInfoRecord.uninstalledDate){
+        event='updated';
+        message=GL('ls_27');
+      }
+      NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
+        getDB(appInfo.id,function(appInfo){
+          NooBoss.History.addRecord({event:event, id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+          isOn('notifyInstallation',function(){
+            chrome.notifications.create({
+              type:'basic',
+              iconUrl: '/images/icon_128.png',
+              title: appInfo.name+' '+event,
+              message: appInfo.name+' '+message
+            });
+          });
         });
-      });
-    });
-    isOn('notifyInstallation',function(){
-      chrome.notifications.create({
-        type:'basic',
-        iconUrl: '/images/icon_128.png',
-        title: 'Added: '+appInfo.type,
-        message: appInfo.name+' has been added to your browswer'
       });
     });
   });
@@ -355,8 +366,8 @@ NooBoss.History.listen=function(){
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: 'Removed '+appInfo.name,
-          message: id+' has been removed from your browswer'
+          title: appInfo.name+' '+capFirst(GL('removed')),
+          message: appInfo.name+' '+GL('ls_28')
         });
       });
     });
