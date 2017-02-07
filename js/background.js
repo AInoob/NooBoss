@@ -120,6 +120,7 @@ NooBoss.Management.autoState.manage=function(tabId){
   var tabs=autoState.tabs;
   var nextPhases={};
   var enableOnlys={};
+  var disableOnlys={};
   for(var i=0;i<autoState.rules.length;i++){
     var rule=autoState.rules[i];
     var appIds=rule.ids;
@@ -149,6 +150,27 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: enableOnlys[appIds[k]]||false,
+              tabid: null,
+              ruleId: i
+            }
+          }
+        }
+        break;
+      case 'disableOnly':
+        if(matched){
+          for(var k=0;k<appIds.length;k++){
+            nextPhases[appIds[k]]={
+              enabled: false,
+              tabid: tabId,
+              ruleId: i
+            }
+            disableOnlys[appIds[k]]=true;
+          }
+        }
+        else{
+          for(var k=0;k<appIds.length;k++){
+            nextPhases[appIds[k]]={
+              enabled: (!disableOnlys[appIds[k]])&&true,
               tabid: null,
               ruleId: i
             }

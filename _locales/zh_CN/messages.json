@@ -158,6 +158,9 @@
   "only_enable_when_matched":{
 	"message":"只有匹配时才开启"
   },
+  "only_disable_when_matched":{
+	"message":"只有匹配才关闭"
+  },
   "enable_when_matched":{
 	"message":"匹配后开启"
   },
@@ -256,6 +259,9 @@
   },
   "enableOnly":{
 	"message":"匹配才开启"
+  },
+  "disableOnly":{
+	"message":"匹配才关闭"
   },
   "all_websites":{
 	"message":"所有网站"

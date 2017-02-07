@@ -158,6 +158,9 @@
   "only_enable_when_matched":{
 	"message":"only enable when matched"
   },
+  "only_disable_when_matched":{
+	"message":"only disable when matched"
+  },
   "enable_when_matched":{
 	"message":"enable when matched"
   },
@@ -256,6 +259,9 @@
   },
   "enableOnly":{
 	"message":"enable only"
+  },
+  "disableOnly":{
+	"message":"disable only"
   },
   "all_websites":{
 	"message":"All websites"

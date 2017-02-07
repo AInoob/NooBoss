@@ -237,6 +237,7 @@ module.exports = React.createClass({
           <div className="selectedAction">
             <div className="input-header">{capFirst(GL('action'))}:</div><select value={this.state.rule.action} onChange={this.updateRule} id="action">
               <option value="enableOnly">{GL('only_enable_when_matched')}</option>
+              <option value="disableOnly">{GL('only_disable_when_matched')}</option>
               <option value="enableWhen">{GL('enable_when_matched')}</option>
               <option value="disableWhen">{GL('disable_when_matched')}</option>
             </select>

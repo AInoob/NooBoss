@@ -29967,6 +29967,11 @@
 	            ),
 	            React.createElement(
 	              'option',
+	              { value: 'disableOnly' },
+	              GL('only_disable_when_matched')
+	            ),
+	            React.createElement(
+	              'option',
 	              { value: 'enableWhen' },
 	              GL('enable_when_matched')
 	            ),
