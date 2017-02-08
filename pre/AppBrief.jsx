@@ -27,18 +27,22 @@ module.exports = React.createClass({
       if(!info.type.match('theme')){
           toggle=<label data={info.id} onClick={CW.bind(null,this.props.toggle,'Manage','switch','')} className="app-switch"></label>
       }
+      var uninstall=null;
+      uninstall=<label data={info.id} onClick={CW.bind(null,this.props.uninstall,'Manage','uninstall','')} className="app-remove"></label>;
       return(
         <div className="app-holder">
           <input type="checkbox" className="app-status-checkbox" readOnly id={info.id+'-status'} checked={info.enabled} />
-          <div className="app-brief" id={info.id+'-app'}>
-            <img onClick={CW.bind(null,shared.goTo.bind(null,'/app?id='+info.id),'Manage','app-detail',info.id)} className="app-icon" src={info.iconUrl} />
+          <div className="app-brief" id={info.id+'-app'} onClick={CW.bind(null,shared.goTo.bind(null,'/app?id='+info.id),'Manage','app-detail',info.id)}>
+            <img className="app-icon" src={info.iconUrl} />
             <div  className="app-info">
-              {toggle}
-              {options}
-              <label data={info.id} onClick={CW.bind(null,this.props.uninstall,'Manage','uninstall','')} className="app-remove"></label>
               <div className="app-version" title={info.version}>{info.version}</div>
               <Link onClick={CW.bind(null,shared.goTo.bind(null,'/app?id='+info.id),'Manage','app-detail',info.id)}  className="app-name" title={info.name}>{info.name}</Link>
             </div>
+          </div>
+          <div className="actions">
+            {toggle}
+            {options}
+            {uninstall}
           </div>
         </div>
       );

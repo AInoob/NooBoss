@@ -1,3 +1,206 @@
+.app-switch {
+  background-image: url("/thirdParty/power-button-on.svg");
+}
+.app-options {
+  background-image: url("/thirdParty/options.svg");
+}
+.app-remove {
+  background-image: url("/thirdParty/remove.svg");
+}
+.app-add {
+  background-image: url("/thirdParty/add.svg");
+}
+.changeView {
+  float: right !important;
+}
+.changeView .listView:checked ~ .viewGrid {
+  filter: invert(50%);
+}
+.changeView .listView:checked ~ .viewList {
+  filter: invert(0%);
+}
+.changeView .viewGrid {
+  background-size: 22px 22px;
+  background-image: url("/thirdParty/view-grid.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 24px;
+  height: 24px;
+  float: left;
+  padding-left: 0px;
+  margin-right: 3px;
+}
+.changeView .viewGrid:before {
+  display: none;
+}
+.changeView .viewGrid:after {
+  display: none;
+}
+.changeView .viewList {
+  background-size: 24px 24px;
+  background-image: url("/thirdParty/view-list.svg");
+  background-repeat: no-repeat;
+  width: 24px;
+  float: right;
+  height: 24px;
+  filter: invert(50%);
+  cursor: pointer;
+}
+.app-holder {
+  float: left;
+  width: 105px;
+  height: 105px;
+  position: relative;
+}
+.app-holder .app-brief {
+  padding: 15%;
+  position: relative;
+}
+.app-holder .app-brief .app-icon,
+.app-holder .app-brief .app-info {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.app-holder .app-brief .app-icon {
+  width: 100%;
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.app-holder .app-brief .app-info {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  position: absolute;
+  text-align: center;
+  top: 0px;
+  left: 0px;
+  font-size: 12px;
+  padding: 10%;
+  padding-top: 22px;
+}
+.app-holder .app-brief .app-info a {
+  display: block;
+}
+.app-holder .app-brief .app-info .app-version {
+  display: none;
+}
+.app-holder .dimmer {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(128, 128, 128, 0.47);
+}
+.app-holder:hover .app-brief .app-icon {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.app-holder:hover .app-brief .app-info {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.listView:checked ~ .app-holder {
+  width: 100% !important;
+  height: 33px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-name {
+  margin-top: -36px;
+  width: 256px;
+  margin-left: 66px;
+  text-align: left;
+  margin-top: -15px;
+}
+.listView:checked ~ .app-holder .app-brief .app-version {
+  margin-top: -22px;
+  margin-left: 336px;
+}
+.listView:checked ~ .app-holder .app-brief .app-icon {
+  width: 23px !important;
+  height: 23px !important;
+  position: absolute;
+  margin-left: 36px !important;
+  top: 0px;
+  left: 0px;
+}
+.listView:checked ~ .app-holder .app-brief .app-switch {
+  margin-left: 6px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-remove {
+  margin-top: -25px;
+  margin-left: 457px !important;
+}
+.listView:checked ~ .app-holder .app-brief .app-options {
+  margin-top: -25px;
+  margin-left: 424px !important;
+}
+.listView:checked ~ .app-holder * {
+  display: block !important;
+}
+.listView:checked ~ .app-holder .app-status-checkbox {
+  display: none !important;
+}
+@keyframes spinRightAnime {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinLeftAnime {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
+.spinRight {
+  animation: spinRightAnime 3s linear infinite;
+}
+.spinLeft {
+  animation: spinLeftAnime 3s linear infinite;
+}
+.arrowUp {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid rgba(128, 128, 128, 0.46);
+}
+.arrowUp.active {
+  border-bottom: 10px solid #9c3aff;
+}
+.arrowDown {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid rgba(128, 128, 128, 0.46);
+}
+.arrowDown.active {
+  border-top: 10px solid #9c3aff;
+}
+.flip .front,
+.flip .back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.flip:hover .front {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.flip:hover .back {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.flip .front {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.flip .back {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+* {
+  transition-duration: 0.618s;
+}
 body {
   width: 600px;
   font-size: 1rem;
@@ -222,20 +425,107 @@ nav ul a {
 #goReco:checked ~ #recoBoard {
   display: block;
 }
-#manage {
-  font-size: 12px;
+#manage select {
+  display: block;
+  width: 96px;
+  float: left;
+  height: 30px;
 }
-#manage .actionBar * {
+#manage #keyword {
+  margin-left: 6px;
+  width: 72px;
   float: left;
 }
-#manage .actionBar select {
-  display: block;
-  width: 82px;
-  height: 28px;
+#manage .btn {
+  float: left;
+  font-size: 12px;
+  padding: 0 6px;
+  margin-right: 8px;
 }
-#manage .actionBar #keyword {
-  margin-left: 8px;
-  width: 100px;
+#manage .app-holder {
+  float: left;
+  width: 113px;
+  height: 113px;
+  position: relative;
+}
+#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief .app-switch {
+  background-image: url("/thirdParty/power-button-off.svg");
+  filter: invert(50%);
+}
+#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief img {
+  filter: invert(23%);
+}
+#manage .app-holder .dimmer {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(128, 128, 128, 0.47);
+}
+#manage .app-holder .app-brief {
+  cursor: pointer;
+  float: left;
+  margin-top: 15%;
+  width: 70%;
+  padding: 5%;
+  position: relative;
+}
+#manage .app-holder .app-brief .app-icon,
+#manage .app-holder .app-brief .app-info {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+#manage .app-holder .app-brief .app-icon {
+  height: 100%;
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+#manage .app-holder .app-brief .app-info {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  position: absolute;
+  text-align: center;
+  top: 0px;
+  left: 0px;
+  padding: 0%;
+  width: 100%;
+  padding-top: 0px;
+}
+#manage .app-holder .app-brief .app-info .app-name {
+  width: 100%;
+}
+#manage .app-holder .app-brief .app-info .app-version {
+  width: 100%;
+  display: block !important;
+}
+#manage .app-holder .actions {
+  float: left;
+  width: 22px;
+  height: 100%;
+  margin-top: 18%;
+}
+#manage .app-holder .actions .app-switch,
+#manage .app-holder .actions .app-options,
+#manage .app-holder .actions .app-remove {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  display: block;
+  background-size: 17px 17px;
+  width: 22px;
+  height: 22px;
+  margin-bottom: 8%;
+}
+#manage .app-holder:hover .app-brief .app-icon {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+#manage .app-holder:hover .app-brief .app-info {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+#manage .app-holder:hover .app-brief .app-info a {
+  display: block;
 }
 #about #top {
   height: 100px;
@@ -255,159 +545,4 @@ nav ul a {
   float: left;
   width: 66px;
   margin: 2px;
-}
-.app-holder {
-  float: left;
-  width: 105px;
-  height: 105px;
-  position: relative;
-}
-.app-holder .app-brief {
-  padding: 15%;
-  position: relative;
-}
-.app-holder .app-brief .app-icon,
-.app-holder .app-brief .app-info {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-.app-holder .app-brief .app-icon {
-  width: 100%;
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-.app-holder .app-brief .app-info {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-  position: absolute;
-  text-align: center;
-  top: 0px;
-  left: 0px;
-  font-size: 12px;
-  padding: 10%;
-  padding-top: 22px;
-}
-.app-holder .app-brief .app-info a {
-  display: block;
-}
-.app-holder .app-brief .app-info .app-version {
-  display: none;
-}
-.app-holder .dimmer {
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(128, 128, 128, 0.47);
-}
-.app-holder:hover .app-brief .app-icon {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-.app-holder:hover .app-brief .app-info {
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-.listView:checked ~ .app-holder {
-  width: 100% !important;
-  height: 33px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-name {
-  margin-top: -36px;
-  width: 256px;
-  margin-left: 66px;
-  text-align: left;
-  margin-top: -15px;
-}
-.listView:checked ~ .app-holder .app-brief .app-version {
-  margin-top: -22px;
-  margin-left: 336px;
-}
-.listView:checked ~ .app-holder .app-brief .app-icon {
-  width: 23px !important;
-  height: 23px !important;
-  position: absolute;
-  margin-left: 36px !important;
-  top: 0px;
-  left: 0px;
-}
-.listView:checked ~ .app-holder .app-brief .app-switch {
-  margin-left: 6px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-remove {
-  margin-top: -25px;
-  margin-left: 457px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-options {
-  margin-top: -25px;
-  margin-left: 424px !important;
-}
-.listView:checked ~ .app-holder * {
-  display: block !important;
-}
-.listView:checked ~ .app-holder .app-status-checkbox {
-  display: none !important;
-}
-@keyframes spinRightAnime {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes spinLeftAnime {
-  100% {
-    -webkit-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-  }
-}
-.spinRight {
-  animation: spinRightAnime 3s linear infinite;
-}
-.spinLeft {
-  animation: spinLeftAnime 3s linear infinite;
-}
-.arrowUp {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid rgba(128, 128, 128, 0.46);
-}
-.arrowUp.active {
-  border-bottom: 10px solid #9c3aff;
-}
-.arrowDown {
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid rgba(128, 128, 128, 0.46);
-}
-.arrowDown.active {
-  border-top: 10px solid #9c3aff;
-}
-.flip .front,
-.flip .back {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-.flip:hover .front {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-.flip:hover .back {
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-.flip .front {
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-.flip .back {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-* {
-  transition-duration: 0.618s;
 }

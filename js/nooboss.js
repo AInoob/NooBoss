@@ -28673,20 +28673,19 @@
 	      if (!info.type.match('theme')) {
 	        toggle = React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.toggle, 'Manage', 'switch', ''), className: 'app-switch' });
 	      }
+	      var uninstall = null;
+	      uninstall = React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' });
 	      return React.createElement(
 	        'div',
 	        { className: 'app-holder' },
 	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, id: info.id + '-status', checked: info.enabled }),
 	        React.createElement(
 	          'div',
-	          { className: 'app-brief', id: info.id + '-app' },
-	          React.createElement('img', { onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'Manage', 'app-detail', info.id), className: 'app-icon', src: info.iconUrl }),
+	          { className: 'app-brief', id: info.id + '-app', onClick: CW.bind(null, shared.goTo.bind(null, '/app?id=' + info.id), 'Manage', 'app-detail', info.id) },
+	          React.createElement('img', { className: 'app-icon', src: info.iconUrl }),
 	          React.createElement(
 	            'div',
 	            { className: 'app-info' },
-	            toggle,
-	            options,
-	            React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
 	            React.createElement(
 	              'div',
 	              { className: 'app-version', title: info.version },
@@ -28698,6 +28697,13 @@
 	              info.name
 	            )
 	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'actions' },
+	          toggle,
+	          options,
+	          uninstall
 	        )
 	      );
 	    }
