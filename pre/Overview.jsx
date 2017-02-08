@@ -7,6 +7,7 @@ module.exports = React.createClass({
   getInitialState: function(){
     return {
       joinCommunity:false,
+      recoExtensions: false,
       filter:{type:'extension',keyword: ''},
       reco:{
         selected:{}
@@ -53,94 +54,98 @@ module.exports = React.createClass({
           return prevState;
         });
       }.bind(this));
-      isOn('joinCommunity',function(){
-        chrome.permissions.contains({
-          permissions: ['tabs']
-        },function(result){
-          if(result){
-            this.setState({tabPerm:true});
-          }
-        }.bind(this));
-        this.setState({joinCommunity:true});
-        chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-          var url="";
-          if(tabs[0])
-            url = tabs[0].url;
-          var website=extractDomain(url);
-          if(website.match(/^undefined/)){
-            website=GL('all_websites');
-          }
-          $.ajax({
-            type:'POST',
-            contentType: "application/json",
-            data: JSON.stringify({website:website,userId:this.state.userId}),
-            url:'https://ainoob.com/api/nooboss/website'
-          }).done(function(data){
-            var appInfos={};
-            for(var i=0;i<data.appInfos.length;i++){
-              var appId=data.appInfos[i].appId;
-              appInfos[appId]=data.appInfos[i];
+      isOn('recoExtensions',function(){
+        this.setState({recoExtensions:true});
+        isOn('joinCommunity',function(){
+          chrome.permissions.contains({
+            permissions: ['tabs']
+          },function(result){
+            if(result){
+              this.setState({tabPerm:true});
             }
-            var votes={};
-            var tags={};
-            for(var i=0;i<data.votes.length;i++){
-              var appId=data.votes[i].appId;
-              votes[appId]=data.votes[i].action;
-              tags[appId]={};
+          }.bind(this));
+          this.setState({joinCommunity:true});
+          chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+            var url="";
+            if(tabs[0])
+              url = tabs[0].url;
+            var website=extractDomain(url);
+            if(website.match(/^undefined/)){
+              website=GL('all_websites');
             }
-            for(var i=0;i<data.tags.length;i++){
-              if(!tags[data.tags[i].appId]){
-                tags[data.tags[i].appId]={};
+            $.ajax({
+              type:'POST',
+              contentType: "application/json",
+              data: JSON.stringify({website:website,userId:this.state.userId}),
+              url:'https://ainoob.com/api/nooboss/website'
+            }).done(function(data){
+              var appInfos={};
+              for(var i=0;i<data.appInfos.length;i++){
+                var appId=data.appInfos[i].appId;
+                appInfos[appId]=data.appInfos[i];
               }
-              tags[data.tags[i].appId][data.tags[i].tag]=data.tags[i].tagged;
-            }
-            var recoList=[];
-            var temp=Object.keys(data.recos);
-            for(var i=0;i<temp.length;i++){
-              var appId=temp[i];
-              var upVoted=0;
-              var downVoted=0;
-              if(votes[appId]=='up'){
-                upVoted=1;
+              var votes={};
+              var tags={};
+              for(var i=0;i<data.votes.length;i++){
+                var appId=data.votes[i].appId;
+                votes[appId]=data.votes[i].action;
+                tags[appId]={};
               }
-              else if(votes[appId]=='down'){
-                downVoted=1;
+              for(var i=0;i<data.tags.length;i++){
+                if(!tags[data.tags[i].appId]){
+                  tags[data.tags[i].appId]={};
+                }
+                tags[data.tags[i].appId][data.tags[i].tag]=data.tags[i].tagged;
               }
-              recoList.push({appId:appId,upVotes:data.recos[appId].upVotes-upVoted,downVotes:data.recos[appId].downVotes-downVoted});
-            }
-            this.setState({
-              recoList: recoList,
-              appInfosWeb: appInfos,
-              website: website,
-              votes: votes,
-              tags: tags
-            },function(){
-              this.getInfosGoogle();
-              this.setState(function(prevState){
-                prevState.recoList.sort(function(a,b){
-                  var upCountA=0;
-                  var downCountA=0;
-                  var upCountB=0;
-                  var downCountB=0;
-                  if(this.state.votes[a.appId]=='up'){
-                    upCountA=1;
-                  }
-                  else if(this.state.votes[a.appId]=='down'){
-                    downCountA=1;
-                  }
-                  if(this.state.votes[b.appId]=='up'){
-                    upCountB=1;
-                  }
-                  else if(this.state.votes[b.appId]=='down'){
-                    downCountB=1;
-                  }
-                  return (a.upVotes-a.downVotes+upCountA-downCountB)<(b.upVotes-b.downVotes+upCountB-downCountB);
-                }.bind(this));
-              });
+              var recoList=[];
+              var temp=Object.keys(data.recos);
+              for(var i=0;i<temp.length;i++){
+                var appId=temp[i];
+                var upVoted=0;
+                var downVoted=0;
+                if(votes[appId]=='up'){
+                  upVoted=1;
+                }
+                else if(votes[appId]=='down'){
+                  downVoted=1;
+                }
+                recoList.push({appId:appId,upVotes:data.recos[appId].upVotes-upVoted,downVotes:data.recos[appId].downVotes-downVoted});
+              }
+              this.setState({
+                recoList: recoList,
+                appInfosWeb: appInfos,
+                website: website,
+                votes: votes,
+                tags: tags
+              },function(){
+                this.getInfosGoogle();
+                this.setState(function(prevState){
+                  prevState.recoList.sort(function(a,b){
+                    var upCountA=0;
+                    var downCountA=0;
+                    var upCountB=0;
+                    var downCountB=0;
+                    if(this.state.votes[a.appId]=='up'){
+                      upCountA=1;
+                    }
+                    else if(this.state.votes[a.appId]=='down'){
+                      downCountA=1;
+                    }
+                    if(this.state.votes[b.appId]=='up'){
+                      upCountB=1;
+                    }
+                    else if(this.state.votes[b.appId]=='down'){
+                      downCountB=1;
+                    }
+                    return (a.upVotes-a.downVotes+upCountA-downCountB)<(b.upVotes-b.downVotes+upCountB-downCountB);
+                  }.bind(this));
+                });
+              }.bind(this));
             }.bind(this));
           }.bind(this));
         }.bind(this));
       }.bind(this));
+      
   },
   select: function(appId){
     this.setState(function(prevState){
@@ -373,166 +378,168 @@ module.exports = React.createClass({
     }
     var discover=null;
     var recoList;
-    if(!this.state.joinCommunity){
-      discover=
-        <div id="discover" className="section">
-          {GL('ls_0')}(turn it on <Link to="/options">{GL('join_community')}here</Link>).
-        </div>;
-    }
-    else{
-      if(this.state.tabPerm){
-        var recoList;
-        if((this.state.recoList||[]).length>0){
-          recoList=(this.state.recoList||[]).map(function(elem,index){
-            var app=null;
-            var appInfo=null;
-            var appId=elem.appId;
-            var upActive='';
-            var downActive='';
-            var upCount=0;
-            var downCount=0;
-            if(this.state.votes[appId]=='up'){
-              upActive='active';
-              upCount=1;
-            }
-            else if(this.state.votes[appId]=='down'){
-              downActive='active';
-              downCount=1;
-            }
-            if(this.state.appInfosWeb){
-              appInfo=this.state.appInfosWeb[appId];
-            }
-            appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
-            var active={};
-            var temp=Object.keys(this.state.tags[appId]||{});
-            for(var j=0;j<temp.length;j++){
-              if(this.state.tags[appId][temp[j]]){
-                active[temp[j]]='active'
-              }
-            }
-            var tags=<div className="tags">
-              <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfo.tags['useful']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfo.tags['working']||0}</div>
-              </div>
-              <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfo.tags['laggy']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfo.tags['buggy']||0}</div>
-              </div>
-              <div className="tagColumn">
-                <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfo.tags['not_working']||0}</div>
-                <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfo.tags['ASM']||0}</div>
-              </div>
-            </div>;
-            var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
-            if(appInfo.upVotes!=0||appInfo.downVotes!=0){
-              ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
-            }
-            var rating=<div className="flip rating">
-              {ratingBar}
-              <div className="back ratingDetail">
-                <div className="upVotes">{GL('up')}<br/>{appInfo.upVotes}</div>
-                <div className="downVotes">{GL('down')}<br/>{appInfo.downVotes}</div>
-              </div>
-            </div>;
-            app=
-              <div className="app">
-                <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+appId}>
-                  <div className="front">
-                    <div className="name">{(this.state.infosGoogle[appId]||{}).name}</div>
-                    <img src={(this.state.infosGoogle[appId]||{}).imgUrl} />
-                  </div>
-                  <div className="description back">
-                    {(this.state.infosGoogle[appId]||{}).description}
-                  </div>
-                </a>
-                <div className="appReview">
-                  {tags}
-                </div>
-              </div>;
-            return(
-              <div className="reco" key={index}>
-                <div className="votes">
-                  <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
-                    <div className={"front arrowUp "+upActive}></div>
-                    <div className="back count">{elem.upVotes+upCount}</div>
-                  </div>
-                  <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
-                  <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
-                    <div className={"front arrowDown "+downActive}></div>
-                    <div className="back count">{elem.downVotes+downCount}</div>
-                  </div>
-                </div>
-                {app}
-              </div>);
-          }.bind(this));
-        }
-        else{
-          recoList=<div className="noReco">{GL('ls_1')} {this.state.website}?</div>
-        }
-        var appList=this.getFilteredList().map(function(appInfo,index){
-          if(appInfo){
-            var dimmer='dimmer';
-            if(this.state.reco.selected[appInfo.id]){
-              dimmer='nonDimmer';
-            }
-            return (
-                <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
-            );
-          }
-        }.bind(this));
-        var recoApps=(
-          <div className="recoApp">
-            <input type="checkbox" className="goReco" id="goReco" />
-            <label className="goRecoLabel button" htmlFor="goReco">{GL('recommend_extensions_for_this_website')}</label>
-            <div className="recoBoard">
-              <div className="actionBar">
-                <input id="keyword" onChange={this.updateFilter} type="text" />
-                <div className="addReco button" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>{capFirst(GL('recommend'))}</div>
-              </div>
-              {appList}
-            </div>
-          </div>);
-        discover=(
+    if(this.state.recoExtensions){
+      if(!this.state.joinCommunity){
+        discover=
           <div id="discover" className="section">
-            <div className="header">{GL('extensions_for')} <span className="website">{this.state.website}</span>:</div>
-            {recoList}
-            {recoApps}
-          </div>);
+            {GL('ls_0')}(turn it on <Link to="/options">{GL('join_community')}here</Link>).
+          </div>;
       }
       else{
-        discover=(
-        <div id="discover" className="section">
-          {GL('ls_2')} <div className="button" onClick={this.requestTabsPermission}>{GL('enable')}</div>
-        </div>);
+        if(this.state.tabPerm){
+          var recoList;
+          if((this.state.recoList||[]).length>0){
+            recoList=(this.state.recoList||[]).map(function(elem,index){
+              var app=null;
+              var appInfo=null;
+              var appId=elem.appId;
+              var upActive='';
+              var downActive='';
+              var upCount=0;
+              var downCount=0;
+              if(this.state.votes[appId]=='up'){
+                upActive='active';
+                upCount=1;
+              }
+              else if(this.state.votes[appId]=='down'){
+                downActive='active';
+                downCount=1;
+              }
+              if(this.state.appInfosWeb){
+                appInfo=this.state.appInfosWeb[appId];
+              }
+              appInfo=appInfo||{tags:[],upVotes:0,downVotes:0};
+              var active={};
+              var temp=Object.keys(this.state.tags[appId]||{});
+              for(var j=0;j<temp.length;j++){
+                if(this.state.tags[appId][temp[j]]){
+                  active[temp[j]]='active'
+                }
+              }
+              var tags=<div className="tags">
+                <div className="tagColumn">
+                  <div onClick={this.toggleTag.bind(this,appId,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfo.tags['useful']||0}</div>
+                  <div onClick={this.toggleTag.bind(this,appId,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfo.tags['working']||0}</div>
+                </div>
+                <div className="tagColumn">
+                  <div onClick={this.toggleTag.bind(this,appId,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfo.tags['laggy']||0}</div>
+                  <div onClick={this.toggleTag.bind(this,appId,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfo.tags['buggy']||0}</div>
+                </div>
+                <div className="tagColumn">
+                  <div onClick={this.toggleTag.bind(this,appId,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfo.tags['not_working']||0}</div>
+                  <div onClick={this.toggleTag.bind(this,appId,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfo.tags['ASM']||0}</div>
+                </div>
+              </div>;
+              var ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, grey 100%, #01e301 0%)',width:'16px',height:'50px'}}></div>;
+              if(appInfo.upVotes!=0||appInfo.downVotes!=0){
+                ratingBar=<div className="ratingBar front" style={{background:'linear-gradient(180deg, red '+(appInfo.downVotes/(appInfo.upVotes+appInfo.downVotes)*100)+'%, #01e301 0%)',width:'16px',height:'50px'}}></div>
+              }
+              var rating=<div className="flip rating">
+                {ratingBar}
+                <div className="back ratingDetail">
+                  <div className="upVotes">{GL('up')}<br/>{appInfo.upVotes}</div>
+                  <div className="downVotes">{GL('down')}<br/>{appInfo.downVotes}</div>
+                </div>
+              </div>;
+              app=
+                <div className="app">
+                  <a target="_blank" className="appBrief flip" href={"https://chrome.google.com/webstore/detail/"+appId}>
+                    <div className="front">
+                      <div className="name">{(this.state.infosGoogle[appId]||{}).name}</div>
+                      <img src={(this.state.infosGoogle[appId]||{}).imgUrl} />
+                    </div>
+                    <div className="description back">
+                      {(this.state.infosGoogle[appId]||{}).description}
+                    </div>
+                  </a>
+                  <div className="appReview">
+                    {tags}
+                  </div>
+                </div>;
+              return(
+                <div className="reco" key={index}>
+                  <div className="votes">
+                    <div className="upVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'up'),'Community','addReco','up')}>
+                      <div className={"front arrowUp "+upActive}></div>
+                      <div className="back count">{elem.upVotes+upCount}</div>
+                    </div>
+                    <div className="score">{elem.upVotes-elem.downVotes+upCount-downCount}</div>
+                    <div className="downVotes flip" onClick={CW.bind(null,this.addReco.bind(this,appId,'down'),'Community','addReco','down')}>
+                      <div className={"front arrowDown "+downActive}></div>
+                      <div className="back count">{elem.downVotes+downCount}</div>
+                    </div>
+                  </div>
+                  {app}
+                </div>);
+            }.bind(this));
+          }
+          else{
+            recoList=<div className="noReco">{GL('ls_1')} {this.state.website}?</div>
+          }
+          var appList=this.getFilteredList().map(function(appInfo,index){
+            if(appInfo){
+              var dimmer='dimmer';
+              if(this.state.reco.selected[appInfo.id]){
+                dimmer='nonDimmer';
+              }
+              return (
+                  <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
+              );
+            }
+          }.bind(this));
+          var recoApps=(
+            <div className="recoApp">
+              <input type="checkbox" className="hide" id="goReco" />
+              <div></div>
+              <label id="goRecoLabel" className="btn" htmlFor="goReco">{GL('recommend_extensions_for_this_website')}</label>
+              <div id="recoBoard" className="section">
+                <div className="actionBar">
+                  <input id="keyword" onChange={this.updateFilter} placeholder={GL('filter')} type="text" />
+                  <div className="addReco btn" onClick={CW.bind(null,this.addReco.bind(this,null),'Community','addReco','up')}>{capFirst(GL('recommend'))}</div>
+                </div>
+                {appList}
+              </div>
+            </div>);
+          discover=(
+            <div id="discover" className="section container">
+              <h5>{GL('extensions_for')} <span className="website">{this.state.website}</span>:</h5>
+              {recoList}
+              {recoApps}
+            </div>);
+        }
+        else{
+          discover=(
+          <div id="discover" className="section container">
+            {GL('ls_2')} <div className="btn" onClick={this.requestTabsPermission}>{GL('enable')}</div>
+          </div>);
+        }
       }
     }
+    
     return(
       <div id="overview">
         <Helmet
           title="Home"
         />
-        <div id="overview">
-          <div className="manage section">
-            <div className="header">{GL('you_have')}</div>
-            <div className="status">
-              <Link to="/manage/app">
-                {overview.app}
-              </Link> {GL('app_s')},&nbsp;
-              <Link to="/manage/extension">
-                {overview.extension}
-              </Link> {GL('extension_s')},&nbsp;
-              <Link to="/manage/theme">
-                {overview.theme}
-              </Link> {GL('theme')}<br/>
-              <Link to="/autoState">
-                {(this.state.rules||[]).length}
-              </Link>
-              &nbsp;{GL('auto_state_rule_s')}
-            </div>
+        <div className="manage container section">
+          <h5>{GL('you_have')}</h5>
+          <div className="status important">
+            <Link to="/manage/app">
+              {overview.app}
+            </Link> {GL('app_s')},&nbsp;
+            <Link to="/manage/extension">
+              {overview.extension}
+            </Link> {GL('extension_s')},&nbsp;
+            <Link to="/manage/theme">
+              {overview.theme}
+            </Link> {GL('theme')}<br/>
+            <Link to="/autoState">
+              {(this.state.rules||[]).length}
+            </Link>
+            &nbsp;{GL('auto_state_rule_s')}
           </div>
-          {discover}
         </div>
+        {discover}
       </div>
     );
   }

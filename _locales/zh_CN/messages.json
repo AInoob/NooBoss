@@ -296,6 +296,9 @@
   "installed":{
 	"message":"安装"
   },
+  "recoExtensions":{
+	"message":"推荐拓展"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },

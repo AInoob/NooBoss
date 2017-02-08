@@ -12,7 +12,7 @@ module.exports = React.createClass({
         return prevState;
       });
     }.bind(this));
-    var switchList=['joinCommunity','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
+    var switchList=['joinCommunity','recoExtensions','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
     for(var i=0;i<switchList.length;i++){
       isOn(
         switchList[i],
@@ -232,6 +232,7 @@ module.exports = React.createClass({
               <option value="history">{GL('history')}</option>
             </select>
           </div>
+          {this.getSwitch('recoExtensions')}
           {this.getSwitch('joinCommunity',this.joinCommunity)}
           {this.getSwitch('showAds',this.showAds)}
           <div className="button space">{GL('import_settings')}<input id="upload" type="file" onChange={CW.bind(null,this.importOptions,'Options','importOptions','')}/></div><br />

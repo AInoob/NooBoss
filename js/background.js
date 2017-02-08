@@ -10,7 +10,8 @@ NooBoss.defaultValues=[
   ['autoState',false],
   ['autoStateNotification',true],
   ['autoStateRules','[]'],
-  ['sortOrder','nameState']
+  ['sortOrder','nameState'],
+  ['recoExtensions',true]
 ];
 
 NooBoss.resetSettings=function(){
@@ -351,8 +352,10 @@ NooBoss.History.listen=function(){
       var message=GL('ls_26');
       console.log(appInfoRecord);
       if((!appInfoRecord.lastUpdateDate)||(!appInfoRecord.uninstalledDate)||appInfoRecord.lastUpdateDate>appInfoRecord.uninstalledDate){
-        event='updated';
-        message=GL('ls_27');
+        if(appInfoRecord.version<appInfo.version){
+          event='updated';
+          message=GL('ls_27');
+        }
       }
       NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
         getDB(appInfo.id,function(appInfo){
