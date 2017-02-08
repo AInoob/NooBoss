@@ -29576,60 +29576,56 @@
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return React.createElement(
 	      'div',
-	      { id: 'manage', className: 'section' },
+	      { id: 'manage', className: 'section container' },
 	      React.createElement(Helmet, {
 	        title: 'Manage'
 	      }),
 	      React.createElement(
-	        'div',
-	        { className: 'header' },
+	        'h5',
+	        null,
 	        capFirst(GL('manage'))
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'actionBar' },
 	        React.createElement(
-	          'div',
-	          { className: 'type' },
+	          'select',
+	          { defaultValue: type, onChange: this.updateFilter, id: 'type' },
 	          React.createElement(
-	            'select',
-	            { defaultValue: type, onChange: this.updateFilter, id: 'type' },
-	            React.createElement(
-	              'option',
-	              { value: 'all' },
-	              GL('all')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'app' },
-	              GL('app')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'extension' },
-	              GL('extension')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'theme' },
-	              GL('theme')
-	            )
+	            'option',
+	            { value: 'all' },
+	            GL('all')
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'app' },
+	            GL('app')
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'extension' },
+	            GL('extension')
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'theme' },
+	            GL('theme')
 	          )
 	        ),
 	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
 	        React.createElement(
 	          'span',
-	          { id: 'enableAll', className: 'button', onClick: this.enableAll },
+	          { id: 'enableAll', className: 'btn', onClick: this.enableAll },
 	          GL('enable_all')
 	        ),
 	        React.createElement(
 	          'span',
-	          { id: 'disableAll', className: 'button', onClick: this.disableAll },
+	          { id: 'disableAll', className: 'btn', onClick: this.disableAll },
 	          GL('disable_all')
 	        ),
 	        React.createElement(
 	          'span',
-	          { id: 'undo', className: 'button', onClick: this.undoAll },
+	          { id: 'undo', className: 'btn', onClick: this.undoAll },
 	          GL('undo_all')
 	        ),
 	        React.createElement(

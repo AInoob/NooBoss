@@ -45,9 +45,10 @@ nav ul a {
 #overview{
   .reco{
     overflow: hidden;
-    & + reco{
+    padding-bottom: 8px;
+    & + .reco{
       border-top: 1px solid #a8a8a8;
-      padding-top: 5px;
+      padding-top: 8px;
     }
     .votes{
       width: 40px;
@@ -240,7 +241,23 @@ nav ul a {
     }
   }
 
-
+#manage{
+  font-size: 12px;
+  .actionBar{
+    *{
+      float: left;
+    }
+    select{
+      display: block;
+      width: 82px;
+      height: 28px;
+    }
+    #keyword{
+      margin-left: 8px;
+      width: 100px;
+    }
+  }
+}
 
 #about{
   #top{
@@ -263,77 +280,63 @@ nav ul a {
   }
 }
 
-@keyframes spinRightAnime {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes spinLeftAnime {
-  100% {
-    -webkit-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-  }
-}
-.spinRight {
-  animation: spinRightAnime 3s linear infinite;
-}
-.spinLeft {
-  animation: spinLeftAnime 3s linear infinite;
-}
-
 .app-holder {
   float: left;
-  width: 113px;
-  height: 113px;
+  width: 105px;
+  height: 105px;
   position: relative;
+  .app-brief{
+    padding: 15%;
+    position: relative;
+    .app-icon,.app-info{
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .app-icon{
+      width: 100%;
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+    }
+    .app-info{
+      -webkit-transform: rotateY(180deg);
+      transform: rotateY(180deg);
+      position: absolute;
+      text-align: center;
+      top: 0px;
+      left: 0px;
+      font-size: 12px;
+      padding: 10%;
+      padding-top: 22px;
+      a{
+        display: block;
+      }
+      .app-version{
+        display: none;
+      }
+    }
+  }
+  .dimmer{
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.47);
+  }
+  &:hover{
+    .app-brief{
+      .app-icon{
+        -webkit-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+      }
+      .app-info{
+        -webkit-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+      }
+    }
+  }
 }
-.app-holder .app-brief {
-  padding: 10%;
-  width: 80%;
-  height: 80%;
-  position: relative;
-}
-.app-holder .app-brief .app-icon,
-.app-holder .app-brief .app-info {
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-.app-holder .app-brief .app-icon {
-  height: 100%;
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
-.app-holder .app-brief .app-info {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-  position: absolute;
-  text-align: center;
-  top: 0px;
-  left: 0px;
-  padding: 10%;
-  padding-top: 23px;
-  width: 80%;
-}
-.app-holder .app-brief .app-info a {
-  display: block;
-}
-.app-holder .dimmer {
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(128, 128, 128, 0.47);
-}
-.app-holder:hover .app-brief .app-icon {
-  -webkit-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-.app-holder:hover .app-brief .app-info {
-  -webkit-transform: rotateY(0deg);
-  transform: rotateY(0deg);
-}
+
 .listView:checked ~ .app-holder {
   width: 100% !important;
   height: 33px !important;
@@ -374,6 +377,27 @@ nav ul a {
 .listView:checked ~ .app-holder .app-status-checkbox {
   display: none !important;
 }
+
+
+@keyframes spinRightAnime {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinLeftAnime {
+  100% {
+    -webkit-transform: rotate(-360deg);
+    transform: rotate(-360deg);
+  }
+}
+.spinRight {
+  animation: spinRightAnime 3s linear infinite;
+}
+.spinLeft {
+  animation: spinLeftAnime 3s linear infinite;
+}
+
 .arrowUp {
   width: 0;
   height: 0;

@@ -201,24 +201,22 @@ module.exports = React.createClass({
     }.bind(this));
     var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return(
-      <div id="manage" className="section">
+      <div id="manage" className="section container">
         <Helmet
           title="Manage"
         />
-        <div className="header">{capFirst(GL('manage'))}</div>
+        <h5>{capFirst(GL('manage'))}</h5>
         <div className="actionBar">
-          <div className="type">
-            <select defaultValue={type} onChange={this.updateFilter} id="type">
-              <option value="all">{GL('all')}</option>
-              <option value="app">{GL('app')}</option>
-              <option value="extension">{GL('extension')}</option>
-              <option value="theme">{GL('theme')}</option>
-            </select>
-          </div>
+          <select defaultValue={type} onChange={this.updateFilter} id="type">
+            <option value="all">{GL('all')}</option>
+            <option value="app">{GL('app')}</option>
+            <option value="extension">{GL('extension')}</option>
+            <option value="theme">{GL('theme')}</option>
+          </select>
           <input id="keyword" onChange={this.updateFilter} type="text" />
-          <span id="enableAll" className="button" onClick={this.enableAll}>{GL('enable_all')}</span>
-          <span id="disableAll" className="button" onClick={this.disableAll}>{GL('disable_all')}</span>
-          <span id="undo" className="button" onClick={this.undoAll}>{GL('undo_all')}</span>
+          <span id="enableAll" className="btn" onClick={this.enableAll}>{GL('enable_all')}</span>
+          <span id="disableAll" className="btn" onClick={this.disableAll}>{GL('disable_all')}</span>
+          <span id="undo" className="btn" onClick={this.undoAll}>{GL('undo_all')}</span>
           <div className="changeView">
             <input type="checkbox" className="listView" checked={this.state.listView}  />
             <label className="viewGrid" onClick={this.toggleView}></label>
