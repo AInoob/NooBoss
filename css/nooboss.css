@@ -1,13 +1,17 @@
 .app-switch {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/power-button-on.svg");
 }
 .app-options {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/options.svg");
 }
 .app-remove {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/remove.svg");
 }
 .app-add {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/add.svg");
 }
 .changeView {
@@ -99,45 +103,33 @@
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }
-.listView:checked ~ .app-holder {
-  width: 100% !important;
-  height: 33px !important;
+.tags {
+  margin-left: 8px;
 }
-.listView:checked ~ .app-holder .app-brief .app-name {
-  margin-top: -36px;
-  width: 256px;
-  margin-left: 66px;
-  text-align: left;
-  margin-top: -15px;
+.tags .tagColumn {
+  float: left;
 }
-.listView:checked ~ .app-holder .app-brief .app-version {
-  margin-top: -22px;
-  margin-left: 336px;
+.tags .tagColumn + .tagColumn {
+  margin-left: 16px;
 }
-.listView:checked ~ .app-holder .app-brief .app-icon {
-  width: 23px !important;
-  height: 23px !important;
-  position: absolute;
-  margin-left: 36px !important;
-  top: 0px;
-  left: 0px;
+.tags .tagColumn .tag {
+  background-color: rgba(211, 211, 211, 0.48);
+  text-align: center;
+  cursor: pointer;
+  color: grey;
+  width: 80px;
+  margin-top: 3px;
+  font-size: 12px;
 }
-.listView:checked ~ .app-holder .app-brief .app-switch {
-  margin-left: 6px !important;
+.tags .tagColumn .tag.active {
+  background: #c27ae8;
+  color: white;
 }
-.listView:checked ~ .app-holder .app-brief .app-remove {
-  margin-top: -25px;
-  margin-left: 457px !important;
+.tags .tagColumn .tag.soso.active {
+  background: #750707;
 }
-.listView:checked ~ .app-holder .app-brief .app-options {
-  margin-top: -25px;
-  margin-left: 424px !important;
-}
-.listView:checked ~ .app-holder * {
-  display: block !important;
-}
-.listView:checked ~ .app-holder .app-status-checkbox {
-  display: none !important;
+.tags .tagColumn .tag.bad.active {
+  background: #1d0336;
 }
 @keyframes spinRightAnime {
   100% {
@@ -310,34 +302,6 @@ nav ul a {
 #overview .reco .app .appReview {
   float: left;
 }
-#overview .reco .app .appReview .tags {
-  margin-left: 8px;
-}
-#overview .reco .app .appReview .tags .tagColumn {
-  float: left;
-}
-#overview .reco .app .appReview .tags .tagColumn + .tagColumn {
-  margin-left: 16px;
-}
-#overview .reco .app .appReview .tags .tagColumn .tag {
-  background-color: rgba(211, 211, 211, 0.48);
-  text-align: center;
-  cursor: pointer;
-  color: grey;
-  width: 80px;
-  margin-top: 3px;
-  font-size: 12px;
-}
-#overview .reco .app .appReview .tags .tagColumn .tag.active {
-  background: #c27ae8;
-  color: white;
-}
-#overview .reco .app .appReview .tags .tagColumn .tag.soso.active {
-  background: #750707;
-}
-#overview .reco .app .appReview .tags .tagColumn .tag.bad.active {
-  background: #1d0336;
-}
 .arrowUp {
   width: 0;
   height: 0;
@@ -448,11 +412,11 @@ nav ul a {
   height: 113px;
   position: relative;
 }
-#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief .app-switch {
+#manage .app-holder .app-status-checkbox:not(:checked) ~ .actions .app-switch {
   background-image: url("/thirdParty/power-button-off.svg");
   filter: invert(50%);
 }
-#manage .app-holder .app-status-checkbox:not(:checked) + .app-brief img {
+#manage .app-holder .app-status-checkbox:not(:checked) ~ .actions img {
   filter: invert(23%);
 }
 #manage .app-holder .dimmer {
@@ -526,6 +490,114 @@ nav ul a {
 }
 #manage .app-holder:hover .app-brief .app-info a {
   display: block;
+}
+#manage .listView:checked ~ .app-holder {
+  width: 100%;
+  height: 33px;
+  overflow: hidden;
+  padding-top: 8px;
+}
+#manage .listView:checked ~ .app-holder + .app-holder {
+  border-top: 1px solid #c27ae8;
+}
+#manage .listView:checked ~ .app-holder .app-brief {
+  margin-top: 0px;
+  padding: 0px;
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-name {
+  width: 256px;
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-icon,
+#manage .listView:checked ~ .app-holder .app-brief .app-info {
+  -webkit-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-icon {
+  width: 23px;
+  height: 23px;
+  margin-left: 25px;
+  margin-top: -3px;
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-info .app-version,
+#manage .listView:checked ~ .app-holder .app-brief .app-info .app-name {
+  width: initial;
+  position: absolute;
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-info .app-version {
+  left: 330px;
+}
+#manage .listView:checked ~ .app-holder .app-brief .app-info .app-name {
+  left: 60px;
+}
+#manage .listView:checked ~ .app-holder .actions {
+  position: absolute;
+  margin-top: 0px;
+  width: 0px;
+}
+#manage .listView:checked ~ .app-holder .actions * {
+  position: absolute;
+}
+#manage .listView:checked ~ .app-holder .actions .app-switch {
+  left: 0px;
+}
+#manage .listView:checked ~ .app-holder .actions .app-options {
+  left: 410px;
+}
+#manage .listView:checked ~ .app-holder .actions .app-remove {
+  left: 440px;
+}
+#app td {
+  padding: 5px 5px;
+}
+#app .app-icon {
+  position: absolute;
+  display: block;
+  right: 0px;
+  cursor: pointer;
+}
+#app .config {
+  position: absolute;
+  margin-left: 200px;
+  top: 85px;
+}
+#app .config * {
+  cursor: pointer;
+  float: left;
+  margin-right: 8px;
+  width: 44px;
+  height: 44px;
+}
+#app .config .app-status-checkbox {
+  display: none;
+}
+#app .config .app-status-checkbox:not(:checked) + .app-switch {
+  background-image: url("/thirdParty/power-button-off.svg");
+  filter: invert(50%);
+}
+#app .config .app-switch:before {
+  display: none;
+}
+#app .config .app-switch:after {
+  display: none;
+}
+#app .app-name {
+  cursor: pointer;
+}
+#app .section {
+  overflow: hidden;
+  position: relative;
+}
+#app .app-brief tr td:nth-child(1) {
+  width: 100px;
+}
+#app .app-detail {
+  font-size: 12px;
+}
+#app .app-detail tr td:nth-child(1) {
+  width: 150px;
+}
+#app .app-detail tr + tr {
+  border-top: 1px solid #c27ae8;
 }
 #about #top {
   height: 100px;

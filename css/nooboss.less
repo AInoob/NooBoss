@@ -4,15 +4,19 @@
 @nooboss-button-2: #59cee5;
 
 .app-switch {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/power-button-on.svg");
 }
 .app-options {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/options.svg");
 }
 .app-remove {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/remove.svg");
 }
 .app-add {
+  background-size: 100% 100%;
   background-image: url("/thirdParty/add.svg");
 }
 
@@ -111,45 +115,35 @@
   }
 }
 
-.listView:checked ~ .app-holder {
-  width: 100% !important;
-  height: 33px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-name {
-  margin-top: -36px;
-  width: 256px;
-  margin-left: 66px;
-  text-align: left;
-  margin-top: -15px;
-}
-.listView:checked ~ .app-holder .app-brief .app-version {
-  margin-top: -22px;
-  margin-left: 336px;
-}
-.listView:checked ~ .app-holder .app-brief .app-icon {
-  width: 23px !important;
-  height: 23px !important;
-  position: absolute;
-  margin-left: 36px !important;
-  top: 0px;
-  left: 0px;
-}
-.listView:checked ~ .app-holder .app-brief .app-switch {
-  margin-left: 6px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-remove {
-  margin-top: -25px;
-  margin-left: 457px !important;
-}
-.listView:checked ~ .app-holder .app-brief .app-options {
-  margin-top: -25px;
-  margin-left: 424px !important;
-}
-.listView:checked ~ .app-holder * {
-  display: block !important;
-}
-.listView:checked ~ .app-holder .app-status-checkbox {
-  display: none !important;
+
+
+.tags{
+  margin-left: 8px;
+  .tagColumn{
+    float: left;
+    & + .tagColumn{
+      margin-left: 16px;
+    }
+    .tag{
+      background-color: rgba(211, 211, 211, 0.48);
+      text-align: center;
+      cursor: pointer;
+      color: grey;
+      width: 80px;
+      margin-top: 3px;
+      font-size: 12px;
+    }
+    .tag.active{
+      background: @nooboss-color-1;
+      color: white;
+    }
+    .tag.soso.active{
+      background: #750707;
+    }
+    .tag.bad.active{
+      background: #1d0336;
+    }
+  }
 }
 
 
@@ -328,34 +322,7 @@ nav ul a {
       }
       .appReview{
         float: left;
-        .tags{
-          margin-left: 8px;
-          .tagColumn{
-            float: left;
-            & + .tagColumn{
-              margin-left: 16px;
-            }
-            .tag{
-              background-color: rgba(211, 211, 211, 0.48);
-              text-align: center;
-              cursor: pointer;
-              color: grey;
-              width: 80px;
-              margin-top: 3px;
-              font-size: 12px;
-            }
-            .tag.active{
-              background: @nooboss-color-1;
-              color: white;
-            }
-            .tag.soso.active{
-              background: #750707;
-            }
-            .tag.bad.active{
-              background: #1d0336;
-            }
-          }
-        }
+        
       }
     }
   }
@@ -479,7 +446,7 @@ nav ul a {
     width: 113px;
     height: 113px;
     position: relative;
-    .app-status-checkbox:not(:checked) + .app-brief{
+    .app-status-checkbox:not(:checked) ~ .actions{
       .app-switch{
         background-image: url("/thirdParty/power-button-off.svg");
         filter: invert(50%);
@@ -559,6 +526,127 @@ nav ul a {
             display: block;
           }
         }
+      }
+    }
+  }
+  .listView:checked{
+    & ~ .app-holder{
+      width: 100%;
+      height: 33px;
+      overflow: hidden;
+      padding-top: 8px;
+      & + .app-holder{
+        border-top: 1px solid @nooboss-color-1;
+      }
+      .app-brief{
+        margin-top: 0px;
+        padding: 0px;
+        .app-name{
+          width: 256px;
+        }
+        .app-icon,.app-info{
+          -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+        .app-icon{
+          width: 23px;
+          height: 23px;
+          margin-left: 25px;
+          margin-top: -3px;
+        }
+        .app-info{
+          .app-version,.app-name{
+            width: initial;
+            position: absolute;
+          }
+          .app-version{
+            left: 330px;
+          }
+          .app-name{
+            left: 60px;
+          }
+        }
+      }
+      .actions{
+        position: absolute;
+        margin-top: 0px;
+        width: 0px;
+        *{
+          position: absolute;
+        }
+        .app-switch{
+          left: 0px;
+        }
+        .app-options{
+          left: 410px;
+        }
+        .app-remove{
+          left: 440px;
+        }
+      }
+    }
+  }
+}
+
+#app{
+  td{
+    padding: 5px 5px;
+  }
+  .app-icon{
+    position: absolute;
+    display: block;
+    right: 0px;
+    cursor: pointer;
+  }
+  .config {
+    position: absolute;
+    margin-left: 200px;
+    top: 85px;
+    *{
+      cursor: pointer;
+      float: left;
+      margin-right: 8px;
+      width: 44px;
+      height: 44px;
+    }
+    .app-status-checkbox{
+      display: none;
+      &:not(:checked) + .app-switch{
+        background-image: url("/thirdParty/power-button-off.svg");
+        filter: invert(50%);
+      }
+    }
+    .app-switch{
+      &:before{
+        display: none;
+      }
+      &:after{
+        display: none;
+      }
+    }
+  }
+  .app-name{
+    cursor: pointer;
+  }
+  .section{
+    overflow: hidden;
+    position: relative;
+  }
+  .app-brief{
+    tr{
+      td:nth-child(1){
+        width: 100px;
+      }
+    }
+  }
+  .app-detail{
+    font-size: 12px;
+    tr{
+      td:nth-child(1){
+        width: 150px;
+      }
+      & + tr{
+        border-top: 1px solid @nooboss-color-1;
       }
     }
   }

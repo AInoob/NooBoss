@@ -233,12 +233,11 @@ module.exports = React.createClass({
         <Helmet
           title="App"
         />
-        <div className="section">
-          <div className="header">{GL('brief')}</div>
+        <div className="section container">
           <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} className="app-icon" onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')}><img src={appInfo.icon} /></a>
           {config}
           {launch}
-          <a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} className="app-name">{appInfo.name}</a>
+          <h4><a title={'https://chrome.google.com/webstore/detail/'+appInfo.id} onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} className="app-name">{appInfo.name}</a></h4>
           <table className="app-brief">
             <tbody>
               <tr><td>{GL('version')}</td><td>{appInfo.version}</td></tr>
@@ -249,8 +248,8 @@ module.exports = React.createClass({
           </table>
           {tags}
         </div>
-        <div className="section">
-          <div className="header">{capFirst(GL('detail'))}</div>
+        <div className="section container">
+          <h5>{capFirst(GL('detail'))}</h5>
           <table className="app-detail">
             <tbody>
               <tr><td>{GL('last_update')}</td><td>{capFirst(new timeago().format(appInfo.lastUpdateDate))}</td></tr>

@@ -29070,12 +29070,7 @@
 	      }),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
-	        React.createElement(
-	          'div',
-	          { className: 'header' },
-	          GL('brief')
-	        ),
+	        { className: 'section container' },
 	        React.createElement(
 	          'a',
 	          { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-icon', onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link') },
@@ -29084,9 +29079,13 @@
 	        config,
 	        launch,
 	        React.createElement(
-	          'a',
-	          { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), className: 'app-name' },
-	          appInfo.name
+	          'h4',
+	          null,
+	          React.createElement(
+	            'a',
+	            { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), className: 'app-name' },
+	            appInfo.name
+	          )
 	        ),
 	        React.createElement(
 	          'table',
@@ -29160,10 +29159,10 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
+	        { className: 'section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          capFirst(GL('detail'))
 	        ),
 	        React.createElement(
