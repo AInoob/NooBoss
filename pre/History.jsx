@@ -46,17 +46,15 @@ module.exports = React.createClass({
           title="History"
         />
         <div className="actionBar">
-          <div className="event">
-            <select onChange={this.updateFilter} id="event">
-              <option value="all">{capFirst(GL('all'))}</option>
-              <option value="installed">{capFirst(GL('installed'))}</option>
-              <option value="updated">{capFirst(GL('updated'))}</option>
-              <option value="removed">{capFirst(GL('removed'))}</option>
-              <option value="enabled">{capFirst(GL('enabled'))}</option>
-              <option value="disabled">{capFirst(GL('disabled'))}</option>
-            </select>
-          </div>
-          <input id="keyword" onChange={this.updateFilter} type="text" />
+          <select onChange={this.updateFilter} id="event">
+            <option value="all">{capFirst(GL('all'))}</option>
+            <option value="installed">{capFirst(GL('installed'))}</option>
+            <option value="updated">{capFirst(GL('updated'))}</option>
+            <option value="removed">{capFirst(GL('removed'))}</option>
+            <option value="enabled">{capFirst(GL('enabled'))}</option>
+            <option value="disabled">{capFirst(GL('disabled'))}</option>
+          </select>
+          <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
         </div>
         <table className="history-table">
           <thead>

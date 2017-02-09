@@ -29633,7 +29633,7 @@
 	            GL('theme')
 	          )
 	        ),
-	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' }),
+	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') }),
 	        React.createElement(
 	          'span',
 	          { id: 'enableAll', className: 'btn', onClick: this.enableAll },
@@ -29901,10 +29901,10 @@
 	      }),
 	      React.createElement(
 	        'div',
-	        { className: 'rules section' },
+	        { className: 'rules section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          GL('rules')
 	        ),
 	        React.createElement(
@@ -29947,10 +29947,10 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'newRule section' },
+	        { className: 'newRule section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          GL('new_rule')
 	        ),
 	        React.createElement(
@@ -29958,7 +29958,7 @@
 	          { className: 'selectedApps' },
 	          React.createElement(
 	            'div',
-	            { className: 'input-header' },
+	            { className: 'header' },
 	            capFirst(GL('app_s')),
 	            ':'
 	          ),
@@ -29974,7 +29974,7 @@
 	          { className: 'selectedAction' },
 	          React.createElement(
 	            'div',
-	            { className: 'input-header' },
+	            { className: 'header' },
 	            capFirst(GL('action')),
 	            ':'
 	          ),
@@ -30008,15 +30008,15 @@
 	          { className: 'match' },
 	          React.createElement(
 	            'div',
-	            { className: 'input-header' },
+	            { className: 'header' },
 	            capFirst(GL('url')),
 	            ':'
 	          ),
-	          React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, type: 'text' })
+	          React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'addRule button', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
+	          { className: 'addRule btn', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
 	          GL('add_rule')
 	        ),
 	        React.createElement(
@@ -30050,7 +30050,7 @@
 	              )
 	            )
 	          ),
-	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
+	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') })
 	        ),
 	        appList
 	      )
@@ -30449,44 +30449,40 @@
 	        'div',
 	        { className: 'actionBar' },
 	        React.createElement(
-	          'div',
-	          { className: 'event' },
+	          'select',
+	          { onChange: this.updateFilter, id: 'event' },
 	          React.createElement(
-	            'select',
-	            { onChange: this.updateFilter, id: 'event' },
-	            React.createElement(
-	              'option',
-	              { value: 'all' },
-	              capFirst(GL('all'))
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'installed' },
-	              capFirst(GL('installed'))
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'updated' },
-	              capFirst(GL('updated'))
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'removed' },
-	              capFirst(GL('removed'))
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'enabled' },
-	              capFirst(GL('enabled'))
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'disabled' },
-	              capFirst(GL('disabled'))
-	            )
+	            'option',
+	            { value: 'all' },
+	            capFirst(GL('all'))
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'installed' },
+	            capFirst(GL('installed'))
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'updated' },
+	            capFirst(GL('updated'))
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'removed' },
+	            capFirst(GL('removed'))
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'enabled' },
+	            capFirst(GL('enabled'))
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'disabled' },
+	            capFirst(GL('disabled'))
 	          )
 	        ),
-	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text' })
+	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') })
 	      ),
 	      React.createElement(
 	        'table',

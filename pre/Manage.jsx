@@ -213,7 +213,7 @@ module.exports = React.createClass({
             <option value="extension">{GL('extension')}</option>
             <option value="theme">{GL('theme')}</option>
           </select>
-          <input id="keyword" onChange={this.updateFilter} type="text" />
+          <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
           <span id="enableAll" className="btn" onClick={this.enableAll}>{GL('enable_all')}</span>
           <span id="disableAll" className="btn" onClick={this.disableAll}>{GL('disable_all')}</span>
           <span id="undo" className="btn" onClick={this.undoAll}>{GL('undo_all')}</span>

@@ -1,3 +1,10 @@
+select {
+  border: 1px solid #e2cdde;
+  height: 31px;
+}
+input {
+  border-bottom: 1px solid #e2cdde;
+}
 .app-switch {
   background-size: 100% 100%;
   background-image: url("/thirdParty/power-button-on.svg");
@@ -599,21 +606,86 @@ nav ul a {
 #app .app-detail tr + tr {
   border-top: 1px solid #c27ae8;
 }
-#about #top {
+#autoState tr td {
+  padding: 5px 5px;
+}
+#autoState tr td img {
+  width: 23px;
+  height: 23px;
+}
+#autoState select {
+  float: left;
+  display: block;
+  width: initial;
+  height: 28px;
+}
+#autoState .header {
+  float: left;
+  width: 66px;
+}
+#autoState .selectedApps,
+#autoState .selectedAction,
+#autoState .match {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+#autoState .match {
+  height: 28px;
+}
+#autoState #match {
+  float: left;
+  width: initial;
+  height: 28px;
+  margin-top: -5px;
+}
+#autoState .selected {
+  height: 23px;
+}
+#autoState .selected img {
+  height: 23px;
+  width: 23px;
+}
+#autoState .actionBar {
+  height: 38px;
+  margin-top: 15px;
+}
+#autoState .actionBar * {
+  margin-right: 8px;
+}
+#history td {
+  padding: 5px 5px;
+}
+#history tr + tr {
+  border-top: 1px solid #c27ae8;
+}
+#history img {
+  width: 22px;
+  height: 22px;
+}
+#history .actionBar * {
+  margin-left: 8px;
+}
+#history .actionBar select {
+  display: inline-block;
+  width: initial;
+  float: left;
+}
+#divabout #top {
   height: 100px;
 }
-#about #icon1,
-#about #icon2 {
+#divabout #icon1,
+#divabout #icon2 {
   width: 69px;
   height: 69px;
   top: 96px;
   position: absolute;
   margin-left: 80px;
 }
-#about #icon2 {
+#divabout #icon2 {
   margin-left: 430px;
 }
-#about .shareIcon {
+#divabout .shareIcon {
   float: left;
   width: 66px;
   margin: 2px;

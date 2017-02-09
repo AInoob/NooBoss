@@ -211,8 +211,8 @@ module.exports = React.createClass({
         <Helmet
           title="Manage"
         />
-        <div className="rules section">
-          <div className="header">{GL('rules')}</div>
+        <div className="rules section container">
+          <h5>{GL('rules')}</h5>
           <table className="autoState-table">
             <thead>
               <tr>
@@ -227,15 +227,15 @@ module.exports = React.createClass({
             </tbody>
           </table>
         </div>
-        <div className="newRule section">
-          <div className="header">{GL('new_rule')}</div>
+        <div className="newRule section container">
+          <h5>{GL('new_rule')}</h5>
           <div className="selectedApps">
-            <div className="input-header">{capFirst(GL('app_s'))}:</div> <div className="selected">
+            <div className="header">{capFirst(GL('app_s'))}:</div> <div className="selected">
             {selectedIcons}
             </div>
           </div>
           <div className="selectedAction">
-            <div className="input-header">{capFirst(GL('action'))}:</div><select value={this.state.rule.action} onChange={this.updateRule} id="action">
+            <div className="header">{capFirst(GL('action'))}:</div><select value={this.state.rule.action} onChange={this.updateRule} id="action">
               <option value="enableOnly">{GL('only_enable_when_matched')}</option>
               <option value="disableOnly">{GL('only_disable_when_matched')}</option>
               <option value="enableWhen">{GL('enable_when_matched')}</option>
@@ -243,9 +243,9 @@ module.exports = React.createClass({
             </select>
           </div>
           <div className="match">
-            <div className="input-header">{capFirst(GL('url'))}:</div><input id="match" value={this.state.rule.match} onChange={this.updateRule} type="text" />
+            <div className="header">{capFirst(GL('url'))}:</div><input id="match" value={this.state.rule.match} onChange={this.updateRule} placeholder="RegExp matching" type="text" />
           </div>
-          <div className="addRule button" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</div>
+          <div className="addRule btn" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</div>
           <div className="actionBar autoState">
             <div className="type">
               <select onChange={this.updateFilter} id="type">
@@ -255,7 +255,7 @@ module.exports = React.createClass({
                 <option value="theme">{GL('theme')}</option>
               </select>
             </div>
-            <input id="keyword" onChange={this.updateFilter} type="text" />
+            <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')} />
           </div>
           {appList}
         </div>
