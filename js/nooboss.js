@@ -28069,7 +28069,7 @@
 	                  } else if (this.state.votes[b.appId] == 'down') {
 	                    downCountB = 1;
 	                  }
-	                  return a.upVotes - a.downVotes + upCountA - downCountB < b.upVotes - b.downVotes + upCountB - downCountB;
+	                  return b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
 	                }.bind(this));
 	              });
 	            }.bind(this));
@@ -28299,7 +28299,7 @@
 	      }
 	    }
 	    var discover = null;
-	    var recoList;
+	    var recoList = null;
 	    if (this.state.recoExtensions) {
 	      if (!this.state.joinCommunity) {
 	        discover = React.createElement(
@@ -28317,9 +28317,25 @@
 	        );
 	      } else {
 	        if (this.state.tabPerm) {
-	          var recoList;
 	          if ((this.state.recoList || []).length > 0) {
-	            recoList = (this.state.recoList || []).map(function (elem, index) {
+	            var tempRecoList = this.state.recoList.sort(function (a, b) {
+	              var upCountA = 0;
+	              var downCountA = 0;
+	              var upCountB = 0;
+	              var downCountB = 0;
+	              if (this.state.votes[a.appId] == 'up') {
+	                upCountA = 1;
+	              } else if (this.state.votes[a.appId] == 'down') {
+	                downCountA = 1;
+	              }
+	              if (this.state.votes[b.appId] == 'up') {
+	                upCountB = 1;
+	              } else if (this.state.votes[b.appId] == 'down') {
+	                downCountB = 1;
+	              }
+	              return b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
+	            }.bind(this));
+	            recoList = (tempRecoList || []).map(function (elem, index) {
 	              var app = null;
 	              var appInfo = null;
 	              var appId = elem.appId;
