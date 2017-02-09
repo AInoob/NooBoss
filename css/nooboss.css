@@ -4,6 +4,7 @@ select {
 }
 input {
   border-bottom: 1px solid #e2cdde;
+  margin-bottom: 0px !important;
 }
 .app-switch {
   background-size: 100% 100%;
@@ -234,9 +235,19 @@ nav ul a {
 }
 .section {
   padding-bottom: 0px;
+  padding-top: 0px;
 }
 .container {
   width: 90%;
+}
+#overview .app-holder {
+  cursor: pointer;
+}
+#overview .app-holder .app-info {
+  width: 100%;
+}
+#overview .app-holder .app-info .app-name {
+  width: 100%;
 }
 #overview .reco {
   overflow: hidden;
@@ -606,6 +617,18 @@ nav ul a {
 #app .app-detail tr + tr {
   border-top: 1px solid #c27ae8;
 }
+#autoState .app-holder {
+  cursor: pointer;
+}
+#autoState .app-holder .app-info {
+  width: 100%;
+}
+#autoState .app-holder .app-info .app-name {
+  width: 100%;
+}
+#autoState table {
+  margin-top: -10px;
+}
 #autoState tr td {
   padding: 5px 5px;
 }
@@ -623,7 +646,6 @@ nav ul a {
   float: left;
   display: block;
   width: initial;
-  height: 28px;
 }
 #autoState .header {
   float: left;
@@ -660,6 +682,7 @@ nav ul a {
   margin-right: 8px;
 }
 #history {
+  padding-top: 10px;
   font-size: 13px;
 }
 #history td {
@@ -679,6 +702,13 @@ nav ul a {
   display: inline-block;
   width: initial;
   float: left;
+}
+#options .container {
+  width: 75%;
+}
+#options h5,
+#options h4 {
+  margin-left: -33px;
 }
 #options select {
   display: inline-block;

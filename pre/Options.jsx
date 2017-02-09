@@ -3,7 +3,7 @@ var Helmet = require('react-helmet');
 module.exports = React.createClass({
   displayName: 'Options',
   getInitialState: function(){
-    return {setting:{joinCommunity:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
+    return {setting:{joinCommunity:false,recoExtensions:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
   },
   componentDidMount: function(){
     get('defaultPage',function(url){

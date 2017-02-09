@@ -10,6 +10,7 @@ select{
 
 input{
   border-bottom: 1px solid #e2cdde;
+  margin-bottom: 0px !important;
 }
 
 .app-switch {
@@ -254,6 +255,7 @@ nav ul a {
 }
 .section{
   padding-bottom: 0px;
+  padding-top: 0px;
 }
 
 .container{
@@ -261,6 +263,15 @@ nav ul a {
 }
 
 #overview{
+  .app-holder{
+    cursor: pointer;
+    .app-info{
+      width: 100%;
+      .app-name{
+        width: 100%;
+      }
+    }
+  }
   .reco{
     overflow: hidden;
     padding-bottom: 8px;
@@ -662,6 +673,18 @@ nav ul a {
 }
 
 #autoState{
+  .app-holder{
+    cursor: pointer;
+    .app-info{
+      width: 100%;
+      .app-name{
+        width: 100%;
+      }
+    }
+  }
+  table{
+    margin-top: -10px;
+  }
   tr{
     td{
       padding: 5px 5px;
@@ -682,7 +705,6 @@ nav ul a {
     float: left;
     display: block;
     width: initial;
-    height: 28px;
   }
   .header{
     float: left;
@@ -719,6 +741,7 @@ nav ul a {
 }
 
 #history{
+  padding-top: 10px;
   font-size: 13px;
   td{
     padding: 5px 5px;
@@ -745,6 +768,12 @@ nav ul a {
 }
 
 #options{
+  .container{
+    width: 75%;
+  }
+  h5,h4{
+    margin-left: -33px;
+  }
   select{
     display: inline-block;
     width: initial;

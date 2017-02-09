@@ -11,7 +11,7 @@ module.exports = React.createClass({
             <img className="app-icon" src={info.iconUrl} />
             <div className="app-info">
               <div className="app-version" title={info.version}>{info.version}</div>
-              <div>{info.name}</div>
+              <div className="app-name">{info.name}</div>
             </div>
           </div>
           <div className={this.props.dimmer} />
