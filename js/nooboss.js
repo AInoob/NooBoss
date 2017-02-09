@@ -30178,7 +30178,11 @@
 	      { className: 'switch' },
 	      React.createElement('input', { type: 'checkbox', onChange: CW.bind(null, handler || this.toggleSetting.bind(this, id), 'Options', 'option-switch', id), checked: this.state.setting[id], id: id }),
 	      React.createElement('label', { htmlFor: id, className: 'checkbox' }),
-	      GL(id)
+	      React.createElement(
+	        'span',
+	        null,
+	        GL(id)
+	      )
 	    );
 	  },
 	  showAds: function () {
@@ -30266,30 +30270,30 @@
 	      }),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
+	        { className: 'section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          capFirst(GL('clean'))
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'button space', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
+	          { className: 'btn space', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
 	          GL('clean_history')
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'div',
-	          { className: 'button space', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
+	          { className: 'btn space', onClick: CW.bind(null, this.reset, 'Options', 'reset', '') },
 	          GL('reset_everything')
 	        )
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
+	        { className: 'section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          GL('notification')
 	        ),
 	        this.getSwitch('notifyStateChange'),
@@ -30299,68 +30303,64 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
+	        { className: 'section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          GL('functions')
 	        ),
-	        this.getSwitch('autoState', this.autoState)
+	        this.getSwitch('autoState', this.autoState),
+	        this.getSwitch('recoExtensions')
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'section' },
+	        { className: 'section container' },
 	        React.createElement(
-	          'div',
-	          { className: 'header' },
+	          'h5',
+	          null,
 	          GL('experience')
 	        ),
 	        React.createElement(
-	          'div',
-	          { className: 'selector' },
+	          'span',
+	          { className: 'defaultPage' },
+	          GL('default_page')
+	        ),
+	        React.createElement(
+	          'select',
+	          { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
 	          React.createElement(
-	            'span',
-	            { className: 'defaultPage' },
-	            GL('default_page')
+	            'option',
+	            { value: 'overview' },
+	            GL('overview')
 	          ),
 	          React.createElement(
-	            'select',
-	            { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
-	            React.createElement(
-	              'option',
-	              { value: 'overview' },
-	              GL('overview')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'manage' },
-	              GL('manage')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'autoState' },
-	              GL('autoState')
-	            ),
-	            React.createElement(
-	              'option',
-	              { value: 'history' },
-	              GL('history')
-	            )
+	            'option',
+	            { value: 'manage' },
+	            GL('manage')
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'autoState' },
+	            GL('autoState')
+	          ),
+	          React.createElement(
+	            'option',
+	            { value: 'history' },
+	            GL('history')
 	          )
 	        ),
-	        this.getSwitch('recoExtensions'),
 	        this.getSwitch('joinCommunity', this.joinCommunity),
 	        this.getSwitch('showAds', this.showAds),
+	        React.createElement('input', { id: 'upload', className: 'hide', type: 'file', onChange: CW.bind(null, this.importOptions, 'Options', 'importOptions', '') }),
 	        React.createElement(
-	          'div',
-	          { className: 'button space' },
-	          GL('import_settings'),
-	          React.createElement('input', { id: 'upload', type: 'file', onChange: CW.bind(null, this.importOptions, 'Options', 'importOptions', '') })
+	          'label',
+	          { htmlFor: 'upload', className: 'btn space' },
+	          GL('import_settings')
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'div',
-	          { className: 'button space', onClick: CW.bind(null, this.exportOptions, 'Options', 'exportOptions', '') },
+	          { className: 'btn space', onClick: CW.bind(null, this.exportOptions, 'Options', 'exportOptions', '') },
 	          GL('export_settings')
 	        ),
 	        React.createElement('br', null)
@@ -30396,6 +30396,19 @@
 	      prevState.filter[id] = value;
 	      return prevState;
 	    });
+	  },
+	  cleanHistory: function () {
+	    var result = confirm(GL('ls_5'));
+	    if (result) {
+	      setDB('history_records', null, function () {
+	        chrome.notifications.create({
+	          type: 'basic',
+	          iconUrl: '/images/icon_128.png',
+	          title: GL('history_cleaned'),
+	          message: GL('ls_6')
+	        });
+	      });
+	    }
 	  },
 	  render: function () {
 	    var filter = this.state.filter;
@@ -30441,7 +30454,7 @@
 	    }).reverse();
 	    return React.createElement(
 	      'div',
-	      { className: 'section', id: 'history' },
+	      { className: 'section container', id: 'history' },
 	      React.createElement(Helmet, {
 	        title: 'History'
 	      }),
@@ -30482,7 +30495,12 @@
 	            capFirst(GL('disabled'))
 	          )
 	        ),
-	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') })
+	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') }),
+	        React.createElement(
+	          'div',
+	          { className: 'btn', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
+	          GL('clean')
+	        )
 	      ),
 	      React.createElement(
 	        'table',
@@ -30555,8 +30573,8 @@
 	                    'div',
 	                    { className: 'section', id: 'top' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h3',
+	                        null,
 	                        '\u4E8C\u7BA1\u5BB6'
 	                    ),
 	                    React.createElement(
@@ -30574,8 +30592,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u80FD\u5E72\u4EC0\u4E48\uFF1F'
 	                    ),
 	                    React.createElement(
@@ -30716,8 +30734,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u8C01\u5F04\u7684\u4E8C\u7BA1\u5BB6'
 	                    ),
 	                    React.createElement(
@@ -30742,8 +30760,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u9690\u79C1\uFF1F'
 	                    ),
 	                    React.createElement(
@@ -30761,8 +30779,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u600E\u4E48\u652F\u6301\u4E8C\u7BA1\u5BB6\uFF1F'
 	                    ),
 	                    React.createElement(
@@ -30775,8 +30793,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u5EFA\u8BAE\uFF1F'
 	                    ),
 	                    React.createElement(
@@ -30795,8 +30813,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u5206\u4EAB\u4E8C\u7BA1\u5BB6'
 	                    ),
 	                    React.createElement(
@@ -30844,8 +30862,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        '\u9E23\u8C22'
 	                    ),
 	                    React.createElement(
@@ -30986,8 +31004,8 @@
 	                    'div',
 	                    { className: 'section', id: 'top' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h3',
+	                        null,
 	                        'NooBoss'
 	                    ),
 	                    React.createElement(
@@ -31005,8 +31023,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'What can NooBoss do?'
 	                    ),
 	                    React.createElement(
@@ -31156,8 +31174,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'Who made NooBoss'
 	                    ),
 	                    React.createElement(
@@ -31181,8 +31199,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'Privacy'
 	                    ),
 	                    React.createElement(
@@ -31200,8 +31218,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'How to support NooBoss?'
 	                    ),
 	                    React.createElement(
@@ -31214,8 +31232,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'Any suggestions?'
 	                    ),
 	                    React.createElement(
@@ -31234,8 +31252,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'Share NooBoss'
 	                    ),
 	                    React.createElement(
@@ -31283,8 +31301,8 @@
 	                    'section',
 	                    { className: 'section' },
 	                    React.createElement(
-	                        'div',
-	                        { className: 'header' },
+	                        'h5',
+	                        null,
 	                        'Acknowledgements'
 	                    ),
 	                    React.createElement(

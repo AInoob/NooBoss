@@ -671,21 +671,61 @@ nav ul a {
   width: initial;
   float: left;
 }
-#divabout #top {
+#options select {
+  display: inline-block;
+  width: initial;
+  float: left;
+}
+#options .btn {
+  margin-bottom: 8px;
+}
+#options .switch {
+  clear: both;
+  margin-bottom: 13px;
+}
+#options [type="checkbox"] + label {
+  height: 18px;
+}
+#options span.defaultPage {
+  float: left;
+  margin-right: 10px;
+  margin-top: 6px;
+}
+#options [type="checkbox"]:checked + label:before {
+  border-top: 2px solid transparent;
+  border-left: 2px solid transparent;
+  border-right: 2px solid #c27ae8;
+  border-bottom: 2px solid #c27ae8;
+}
+#about .section {
+  width: 90%;
+  margin: auto;
+}
+#about ul {
+  padding-left: 22px;
+  list-style: initial;
+}
+#about ul li {
+  list-style: initial;
+}
+#about a {
+  cursor: pointer;
+}
+#about #top {
   height: 100px;
 }
-#divabout #icon1,
-#divabout #icon2 {
+#about #icon1,
+#about #icon2 {
   width: 69px;
   height: 69px;
   top: 96px;
   position: absolute;
-  margin-left: 80px;
+  margin-left: 267px;
 }
-#divabout #icon2 {
+#about #icon2 {
   margin-left: 430px;
 }
-#divabout .shareIcon {
+#about .shareIcon {
   float: left;
   width: 66px;
   margin: 2px;

@@ -116,7 +116,7 @@ module.exports = React.createClass({
   getSwitch: function(id,handler){
     return <div className="switch">
       <input type="checkbox" onChange={CW.bind(null,(handler||this.toggleSetting.bind(this,id)),'Options','option-switch',id)} checked={this.state.setting[id]} id={id} />
-      <label htmlFor={id} className="checkbox"></label>{GL(id)}
+      <label htmlFor={id} className="checkbox"></label><span>{GL(id)}</span>
     </div>;
   },
   showAds: function(){
@@ -205,38 +205,37 @@ module.exports = React.createClass({
         <Helmet
           title="Options"
         />
-        <div className="section">
-          <div className="header">{capFirst(GL('clean'))}</div>
-          <div className="button space" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div><br />
-          <div className="button space" onClick={CW.bind(null,this.reset,'Options','reset','')}>{GL('reset_everything')}</div>
+        <div className="section container">
+          <h5>{capFirst(GL('clean'))}</h5>
+          <div className="btn space" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div><br />
+          <div className="btn space" onClick={CW.bind(null,this.reset,'Options','reset','')}>{GL('reset_everything')}</div>
         </div>
-        <div className="section">
-          <div className="header">{GL('notification')}</div>
+        <div className="section container">
+          <h5>{GL('notification')}</h5>
           {this.getSwitch('notifyStateChange')}
           {this.getSwitch('notifyInstallation')}
           {this.getSwitch('notifyRemoval')}
           {this.getSwitch('autoStateNotification')}
         </div>
-        <div className="section">
-          <div className="header">{GL('functions')}</div>
+        <div className="section container">
+          <h5>{GL('functions')}</h5>
           {this.getSwitch('autoState',this.autoState)}
-        </div>
-        <div className="section">
-          <div className="header">{GL('experience')}</div>
-          <div className="selector">
-          <span className="defaultPage">{GL('default_page')}</span>
-            <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
-              <option value="overview">{GL('overview')}</option>
-              <option value="manage">{GL('manage')}</option>
-              <option value="autoState">{GL('autoState')}</option>
-              <option value="history">{GL('history')}</option>
-            </select>
-          </div>
           {this.getSwitch('recoExtensions')}
+        </div>
+        <div className="section container">
+          <h5>{GL('experience')}</h5>
+          <span className="defaultPage">{GL('default_page')}</span>
+          <select value={this.state.setting.defaultPage} onChange={this.updateDefaultPage} id="type">
+            <option value="overview">{GL('overview')}</option>
+            <option value="manage">{GL('manage')}</option>
+            <option value="autoState">{GL('autoState')}</option>
+            <option value="history">{GL('history')}</option>
+          </select>
           {this.getSwitch('joinCommunity',this.joinCommunity)}
           {this.getSwitch('showAds',this.showAds)}
-          <div className="button space">{GL('import_settings')}<input id="upload" type="file" onChange={CW.bind(null,this.importOptions,'Options','importOptions','')}/></div><br />
-          <div className="button space" onClick={CW.bind(null,this.exportOptions,'Options','exportOptions','')}>{GL('export_settings')}</div><br />
+          <input id="upload" className="hide" type="file" onChange={CW.bind(null,this.importOptions,'Options','importOptions','')}/>
+          <label htmlFor="upload" className="btn space">{GL('import_settings')}</label><br />
+          <div className="btn space" onClick={CW.bind(null,this.exportOptions,'Options','exportOptions','')}>{GL('export_settings')}</div><br />
         </div>
       </div>
     );

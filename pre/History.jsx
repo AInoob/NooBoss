@@ -22,6 +22,19 @@ module.exports = React.createClass({
       return prevState;
     });
   },
+  cleanHistory: function(){
+    var result=confirm(GL('ls_5'));
+    if(result){
+      setDB('history_records',null,function(){
+        chrome.notifications.create({
+          type:'basic',
+          iconUrl: '/images/icon_128.png',
+          title: GL('history_cleaned'),
+          message: GL('ls_6'),
+        });
+      });
+    }
+  },
   render: function(){
     var filter=this.state.filter;
     var pattern=new RegExp(filter.keyword,'i');
@@ -41,7 +54,7 @@ module.exports = React.createClass({
       }
     }).reverse();
     return(
-      <div className="section" id="history">
+      <div className="section container" id="history">
         <Helmet
           title="History"
         />
@@ -55,6 +68,7 @@ module.exports = React.createClass({
             <option value="disabled">{capFirst(GL('disabled'))}</option>
           </select>
           <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
+          <div className="btn" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean')}</div>
         </div>
         <table className="history-table">
           <thead>
