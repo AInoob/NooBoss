@@ -613,6 +613,12 @@ nav ul a {
   width: 23px;
   height: 23px;
 }
+#autoState tr td:nth-child(5) {
+  cursor: pointer;
+}
+#autoState tr td:nth-child(6) {
+  cursor: pointer;
+}
 #autoState select {
   float: left;
   display: block;
@@ -652,6 +658,9 @@ nav ul a {
 }
 #autoState .actionBar * {
   margin-right: 8px;
+}
+#history {
+  font-size: 13px;
 }
 #history td {
   padding: 5px 5px;
