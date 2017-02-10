@@ -229,8 +229,8 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
           chrome.notifications.create({
             type:'basic',
             iconUrl: '/images/icon_128.png',
-            title: 'Auto state management',
-            message: appInfo.name+' has been '+enabledStr+' because of rule #'+(ruleId+1),
+            title: GL('autoState'),
+            message: appInfo.name+GL('has_been')+GL(enabledStr)+GL('because_of_rule_')+(ruleId+1),
             requireInteraction: true
           },function(notificationId){
             get('notificationDuration_autoState',function(time){
@@ -336,8 +336,8 @@ NooBoss.listeners.onEnabled=function(appInfoOld){
     chrome.notifications.create({
       type:'basic',
       iconUrl: '/images/icon_128.png',
-      title: 'Enabled: '+appInfoOld.name,
-      message: appInfoOld.name+' is now enabled',
+      title: capFirst(GL('enabled'))+': '+appInfoOld.name,
+      message: appInfoOld.name+GL('has_been')+GL('enabled'),
       requireInteraction: true
     },function(notificationId){
         get('notificationDuration_stateChange',function(time){
@@ -387,7 +387,7 @@ NooBoss.History.listen=function(){
             chrome.notifications.create({
               type:'basic',
               iconUrl: '/images/icon_128.png',
-              title: appInfo.name+' '+event,
+              title: appInfo.name+' '+GL(event),
               message: appInfo.name+' '+message,
               requireInteraction: true
             },function(notificationId){
@@ -458,7 +458,7 @@ NooBoss.History.listen=function(){
         type:'basic',
         iconUrl: '/images/icon_128.png',
         title: 'Disabled: '+appInfoOld.name,
-        message: appInfoOld.name+' is now disabled',
+        message: appInfoOld.name+GL('has_been')+GL('disabled'),
         requireInteraction: true
       },function(notificationId){
           get('notificationDuration_stateChange',function(time){
