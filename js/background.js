@@ -4,14 +4,19 @@ NooBoss.defaultValues=[
   ['userId',(Math.random().toString(36)+'00000000000000000').slice(2, 19)],
   ['joinCommunity',true],
   ['showAds',false],
-  ['notifyStateChange',false],
+  ['notifyStateChange',true],
   ['notifyInstallation',true],
   ['notifyRemoval',true],
-  ['autoState',false],
+  ['autoState',true],
   ['autoStateNotification',true],
   ['autoStateRules','[]'],
   ['sortOrder','nameState'],
-  ['recoExtensions',true]
+  ['recoExtensions',true],
+  ['defaultPage','manage'],
+  ['notificationDuration_autoState',5],
+  ['notificationDuration_stateChange',5],
+  ['notificationDuration_installation',-1],
+  ['notificationDuration_removal',-1]
 ];
 
 NooBoss.resetSettings=function(){
@@ -225,7 +230,16 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
             type:'basic',
             iconUrl: '/images/icon_128.png',
             title: 'Auto state management',
-            message: appInfo.name+' has been '+enabledStr+' because of rule #'+(ruleId+1)
+            message: appInfo.name+' has been '+enabledStr+' because of rule #'+(ruleId+1),
+            requireInteraction: true
+          },function(notificationId){
+            get('notificationDuration_autoState',function(time){
+              if(time>0){
+                setTimeout(function(){
+                  chrome.notifications.clear(notificationId,function(){});
+                },time*1000);
+              }
+            });
           });
         });
         get('userId',function(userId){
@@ -323,8 +337,17 @@ NooBoss.listeners.onEnabled=function(appInfoOld){
       type:'basic',
       iconUrl: '/images/icon_128.png',
       title: 'Enabled: '+appInfoOld.name,
-      message: appInfoOld.name+' is now enabled'
-    });
+      message: appInfoOld.name+' is now enabled',
+      requireInteraction: true
+    },function(notificationId){
+        get('notificationDuration_stateChange',function(time){
+          if(time>0){
+            setTimeout(function(){
+              chrome.notifications.clear(notificationId,function(){});
+            },time*1000);
+          }
+        });
+      });
   });
 }
 
@@ -365,7 +388,16 @@ NooBoss.History.listen=function(){
               type:'basic',
               iconUrl: '/images/icon_128.png',
               title: appInfo.name+' '+event,
-              message: appInfo.name+' '+message
+              message: appInfo.name+' '+message,
+              requireInteraction: true
+            },function(notificationId){
+              get('notificationDuration_installation',function(time){
+                if(time>0){
+                  setTimeout(function(){
+                    chrome.notifications.clear(notificationId,function(){});
+                  },time*1000);
+                }
+              });
             });
           });
         });
@@ -392,8 +424,17 @@ NooBoss.History.listen=function(){
           type:'basic',
           iconUrl: '/images/icon_128.png',
           title: appInfo.name+' '+capFirst(GL('removed')),
-          message: appInfo.name+' '+GL('ls_28')
-        });
+          message: appInfo.name+' '+GL('ls_28'),
+          requireInteraction: true
+        },function(notificationId){
+            get('notificationDuration_removal',function(time){
+              if(time>0){
+                setTimeout(function(){
+                  chrome.notifications.clear(notificationId,function(){});
+                },time*1000);
+              }
+            });
+          });
       });
     });
   });
@@ -417,8 +458,17 @@ NooBoss.History.listen=function(){
         type:'basic',
         iconUrl: '/images/icon_128.png',
         title: 'Disabled: '+appInfoOld.name,
-        message: appInfoOld.name+' is now disabled'
-      });
+        message: appInfoOld.name+' is now disabled',
+        requireInteraction: true
+      },function(notificationId){
+          get('notificationDuration_stateChange',function(time){
+            if(time>0){
+              setTimeout(function(){
+                chrome.notifications.clear(notificationId,function(){});
+              },time*1000);
+            }
+          });
+        });
     });
   });
 }

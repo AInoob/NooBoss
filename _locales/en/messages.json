@@ -1,9 +1,9 @@
 {
   "appName":{
-    "message":"NooBoss"
+    "message":"NooBoss - Extensions Manager, Update Notifier, Auto manage extensions"
   },
   "appDesc":{
-    "message":"The ultimate Chrome extensions manager, track extensions history, auto enable/disable extensions, recommend extensions"
+    "message":"A Chrome extensions manager, nofity extensions updates, auto enable/disable extensions, recommend extensions"
   },
   "overview":{
     "message":"overview"
@@ -298,6 +298,12 @@
   },
   "recoExtensions":{
 	"message":"Recommend Extensions"
+  },
+  "s":{
+	"message":"seconds"
+  },
+  "for":{
+	"message":"for"
   },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."

@@ -30067,12 +30067,12 @@
 	module.exports = React.createClass({
 	  displayName: 'Options',
 	  getInitialState: function () {
-	    return { setting: { joinCommunity: false, recoExtensions: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
+	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, joinCommunity: false, recoExtensions: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
 	  },
 	  componentDidMount: function () {
 	    get('defaultPage', function (url) {
 	      this.setState(function (prevState) {
-	        this.state.setting.defaultPage = url;
+	        this.state.settings.defaultPage = url;
 	        return prevState;
 	      });
 	    }.bind(this));
@@ -30080,12 +30080,22 @@
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
 	        this.setState(function (prevState) {
-	          prevState.setting[switchList[ii]] = true;
+	          prevState.settings[switchList[ii]] = true;
 	          return prevState;
 	        });
 	      }.bind(this, i), function (ii) {
 	        this.setState(function (prevState) {
-	          prevState.setting[switchList[ii]] = false;
+	          prevState.settings[switchList[ii]] = false;
+	          return prevState;
+	        });
+	      }.bind(this, i));
+	    }
+	    var keyList = ['notificationDuration_installation', 'notificationDuration_autoState', 'notificationDuration_removal', 'notificationDuration_stateChange'];
+	    for (var i = 0; i < keyList.length; i++) {
+	      get(keyList[i], function (ii, value) {
+	        this.setState(function (prevState) {
+	          prevState.settings[keyList[ii]] = value;
+	          console.log(keyList[ii] + ' ' + value);
 	          return prevState;
 	        });
 	      }.bind(this, i));
@@ -30164,10 +30174,10 @@
 	    }
 	  },
 	  toggleSetting: function (id) {
-	    var newValue = !this.state.setting[id];
+	    var newValue = !this.state.settings[id];
 	    set(id, newValue, function () {
 	      this.setState(function (prevState) {
-	        prevState.setting[id] = newValue;
+	        prevState.settings[id] = newValue;
 	        return prevState;
 	      });
 	    }.bind(this));
@@ -30176,7 +30186,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'switch' },
-	      React.createElement('input', { type: 'checkbox', onChange: CW.bind(null, handler || this.toggleSetting.bind(this, id), 'Options', 'option-switch', id), checked: this.state.setting[id], id: id }),
+	      React.createElement('input', { type: 'checkbox', onChange: CW.bind(null, handler || this.toggleSetting.bind(this, id), 'Options', 'option-switch', id), checked: this.state.settings[id], id: id }),
 	      React.createElement('label', { htmlFor: id, className: 'checkbox' }),
 	      React.createElement(
 	        'span',
@@ -30189,7 +30199,7 @@
 	    alert(GL('ls_13'));
 	  },
 	  joinCommunity: function () {
-	    if (this.state.setting.joinCommunity) {
+	    if (this.state.settings.joinCommunity) {
 	      var sadMove = confirm(GL('ls_19'));
 	      if (!sadMove) {
 	        return;
@@ -30219,12 +30229,12 @@
 	      }
 	      set('autoState', value, function () {
 	        this.setState(function (prevState) {
-	          prevState.setting.autoState = value;
+	          prevState.settings.autoState = value;
 	          return prevState;
 	        });
 	      }.bind(this));
 	    }.bind(this);
-	    if (!this.state.setting.autoState) {
+	    if (!this.state.settings.autoState) {
 	      chrome.permissions.contains({
 	        permissions: ['tabs']
 	      }, function (result) {
@@ -30255,11 +30265,22 @@
 	  updateDefaultPage: function (e) {
 	    var url = e.target.value;
 	    this.setState(function (prevState) {
-	      prevState.setting.defaultPage = url;
+	      prevState.settings.defaultPage = url;
 	      return prevState;
 	    });
 	    newCommunityRecord(true, ['_trackEvent', 'Options', 'defaultPage', url]);
 	    set('defaultPage', url);
+	  },
+	  setNotification: function (e) {
+	    var key = e.target.id;
+	    var value = e.target.value;
+	    if (!isNaN(value)) {
+	      set(key, value, function () {}.bind(this));
+	    }
+	    this.setState(function (prevState) {
+	      prevState.settings[key] = value;
+	      return prevState;
+	    });
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -30296,10 +30317,78 @@
 	          null,
 	          GL('notification')
 	        ),
+	        React.createElement('span', { className: 'switchWithFollow' }),
 	        this.getSwitch('notifyStateChange'),
+	        React.createElement('input', { type: 'checkbox', className: 'follow', checked: this.state.settings['notifyStateChange'] }),
+	        React.createElement(
+	          'div',
+	          { className: 'followInput' },
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('for')
+	          ),
+	          React.createElement('input', { id: 'notificationDuration_stateChange', value: this.state.settings.notificationDuration_stateChange, onChange: this.setNotification }),
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('s')
+	          )
+	        ),
+	        React.createElement('span', { className: 'switchWithFollow' }),
 	        this.getSwitch('notifyInstallation'),
+	        React.createElement('input', { type: 'checkbox', className: 'follow', checked: this.state.settings['notifyInstallation'] }),
+	        React.createElement(
+	          'div',
+	          { className: 'followInput' },
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('for')
+	          ),
+	          React.createElement('input', { id: 'notificationDuration_installation', value: this.state.settings.notificationDuration_installation, onChange: this.setNotification }),
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('s')
+	          )
+	        ),
+	        React.createElement('span', { className: 'switchWithFollow' }),
 	        this.getSwitch('notifyRemoval'),
-	        this.getSwitch('autoStateNotification')
+	        React.createElement('input', { type: 'checkbox', className: 'follow', checked: this.state.settings['notifyRemoval'] }),
+	        React.createElement(
+	          'div',
+	          { className: 'followInput' },
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('for')
+	          ),
+	          React.createElement('input', { id: 'notificationDuration_removal', value: this.state.settings.notificationDuration_removal, onChange: this.setNotification }),
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('s')
+	          )
+	        ),
+	        React.createElement('span', { className: 'switchWithFollow' }),
+	        this.getSwitch('autoStateNotification'),
+	        React.createElement('input', { type: 'checkbox', className: 'follow', checked: this.state.settings['autoStateNotification'] }),
+	        React.createElement(
+	          'div',
+	          { className: 'followInput' },
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('for')
+	          ),
+	          React.createElement('input', { id: 'notificationDuration_autoState', value: this.state.settings.notificationDuration_autoState, onChange: this.setNotification }),
+	          React.createElement(
+	            'span',
+	            null,
+	            GL('s')
+	          )
+	        )
 	      ),
 	      React.createElement(
 	        'div',
@@ -30327,7 +30416,7 @@
 	        ),
 	        React.createElement(
 	          'select',
-	          { value: this.state.setting.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
+	          { value: this.state.settings.defaultPage, onChange: this.updateDefaultPage, id: 'type' },
 	          React.createElement(
 	            'option',
 	            { value: 'overview' },

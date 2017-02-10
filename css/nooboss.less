@@ -768,8 +768,32 @@ nav ul a {
 }
 
 #options{
+  .switchWithFollow{
+    & + .switch{
+      float: left;
+      margin-right: 12px;
+      & + .follow{
+        &:checked{
+          & + .followInput{
+            display: block;
+          }
+        }
+      }
+    }
+  
+  }
+  .followInput{
+    display: none;
+    float: left;
+    input{
+      height: 25px;
+      width: 66px;
+      text-align: center;
+    }
+  }
   .container{
     width: 75%;
+    clear: both;
   }
   h5,h4{
     margin-left: -33px;

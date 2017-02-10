@@ -703,8 +703,25 @@ nav ul a {
   width: initial;
   float: left;
 }
+#options .switchWithFollow + .switch {
+  float: left;
+  margin-right: 12px;
+}
+#options .switchWithFollow + .switch + .follow:checked + .followInput {
+  display: block;
+}
+#options .followInput {
+  display: none;
+  float: left;
+}
+#options .followInput input {
+  height: 25px;
+  width: 66px;
+  text-align: center;
+}
 #options .container {
   width: 75%;
+  clear: both;
 }
 #options h5,
 #options h4 {
