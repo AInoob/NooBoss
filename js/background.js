@@ -146,7 +146,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: true,
-              tabid: tabId,
+              tabId: tabId,
               ruleId: i
             }
             enableOnlys[appIds[k]]=true;
@@ -156,7 +156,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: enableOnlys[appIds[k]]||false,
-              tabid: null,
+              tabId: null,
               ruleId: i
             }
           }
@@ -167,7 +167,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: false,
-              tabid: tabId,
+              tabId: tabId,
               ruleId: i
             }
             disableOnlys[appIds[k]]=true;
@@ -177,7 +177,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: (!disableOnlys[appIds[k]])&&true,
-              tabid: null,
+              tabId: null,
               ruleId: i
             }
           }
@@ -188,7 +188,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: true,
-              tabid: tabId,
+              tabId: tabId,
               ruleId: i
             }
           }
@@ -199,7 +199,7 @@ NooBoss.Management.autoState.manage=function(tabId){
           for(var k=0;k<appIds.length;k++){
             nextPhases[appIds[k]]={
               enabled: false,
-              tabid: null,
+              tabId: null,
               ruleId: i
             }
           }

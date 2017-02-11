@@ -1,6 +1,6 @@
 {
   "appName":{
-    "message":"NooBoss - Extensions Manager, Update Notifier, Auto manage extensions"
+    "message":"NooBoss - Extensions Manager, Update Notifier"
   },
   "appDesc":{
     "message":"A Chrome extensions manager, nofity extensions updates, auto enable/disable extensions, recommend extensions"

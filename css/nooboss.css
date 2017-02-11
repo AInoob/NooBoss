@@ -686,7 +686,10 @@ nav ul a {
   font-size: 13px;
 }
 #history td {
-  padding: 5px 5px;
+  padding: 3px 3px;
+}
+#history td:nth-child(1) {
+  width: 100px;
 }
 #history tr + tr {
   border-top: 1px solid #c27ae8;
