@@ -16,7 +16,8 @@ NooBoss.defaultValues=[
   ['notificationDuration_autoState',5],
   ['notificationDuration_stateChange',5],
   ['notificationDuration_installation',-1],
-  ['notificationDuration_removal',-1]
+  ['notificationDuration_removal',-1],
+  ['listView',true]
 ];
 
 NooBoss.resetSettings=function(){
@@ -34,6 +35,7 @@ NooBoss.resetIndexedDB=function(){
   }
   req.onsuccess=function(e){
     NooBoss.Management.init();
+    NooBoss.History.init();
   }
 }
 
@@ -490,7 +492,10 @@ document.addEventListener('DOMContentLoaded', function(){
           NooBoss.resetSettings();
           NooBoss.resetIndexedDB();
         }
-        else if(request.job =='autoState'){
+        else if(request.job == 'clearHistory'){
+          NooBoss.History.init();
+        }
+        else if(request.job == 'autoState'){
           isOn('autoState',
             NooBoss.Management.autoState.enable,
             NooBoss.Management.autoState.disable

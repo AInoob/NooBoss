@@ -30160,17 +30160,21 @@
 	      a.click();
 	    });
 	  },
-	  cleanHistory: function () {
+	  clearHistory: function () {
 	    var result = confirm(GL('ls_5'));
 	    if (result) {
 	      setDB('history_records', null, function () {
+	        chrome.runtime.sendMessage({ job: 'clearHistory' });
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: GL('history_cleaned'),
+	          title: GL('history_cleared'),
 	          message: GL('ls_6')
 	        });
-	      });
+	        getDB('history_records', function (recordList) {
+	          this.setState({ recordList: recordList });
+	        }.bind(this));
+	      }.bind(this));
 	    }
 	  },
 	  toggleSetting: function (id) {
@@ -30295,12 +30299,12 @@
 	        React.createElement(
 	          'h5',
 	          null,
-	          capFirst(GL('clean'))
+	          capFirst(GL('clear'))
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'btn space', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
-	          GL('clean_history')
+	          { className: 'btn space', onClick: CW.bind(null, this.clearHistory, 'Options', 'clearHistory', '') },
+	          GL('clear_history')
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
@@ -30486,17 +30490,21 @@
 	      return prevState;
 	    });
 	  },
-	  cleanHistory: function () {
+	  clearHistory: function () {
 	    var result = confirm(GL('ls_5'));
 	    if (result) {
 	      setDB('history_records', null, function () {
+	        chrome.runtime.sendMessage({ job: 'clearHistory' });
 	        chrome.notifications.create({
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
-	          title: GL('history_cleaned'),
+	          title: GL('history_cleared'),
 	          message: GL('ls_6')
 	        });
-	      });
+	        getDB('history_records', function (recordList) {
+	          this.setState({ recordList: recordList });
+	        }.bind(this));
+	      }.bind(this));
 	    }
 	  },
 	  render: function () {
@@ -30587,8 +30595,8 @@
 	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') }),
 	        React.createElement(
 	          'div',
-	          { className: 'btn', onClick: CW.bind(null, this.cleanHistory, 'Options', 'cleanHistory', '') },
-	          GL('clean')
+	          { className: 'btn', onClick: CW.bind(null, this.clearHistory, 'Options', 'clearHistory', '') },
+	          GL('clear')
 	        )
 	      ),
 	      React.createElement(

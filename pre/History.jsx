@@ -22,17 +22,21 @@ module.exports = React.createClass({
       return prevState;
     });
   },
-  cleanHistory: function(){
+  clearHistory: function(){
     var result=confirm(GL('ls_5'));
     if(result){
       setDB('history_records',null,function(){
+        chrome.runtime.sendMessage({job:'clearHistory'});
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: GL('history_cleaned'),
+          title: GL('history_cleared'),
           message: GL('ls_6'),
         });
-      });
+        getDB('history_records',function(recordList){
+          this.setState({recordList:recordList});
+        }.bind(this));
+      }.bind(this));
     }
   },
   render: function(){
@@ -68,7 +72,7 @@ module.exports = React.createClass({
             <option value="disabled">{capFirst(GL('disabled'))}</option>
           </select>
           <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
-          <div className="btn" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean')}</div>
+          <div className="btn" onClick={CW.bind(null,this.clearHistory,'Options','clearHistory','')}>{GL('clear')}</div>
         </div>
         <table className="history-table">
           <thead>

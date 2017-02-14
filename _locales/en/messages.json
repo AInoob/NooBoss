@@ -77,11 +77,11 @@
   "enable":{
 	"message":"enable"
   },
-  "clean":{
-	"message":"clean"
+  "clear":{
+	"message":"clear"
   },
-  "clean_history":{
-	"message":"Clean Apps/Extensions History"
+  "clear_history":{
+	"message":"Clear Apps/Extensions History"
   },
   "notification":{
 	"message":"Notification"
@@ -236,8 +236,8 @@
   "delete":{
 	"message":"delete"
   },
-  "history_cleaned":{
-	"message":"History cleaned"
+  "history_cleared":{
+	"message":"History cleared"
   },
   "enabled":{
 	"message":"enabled"
@@ -324,13 +324,13 @@
 	"message":"You do not have any rule yet"
   },
   "ls_4":{
-	"message":"Do you really want to clean and reset everything?"
+	"message":"Do you really want to clear and reset everything?"
   },
   "ls_5":{
-	"message":"Do you want to clean the history?"
+	"message":"Do you want to clear the history?"
   },
   "ls_6":{
-	"message":"All logged apps/extensions history has been cleaned"
+	"message":"All logged apps/extensions history has been cleared"
   },
   "ls_7":{
 	"message":"Auto state management: Enabled"

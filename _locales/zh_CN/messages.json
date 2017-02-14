@@ -77,11 +77,11 @@
   "enable":{
 	"message":"开启"
   },
-  "clean":{
-	"message":"清理"
+  "clear":{
+	"message":"清除"
   },
-  "clean_history":{
-	"message":"清理记录的历史"
+  "clear_history":{
+	"message":"清除记录的历史"
   },
   "notification":{
 	"message":"通知"
@@ -236,8 +236,8 @@
   "delete":{
 	"message":"删除"
   },
-  "history_cleaned":{
-	"message":"清空历史"
+  "history_cleared":{
+	"message":"清除历史"
   },
   "enabled":{
 	"message":"开启"
@@ -327,7 +327,7 @@
 	"message":"你真的要重置清空所有吗？"
   },
   "ls_5":{
-	"message":"确定清空历史吗？"
+	"message":"确定清除历史吗？"
   },
   "ls_6":{
 	"message":"所有应用和拓展的记录都没了~"

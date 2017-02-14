@@ -104,17 +104,21 @@ module.exports = React.createClass({
       a.click();
     });
   },
-  cleanHistory: function(){
+  clearHistory: function(){
     var result=confirm(GL('ls_5'));
     if(result){
       setDB('history_records',null,function(){
+        chrome.runtime.sendMessage({job:'clearHistory'});
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: GL('history_cleaned'),
+          title: GL('history_cleared'),
           message: GL('ls_6'),
         });
-      });
+        getDB('history_records',function(recordList){
+          this.setState({recordList:recordList});
+        }.bind(this));
+      }.bind(this));
     }
   },
   toggleSetting: function(id){
@@ -231,8 +235,8 @@ module.exports = React.createClass({
           title="Options"
         />
         <div className="section container">
-          <h5>{capFirst(GL('clean'))}</h5>
-          <div className="btn space" onClick={CW.bind(null,this.cleanHistory,'Options','cleanHistory','')}>{GL('clean_history')}</div><br />
+          <h5>{capFirst(GL('clear'))}</h5>
+          <div className="btn space" onClick={CW.bind(null,this.clearHistory,'Options','clearHistory','')}>{GL('clear_history')}</div><br />
           <div className="btn space" onClick={CW.bind(null,this.reset,'Options','reset','')}>{GL('reset_everything')}</div>
         </div>
         <div className="section container">
