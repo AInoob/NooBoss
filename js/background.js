@@ -6,7 +6,7 @@ NooBoss.defaultValues=[
   ['notifyStateChange',true],
   ['notifyInstallation',true],
   ['notifyRemoval',true],
-  ['autoState',true],
+  ['autoState',false],
   ['autoStateNotification',true],
   ['autoStateRules','[]'],
   ['sortOrder','nameState'],
@@ -257,7 +257,6 @@ NooBoss.Management.autoState.setAppState=function(id,enabled,tabId,ruleId){
 }
 
 NooBoss.Management.autoState.init=function(){
-  //{[id],condition,match}
   NooBoss.Management.autoState.rules=[];
   NooBoss.Management.autoState.tabs={};
   chrome.tabs.query({},function(tabList){
@@ -477,9 +476,12 @@ NooBoss.History.listen=function(){
 
 NooBoss.init=function(){
   NooBoss.initDefaultValues();
-  NooBoss.History.init();
-  NooBoss.History.listen();
-  NooBoss.Management.init();
+  //a very bad practice, but yeah.
+  setTimeout(function(){
+    NooBoss.History.init();
+    NooBoss.History.listen();
+    NooBoss.Management.init();
+  },333);
 }
 
 document.addEventListener('DOMContentLoaded', function(){
