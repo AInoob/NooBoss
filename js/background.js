@@ -2,7 +2,6 @@ var NooBoss={};
 
 NooBoss.defaultValues=[
   ['userId',(Math.random().toString(36)+'00000000000000000').slice(2, 19)],
-  ['joinCommunity',true],
   ['showAds',false],
   ['notifyStateChange',true],
   ['notifyInstallation',true],
@@ -17,7 +16,8 @@ NooBoss.defaultValues=[
   ['notificationDuration_stateChange',5],
   ['notificationDuration_installation',-1],
   ['notificationDuration_removal',-1],
-  ['listView',true]
+  ['listView',true],
+  ['sendUsage',true]
 ];
 
 NooBoss.resetSettings=function(){

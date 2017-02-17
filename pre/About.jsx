@@ -18,6 +18,17 @@ module.exports = React.createClass({
 			<a onClick={CL.bind(null,'https://ainoob.com/project/nooboss','About-link','link')}><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
 			<a onClick={CL.bind(null,'https://ainoob.com/project/noobox','About-link','link')}><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
 		  </div>
+		  <section className="section">
+            <h5>分享二管家</h5>
+            <p>你喜欢二管家吗？如果觉得还不错，那就考虑一下分享二管家吧~</p>
+			<a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
+            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
+            <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
+            <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
+            <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
+            <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
+          </section>
                <section className="section">
                <h5>二管家能干什么？</h5>
                <p>目前，二管家可以 (应用/拓展/主题 在下面都会叫应用)</p>
@@ -75,28 +86,17 @@ module.exports = React.createClass({
             </section>
             <section className="section">
                <h5>隐私？</h5>
-               <p>二管家是一个傲娇的软件，不会偷取你的隐私信息，也绝对不会在未经过你要求的情况下在二管家界面内出现广告。</p>
-               <p>默认情况下，二管家会把你使用二管家的情况和你安装的应用分享到二管家社区，如果你希望支持二管家或者不讨厌二管家，请不要关闭社区功能。</p>
+               <p>二管家是一个傲娇的软件，不会偷取你的隐私信息，也绝对不会出现广告。</p>
+               <p>二管家会把你使用二管家的情况发给AInoob，这样他就知道有人喜欢这个软件，然后继续努力开发免费的二管家~</p>
             </section>
             <section className="section">
                <h5>怎么支持二管家？</h5>
-               <p>如果你真的那么喜欢二管家，你可以在选项里开启显示广告（默认关闭），这样二管家界面就会出现广告。这个看个人喜好，二管家给你绝对的权利。不过如果可以，请不要关闭社区功能，不然AInoob就没法知道有没有人在用二管家了，那就很可能停止更新。</p>
+               <p>二管家是免费开源的，AInoob不需要大家的捐钱或者任何资助，心意我领了~~~如果真的很喜欢的话，求在<a onClick={CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link')}>Chrome网上商店</a>给二管家评价或者分享二管家给你身边的需要的人。</p>
             </section>
             <section className="section">
                <h5>建议？</h5>
                <p>如果你有任何好的建议，请去<a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support','About-link','link')}>Chrome网上应用店</a>评论和提建议。</p>
             </section>
-          <section className="section">
-            <h5>分享二管家</h5>
-            <p>你喜欢二管家吗？如果觉得还不错，那就考虑一下分享二管家吧~</p>
-			<a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
-            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
-            <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
-            <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
-            <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
-            <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
-            <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
-          </section>
 		  <section className="section">
 		    <h5>鸣谢</h5>
 			<ul>
@@ -130,6 +130,17 @@ module.exports = React.createClass({
     <a onClick={CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link')}><img id="icon1" className="spinRight" src="/images/icon_128.png" /></a>
     <a onClick={CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link')}><img id="icon2" className="spinLeft" src="/images/icon_2.png" /></a>
 </div>
+<section className="section">
+    <h5>Share NooBoss</h5>
+    <p>Do you like NooBoss? If so, please consider sharing NooBoss!</p>
+    <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
+    <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
+    <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
+    <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
+    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
+    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
+    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
+</section>
 <section className="section">
     <h5>What can NooBoss do?</h5>
     <p>Right now, NooBoss can (apps/extensions/theme will be called apps down below)</p>
@@ -190,27 +201,16 @@ module.exports = React.createClass({
 </section>
 <section className="section">
     <h5>Privacy</h5>
-    <p>NooBoss is a software with proud, it will never steal your private information, and it will never show ADs unless you told NooBoss to do so.</p>
-    <p>By default, NooBoss will share you usage of NooBoss and Apps you installed on Chrome to NooBoss community, please leave this on if you want to support NooBoss or you want AInoob to keep developing NooBoss. Your personal information will not be shared.</p>
+    <p>NooBoss is a software with proud, it will never steal your private information, and it will never show ADs.</p>
+    <p>NooBoss will send your NooBoss usage data to AInoob, so that he will know which function do people like about NooBoss and how many people are using NooBoss, thus get motivated to making NooBoss better and better</p>
 </section>
 <section className="section">
     <h5>How to support NooBoss?</h5>
-    <p>If you love NooBoss, you can choose to show ADs(it's off by default), so I will be more motivated to maintain and upgrade NooBoss. If you turn this on, NooBoss will show ADs only when you open NooBoss, and will only show ADs within NooBoss. Feel free to turn it on or off, as long as you turned on the joinCommunity, AInoob will know that sommeone else, not just him, is using NooBoss, and that feels good man/woman.</p>
+    <p>NooBoss is free and open source software, I do not need any financial support from it. If you like it, please review NooBoss on <a onClick={CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link')}>Chrome web store</a> and share it with people who might like it.</p>
 </section>
 <section className="section">
     <h5>Any suggestions?</h5>
     <p>If you have any suggestions about NooBoss, plese comment on support page in <a onClick={CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support', 'About-link', 'link')}>Chrome web store</a>.</p>
-</section>
-<section className="section">
-    <h5>Share NooBoss</h5>
-    <p>Do you like NooBoss? If so, please consider sharing NooBoss!</p>
-    <a className="shareItem" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/facebook.png" /></a>
-    <a className="shareItem" target="_blank" href="https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/google.png" /></a>
-    <a className="shareItem" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source="><img className="shareIcon" src="thirdParty/linkedin.png" /></a>
-    <a className="shareItem" target="_blank" href="https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss"><img className="shareIcon" src="thirdParty/twitter.png" /></a>
-    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/sina.png" /></a>
-    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/wechat.png" /></a>
-    <a className="shareItem" target="_blank" href="http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss"><img className="shareIcon" src="thirdParty/renren.png" /></a>
 </section>
 <section className="section">
     <h5>Acknowledgements</h5>

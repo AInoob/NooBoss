@@ -1,3 +1,6 @@
+a {
+  cursor: pointer;
+}
 select {
   border: 1px solid #e2cdde;
   height: 31px;
@@ -761,6 +764,7 @@ nav ul a {
 }
 #about .section {
   width: 90%;
+  overflow: hidden;
   margin: auto;
 }
 #about ul {

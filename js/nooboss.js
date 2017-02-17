@@ -30067,7 +30067,7 @@
 	module.exports = React.createClass({
 	  displayName: 'Options',
 	  getInitialState: function () {
-	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, joinCommunity: false, recoExtensions: false, showAds: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
+	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, recoExtensions: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
 	  },
 	  componentDidMount: function () {
 	    get('defaultPage', function (url) {
@@ -30076,7 +30076,7 @@
 	        return prevState;
 	      });
 	    }.bind(this));
-	    var switchList = ['joinCommunity', 'recoExtensions', 'showAds', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification'];
+	    var switchList = ['recoExtensions', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification'];
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
 	        this.setState(function (prevState) {
@@ -30198,18 +30198,6 @@
 	        GL(id)
 	      )
 	    );
-	  },
-	  showAds: function () {
-	    alert(GL('ls_13'));
-	  },
-	  joinCommunity: function () {
-	    if (this.state.settings.joinCommunity) {
-	      var sadMove = confirm(GL('ls_19'));
-	      if (!sadMove) {
-	        return;
-	      }
-	    }
-	    this.toggleSetting('joinCommunity');
 	  },
 	  autoState: function () {
 	    var change = function (value) {
@@ -30442,8 +30430,8 @@
 	            GL('history')
 	          )
 	        ),
-	        this.getSwitch('joinCommunity', this.joinCommunity),
-	        this.getSwitch('showAds', this.showAds),
+	        React.createElement('br', null),
+	        React.createElement('br', null),
 	        React.createElement('input', { id: 'upload', className: 'hide', type: 'file', onChange: CW.bind(null, this.importOptions, 'Options', 'importOptions', '') }),
 	        React.createElement(
 	          'label',
@@ -30691,6 +30679,55 @@
 	                    React.createElement(
 	                        'h5',
 	                        null,
+	                        '\u5206\u4EAB\u4E8C\u7BA1\u5BB6'
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        '\u4F60\u559C\u6B22\u4E8C\u7BA1\u5BB6\u5417\uFF1F\u5982\u679C\u89C9\u5F97\u8FD8\u4E0D\u9519\uFF0C\u90A3\u5C31\u8003\u8651\u4E00\u4E0B\u5206\u4EAB\u4E8C\u7BA1\u5BB6\u5427~'
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
+	                    )
+	                ),
+	                React.createElement(
+	                    'section',
+	                    { className: 'section' },
+	                    React.createElement(
+	                        'h5',
+	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u80FD\u5E72\u4EC0\u4E48\uFF1F'
 	                    ),
 	                    React.createElement(
@@ -30864,12 +30901,12 @@
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        '\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A\u50B2\u5A07\u7684\u8F6F\u4EF6\uFF0C\u4E0D\u4F1A\u5077\u53D6\u4F60\u7684\u9690\u79C1\u4FE1\u606F\uFF0C\u4E5F\u7EDD\u5BF9\u4E0D\u4F1A\u5728\u672A\u7ECF\u8FC7\u4F60\u8981\u6C42\u7684\u60C5\u51B5\u4E0B\u5728\u4E8C\u7BA1\u5BB6\u754C\u9762\u5185\u51FA\u73B0\u5E7F\u544A\u3002'
+	                        '\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A\u50B2\u5A07\u7684\u8F6F\u4EF6\uFF0C\u4E0D\u4F1A\u5077\u53D6\u4F60\u7684\u9690\u79C1\u4FE1\u606F\uFF0C\u4E5F\u7EDD\u5BF9\u4E0D\u4F1A\u51FA\u73B0\u5E7F\u544A\u3002'
 	                    ),
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        '\u9ED8\u8BA4\u60C5\u51B5\u4E0B\uFF0C\u4E8C\u7BA1\u5BB6\u4F1A\u628A\u4F60\u4F7F\u7528\u4E8C\u7BA1\u5BB6\u7684\u60C5\u51B5\u548C\u4F60\u5B89\u88C5\u7684\u5E94\u7528\u5206\u4EAB\u5230\u4E8C\u7BA1\u5BB6\u793E\u533A\uFF0C\u5982\u679C\u4F60\u5E0C\u671B\u652F\u6301\u4E8C\u7BA1\u5BB6\u6216\u8005\u4E0D\u8BA8\u538C\u4E8C\u7BA1\u5BB6\uFF0C\u8BF7\u4E0D\u8981\u5173\u95ED\u793E\u533A\u529F\u80FD\u3002'
+	                        '\u4E8C\u7BA1\u5BB6\u4F1A\u628A\u4F60\u4F7F\u7528\u4E8C\u7BA1\u5BB6\u7684\u60C5\u51B5\u53D1\u7ED9AInoob\uFF0C\u8FD9\u6837\u4ED6\u5C31\u77E5\u9053\u6709\u4EBA\u559C\u6B22\u8FD9\u4E2A\u8F6F\u4EF6\uFF0C\u7136\u540E\u7EE7\u7EED\u52AA\u529B\u5F00\u53D1\u514D\u8D39\u7684\u4E8C\u7BA1\u5BB6~'
 	                    )
 	                ),
 	                React.createElement(
@@ -30883,7 +30920,13 @@
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        '\u5982\u679C\u4F60\u771F\u7684\u90A3\u4E48\u559C\u6B22\u4E8C\u7BA1\u5BB6\uFF0C\u4F60\u53EF\u4EE5\u5728\u9009\u9879\u91CC\u5F00\u542F\u663E\u793A\u5E7F\u544A\uFF08\u9ED8\u8BA4\u5173\u95ED\uFF09\uFF0C\u8FD9\u6837\u4E8C\u7BA1\u5BB6\u754C\u9762\u5C31\u4F1A\u51FA\u73B0\u5E7F\u544A\u3002\u8FD9\u4E2A\u770B\u4E2A\u4EBA\u559C\u597D\uFF0C\u4E8C\u7BA1\u5BB6\u7ED9\u4F60\u7EDD\u5BF9\u7684\u6743\u5229\u3002\u4E0D\u8FC7\u5982\u679C\u53EF\u4EE5\uFF0C\u8BF7\u4E0D\u8981\u5173\u95ED\u793E\u533A\u529F\u80FD\uFF0C\u4E0D\u7136AInoob\u5C31\u6CA1\u6CD5\u77E5\u9053\u6709\u6CA1\u6709\u4EBA\u5728\u7528\u4E8C\u7BA1\u5BB6\u4E86\uFF0C\u90A3\u5C31\u5F88\u53EF\u80FD\u505C\u6B62\u66F4\u65B0\u3002'
+	                        '\u4E8C\u7BA1\u5BB6\u662F\u514D\u8D39\u5F00\u6E90\u7684\uFF0CAInoob\u4E0D\u9700\u8981\u5927\u5BB6\u7684\u6350\u94B1\u6216\u8005\u4EFB\u4F55\u8D44\u52A9\uFF0C\u5FC3\u610F\u6211\u9886\u4E86~~~\u5982\u679C\u771F\u7684\u5F88\u559C\u6B22\u7684\u8BDD\uFF0C\u6C42\u5728',
+	                        React.createElement(
+	                            'a',
+	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link') },
+	                            'Chrome\u7F51\u4E0A\u5546\u5E97'
+	                        ),
+	                        '\u7ED9\u4E8C\u7BA1\u5BB6\u8BC4\u4EF7\u6216\u8005\u5206\u4EAB\u4E8C\u7BA1\u5BB6\u7ED9\u4F60\u8EAB\u8FB9\u7684\u9700\u8981\u7684\u4EBA\u3002'
 	                    )
 	                ),
 	                React.createElement(
@@ -30904,55 +30947,6 @@
 	                            'Chrome\u7F51\u4E0A\u5E94\u7528\u5E97'
 	                        ),
 	                        '\u8BC4\u8BBA\u548C\u63D0\u5EFA\u8BAE\u3002'
-	                    )
-	                ),
-	                React.createElement(
-	                    'section',
-	                    { className: 'section' },
-	                    React.createElement(
-	                        'h5',
-	                        null,
-	                        '\u5206\u4EAB\u4E8C\u7BA1\u5BB6'
-	                    ),
-	                    React.createElement(
-	                        'p',
-	                        null,
-	                        '\u4F60\u559C\u6B22\u4E8C\u7BA1\u5BB6\u5417\uFF1F\u5982\u679C\u89C9\u5F97\u8FD8\u4E0D\u9519\uFF0C\u90A3\u5C31\u8003\u8651\u4E00\u4E0B\u5206\u4EAB\u4E8C\u7BA1\u5BB6\u5427~'
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
 	                    )
 	                ),
 	                React.createElement(
@@ -31114,6 +31108,55 @@
 	                        'a',
 	                        { onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
 	                        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
+	                    )
+	                ),
+	                React.createElement(
+	                    'section',
+	                    { className: 'section' },
+	                    React.createElement(
+	                        'h5',
+	                        null,
+	                        'Share NooBoss'
+	                    ),
+	                    React.createElement(
+	                        'p',
+	                        null,
+	                        'Do you like NooBoss? If so, please consider sharing NooBoss!'
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
+	                    ),
+	                    React.createElement(
+	                        'a',
+	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
+	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
 	                    )
 	                ),
 	                React.createElement(
@@ -31303,12 +31346,12 @@
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        'NooBoss is a software with proud, it will never steal your private information, and it will never show ADs unless you told NooBoss to do so.'
+	                        'NooBoss is a software with proud, it will never steal your private information, and it will never show ADs.'
 	                    ),
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        'By default, NooBoss will share you usage of NooBoss and Apps you installed on Chrome to NooBoss community, please leave this on if you want to support NooBoss or you want AInoob to keep developing NooBoss. Your personal information will not be shared.'
+	                        'NooBoss will send your NooBoss usage data to AInoob, so that he will know which function do people like about NooBoss and how many people are using NooBoss, thus get motivated to making NooBoss better and better'
 	                    )
 	                ),
 	                React.createElement(
@@ -31322,7 +31365,13 @@
 	                    React.createElement(
 	                        'p',
 	                        null,
-	                        'If you love NooBoss, you can choose to show ADs(it\'s off by default), so I will be more motivated to maintain and upgrade NooBoss. If you turn this on, NooBoss will show ADs only when you open NooBoss, and will only show ADs within NooBoss. Feel free to turn it on or off, as long as you turned on the joinCommunity, AInoob will know that sommeone else, not just him, is using NooBoss, and that feels good man/woman.'
+	                        'NooBoss is free and open source software, I do not need any financial support from it. If you like it, please review NooBoss on ',
+	                        React.createElement(
+	                            'a',
+	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link') },
+	                            'Chrome web store'
+	                        ),
+	                        ' and share it with people who might like it.'
 	                    )
 	                ),
 	                React.createElement(
@@ -31343,55 +31392,6 @@
 	                            'Chrome web store'
 	                        ),
 	                        '.'
-	                    )
-	                ),
-	                React.createElement(
-	                    'section',
-	                    { className: 'section' },
-	                    React.createElement(
-	                        'h5',
-	                        null,
-	                        'Share NooBoss'
-	                    ),
-	                    React.createElement(
-	                        'p',
-	                        null,
-	                        'Do you like NooBoss? If so, please consider sharing NooBoss!'
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
-	                    ),
-	                    React.createElement(
-	                        'a',
-	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
 	                    )
 	                ),
 	                React.createElement(

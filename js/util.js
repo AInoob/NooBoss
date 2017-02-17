@@ -124,7 +124,7 @@ function getString(elem){
 }
 
 function newCommunityRecord(ga,data){
-  isOn('joinCommunity',function(){
+  isOn('sendUsage',function(){
     if(ga){
       _gaq.push(data);
     }

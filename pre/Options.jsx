@@ -3,7 +3,7 @@ var Helmet = require('react-helmet');
 module.exports = React.createClass({
   displayName: 'Options',
   getInitialState: function(){
-    return {settings:{notificationDuration_autoState:6,notificationDuration_installation:6,notificationDuration_removal:6,notificationDuration_stateChange:6,joinCommunity:false,recoExtensions:false,showAds:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
+    return {settings:{notificationDuration_autoState:6,notificationDuration_installation:6,notificationDuration_removal:6,notificationDuration_stateChange:6,recoExtensions:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
   },
   componentDidMount: function(){
     get('defaultPage',function(url){
@@ -12,7 +12,7 @@ module.exports = React.createClass({
         return prevState;
       });
     }.bind(this));
-    var switchList=['joinCommunity','recoExtensions','showAds','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
+    var switchList=['recoExtensions','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
     for(var i=0;i<switchList.length;i++){
       isOn(
         switchList[i],
@@ -136,18 +136,6 @@ module.exports = React.createClass({
       <label htmlFor={id} className="checkbox"></label><span>{GL(id)}</span>
     </div>;
   },
-  showAds: function(){
-    alert(GL('ls_13'));
-  },
-  joinCommunity: function(){
-    if(this.state.settings.joinCommunity){
-      var sadMove=confirm(GL('ls_19'));
-      if(!sadMove){
-        return;
-      }
-    }
-    this.toggleSetting('joinCommunity');
-  },
   autoState: function(){
     var change=function(value){
       if(value){
@@ -260,8 +248,8 @@ module.exports = React.createClass({
             <option value="autoState">{GL('autoState')}</option>
             <option value="history">{GL('history')}</option>
           </select>
-          {this.getSwitch('joinCommunity',this.joinCommunity)}
-          {this.getSwitch('showAds',this.showAds)}
+          <br />
+          <br />
           <input id="upload" className="hide" type="file" onChange={CW.bind(null,this.importOptions,'Options','importOptions','')}/>
           <label htmlFor="upload" className="btn space">{GL('import_settings')}</label><br />
           <div className="btn space" onClick={CW.bind(null,this.exportOptions,'Options','exportOptions','')}>{GL('export_settings')}</div><br />
