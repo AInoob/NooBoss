@@ -95,6 +95,7 @@ NooBoss.Management.autoState.enable=function(){
     NooBoss.Management.autoState.removeTab(tabId);
   });
   chrome.tabs.onReplaced.addListener(function(addedTabId,removedTabId){
+    NooBoss.Management.autoState.tabs[removedTabId]=null;
     chrome.tabs.get(addedTabId,function(tab){
       NooBoss.Management.autoState.newTab(tab);
     });
@@ -318,7 +319,6 @@ NooBoss.listeners={};
 NooBoss.listeners.onEnabled=function(appInfoOld){
   var id=appInfoOld.id;
   if(!NooBoss.Management.apps[id]){
-    console.log('a');
     setTimeout(NooBoss.listeners.onEnabled.bind(null,appInfoOld),900);
     return;
   }
@@ -375,7 +375,6 @@ NooBoss.History.listen=function(){
       var time=new Date().getTime();
       var event='installed';
       var message=GL('ls_26');
-      console.log(appInfoRecord);
       if((!appInfoRecord.lastUpdateDate)||(!appInfoRecord.uninstalledDate)||appInfoRecord.lastUpdateDate>appInfoRecord.uninstalledDate){
         if(appInfoRecord.version<appInfo.version){
           event='updated';
