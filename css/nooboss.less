@@ -692,9 +692,25 @@ nav ul a {
   }
   table{
     margin-top: -10px;
+    table-layout: fixed;
   }
   tr{
+    th{
+      &:nth-child(1){
+        width: 60px;
+      }
+      &:nth-child(2){
+        width: 90px;
+      }
+      &:nth-child(3){
+        width: 93px;
+      }
+      &:nth-child(4){
+        width: 204px;
+      }
+    }
     td{
+      word-wrap:break-word;
       padding: 5px 5px;
       img{
         width: 23px;
@@ -731,6 +747,7 @@ nav ul a {
     width: initial;
     height: 28px;
     margin-top: -5px;
+    margin-right: 10px;
   }
   .selected{
     height: 23px;

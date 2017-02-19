@@ -634,8 +634,22 @@ nav ul a {
 }
 #autoState table {
   margin-top: -10px;
+  table-layout: fixed;
+}
+#autoState tr th:nth-child(1) {
+  width: 60px;
+}
+#autoState tr th:nth-child(2) {
+  width: 90px;
+}
+#autoState tr th:nth-child(3) {
+  width: 93px;
+}
+#autoState tr th:nth-child(4) {
+  width: 204px;
 }
 #autoState tr td {
+  word-wrap: break-word;
   padding: 5px 5px;
 }
 #autoState tr td img {
@@ -672,6 +686,7 @@ nav ul a {
   width: initial;
   height: 28px;
   margin-top: -5px;
+  margin-right: 10px;
 }
 #autoState .selected {
   height: 23px;
