@@ -44,9 +44,6 @@
   "recommend_extensions_for_this_website":{
 	"message":"Recommend extensions for this website"
   },
-  "join_community":{
-	"message":"Join community"
-  },
   "up":{
 	"message":"up"
   },
@@ -106,9 +103,6 @@
   },
   "autoStateNotification":{
 	"message":"Auto State notification"
-  },
-  "joinCommunity":{
-	"message":"Join community"
   },
   "type":{
 	"message":"type"
@@ -313,9 +307,6 @@
   },
   "currentWebsite":{
 	"message":"current website"
-  },
-  "ls_0":{
-	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },
   "ls_1":{
 	"message":"No one has recommended any extension for this website yet, do you have a wonderful extension for"

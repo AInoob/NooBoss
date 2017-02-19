@@ -376,7 +376,6 @@ module.exports = React.createClass({
     if(!this.state.recoExtensions){
       discover=
         <div id="discover" className="section">
-          {GL('ls_0')}(turn it on <Link to="/options">{GL('join_community')}here</Link>).
         </div>;
     }
     else{

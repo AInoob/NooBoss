@@ -44,9 +44,6 @@
   "recommend_extensions_for_this_website":{
 	"message":"当前网站推荐拓展"
   },
-  "join_community":{
-	"message":"加入二管家社区"
-  },
   "up":{
 	"message":"顶"
   },
@@ -106,9 +103,6 @@
   },
   "autoStateNotification":{
 	"message":"自动管理通知"
-  },
-  "joinCommunity":{
-	"message":"加入二管家社区"
   },
   "type":{
 	"message":"类型"
@@ -313,9 +307,6 @@
   },
   "currentWebsite":{
 	"message":"当前网站"
-  },
-  "ls_0":{
-	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },
   "ls_1":{
 	"message":"还没有人给这个网站推荐相关拓展呢，你有什么针对这个网站的好用的拓展吗？"

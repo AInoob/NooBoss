@@ -28297,19 +28297,7 @@
 	    var discover = null;
 	    var recoList = null;
 	    if (!this.state.recoExtensions) {
-	      discover = React.createElement(
-	        'div',
-	        { id: 'discover', className: 'section' },
-	        GL('ls_0'),
-	        '(turn it on ',
-	        React.createElement(
-	          Link,
-	          { to: '/options' },
-	          GL('join_community'),
-	          'here'
-	        ),
-	        ').'
-	      );
+	      discover = React.createElement('div', { id: 'discover', className: 'section' });
 	    } else {
 	      if (this.state.tabPerm) {
 	        if ((this.state.recoList || []).length > 0) {
