@@ -311,6 +311,9 @@
   "because_of_rule_":{
 	"message":" 因为规则 #"
   },
+  "currentWebsite":{
+	"message":"当前网站"
+  },
   "ls_0":{
 	"message":"二管家社区没开启，你不会看到任何来自社区用户的拓展推也不能给社区推荐拓展。"
   },

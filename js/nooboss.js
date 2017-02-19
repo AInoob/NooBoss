@@ -29837,6 +29837,17 @@
 	      });
 	    });
 	  },
+	  setCurrentWebsite: function () {
+	    var rule = this.state.rule;
+	    chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
+	      var url = "";
+	      if (tabs[0]) url = tabs[0].url;
+	      this.setState(function (prevState) {
+	        prevState.rule.match = getA(url).origin;
+	        return prevState;
+	      });
+	    }.bind(this));
+	  },
 	  render: function () {
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
@@ -30012,7 +30023,12 @@
 	            capFirst(GL('url')),
 	            ':'
 	          ),
-	          React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' })
+	          React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' }),
+	          React.createElement(
+	            'div',
+	            { className: 'btn', onClick: this.setCurrentWebsite },
+	            GL('currentWebsite')
+	          )
 	        ),
 	        React.createElement(
 	          'div',

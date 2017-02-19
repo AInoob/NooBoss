@@ -311,6 +311,9 @@
   "because_of_rule_":{
 	"message":" because of rule #"
   },
+  "currentWebsite":{
+	"message":"current website"
+  },
   "ls_0":{
 	"message":"Community feature is off, you will not see any extensions recommended by NooBoss users or community details for each app."
   },

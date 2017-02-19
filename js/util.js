@@ -151,6 +151,12 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+function getA(url){
+  var parser = document.createElement('a');
+  parser.href = url;
+  return parser;
+}
+
 
 function dataUrlFromUrl(link, callback){
   var img=new Image();
