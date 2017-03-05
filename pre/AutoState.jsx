@@ -35,7 +35,7 @@ module.exports = React.createClass({
       this.setState({rules:JSON.parse(rules)});
     }.bind(this));
     isOn('autoState',null,function(){
-      alert(GL('ls_20'));
+      swal(GL('ls_20'));
       browserHistory.push('/options');
     })
   },
@@ -228,7 +228,7 @@ module.exports = React.createClass({
           <table className="autoState-table">
             <thead>
               <tr>
-                <th>{capFirst(GL('number'))}</th>
+                <th>#</th>
                 <th>{capFirst(GL('extension_s'))}</th>
                 <th>{capFirst(GL('action'))}</th>
                 <th>{capFirst(GL('match'))}</th>

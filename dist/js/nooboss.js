@@ -29686,7 +29686,7 @@
 	      this.setState({ rules: JSON.parse(rules) });
 	    }.bind(this));
 	    isOn('autoState', null, function () {
-	      alert(GL('ls_20'));
+	      swal(GL('ls_20'));
 	      browserHistory.push('/options');
 	    });
 	  },
@@ -29912,7 +29912,7 @@
 	              React.createElement(
 	                'th',
 	                null,
-	                capFirst(GL('number'))
+	                '#'
 	              ),
 	              React.createElement(
 	                'th',
@@ -30100,10 +30100,24 @@
 	    }
 	  },
 	  reset: function () {
-	    var result = confirm(GL('ls_4'));
-	    if (result) {
+	    swal({
+	      title: GL('are_you_sure'),
+	      text: GL('ls_4'),
+	      type: "warning",
+	      showCancelButton: true,
+	      confirmButtonColor: "#DD6B55",
+	      confirmButtonText: GL('ls_29'),
+	      cancelButtonText: GL('cancel'),
+	      closeOnConfirm: true
+	    }, function () {
 	      chrome.runtime.sendMessage({ job: 'reset' });
-	    }
+	      chrome.notifications.create({
+	        type: 'basic',
+	        iconUrl: '/images/icon_128.png',
+	        title: ' ',
+	        message: GL('ls_31')
+	      });
+	    });
 	  },
 	  importOptions: function (e) {
 	    var f = e.target.files[0];
@@ -30159,8 +30173,16 @@
 	    });
 	  },
 	  clearHistory: function () {
-	    var result = confirm(GL('ls_5'));
-	    if (result) {
+	    swal({
+	      title: GL('are_you_sure'),
+	      text: GL('ls_5'),
+	      type: "warning",
+	      showCancelButton: true,
+	      confirmButtonColor: "#DD6B55",
+	      confirmButtonText: GL('ls_29'),
+	      cancelButtonText: GL('cancel'),
+	      closeOnConfirm: true
+	    }, function () {
 	      setDB('history_records', null, function () {
 	        chrome.runtime.sendMessage({ job: 'clearHistory' });
 	        chrome.notifications.create({
@@ -30173,7 +30195,7 @@
 	          this.setState({ recordList: recordList });
 	        }.bind(this));
 	      }.bind(this));
-	    }
+	    });
 	  },
 	  toggleSetting: function (id) {
 	    var newValue = !this.state.settings[id];
@@ -30477,8 +30499,16 @@
 	    });
 	  },
 	  clearHistory: function () {
-	    var result = confirm(GL('ls_5'));
-	    if (result) {
+	    swal({
+	      title: GL('are_you_sure'),
+	      text: GL('ls_5'),
+	      type: "warning",
+	      showCancelButton: true,
+	      confirmButtonColor: "#DD6B55",
+	      confirmButtonText: GL('ls_29'),
+	      cancelButtonText: GL('cancel'),
+	      closeOnConfirm: true
+	    }, function () {
 	      setDB('history_records', null, function () {
 	        chrome.runtime.sendMessage({ job: 'clearHistory' });
 	        chrome.notifications.create({
@@ -30491,12 +30521,12 @@
 	          this.setState({ recordList: recordList });
 	        }.bind(this));
 	      }.bind(this));
-	    }
+	    }.bind(this));
 	  },
 	  render: function () {
 	    var filter = this.state.filter;
 	    var pattern = new RegExp(filter.keyword, 'i');
-	    var recordList = (this.state.recordList || [{ name: 'Nothing is here yet', id: 'mgehojanhfgnndgffijeglgahakgmgkj' }]).map(function (record, index) {
+	    var recordList = (this.state.recordList || [{ name: GL('ls_30'), id: 'mgehojanhfgnndgffijeglgahakgmgkj' }]).map(function (record, index) {
 	      if ((filter.event == 'all' || record.event == filter.event) && (filter.keyword == '' || pattern.exec(record.name))) {
 	        return React.createElement(
 	          'tr',

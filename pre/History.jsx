@@ -23,8 +23,17 @@ module.exports = React.createClass({
     });
   },
   clearHistory: function(){
-    var result=confirm(GL('ls_5'));
-    if(result){
+    swal({
+        title: GL('are_you_sure'),
+        text: GL('ls_5'),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: GL('ls_29'),
+        cancelButtonText: GL('cancel'),
+        closeOnConfirm: true
+    },
+    function(){
       setDB('history_records',null,function(){
         chrome.runtime.sendMessage({job:'clearHistory'});
         chrome.notifications.create({
@@ -37,12 +46,12 @@ module.exports = React.createClass({
           this.setState({recordList:recordList});
         }.bind(this));
       }.bind(this));
-    }
+    }.bind(this));
   },
   render: function(){
     var filter=this.state.filter;
     var pattern=new RegExp(filter.keyword,'i');
-    var recordList=(this.state.recordList||[{name:'Nothing is here yet',id:'mgehojanhfgnndgffijeglgahakgmgkj'}]).map(function(record,index){
+    var recordList=(this.state.recordList||[{name:GL('ls_30'),id:'mgehojanhfgnndgffijeglgahakgmgkj'}]).map(function(record,index){
       if((filter.event=='all'||record.event==filter.event)&&(filter.keyword==''||pattern.exec(record.name))){
         return(
           <tr key={index}>

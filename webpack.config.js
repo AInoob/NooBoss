@@ -2,7 +2,7 @@ var path=require('path');
 module.exports={
   entry: './pre/NooBoss.jsx',
   output: {
-    path: 'js',
+    path: 'dist/js',
     filename: 'nooboss.js'
   },
   module: {

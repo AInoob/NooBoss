@@ -45,10 +45,25 @@ module.exports = React.createClass({
     }
   },
   reset: function(){
-    var result=confirm(GL('ls_4'));
-    if(result){
+    swal({
+        title: GL('are_you_sure'),
+        text: GL('ls_4'),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: GL('ls_29'),
+        cancelButtonText: GL('cancel'),
+        closeOnConfirm: true
+    },
+    function(){
       chrome.runtime.sendMessage({job:'reset'});
-    }
+      chrome.notifications.create({
+        type:'basic',
+        iconUrl: '/images/icon_128.png',
+        title: ' ',
+        message: GL('ls_31'),
+      });
+    });
   },
   importOptions: function(e){
     var f=e.target.files[0];
@@ -105,8 +120,17 @@ module.exports = React.createClass({
     });
   },
   clearHistory: function(){
-    var result=confirm(GL('ls_5'));
-    if(result){
+    swal({
+        title: GL('are_you_sure'),
+        text: GL('ls_5'),
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: GL('ls_29'),
+        cancelButtonText: GL('cancel'),
+        closeOnConfirm: true
+    },
+    function(){
       setDB('history_records',null,function(){
         chrome.runtime.sendMessage({job:'clearHistory'});
         chrome.notifications.create({
@@ -119,7 +143,7 @@ module.exports = React.createClass({
           this.setState({recordList:recordList});
         }.bind(this));
       }.bind(this));
-    }
+    });
   },
   toggleSetting: function(id){
     var newValue=!this.state.settings[id];

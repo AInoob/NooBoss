@@ -432,9 +432,12 @@ nav ul a {
 }
 #manage .app-holder {
   float: left;
-  width: 113px;
-  height: 113px;
+  width: 108px;
+  height: 108px;
   position: relative;
+}
+#manage .app-holder .app-status-checkbox:not(:checked) ~ .app-brief .app-icon {
+  filter: grayscale(100%);
 }
 #manage .app-holder .app-status-checkbox:not(:checked) ~ .actions .app-switch {
   background-image: url("/thirdParty/power-button-off.svg");
@@ -571,7 +574,7 @@ nav ul a {
   left: 440px;
 }
 #app td {
-  padding: 5px 5px;
+  padding: 5px 4px;
 }
 #app .app-icon {
   position: absolute;
@@ -637,10 +640,10 @@ nav ul a {
   table-layout: fixed;
 }
 #autoState tr th:nth-child(1) {
-  width: 60px;
+  width: 30px;
 }
 #autoState tr th:nth-child(2) {
-  width: 90px;
+  width: 120px;
 }
 #autoState tr th:nth-child(3) {
   width: 93px;
@@ -650,11 +653,19 @@ nav ul a {
 }
 #autoState tr td {
   word-wrap: break-word;
-  padding: 5px 5px;
+  padding: 5px 4px;
 }
 #autoState tr td img {
   width: 23px;
   height: 23px;
+}
+#autoState tr td:nth-child(2) {
+  max-height: 100px;
+  display: block;
+  overflow: scroll;
+}
+#autoState tr td:nth-child(2)::-webkit-scrollbar {
+  width: 0px;
 }
 #autoState tr td:nth-child(5) {
   cursor: pointer;
@@ -703,6 +714,7 @@ nav ul a {
   margin-right: 8px;
 }
 #history {
+  min-height: 360px;
   padding-top: 10px;
   font-size: 13px;
 }

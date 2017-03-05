@@ -471,16 +471,23 @@ nav ul a {
   }
   .app-holder{
     float: left;
-    width: 113px;
-    height: 113px;
+    width: 108px;
+    height: 108px;
     position: relative;
-    .app-status-checkbox:not(:checked) ~ .actions{
-      .app-switch{
-        background-image: url("/thirdParty/power-button-off.svg");
-        filter: invert(50%);
+    .app-status-checkbox:not(:checked){
+      & ~ .app-brief{
+        .app-icon{
+          filter: grayscale(100%);
+        }
       }
-      img{
-        filter: invert(23%);
+      & ~ .actions{
+        .app-switch{
+          background-image: url("/thirdParty/power-button-off.svg");
+          filter: invert(50%);
+        }
+        img{
+          filter: invert(23%);
+        }
       }
     }
     .dimmer{
@@ -618,7 +625,7 @@ nav ul a {
 
 #app{
   td{
-    padding: 5px 5px;
+    padding: 5px 4px;
   }
   .app-icon{
     position: absolute;
@@ -697,10 +704,10 @@ nav ul a {
   tr{
     th{
       &:nth-child(1){
-        width: 60px;
+        width: 30px;
       }
       &:nth-child(2){
-        width: 90px;
+        width: 120px;
       }
       &:nth-child(3){
         width: 93px;
@@ -711,10 +718,18 @@ nav ul a {
     }
     td{
       word-wrap:break-word;
-      padding: 5px 5px;
+      padding: 5px 4px;
       img{
         width: 23px;
         height: 23px;
+      }
+      &:nth-child(2){
+        max-height: 100px;
+        display: block;
+        overflow: scroll;
+        &::-webkit-scrollbar{
+          width: 0px;
+        }
       }
       &:nth-child(5){
         cursor: pointer;
@@ -766,6 +781,7 @@ nav ul a {
 }
 
 #history{
+  min-height: 360px;
   padding-top: 10px;
   font-size: 13px;
   td{
