@@ -17,8 +17,8 @@
     "scripts":["thirdParty/jquery.min.js","thirdParty/timeago.min.js","js/util.js","js/background.js"]
   },
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-  "optional_permissions": [ "tabs"],
   "permissions":[
+    "tabs",
     "management",
     "notifications",
     "storage",
