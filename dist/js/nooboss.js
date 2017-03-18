@@ -29700,6 +29700,7 @@
 	      }, function (result) {
 	        if (!result) {
 	          set('autoState', false, function () {
+	            swal(GL('ls_20'));
 	            browserHistory.push('/options');
 	          });
 	        }
@@ -29784,6 +29785,13 @@
 	  addRule: function () {
 	    var ids = [];
 	    var keys = Object.keys(this.state.rule.selected);
+	    if (keys.length == 0) {
+	      swal(GL('ls_32'));
+	      return;
+	    } else if (this.state.rule.match.length == 0) {
+	      swal(GL('ls_33'));
+	      return;
+	    }
 	    for (var i = 0; i < keys.length; i++) {
 	      var id = keys[i];
 	      if (this.state.rule.selected[id]) {
@@ -30087,6 +30095,13 @@
 	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, recoExtensions: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
 	  },
 	  componentDidMount: function () {
+	    chrome.permissions.contains({
+	      permissions: ['tabs']
+	    }, function (result) {
+	      if (!result) {
+	        set('autoState', false, function () {});
+	      }
+	    });
 	    get('defaultPage', function (url) {
 	      this.setState(function (prevState) {
 	        this.state.settings.defaultPage = url;
@@ -30218,6 +30233,8 @@
 	  },
 	  toggleSetting: function (id) {
 	    var newValue = !this.state.settings[id];
+	    console.log(this.state.settings[id]);
+	    console.log(newValue);
 	    set(id, newValue, function () {
 	      this.setState(function (prevState) {
 	        prevState.settings[id] = newValue;
@@ -30243,7 +30260,7 @@
 	      if (value) {
 	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'on']);
 	        chrome.runtime.sendMessage({ job: 'autoState' });
-	        chrome.notifications.create({
+	        chrome.notifications.create('autoStateSwitch', {
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
 	          title: GL('ls_7'),
@@ -30251,7 +30268,7 @@
 	        });
 	      } else {
 	        newCommunityRecord(true, ['_trackEvent', 'AutoState', 'off']);
-	        chrome.notifications.create({
+	        chrome.notifications.create('autoStateSwitch', {
 	          type: 'basic',
 	          iconUrl: '/images/icon_128.png',
 	          title: GL('ls_9'),
@@ -30266,12 +30283,11 @@
 	      }.bind(this));
 	    }.bind(this);
 	    if (!this.state.settings.autoState) {
+	      change(true);
 	      chrome.permissions.contains({
 	        permissions: ['tabs']
 	      }, function (result) {
-	        if (result) {
-	          change(true);
-	        } else {
+	        if (!result) {
 	          chrome.notifications.create({
 	            type: 'basic',
 	            iconUrl: '/images/icon_128.png',

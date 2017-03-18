@@ -406,5 +406,11 @@
   },
   "ls_31":{
     "message":"Reset complete!"
+  },
+  "ls_32":{
+    "message":"Please select at least one Extension!"
+  },
+  "ls_33":{
+    "message":"Please enter some matching condition!"
   }
 }

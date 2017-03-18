@@ -40,6 +40,7 @@ module.exports = React.createClass({
       },function(result){
         if(!result){
           set('autoState',false,function(){
+            swal(GL('ls_20'));
             browserHistory.push('/options');
           });
         }
@@ -127,6 +128,14 @@ module.exports = React.createClass({
   addRule: function(){
     var ids=[];
     var keys=Object.keys(this.state.rule.selected);
+    if(keys.length==0){
+      swal(GL('ls_32'));
+      return;
+    }
+    else if(this.state.rule.match.length==0){
+      swal(GL('ls_33'));
+      return;
+    }
     for(var i=0;i<keys.length;i++){
       var id=keys[i];
       if(this.state.rule.selected[id]){
