@@ -181,6 +181,8 @@ module.exports = React.createClass({
     if(appInfo.type&&!appInfo.type.match('theme')){
         toggle=<label onClick={CW.bind(null,this.toggleState,'Manage','switch','')} className="app-switch"></label>
     }
+    var chromeOption=null;
+    chromeOption=<label title="default Chrome manage page" onClick={CLR.bind(null,'chrome://extensions/?id='+appInfo.id,'Manage','chromeOption','')} className="app-chromeOption"></label>;
     var config=null;
     if(appInfo.state!='removed'){
       config=
@@ -189,6 +191,7 @@ module.exports = React.createClass({
           {toggle}
           {options}
           <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
+          {chromeOption}
         </div>
     }
     else{

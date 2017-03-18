@@ -34,7 +34,17 @@ module.exports = React.createClass({
     get('autoStateRules',function(rules){
       this.setState({rules:JSON.parse(rules)});
     }.bind(this));
-    isOn('autoState',null,function(){
+    isOn('autoState',function(){
+      chrome.permissions.contains({
+        permissions: ['tabs']
+      },function(result){
+        if(!result){
+          set('autoState',false,function(){
+            browserHistory.push('/options');
+          });
+        }
+      });
+    },function(){
       swal(GL('ls_20'));
       browserHistory.push('/options');
     })

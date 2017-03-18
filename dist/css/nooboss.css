@@ -28,6 +28,10 @@ input {
   background-size: 100% 100%;
   background-image: url("/thirdParty/add.svg");
 }
+.app-chromeOption {
+  background-size: 100% 100%;
+  background-image: url("/thirdParty/chrome.svg");
+}
 .changeView {
   float: right !important;
 }
@@ -498,14 +502,15 @@ nav ul a {
 }
 #manage .app-holder .actions .app-switch,
 #manage .app-holder .actions .app-options,
-#manage .app-holder .actions .app-remove {
+#manage .app-holder .actions .app-remove,
+#manage .app-holder .actions .app-chromeOption {
   cursor: pointer;
   background-repeat: no-repeat;
   display: block;
   background-size: 17px 17px;
   width: 22px;
   height: 22px;
-  margin-bottom: 8%;
+  margin-bottom: -2%;
 }
 #manage .app-holder:hover .app-brief .app-icon {
   -webkit-transform: rotateY(180deg);
@@ -572,6 +577,9 @@ nav ul a {
 }
 #manage .listView:checked ~ .app-holder .actions .app-remove {
   left: 440px;
+}
+#manage .listView:checked ~ .app-holder .actions .app-chromeOption {
+  left: 470px;
 }
 #app td {
   padding: 5px 4px;

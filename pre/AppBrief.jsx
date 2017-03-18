@@ -21,14 +21,16 @@ module.exports = React.createClass({
     else{
       var options=null;
       if(this.props.optionsUrl){
-        options=<label onClick={CW.bind(null,this.props.openOptions,'Manage','options','')} className="app-options"></label>
+        options=<label title="open options page" onClick={CW.bind(null,this.props.openOptions,'Manage','options','')} className="app-options"></label>
       }
       var toggle=null;
       if(!info.type.match('theme')){
-          toggle=<label data={info.id} onClick={CW.bind(null,this.props.toggle,'Manage','switch','')} className="app-switch"></label>
+          toggle=<label data={info.id} title="turn this on or off" onClick={CW.bind(null,this.props.toggle,'Manage','switch','')} className="app-switch"></label>
       }
       var uninstall=null;
-      uninstall=<label data={info.id} onClick={CW.bind(null,this.props.uninstall,'Manage','uninstall','')} className="app-remove"></label>;
+      uninstall=<label data={info.id} title="remove" onClick={CW.bind(null,this.props.uninstall,'Manage','uninstall','')} className="app-remove"></label>;
+      var chromeOption=null;
+      chromeOption=<label data={info.id} title="default Chrome manage page" onClick={CW.bind(null,this.props.chromeOption,'Manage','chromeOption','')} className="app-chromeOption"></label>;
       return(
         <div className="app-holder">
           <input type="checkbox" className="app-status-checkbox" readOnly id={info.id+'-status'} checked={info.enabled} />
@@ -43,6 +45,7 @@ module.exports = React.createClass({
             {toggle}
             {options}
             {uninstall}
+            {chromeOption}
           </div>
         </div>
       );

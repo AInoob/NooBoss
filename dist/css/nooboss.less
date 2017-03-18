@@ -37,6 +37,10 @@ input{
   background-size: 100% 100%;
   background-image: url("/thirdParty/add.svg");
 }
+.app-chromeOption {
+  background-size: 100% 100%;
+  background-image: url("/thirdParty/chrome.svg");
+}
 
 .changeView {
   float: right !important;
@@ -538,14 +542,14 @@ nav ul a {
       width: 22px;
       height: 100%;
       margin-top: 18%;
-      .app-switch, .app-options, .app-remove{
+      .app-switch, .app-options, .app-remove, .app-chromeOption{
         cursor: pointer;
         background-repeat: no-repeat;
         display: block;
         background-size: 17px 17px;
         width: 22px;
         height: 22px;
-        margin-bottom: 8%;
+        margin-bottom: -2%;
       }
     }
     &:hover{
@@ -617,6 +621,9 @@ nav ul a {
         }
         .app-remove{
           left: 440px;
+        }
+        .app-chromeOption{
+          left: 470px;
         }
       }
     }

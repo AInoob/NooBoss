@@ -28665,14 +28665,16 @@
 	    } else {
 	      var options = null;
 	      if (this.props.optionsUrl) {
-	        options = React.createElement('label', { onClick: CW.bind(null, this.props.openOptions, 'Manage', 'options', ''), className: 'app-options' });
+	        options = React.createElement('label', { title: 'open options page', onClick: CW.bind(null, this.props.openOptions, 'Manage', 'options', ''), className: 'app-options' });
 	      }
 	      var toggle = null;
 	      if (!info.type.match('theme')) {
-	        toggle = React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.toggle, 'Manage', 'switch', ''), className: 'app-switch' });
+	        toggle = React.createElement('label', { data: info.id, title: 'turn this on or off', onClick: CW.bind(null, this.props.toggle, 'Manage', 'switch', ''), className: 'app-switch' });
 	      }
 	      var uninstall = null;
-	      uninstall = React.createElement('label', { data: info.id, onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' });
+	      uninstall = React.createElement('label', { data: info.id, title: 'remove', onClick: CW.bind(null, this.props.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' });
+	      var chromeOption = null;
+	      chromeOption = React.createElement('label', { data: info.id, title: 'default Chrome manage page', onClick: CW.bind(null, this.props.chromeOption, 'Manage', 'chromeOption', ''), className: 'app-chromeOption' });
 	      return React.createElement(
 	        'div',
 	        { className: 'app-holder' },
@@ -28701,7 +28703,8 @@
 	          { className: 'actions' },
 	          toggle,
 	          options,
-	          uninstall
+	          uninstall,
+	          chromeOption
 	        )
 	      );
 	    }
@@ -28951,6 +28954,8 @@
 	    if (appInfo.type && !appInfo.type.match('theme')) {
 	      toggle = React.createElement('label', { onClick: CW.bind(null, this.toggleState, 'Manage', 'switch', ''), className: 'app-switch' });
 	    }
+	    var chromeOption = null;
+	    chromeOption = React.createElement('label', { title: 'default Chrome manage page', onClick: CLR.bind(null, 'chrome://extensions/?id=' + appInfo.id, 'Manage', 'chromeOption', ''), className: 'app-chromeOption' });
 	    var config = null;
 	    if (appInfo.state != 'removed') {
 	      config = React.createElement(
@@ -28959,7 +28964,8 @@
 	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, checked: appInfo.enabled }),
 	        toggle,
 	        options,
-	        React.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' })
+	        React.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
+	        chromeOption
 	      );
 	    } else {
 	      config = React.createElement(
@@ -29553,6 +29559,9 @@
 	  openOptions: function (url) {
 	    chrome.tabs.create({ url: url });
 	  },
+	  chromeOption: function (id) {
+	    chrome.tabs.create({ url: 'chrome://extensions/?id=' + id });
+	  },
 	  updateFilter: function (e) {
 	    var id = e.target.id;
 	    var value = e.target.value;
@@ -29573,7 +29582,7 @@
 	  render: function () {
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
-	        return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), info: appInfo });
+	        return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), chromeOption: this.chromeOption.bind(this, appInfo.id, null), info: appInfo });
 	      }
 	    }.bind(this));
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
@@ -29685,7 +29694,17 @@
 	    get('autoStateRules', function (rules) {
 	      this.setState({ rules: JSON.parse(rules) });
 	    }.bind(this));
-	    isOn('autoState', null, function () {
+	    isOn('autoState', function () {
+	      chrome.permissions.contains({
+	        permissions: ['tabs']
+	      }, function (result) {
+	        if (!result) {
+	          set('autoState', false, function () {
+	            browserHistory.push('/options');
+	          });
+	        }
+	      });
+	    }, function () {
 	      swal(GL('ls_20'));
 	      browserHistory.push('/options');
 	    });

@@ -170,8 +170,11 @@ module.exports = React.createClass({
       }
     }.bind(this));
   },
-  openOptions:function(url){
+  openOptions: function(url){
     chrome.tabs.create({url:url});
+  },
+  chromeOption: function(id){
+    chrome.tabs.create({url:'chrome://extensions/?id='+id});
   },
   updateFilter: function(e){
     var id=e.target.id;
@@ -195,7 +198,7 @@ module.exports = React.createClass({
     var appList=this.getFilteredList().map(function(appInfo,index){
       if(appInfo){
         return (
-            <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo,null)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} info={appInfo} />
+            <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo,null)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} chromeOption={this.chromeOption.bind(this,appInfo.id,null)} info={appInfo} />
         );
       }
     }.bind(this));
