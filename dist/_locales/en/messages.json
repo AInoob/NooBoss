@@ -3,7 +3,7 @@
     "message":"NooBoss - Extensions Manager, Update Notifier"
   },
   "appDesc":{
-    "message":"A Chrome extensions manager, nofity extensions updates, auto enable/disable extensions, recommend extensions"
+    "message":"A Chrome extensions manager, notify extensions updates, auto enable/disable extensions, recommend extensions"
   },
   "overview":{
     "message":"overview"
@@ -93,7 +93,7 @@
 	"message":"show ADs"
   },
   "notifyStateChange":{
-	"message":"Nofity state change"
+	"message":"Notify state change"
   },
   "notifyInstallation":{
 	"message":"Notify installation/update"
