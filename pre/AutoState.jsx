@@ -41,13 +41,11 @@ module.exports = React.createClass({
         if(!result){
           set('autoState',false,function(){
             swal(GL('ls_20'));
-            browserHistory.push('/options');
           });
         }
       });
     },function(){
       swal(GL('ls_20'));
-      browserHistory.push('/options');
     })
   },
   getIconUrl: function(appInfo){

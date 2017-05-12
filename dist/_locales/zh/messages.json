@@ -317,6 +317,21 @@
   "are_you_sure":{
 	"message":"你确定吗？"
   },
+  "historyInstall":{
+	"message":"记录安装"
+  },
+  "historyRemove":{
+	"message":"记录删除"
+  },
+  "historyUpdate":{
+	"message":"记录更新"
+  },
+  "historyEnable":{
+	"message":"记录开启事件"
+  },
+  "historyDisable":{
+	"message":"记录关闭事件"
+  },
   "ls_1":{
 	"message":"还没有人给这个网站推荐相关拓展呢，你有什么针对这个网站的好用的拓展吗？"
   },

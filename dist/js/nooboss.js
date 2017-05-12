@@ -29701,13 +29701,11 @@
 	        if (!result) {
 	          set('autoState', false, function () {
 	            swal(GL('ls_20'));
-	            browserHistory.push('/options');
 	          });
 	        }
 	      });
 	    }, function () {
 	      swal(GL('ls_20'));
-	      browserHistory.push('/options');
 	    });
 	  },
 	  getIconUrl: function (appInfo) {
@@ -30092,7 +30090,7 @@
 	module.exports = React.createClass({
 	  displayName: 'Options',
 	  getInitialState: function () {
-	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, recoExtensions: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
+	    return { settings: { notificationDuration_autoState: 6, notificationDuration_installation: 6, notificationDuration_removal: 6, notificationDuration_stateChange: 6, historyInstall: false, historyRemove: false, historyUpdate: false, historyEnable: false, historyDisabl: false, recoExtensions: false, notifyStateChange: false, notifyInstallation: false, notifyRemoval: false, autoState: false, autoStateNotification: false, defaultPage: 'overview' } };
 	  },
 	  componentDidMount: function () {
 	    chrome.permissions.contains({
@@ -30108,7 +30106,7 @@
 	        return prevState;
 	      });
 	    }.bind(this));
-	    var switchList = ['recoExtensions', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification'];
+	    var switchList = ['recoExtensions', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification', 'historyInstall', 'historyRemove', 'historyUpdate', 'historyEnable', 'historyDisable'];
 	    for (var i = 0; i < switchList.length; i++) {
 	      isOn(switchList[i], function (ii) {
 	        this.setState(function (prevState) {
@@ -30436,6 +30434,20 @@
 	            GL('s')
 	          )
 	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'section container' },
+	        React.createElement(
+	          'h5',
+	          null,
+	          GL('history')
+	        ),
+	        this.getSwitch('historyInstall'),
+	        this.getSwitch('historyRemove'),
+	        this.getSwitch('historyUpdate'),
+	        this.getSwitch('historyEnable'),
+	        this.getSwitch('historyDisable')
 	      ),
 	      React.createElement(
 	        'div',

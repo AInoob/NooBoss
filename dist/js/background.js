@@ -6,7 +6,12 @@ NooBoss.defaultValues=[
   ['notifyStateChange',true],
   ['notifyInstallation',true],
   ['notifyRemoval',true],
-  ['autoState',false],
+  ['historyInstall',true],
+  ['historyRemove',true],
+  ['historyUpdate',true],
+  ['historyEnable',true],
+  ['historyDisable',true],
+  ['autoState',true],
   ['autoStateNotification',true],
   ['autoStateRules','[]'],
   ['sortOrder','nameState'],
@@ -380,18 +385,83 @@ NooBoss.History.listen=function(){
           message=GL('ls_27');
         }
       }
-      NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
-        getDB(appInfo.id,function(appInfo){
-          NooBoss.History.addRecord({event:event, id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
-          isOn('notifyInstallation',function(){
-            chrome.notifications.create({
-              type:'basic',
-              iconUrl: '/images/icon_128.png',
-              title: appInfo.name+' '+GL(event),
-              message: appInfo.name+' '+message,
-              requireInteraction: true
-            },function(notificationId){
-              get('notificationDuration_installation',function(time){
+      if(event=='installed') {
+        isOn('historyInstall', function() {
+          NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
+            getDB(appInfo.id,function(appInfo){
+              NooBoss.History.addRecord({event:event, id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+              isOn('notifyInstallation',function(){
+                chrome.notifications.create({
+                  type:'basic',
+                  iconUrl: '/images/icon_128.png',
+                  title: appInfo.name+' '+GL(event),
+                  message: appInfo.name+' '+message,
+                  requireInteraction: true
+                },function(notificationId){
+                  get('notificationDuration_installation',function(time){
+                    if(time>0){
+                      setTimeout(function(){
+                        chrome.notifications.clear(notificationId,function(){});
+                      },time*1000);
+                    }
+                  });
+                });
+              });
+            });
+          });
+        });
+      }
+      else {
+        NooBoss.Management.updateAppInfo(appInfo,{lastUpdateDate:time},function(data){
+          getDB(appInfo.id,function(appInfo){
+            NooBoss.History.addRecord({event:event, id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+            isOn('notifyInstallation',function(){
+              chrome.notifications.create({
+                type:'basic',
+                iconUrl: '/images/icon_128.png',
+                title: appInfo.name+' '+GL(event),
+                message: appInfo.name+' '+message,
+                requireInteraction: true
+              },function(notificationId){
+                get('notificationDuration_installation',function(time){
+                  if(time>0){
+                    setTimeout(function(){
+                      chrome.notifications.clear(notificationId,function(){});
+                    },time*1000);
+                  }
+                });
+              });
+            });
+          });
+        });
+      }
+    });
+  });
+  chrome.management.onUninstalled.addListener(function(id){
+    isOn('historyRemove', function() {
+      NooBoss.Management.apps[id]=null;
+      var recordUninstall=function(times,appInfo){
+        if(!appInfo){
+          if(times<9){
+            setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+          }
+        }
+        else{
+          NooBoss.History.addRecord({event:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
+        }
+      }
+      getDB(id,recordUninstall.bind(null,1));
+      NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
+      isOn('notifyRemoval',function(){
+        getDB(id,function(appInfo){
+          chrome.notifications.create({
+            type:'basic',
+            iconUrl: '/images/icon_128.png',
+            title: appInfo.name+' '+capFirst(GL('removed')),
+            message: appInfo.name+' '+GL('ls_28'),
+            requireInteraction: true
+          },function(notificationId){
+              get('notificationDuration_removal',function(time){
                 if(time>0){
                   setTimeout(function(){
                     chrome.notifications.clear(notificationId,function(){});
@@ -399,35 +469,37 @@ NooBoss.History.listen=function(){
                 }
               });
             });
-          });
         });
       });
     });
   });
-  chrome.management.onUninstalled.addListener(function(id){
-    NooBoss.Management.apps[id]=null;
-    var recordUninstall=function(times,appInfo){
-      if(!appInfo){
-        if(times<9){
-          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+  chrome.management.onEnabled.addListener(function(appInfo) {
+    isOn('historyEnable', NooBoss.listeners.onEnabled.bind(null, appInfo));
+  });
+  chrome.management.onDisabled.addListener(function(appInfoOld){
+    isOn('historyDisable', function() {
+      var id=appInfoOld.id;
+      NooBoss.Management.apps[id].enabled=false;
+      var recordDisable=function(times,appInfo){
+        if(!appInfo){
+          if(times<9){
+            setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
+          }
+        }
+        else{
+          NooBoss.History.addRecord({event:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
         }
       }
-      else{
-        NooBoss.History.addRecord({event:'removed', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
-      }
-    }
-    getDB(id,recordUninstall.bind(null,1));
-    NooBoss.Management.updateAppInfoById(id,{uninstalledDate:new Date().getTime()});
-    isOn('notifyRemoval',function(){
-      getDB(id,function(appInfo){
+      getDB(id,recordDisable.bind(null,1));
+      isOn('notifyStateChange',function(){
         chrome.notifications.create({
           type:'basic',
           iconUrl: '/images/icon_128.png',
-          title: appInfo.name+' '+capFirst(GL('removed')),
-          message: appInfo.name+' '+GL('ls_28'),
+          title: 'Disabled: '+appInfoOld.name,
+          message: appInfoOld.name+GL('has_been')+GL('disabled'),
           requireInteraction: true
         },function(notificationId){
-            get('notificationDuration_removal',function(time){
+            get('notificationDuration_stateChange',function(time){
               if(time>0){
                 setTimeout(function(){
                   chrome.notifications.clear(notificationId,function(){});
@@ -436,39 +508,6 @@ NooBoss.History.listen=function(){
             });
           });
       });
-    });
-  });
-  chrome.management.onEnabled.addListener(NooBoss.listeners.onEnabled.bind(null));
-  chrome.management.onDisabled.addListener(function(appInfoOld){
-    var id=appInfoOld.id;
-    NooBoss.Management.apps[id].enabled=false;
-    var recordDisable=function(times,appInfo){
-      if(!appInfo){
-        if(times<9){
-          setTimeout(getDB.bind(null,id,recordUninstall.bind(null,times+1)),1000);
-        }
-      }
-      else{
-        NooBoss.History.addRecord({event:'disabled', id:appInfo.id, icon: appInfo.icon, name:appInfo.name, version:appInfo.version});
-      }
-    }
-    getDB(id,recordDisable.bind(null,1));
-    isOn('notifyStateChange',function(){
-      chrome.notifications.create({
-        type:'basic',
-        iconUrl: '/images/icon_128.png',
-        title: 'Disabled: '+appInfoOld.name,
-        message: appInfoOld.name+GL('has_been')+GL('disabled'),
-        requireInteraction: true
-      },function(notificationId){
-          get('notificationDuration_stateChange',function(time){
-            if(time>0){
-              setTimeout(function(){
-                chrome.notifications.clear(notificationId,function(){});
-              },time*1000);
-            }
-          });
-        });
     });
   });
 }

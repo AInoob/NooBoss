@@ -3,7 +3,7 @@ var Helmet = require('react-helmet');
 module.exports = React.createClass({
   displayName: 'Options',
   getInitialState: function(){
-    return {settings:{notificationDuration_autoState:6,notificationDuration_installation:6,notificationDuration_removal:6,notificationDuration_stateChange:6,recoExtensions:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
+    return {settings:{notificationDuration_autoState:6,notificationDuration_installation:6,notificationDuration_removal:6,notificationDuration_stateChange:6,historyInstall:false,historyRemove:false,historyUpdate:false,historyEnable:false,historyDisabl:false,recoExtensions:false,notifyStateChange:false,notifyInstallation:false,notifyRemoval:false,autoState:false,autoStateNotification:false,defaultPage:'overview'}};
   },
   componentDidMount: function(){
     chrome.permissions.contains({
@@ -20,7 +20,7 @@ module.exports = React.createClass({
         return prevState;
       });
     }.bind(this));
-    var switchList=['recoExtensions','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification'];
+    var switchList=['recoExtensions','notifyStateChange','notifyInstallation','notifyRemoval','autoState','autoStateNotification','historyInstall','historyRemove','historyUpdate','historyEnable','historyDisable'];
     for(var i=0;i<switchList.length;i++){
       isOn(
         switchList[i],
@@ -265,6 +265,14 @@ module.exports = React.createClass({
           <span className="switchWithFollow"></span>{this.getSwitch('notifyInstallation')}<input type="checkbox" className="follow" checked={this.state.settings['notifyInstallation']} /><div className="followInput"><span>{GL('for')}</span><input id='notificationDuration_installation' value={this.state.settings.notificationDuration_installation} onChange={this.setNotification} /><span>{GL('s')}</span></div>
           <span className="switchWithFollow"></span>{this.getSwitch('notifyRemoval')}<input type="checkbox" className="follow" checked={this.state.settings['notifyRemoval']} /><div className="followInput"><span>{GL('for')}</span><input id='notificationDuration_removal' value={this.state.settings.notificationDuration_removal} onChange={this.setNotification} /><span>{GL('s')}</span></div>
           <span className="switchWithFollow"></span>{this.getSwitch('autoStateNotification')}<input type="checkbox" className="follow" checked={this.state.settings['autoStateNotification']} /><div className="followInput"><span>{GL('for')}</span><input id='notificationDuration_autoState' value={this.state.settings.notificationDuration_autoState} onChange={this.setNotification} /><span>{GL('s')}</span></div>
+        </div>
+        <div className="section container">
+          <h5>{GL('history')}</h5>
+          {this.getSwitch('historyInstall')}
+          {this.getSwitch('historyRemove')}
+          {this.getSwitch('historyUpdate')}
+          {this.getSwitch('historyEnable')}
+          {this.getSwitch('historyDisable')}
         </div>
         <div className="section container">
           <h5>{GL('functions')}</h5>
