@@ -1,17 +1,20 @@
 var path=require('path');
 module.exports={
-  entry: './pre/NooBoss.jsx',
+  entry: {
+    nooboss: './pre/NooBoss.jsx',
+    background: './pre/background.js',
+  },
   output: {
     path: 'dist/js',
-    filename: 'nooboss.js'
+    filename: '[name].js'
   },
   module: {
     loaders: [
       {
-        test: /\.jsx$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         query: {
-          presets: ['react']
+          presets: ['react', 'es2015']
         }
       }
     ]
