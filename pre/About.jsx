@@ -1,14 +1,15 @@
-var React = require('react');
-var Helmet = require('react-helmet');
+import React from 'react';
+import Helmet from 'react-helmet';
+
 module.exports = React.createClass({
-  getInitialState: function(){
+  getInitialState() {
     return null;
   },
-  componentDidMount: function(){
+  componentDidMount() {
   },
-  render: function(){
-    if(chrome.i18n.getUILanguage().indexOf('zh')!=-1){
-      return(
+  render() {
+    if(chrome.i18n.getUILanguage().indexOf('zh') != -1) {
+      return (
         <div id="about">
           <Helmet
             title="About"
@@ -119,8 +120,8 @@ module.exports = React.createClass({
 		</div>
       );
     }
-    else{
-      return(
+    else {
+      return (
         <div id="about">
           <Helmet
             title="About"
@@ -234,6 +235,5 @@ module.exports = React.createClass({
         </div>
       );
     }
-    
   }
 });

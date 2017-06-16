@@ -1,191 +1,196 @@
-var React = require('react');
-var Helmet = require('react-helmet');
+import React from 'react';
+import Helmet from 'react-helmet';
+
 module.exports = React.createClass({
-  getInitialState: function(){
-    return {tags:{},joinCommunity:false,appInfo:{enabled:true}};
+  getInitialState() {
+    return { tags: {}, joinCommunity: false, appInfo: { enabled: true } };
   },
-  componentDidMount: function(){
-    var id=getParameterByName('id');
-    var chromeVersion=getChromeVersion();
-    isOn('joinCommunity',function(){
-      this.setState(function(prevState){
+  componentDidMount() {
+    const id = getParameterByName('id');
+    const chromeVersion = getChromeVersion();
+    isOn('joinCommunity', () => {
+      this.setState((prevState) => {
         prevState.joinCommunity=true;
-        return;
+        return prevState;
       });
-      get('userId',function(userId){
-        this.setState({userId:userId});
+      get('userId', (userId) => {
+        this.setState({ userId });
         $.ajax({
-          type:'POST',
+          type: 'POST',
           contentType: "application/json",
           data: JSON.stringify({userId:userId,appId:id}),
           url:'https://ainoob.com/api/nooboss/app'
-        }).done(function(data){
-          var tags={};
-          for(var i=0;i<data.tags.length;i++){
-            tags[data.tags[i].tag]=data.tags[i].tagged;
+        }).done((data) => {
+          const tags={};
+          for(let i = 0; i < data.tags.length; i++) {
+            tags[data.tags[i].tag] = data.tags[i].tagged;
           }
-          this.setState({appInfoWeb:data.appInfo,tags:tags});
-        }.bind(this));
-      }.bind(this));
-    }.bind(this));
+          this.setState({ appInfoWeb: data.appInfo, tags });
+        });
+      });
+    });
     $.ajax({
       dataType: 'xml',
-      url:'https://clients2.google.com/service/update2/crx?prodversion='+chromeVersion+'&x=id%3D'+id+'%26installsource%3Dondemand%26uc'
-    }).done(function(data){
-      crxUrl=$(data).find('updatecheck').attr('codebase');
-      crxVersion=$(data).find('updatecheck').attr('version');
-      this.setState({crxUrl:crxUrl,crxVersion:crxVersion});
-    }.bind(this));
+      url: 'https://clients2.google.com/service/update2/crx?prodversion='+chromeVersion+'&x=id%3D'+id+'%26installsource%3Dondemand%26uc'
+    }).done((data) => {
+      const crxUrl = $(data).find('updatecheck').attr('codebase');
+      const crxVersion = $(data).find('updatecheck').attr('version');
+      this.setState({ crxUrl, crxVersion });
+    });
     $.ajax({
       url:'https://chrome.google.com/webstore/detail/'+id
-    }).done(function(data){
-      this.setState({rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5'});
-    }.bind(this));
-    getDB(id,function(appInfo){
-      chrome.management.get(id,function(appInfo2){
-        if(chrome.runtime.lastError){
-          appInfo.state='removed';
+    }).done((data) => {
+      this.setState({
+        rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5'
+      });
+    });
+    getDB(id, (appInfo) => {
+      chrome.management.get(id, (appInfo2) => {
+        console.log(appInfo2);
+        if(chrome.runtime.lastError) {
+          appInfo.state = 'removed';
         }
         else{
-          if(appInfo2.enabled){
-            appInfo.state='enabled';
+          appInfo.enabled = appInfo2.enabled;
+          if(appInfo2.enabled) {
+            appInfo.state = 'enabled';
           }
           else{
-            appInfo.state='disabled';
+            appInfo.state = 'disabled';
           }
         }
       });
-      this.setState({appInfo: appInfo});
+      this.setState({ appInfo: appInfo });
       console.log(appInfo);
-    }.bind(this));
+    });
   },
-  toggleState: function(info){
-    var info=this.state.appInfo;
-    var action='enable';
-    if(info.enabled){
-      action='disable';
+  toggleState(info) {
+    info = this.state.appInfo;
+    let action = 'enable';
+    if(info.enabled) {
+      action = 'disable';
     }
-    newCommunityRecord(true,['_trackEvent', 'manage', action]);
-    chrome.management.setEnabled(info.id,!info.enabled,function(){
-      var result='enabled';
-      if(info.enabled){
-        result='disabled';
+    newCommunityRecord(true, ['_trackEvent', 'manage', action]);
+    chrome.management.setEnabled(info.id,!info.enabled, () => {
+      let result = 'enabled';
+      if(info.enabled) {
+        result = 'disabled';
       }
-      this.setState(function(prevState){
-        prevState.appInfo.enabled=!info.enabled;
-        if(prevState.appInfo.enabled){
-          prevState.appInfo.state='enabled';
+      this.setState((prevState) => {
+        prevState.appInfo.enabled = !info.enabled;
+        if(prevState.appInfo.enabled) {
+          prevState.appInfo.state = 'enabled';
         }
         else{
-          prevState.appInfo.state='disabled';
+          prevState.appInfo.state = 'disabled';
         }
         return prevState;
       });
-    }.bind(this));
+    });
   },
-  toggleTag: function(tag){
-    var inc=1;
-    var tagged=true;
-    var action='tag';
-    var appId=this.state.appInfo.id;
-    if(this.state.tags&&this.state.tags[tag]){
-      action='unTag';
-      tagged=false;
-      inc=-1;
+  toggleTag(tag) {
+    let inc = 1;
+    let tagged = true;
+    let action = 'tag';
+    const appId = this.state.appInfo.id;
+    if(this.state.tags && this.state.tags[tag]) {
+      action = 'unTag';
+      tagged = false;
+      inc = -1;
     }
-    CW(function(){},'Community','addTag',action);
-    var reco={
-      appId:appId,
+    CW(() => {}, 'Community', 'addTag', action);
+    const reco = {
       userId:this.state.userId,
-      tag:tag,
-      action:action
+      appId,
+      tag,
+      action
     };
     $.ajax({
-      type:'POST',
-      url:"https://ainoob.com/api/nooboss/reco/app/tag",
-      contentType: "application/json",
+      type: 'POST',
+      url: 'https://ainoob.com/api/nooboss/reco/app/tag',
+      contentType: 'application/json',
       data: JSON.stringify(reco)
-    }).done(function(data){
-      this.setState(function(prevState){
-        if(!prevState.appInfoWeb){
-          prevState.appInfoWeb={appId:appId,tags:{}};
+    }).done((data) => {
+      this.setState((prevState) => {
+        if(!prevState.appInfoWeb) {
+          prevState.appInfoWeb = { appId, tags:{} };
         }
-        if(!prevState.appInfoWeb.tags[tag]){
-          prevState.appInfoWeb.tags[tag]=1;
+        if(!prevState.appInfoWeb.tags[tag]) {
+          prevState.appInfoWeb.tags[tag] = 1;
         }
-        else{
-          prevState.appInfoWeb.tags[tag]+=inc;
+        else {
+          prevState.appInfoWeb.tags[tag] += inc;
         }
-        if(!prevState.tags){
-          prevState.tags={};
+        if(!prevState.tags) {
+          prevState.tags = {};
         }
-        prevState.tags[tag]=tagged;
+        prevState.tags[tag] = tagged;
         return prevState;
       });
-    }.bind(this));
+    });
   },
-  uninstall: function(info){
-    var result='removal_success';
-    newCommunityRecord(true,['_trackEvent', 'manage', 'removal', info.id]);
-    chrome.management.uninstall(this.state.appInfo.id,function(){
-      if(chrome.runtime.lastError){
-        action='removal_fail';
+  uninstall(info) {
+    let result = 'removal_success';
+    newCommunityRecord(true, ['_trackEvent', 'manage', 'removal', info.id]);
+    chrome.management.uninstall(this.state.appInfo.id, () => {
+      if(chrome.runtime.lastError) {
+        action = 'removal_fail';
         console.log(chrome.runtime.lastError);
         chrome.notifications.create({
-          type:'basic',
+          type: 'basic',
           iconUrl: '/images/icon_128.png',
           title: 'Removal calcelled',
-          message: 'You have cancelled the removal of '+info.name,
+          message: 'You have cancelled the removal of ' + info.name,
           imageUrl: info.icon
         });
       }
-      else{
-        this.setState(function(prevState){
-          prevState.appInfo.enabled=false;
-          prevState.appInfo.state='removed';
+      else {
+        this.setState((prevState) => {
+          prevState.appInfo.enabled = false;
+          prevState.appInfo.state = 'removed';
           return prevState;
         });
-        newCommunityRecord(true,['_trackEvent', 'result', result, info.id]);
+        newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
       }
-    }.bind(this));
+    });
   },
-  launchApp: function(){
+  launchApp() {
     chrome.management.launchApp(this.state.appInfo.id);
     window.close();
   },
-  render: function(){
-    var appInfo=this.state.appInfo;
-    var launch=null;
-    if(appInfo.isApp){
+  render() {
+    const appInfo = this.state.appInfo;
+    let launch = null;
+    if(appInfo.isApp) {
       launch=<div className="app-launcher button" onClick={CW.bind(null,this.launchApp,'App','launch','')}>{GL('Launch')}</div>;
     }
-    var launchType=null;
-    if(appInfo.launchType){
+    let launchType = null;
+    if(appInfo.launchType) {
       launchType=<tr><td>{GL('launch_type')}</td><td>{appInfo.launchType}</td></tr>
     }
-    var permissions=null;
-    var permissionList=(appInfo.permissions||[]).map(function(elem,index){
+    let  permissions = null;
+    const permissionList = (appInfo.permissions || []).map((elem,index) => {
+      return <li key={index}>{elem}</li>;
+    });
+    permissions = <tr><td>{GL('permissions')}</td><td><ul>{permissionList}</ul></td></tr>;
+    let hostPermissions = null;
+    const hostPermissionList = (appInfo.hostPermissions || []).map((elem,index) => {
       return <li key={index}>{elem}</li>
     });
-    permissions=<tr><td>{GL('permissions')}</td><td><ul>{permissionList}</ul></td></tr>
-    var hostPermissions=null;
-    var hostPermissionList=(appInfo.hostPermissions||[]).map(function(elem,index){
-      return <li key={index}>{elem}</li>
-    });
-    hostPermissions=<tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>
-    var options=null;
-    if(appInfo.optionsUrl){
-      options=<span className="app-options" onClick={CLR.bind(null,appInfo.optionsUrl,'Manage','option','')}></span>
+    hostPermissions = <tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>;
+    let options = null;
+    if(appInfo.optionsUrl) {
+      options = <span className="app-options" onClick={CLR.bind(null,appInfo.optionsUrl,'Manage','option','')}></span>;
     }
-    var toggle=null;
-    if(appInfo.type&&!appInfo.type.match('theme')){
-        toggle=<label onClick={CW.bind(null,this.toggleState,'Manage','switch','')} className="app-switch"></label>
+    let toggle = null;
+    if(appInfo.type && !appInfo.type.match('theme')) {
+        toggle = <label onClick={CW.bind(null,this.toggleState,'Manage','switch','')} className="app-switch"></label>;
     }
-    var chromeOption=null;
-    chromeOption=<label title="default Chrome manage page" onClick={CLR.bind(null,'chrome://extensions/?id='+appInfo.id,'Manage','chromeOption','')} className="app-chromeOption"></label>;
-    var config=null;
-    if(appInfo.state!='removed'){
-      config=
+    let chromeOption = null;
+    chromeOption = <label title="default Chrome manage page" onClick={CLR.bind(null,'chrome://extensions/?id='+appInfo.id,'Manage','chromeOption','')} className="app-chromeOption"></label>;
+    let config = null;
+    if(appInfo.state != 'removed') {
+      config = (
         <div className="config">
           <input type="checkbox" className="app-status-checkbox" readOnly  checked={(appInfo.enabled)} />
           {toggle}
@@ -193,45 +198,49 @@ module.exports = React.createClass({
           <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
           {chromeOption}
         </div>
+      );
     }
-    else{
-      config=
+    else {
+      config = (
         <div className="config">
           <a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+appInfo.id,'App','app-link')} title={'https://chrome.google.com/webstore/detail/'+appInfo.id}><label className='app-add'></label></a>
         </div>
+      );
     }
-    var crxName=null;
-    if(this.state.crxVersion){
-      crxName='extension_'+(this.state.crxVersion.replace(/\./g,'_')+'.crx');
+    let crxName=null;
+    if(this.state.crxVersion) {
+      crxName = 'extension_' + (this.state.crxVersion.replace(/\./g,'_') + '.crx');
     }
-    var manifestUrl='chrome-extension://'+appInfo.id+'/manifest.json';
-    var nb_rating=<tr><td>{capFirst('NB-Rating')}</td><td>{this.state.nb_rating}</td></tr>;
-    var tags=null;
-    if(this.state.joinCommunity){
-      appInfoWeb=this.state.appInfoWeb||{tags:[],upVotes:0,downVotes:0};
-      var active={};
-      var temp=Object.keys(this.state.tags||{});
-      for(var j=0;j<temp.length;j++){
-        if(this.state.tags[temp[j]]){
-          active[temp[j]]='active'
+    const manifestUrl='chrome-extension://'+appInfo.id+'/manifest.json';
+    const nb_rating=<tr><td>{capFirst('NB-Rating')}</td><td>{this.state.nb_rating}</td></tr>;
+    let tags=null;
+    if(this.state.joinCommunity) {
+      appInfoWeb = this.state.appInfoWeb || { tags: [], upVotes: 0, downVotes: 0 };
+      const active = {};
+      const temp = Object.keys(this.state.tags || {});
+      for(let j = 0; j < temp.length; j++) {
+        if(this.state.tags[temp[j]]) {
+          active[temp[j]] = 'active';
         }
       }
-      var tags=<div className="tags">
-        <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfoWeb.tags['useful']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfoWeb.tags['working']||0}</div>
+      const tags=(
+        <div className="tags">
+          <div className="tagColumn">
+            <div onClick={this.toggleTag.bind(this,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{appInfoWeb.tags['useful']||0}</div>
+            <div onClick={this.toggleTag.bind(this,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{appInfoWeb.tags['working']||0}</div>
+          </div>
+          <div className="tagColumn">
+            <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfoWeb.tags['laggy']||0}</div>
+            <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfoWeb.tags['buggy']||0}</div>
+          </div>
+          <div className="tagColumn">
+            <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfoWeb.tags['not_working']||0}</div>
+            <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfoWeb.tags['ASM']||0}</div>
+          </div>
         </div>
-        <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{appInfoWeb.tags['laggy']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{appInfoWeb.tags['buggy']||0}</div>
-        </div>
-        <div className="tagColumn">
-          <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{appInfoWeb.tags['not_working']||0}</div>
-          <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{appInfoWeb.tags['ASM']||0}</div>
-        </div>
-      </div>;
+      );
     }
-    return(
+    return (
       <div id="app">
         <Helmet
           title="App"

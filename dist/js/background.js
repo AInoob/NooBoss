@@ -88,6 +88,7 @@
 	_Management2.default.updateAppInfo = _Management2.default.updateAppInfo.bind(NooBoss);
 	NooBoss.Management = _Management2.default;
 
+	_listeners2.default.onEnabled = _listeners2.default.onEnabled.bind(NooBoss);
 	NooBoss.listeners = _listeners2.default;
 
 	_History2.default.init = _History2.default.init.bind(NooBoss);

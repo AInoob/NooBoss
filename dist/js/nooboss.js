@@ -27043,83 +27043,90 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	var Link = __webpack_require__(189).Link;
+	var _react = __webpack_require__(7);
 
-	module.exports = React.createClass({
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	var _reactRouter = __webpack_require__(189);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
 	  displayName: 'exports',
-
 	  render: function render() {
 	    var activeList = {};
 	    activeList[(this.props.location.pathname.match(/(\w+)/) || [null, null])[1]] = 'active';
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { id: 'core' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'nav',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'ul',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.overview },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/overview' },
 	              capFirst(GL('overview'))
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.manage },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/manage' },
 	              capFirst(GL('manage'))
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.autoState },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/autoState' },
 	              capFirst(GL('autoState'))
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.history },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/history' },
 	              capFirst(GL('history'))
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.options },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/options' },
 	              capFirst(GL('options'))
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'li',
 	            { className: activeList.about },
-	            React.createElement(
-	              Link,
+	            _react2.default.createElement(
+	              _reactRouter.Link,
 	              { to: '/about' },
 	              capFirst(GL('about'))
 	            )
 	          )
 	        )
 	      ),
-	      React.createElement('div', { className: 'headerPad' }),
-	      React.createElement(Helmet, {
+	      _react2.default.createElement('div', { className: 'headerPad' }),
+	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'Core'
 	      }),
 	      this.props.children
@@ -29133,24 +29140,33 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	module.exports = React.createClass({
-	  displayName: 'exports',
+	var _react = __webpack_require__(7);
 
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
+	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
 	    return { tags: {}, joinCommunity: false, appInfo: { enabled: true } };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+
 	    var id = getParameterByName('id');
 	    var chromeVersion = getChromeVersion();
 	    isOn('joinCommunity', function () {
-	      this.setState(function (prevState) {
+	      _this.setState(function (prevState) {
 	        prevState.joinCommunity = true;
-	        return;
+	        return prevState;
 	      });
 	      get('userId', function (userId) {
-	        this.setState({ userId: userId });
+	        _this.setState({ userId: userId });
 	        $.ajax({
 	          type: 'POST',
 	          contentType: "application/json",
@@ -29161,28 +29177,32 @@
 	          for (var i = 0; i < data.tags.length; i++) {
 	            tags[data.tags[i].tag] = data.tags[i].tagged;
 	          }
-	          this.setState({ appInfoWeb: data.appInfo, tags: tags });
-	        }.bind(this));
-	      }.bind(this));
-	    }.bind(this));
+	          _this.setState({ appInfoWeb: data.appInfo, tags: tags });
+	        });
+	      });
+	    });
 	    $.ajax({
 	      dataType: 'xml',
 	      url: 'https://clients2.google.com/service/update2/crx?prodversion=' + chromeVersion + '&x=id%3D' + id + '%26installsource%3Dondemand%26uc'
 	    }).done(function (data) {
-	      crxUrl = $(data).find('updatecheck').attr('codebase');
-	      crxVersion = $(data).find('updatecheck').attr('version');
-	      this.setState({ crxUrl: crxUrl, crxVersion: crxVersion });
-	    }.bind(this));
+	      var crxUrl = $(data).find('updatecheck').attr('codebase');
+	      var crxVersion = $(data).find('updatecheck').attr('version');
+	      _this.setState({ crxUrl: crxUrl, crxVersion: crxVersion });
+	    });
 	    $.ajax({
 	      url: 'https://chrome.google.com/webstore/detail/' + id
 	    }).done(function (data) {
-	      this.setState({ rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3) + ' / 5' });
-	    }.bind(this));
+	      _this.setState({
+	        rating: parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3) + ' / 5'
+	      });
+	    });
 	    getDB(id, function (appInfo) {
 	      chrome.management.get(id, function (appInfo2) {
+	        console.log(appInfo2);
 	        if (chrome.runtime.lastError) {
 	          appInfo.state = 'removed';
 	        } else {
+	          appInfo.enabled = appInfo2.enabled;
 	          if (appInfo2.enabled) {
 	            appInfo.state = 'enabled';
 	          } else {
@@ -29190,12 +29210,14 @@
 	          }
 	        }
 	      });
-	      this.setState({ appInfo: appInfo });
+	      _this.setState({ appInfo: appInfo });
 	      console.log(appInfo);
-	    }.bind(this));
+	    });
 	  },
 	  toggleState: function toggleState(info) {
-	    var info = this.state.appInfo;
+	    var _this2 = this;
+
+	    info = this.state.appInfo;
 	    var action = 'enable';
 	    if (info.enabled) {
 	      action = 'disable';
@@ -29206,7 +29228,7 @@
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      this.setState(function (prevState) {
+	      _this2.setState(function (prevState) {
 	        prevState.appInfo.enabled = !info.enabled;
 	        if (prevState.appInfo.enabled) {
 	          prevState.appInfo.state = 'enabled';
@@ -29215,9 +29237,11 @@
 	        }
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	  },
 	  toggleTag: function toggleTag(tag) {
+	    var _this3 = this;
+
 	    var inc = 1;
 	    var tagged = true;
 	    var action = 'tag';
@@ -29229,18 +29253,18 @@
 	    }
 	    CW(function () {}, 'Community', 'addTag', action);
 	    var reco = {
-	      appId: appId,
 	      userId: this.state.userId,
+	      appId: appId,
 	      tag: tag,
 	      action: action
 	    };
 	    $.ajax({
 	      type: 'POST',
-	      url: "https://ainoob.com/api/nooboss/reco/app/tag",
-	      contentType: "application/json",
+	      url: 'https://ainoob.com/api/nooboss/reco/app/tag',
+	      contentType: 'application/json',
 	      data: JSON.stringify(reco)
 	    }).done(function (data) {
-	      this.setState(function (prevState) {
+	      _this3.setState(function (prevState) {
 	        if (!prevState.appInfoWeb) {
 	          prevState.appInfoWeb = { appId: appId, tags: {} };
 	        }
@@ -29255,9 +29279,11 @@
 	        prevState.tags[tag] = tagged;
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	  },
 	  uninstall: function uninstall(info) {
+	    var _this4 = this;
+
 	    var result = 'removal_success';
 	    newCommunityRecord(true, ['_trackEvent', 'manage', 'removal', info.id]);
 	    chrome.management.uninstall(this.state.appInfo.id, function () {
@@ -29272,14 +29298,14 @@
 	          imageUrl: info.icon
 	        });
 	      } else {
-	        this.setState(function (prevState) {
+	        _this4.setState(function (prevState) {
 	          prevState.appInfo.enabled = false;
 	          prevState.appInfo.state = 'removed';
 	          return prevState;
 	        });
 	        newCommunityRecord(true, ['_trackEvent', 'result', result, info.id]);
 	      }
-	    }.bind(this));
+	    });
 	  },
 	  launchApp: function launchApp() {
 	    chrome.management.launchApp(this.state.appInfo.id);
@@ -29289,7 +29315,7 @@
 	    var appInfo = this.state.appInfo;
 	    var launch = null;
 	    if (appInfo.isApp) {
-	      launch = React.createElement(
+	      launch = _react2.default.createElement(
 	        'div',
 	        { className: 'app-launcher button', onClick: CW.bind(null, this.launchApp, 'App', 'launch', '') },
 	        GL('Launch')
@@ -29297,15 +29323,15 @@
 	    }
 	    var launchType = null;
 	    if (appInfo.launchType) {
-	      launchType = React.createElement(
+	      launchType = _react2.default.createElement(
 	        'tr',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          GL('launch_type')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          appInfo.launchType
@@ -29314,24 +29340,24 @@
 	    }
 	    var permissions = null;
 	    var permissionList = (appInfo.permissions || []).map(function (elem, index) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'li',
 	        { key: index },
 	        elem
 	      );
 	    });
-	    permissions = React.createElement(
+	    permissions = _react2.default.createElement(
 	      'tr',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
 	        GL('permissions')
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'ul',
 	          null,
 	          permissionList
@@ -29340,24 +29366,24 @@
 	    );
 	    var hostPermissions = null;
 	    var hostPermissionList = (appInfo.hostPermissions || []).map(function (elem, index) {
-	      return React.createElement(
+	      return _react2.default.createElement(
 	        'li',
 	        { key: index },
 	        elem
 	      );
 	    });
-	    hostPermissions = React.createElement(
+	    hostPermissions = _react2.default.createElement(
 	      'tr',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
 	        GL('host_permissions')
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'ul',
 	          null,
 	          hostPermissionList
@@ -29366,33 +29392,33 @@
 	    );
 	    var options = null;
 	    if (appInfo.optionsUrl) {
-	      options = React.createElement('span', { className: 'app-options', onClick: CLR.bind(null, appInfo.optionsUrl, 'Manage', 'option', '') });
+	      options = _react2.default.createElement('span', { className: 'app-options', onClick: CLR.bind(null, appInfo.optionsUrl, 'Manage', 'option', '') });
 	    }
 	    var toggle = null;
 	    if (appInfo.type && !appInfo.type.match('theme')) {
-	      toggle = React.createElement('label', { onClick: CW.bind(null, this.toggleState, 'Manage', 'switch', ''), className: 'app-switch' });
+	      toggle = _react2.default.createElement('label', { onClick: CW.bind(null, this.toggleState, 'Manage', 'switch', ''), className: 'app-switch' });
 	    }
 	    var chromeOption = null;
-	    chromeOption = React.createElement('label', { title: 'default Chrome manage page', onClick: CLR.bind(null, 'chrome://extensions/?id=' + appInfo.id, 'Manage', 'chromeOption', ''), className: 'app-chromeOption' });
+	    chromeOption = _react2.default.createElement('label', { title: 'default Chrome manage page', onClick: CLR.bind(null, 'chrome://extensions/?id=' + appInfo.id, 'Manage', 'chromeOption', ''), className: 'app-chromeOption' });
 	    var config = null;
 	    if (appInfo.state != 'removed') {
-	      config = React.createElement(
+	      config = _react2.default.createElement(
 	        'div',
 	        { className: 'config' },
-	        React.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, checked: appInfo.enabled }),
+	        _react2.default.createElement('input', { type: 'checkbox', className: 'app-status-checkbox', readOnly: true, checked: appInfo.enabled }),
 	        toggle,
 	        options,
-	        React.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
+	        _react2.default.createElement('label', { onClick: CW.bind(null, this.uninstall, 'Manage', 'uninstall', ''), className: 'app-remove' }),
 	        chromeOption
 	      );
 	    } else {
-	      config = React.createElement(
+	      config = _react2.default.createElement(
 	        'div',
 	        { className: 'config' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'a',
 	          { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), title: 'https://chrome.google.com/webstore/detail/' + appInfo.id },
-	          React.createElement('label', { className: 'app-add' })
+	          _react2.default.createElement('label', { className: 'app-add' })
 	        )
 	      );
 	    }
@@ -29401,15 +29427,15 @@
 	      crxName = 'extension_' + (this.state.crxVersion.replace(/\./g, '_') + '.crx');
 	    }
 	    var manifestUrl = 'chrome-extension://' + appInfo.id + '/manifest.json';
-	    var nb_rating = React.createElement(
+	    var nb_rating = _react2.default.createElement(
 	      'tr',
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
 	        capFirst('NB-Rating')
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'td',
 	        null,
 	        this.state.nb_rating
@@ -29425,151 +29451,151 @@
 	          active[temp[j]] = 'active';
 	        }
 	      }
-	      var tags = React.createElement(
+	      var _tags = _react2.default.createElement(
 	        'div',
 	        { className: 'tags' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'tagColumn' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'useful'), className: "tag wtf " + active['useful'] },
 	            GL('useful'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['useful'] || 0
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'working'), className: "tag wtf " + active['working'] },
 	            GL('working'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['working'] || 0
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'tagColumn' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'laggy'), className: "tag soso " + active['laggy'] },
 	            GL('laggy'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['laggy'] || 0
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'buggy'), className: "tag soso " + active['buggy'] },
 	            GL('buggy'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['buggy'] || 0
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'tagColumn' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'not_working'), className: "tag bad " + active['not_working'] },
 	            GL('not_working'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['not_working'] || 0
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.toggleTag.bind(this, 'ASM'), className: "tag bad " + active['ASM'] },
 	            GL('ASM'),
-	            React.createElement('br', null),
+	            _react2.default.createElement('br', null),
 	            appInfoWeb.tags['ASM'] || 0
 	          )
 	        )
 	      );
 	    }
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { id: 'app' },
-	      React.createElement(Helmet, {
+	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'App'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'section container' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'a',
 	          { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, className: 'app-icon', onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link') },
-	          React.createElement('img', { src: appInfo.icon })
+	          _react2.default.createElement('img', { src: appInfo.icon })
 	        ),
 	        config,
 	        launch,
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h4',
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            'a',
 	            { title: 'https://chrome.google.com/webstore/detail/' + appInfo.id, onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/' + appInfo.id, 'App', 'app-link'), className: 'app-name' },
 	            appInfo.name
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'table',
 	          { className: 'app-brief' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'tbody',
 	            null,
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('version')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                appInfo.version
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('state')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'span',
 	                  { className: 'noTransTime ' + (this.state.appInfo || {}).state },
 	                  capFirst((this.state.appInfo || {}).state)
 	                )
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('rating')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                this.state.rating
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('description')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                appInfo.description
@@ -29579,214 +29605,214 @@
 	        ),
 	        tags
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'section container' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h5',
 	          null,
 	          capFirst(GL('detail'))
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'table',
 	          { className: 'app-detail' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'tbody',
 	            null,
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('last_update')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(new timeago().format(appInfo.lastUpdateDate))
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('first_installed')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(new timeago().format(appInfo.installedDate))
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('enabled')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(appInfo.enabled)
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('homepage_url')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'a',
 	                  { title: appInfo.homepageUrl, onClick: CL.bind(null, appInfo.homepageUrl, 'App', 'app-link') },
 	                  appInfo.homepageUrl
 	                )
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst('id')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                appInfo.id
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('short_name')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                appInfo.shortName
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('type')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(appInfo.type)
 	              )
 	            ),
 	            launchType,
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('offline_enabled')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(getString(appInfo.offlineEnabled))
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                GL('download_crx')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'a',
 	                  { title: this.state.crxUrl, onClick: CL.bind(null, this.state.crxUrl, 'App', 'app-link') },
 	                  crxName
 	                )
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst('update_url')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'a',
 	                  { title: appInfo.updateUrl, onClick: CL.bind(null, appInfo.updateUrl, 'App', 'app-link') },
 	                  appInfo.updateUrl
 	                )
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst('manifest_file')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'a',
 	                  { onClick: CL.bind(null, manifestUrl, 'App', 'manifest'), title: manifestUrl },
 	                  'manifest.json'
 	                )
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst('may_disable')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(getString(appInfo.mayDisable))
 	              )
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst('install_type')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'td',
 	                null,
 	                capFirst(appInfo.installType)
@@ -31191,165 +31217,172 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	module.exports = React.createClass({
-	    displayName: 'exports',
+	var _react = __webpack_require__(7);
 
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
+	    displayName: 'exports',
 	    getInitialState: function getInitialState() {
 	        return null;
 	    },
 	    componentDidMount: function componentDidMount() {},
 	    render: function render() {
 	        if (chrome.i18n.getUILanguage().indexOf('zh') != -1) {
-	            return React.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                { id: 'about' },
-	                React.createElement(Helmet, {
+	                _react2.default.createElement(_reactHelmet2.default, {
 	                    title: 'About'
 	                }),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'section', id: 'top' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
-	                        React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
+	                        _react2.default.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
-	                        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
+	                        _react2.default.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u5206\u4EAB\u4E8C\u7BA1\u5BB6'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u4F60\u559C\u6B22\u4E8C\u7BA1\u5BB6\u5417\uFF1F\u5982\u679C\u89C9\u5F97\u8FD8\u4E0D\u9519\uFF0C\u90A3\u5C31\u8003\u8651\u4E00\u4E0B\u5206\u4EAB\u4E8C\u7BA1\u5BB6\u5427~'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u80FD\u5E72\u4EC0\u4E48\uFF1F'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u76EE\u524D\uFF0C\u4E8C\u7BA1\u5BB6\u53EF\u4EE5 (\u5E94\u7528/\u62D3\u5C55/\u4E3B\u9898 \u5728\u4E0B\u9762\u90FD\u4F1A\u53EB\u5E94\u7528)'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'ul',
 	                        null,
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u7BA1\u7406\u4F60\u7684\u5E94\u7528',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u5F00\u542F/\u5173\u95ED/\u5220\u9664\u4E00\u4E2A\u6216\u591A\u4E2A\u5E94\u7528'
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u793E\u533A\u5206\u4EAB',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u6839\u636E\u5F53\u524D\u7F51\u9875\u770B\u5230\u4E8C\u7BA1\u5BB6\u793E\u533A\u63A8\u8350\u7684\u9002\u7528\u4E8E\u5F53\u524D\u7F51\u9875\u7684\u62D3\u5C55'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u6BCF\u4E2A\u4EBA\u90FD\u53EF\u4EE5\u7ED9\u4EFB\u4F55\u4E00\u4E2A\u7F51\u7AD9\u63A8\u8350\u597D\u7684\u62D3\u5C55'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u6BCF\u4E2A\u4EBA\u90FD\u53EF\u4EE5\u7ED9\u4EFB\u4F55\u4E00\u4E2A\u62D3\u5C55\u6253\u6807\u7B7E'
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u81EA\u52A8\u5E94\u7528\u72B6\u6001\u7BA1\u7406',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u6839\u636E\u8BBE\u7F6E\u7684\u89C4\u5219\u81EA\u52A8\u542F\u7528\u6216\u7981\u7528\u5E94\u7528',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'ul',
 	                                        null,
-	                                        React.createElement(
+	                                        _react2.default.createElement(
 	                                            'li',
 	                                            null,
 	                                            '(\u51CF\u5C11\u5185\u5B58\u5360\u7528)'
 	                                        ),
-	                                        React.createElement(
+	                                        _react2.default.createElement(
 	                                            'li',
 	                                            null,
 	                                            '(\u53EA\u6709\u5728\u9700\u8981\u7684\u65F6\u5019\u624D\u5F00\u542F\u5E94\u7528)'
@@ -31358,48 +31391,48 @@
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u5E94\u7528\u5386\u53F2\u8BB0\u5F55',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u8BB0\u5F55\u5E94\u7528\u7684\u5B89\u88C5\uFF0C\u5378\u8F7D\uFF0C\u5F00\u542F\uFF0C\u548C\u5173\u95ED'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u53EF\u4EE5\u77E5\u9053\u7248\u672C\u53D8\u5316'
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u663E\u793A\u5E94\u7528\u8BE6\u7EC6\u4FE1\u606F',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u4E0B\u8F7Dcrx\u6587\u4EF6'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u6253\u5F00manifest\u6587\u4EF6'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u67E5\u770B\u6743\u9650'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    '\u548C\u5404\u79CD\u5404\u6837\u7684\u8BE6\u7EC6\u4FE1\u606F'
@@ -31407,36 +31440,36 @@
 	                            )
 	                        )
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u5982\u679C\u4F60\u6709\u5404\u79CD\u5173\u4E8E\u4E8C\u7BA1\u5BB6\u4F7F\u7528\u65B9\u9762\u7684\u95EE\u9898\uFF0C\u4F60\u53EF\u4EE5\u5728\u8FD9\u91CC\u67E5\u770B\u4F7F\u7528\u4ECB\u7ECD: ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	                            '\u4E8C\u7BA1\u5BB6\u9879\u76EE'
 	                        )
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u8C01\u5F04\u7684\u4E8C\u7BA1\u5BB6'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
 	                            'AInoob'
 	                        ),
 	                        '\u5199\u7684\u5F00\u6E90\u7684\u9879\u76EE(GPL-V3)\u3002\u4F60\u53EF\u4EE5\u5728',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	                            '\u8FD9\u91CC'
@@ -31444,38 +31477,38 @@
 	                        '\u67E5\u770B\u4E8C\u7BA1\u5BB6\u7684\u8FDB\u5C55'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u9690\u79C1\uFF1F'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u662F\u4E00\u4E2A\u50B2\u5A07\u7684\u8F6F\u4EF6\uFF0C\u4E0D\u4F1A\u5077\u53D6\u4F60\u7684\u9690\u79C1\u4FE1\u606F\uFF0C\u4E5F\u7EDD\u5BF9\u4E0D\u4F1A\u51FA\u73B0\u5E7F\u544A\u3002'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u4F1A\u628A\u4F60\u4F7F\u7528\u4E8C\u7BA1\u5BB6\u7684\u60C5\u51B5\u53D1\u7ED9AInoob\uFF0C\u8FD9\u6837\u4ED6\u5C31\u77E5\u9053\u6709\u4EBA\u559C\u6B22\u8FD9\u4E2A\u8F6F\u4EF6\uFF0C\u7136\u540E\u7EE7\u7EED\u52AA\u529B\u5F00\u53D1\u514D\u8D39\u7684\u4E8C\u7BA1\u5BB6~'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u600E\u4E48\u652F\u6301\u4E8C\u7BA1\u5BB6\uFF1F'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u4E8C\u7BA1\u5BB6\u662F\u514D\u8D39\u5F00\u6E90\u7684\uFF0CAInoob\u4E0D\u9700\u8981\u5927\u5BB6\u7684\u6350\u94B1\u6216\u8005\u4EFB\u4F55\u8D44\u52A9\uFF0C\u5FC3\u610F\u6211\u9886\u4E86~~~\u5982\u679C\u771F\u7684\u5F88\u559C\u6B22\u7684\u8BDD\uFF0C\u6C42\u5728',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link') },
 	                            'Chrome\u7F51\u4E0A\u5546\u5E97'
@@ -31483,19 +31516,19 @@
 	                        '\u7ED9\u4E8C\u7BA1\u5BB6\u8BC4\u4EF7\u6216\u8005\u5206\u4EAB\u4E8C\u7BA1\u5BB6\u7ED9\u4F60\u8EAB\u8FB9\u7684\u9700\u8981\u7684\u4EBA\u3002'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u5EFA\u8BAE\uFF1F'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        '\u5982\u679C\u4F60\u6709\u4EFB\u4F55\u597D\u7684\u5EFA\u8BAE\uFF0C\u8BF7\u53BB',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support', 'About-link', 'link') },
 	                            'Chrome\u7F51\u4E0A\u5E94\u7528\u5E97'
@@ -31503,131 +31536,131 @@
 	                        '\u8BC4\u8BBA\u548C\u63D0\u5EFA\u8BAE\u3002'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        '\u9E23\u8C22'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'ul',
 	                        null,
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u4E8C\u7BB1\u4F7F\u7528\u4E86Facebook\u7684',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://github.com/facebook/react', target: '_blank' },
 	                                'React(BSD\u534F\u8BAE)'
 	                            ),
 	                            '\u4F5C\u4E3A\u5E95\u5C42\u5EFA\u7B51'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u4E8C\u7BB1\u4F7F\u7528\u4E86JS Foundation\u7684',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://jquery.com/', target: '_blank' },
 	                                'jQuery(MIT\u534F\u8BAE)'
 	                            ),
 	                            '\u6765\u5904\u7406\u4E00\u4E9BDOM\u548CAjax\u8BF7\u6C42'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u4E8C\u7BB1\u4F7F\u7528\u4E86Hust.cc\u7684',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
 	                                'Timeago(MIT\u534F\u8BAE)'
 	                            ),
 	                            '\u6765\u663E\u793A\u65F6\u95F4'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            '\u4E00\u4E9B\u56FE\u6807\u6765\u81EA\u4E0E',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { title: 'Flaticon', href: 'http://www.flaticon.com', target: '_blank' },
 	                                'www.flaticon.com'
 	                            ),
 	                            '(',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { title: 'Creative Commons BY 3.0', href: 'http://creativecommons.org/licenses/by/3.0/', target: '_blank' },
 	                                'CC 3.0 BY'
 	                            ),
 	                            ')',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Gregor Cresnar', href: 'http://www.flaticon.com/authors/gregor-cresnar', target: '_blank' },
 	                                        'Gregor Cresnar'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Freepik', href: 'http://www.freepik.com', target: '_blank' },
 	                                        'Freepik'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Madebyoliver', href: 'http://www.flaticon.com/authors/madebyoliver', target: '_blank' },
 	                                        'Madebyoliver'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
-	                                    React.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
 	                                        'Chanut is Industries'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { href: 'http://www.freepik.com', title: 'Freepik', target: '_blank' },
 	                                        'Freepik'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
 	                                    '\u6765\u81EA\u4E8E\u4F5C\u8005',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { href: 'http://www.flaticon.com/authors/elegant-themes', title: 'Elegant Themes', target: '_blank' },
 	                                        'Elegant Themes'
@@ -31639,154 +31672,154 @@
 	                )
 	            );
 	        } else {
-	            return React.createElement(
+	            return _react2.default.createElement(
 	                'div',
 	                { id: 'about' },
-	                React.createElement(Helmet, {
+	                _react2.default.createElement(_reactHelmet2.default, {
 	                    title: 'About'
 	                }),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'section', id: 'top' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h3',
 	                        null,
 	                        'NooBoss'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
-	                        React.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
+	                        _react2.default.createElement('img', { id: 'icon1', className: 'spinRight', src: '/images/icon_128.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { onClick: CL.bind(null, 'https://ainoob.com/project/noobox', 'About-link', 'link') },
-	                        React.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
+	                        _react2.default.createElement('img', { id: 'icon2', className: 'spinLeft', src: '/images/icon_2.png' })
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'Share NooBoss'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'Do you like NooBoss? If so, please consider sharing NooBoss!'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://www.facebook.com/sharer/sharer.php?u=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/facebook.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://plus.google.com/share?url=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/google.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://www.linkedin.com/shareArticle?mini=true&url=https%3A//ainoob.com/project/nooboss&title=NooBoss%20---%20A%20ultimate%20extension%20for%20Chrome%20extensions%%20managing&summary=&source=' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/linkedin.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'https://twitter.com/home?status=https%3A//ainoob.com/project/nooboss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/twitter.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=tsina&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/sina.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=weixin&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/wechat.png' })
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'a',
 	                        { className: 'shareItem', target: '_blank', href: 'http://www.jiathis.com/send/?webid=renren&url=https://ainoob.com/project/nooboss&title=NooBoss' },
-	                        React.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
+	                        _react2.default.createElement('img', { className: 'shareIcon', src: 'thirdParty/renren.png' })
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'What can NooBoss do?'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'Right now, NooBoss can (apps/extensions/theme will be called apps down below)'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'ul',
 	                        null,
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'Manage your apps',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'enable/disable/remove one or a bunch of apps'
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'NooBoss community',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'get apps recommended by NooBoss community for the website you are visiting'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'you can recommend useful apps to NooBoss community'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'you can tag useful or spammy apps'
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'Auto state management',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'automatically enable/disable apps base on auto state rules',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'ul',
 	                                        null,
-	                                        React.createElement(
+	                                        _react2.default.createElement(
 	                                            'li',
 	                                            null,
 	                                            '(you can save memory)'
 	                                        ),
-	                                        React.createElement(
+	                                        _react2.default.createElement(
 	                                            'li',
 	                                            null,
 	                                            '(enable apps only when you need them)'
@@ -31795,26 +31828,26 @@
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'Show history of\xA0apps',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'installation, removal, enabling, disabling'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'show the version change',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'ul',
 	                                        null,
-	                                        React.createElement(
+	                                        _react2.default.createElement(
 	                                            'li',
 	                                            null,
 	                                            '(you can tell when did apps got updated)'
@@ -31823,29 +31856,29 @@
 	                                )
 	                            )
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'Show detailed information of\xA0apps',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'download crx file'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'open manifest file'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'see permissions'
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
 	                                    'And a lot more informations'
@@ -31853,74 +31886,74 @@
 	                            )
 	                        )
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'If you have questions about how to use NooBoss, you can find instructions here: ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	                            'NooBoss project'
 	                        )
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'Who made NooBoss'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'NooBoss is an open source project under GPL-V3 made by ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com', 'About-link', 'link') },
 	                            'AInoob'
 	                        ),
 	                        ', you can check the project progress ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://ainoob.com/project/nooboss', 'About-link', 'link') },
 	                            'here'
 	                        )
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'Privacy'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'NooBoss is a software with proud, it will never steal your private information, and it will never show ADs.'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'NooBoss will send your NooBoss usage data to AInoob, so that he will know which function do people like about NooBoss and how many people are using NooBoss, thus get motivated to making NooBoss better and better'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'How to support NooBoss?'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'NooBoss is free and open source software, I do not need any financial support from it. If you like it, please review NooBoss on ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/reviews', 'About-link', 'link') },
 	                            'Chrome web store'
@@ -31928,19 +31961,19 @@
 	                        ' and share it with people who might like it.'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'Any suggestions?'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'p',
 	                        null,
 	                        'If you have any suggestions about NooBoss, plese comment on support page in ',
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'a',
 	                            { onClick: CL.bind(null, 'https://chrome.google.com/webstore/detail/aajodjghehmlpahhboidcpfjcncmcklf/support', 'About-link', 'link') },
 	                            'Chrome web store'
@@ -31948,131 +31981,131 @@
 	                        '.'
 	                    )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                    'section',
 	                    { className: 'section' },
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'h5',
 	                        null,
 	                        'Acknowledgements'
 	                    ),
-	                    React.createElement(
+	                    _react2.default.createElement(
 	                        'ul',
 	                        null,
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'NooBoss uses ',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://github.com/facebook/react', target: '_blank' },
 	                                'React(BSD Liscense)'
 	                            ),
 	                            ' from Facebook to build the bases'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'NooBoss uses ',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://jquery.com/', target: '_blank' },
 	                                'jQuery(MIT Liscense)'
 	                            ),
 	                            ' from JS Foundation to handle DOM and Ajax requests'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'NooBoss uses ',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { href: 'https://github.com/hustcc/timeago.js', target: '_blank' },
 	                                'Timeago(MIT Liscense)'
 	                            ),
 	                            ' from Hust.cc to display timeago'
 	                        ),
-	                        React.createElement(
+	                        _react2.default.createElement(
 	                            'li',
 	                            null,
 	                            'Some icons are from',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { title: 'Flaticon', href: 'http://www.flaticon.com', target: '_blank' },
 	                                'www.flaticon.com'
 	                            ),
 	                            '(',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'a',
 	                                { title: 'Creative Commons BY 3.0', href: 'http://creativecommons.org/licenses/by/3.0/', target: '_blank' },
 	                                'CC 3.0 BY'
 	                            ),
 	                            ')',
-	                            React.createElement(
+	                            _react2.default.createElement(
 	                                'ul',
 	                                null,
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/options.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Gregor Cresnar', href: 'http://www.flaticon.com/authors/gregor-cresnar', target: '_blank' },
 	                                        'Gregor Cresnar'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/remove.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Freepik', href: 'http://www.freepik.com', target: '_blank' },
 	                                        'Freepik'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/add.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Madebyoliver', href: 'http://www.flaticon.com/authors/madebyoliver', target: '_blank' },
 	                                        'Madebyoliver'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
-	                                    React.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/power-button-on.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/power-button-off.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { title: 'Chanut is Industries', href: 'http://www.flaticon.com/authors/chanut-is-industries', target: '_blank' },
 	                                        'Chanut is Industries'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/view-list.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { href: 'http://www.freepik.com', title: 'Freepik', target: '_blank' },
 	                                        'Freepik'
 	                                    )
 	                                ),
-	                                React.createElement(
+	                                _react2.default.createElement(
 	                                    'li',
 	                                    null,
-	                                    React.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
+	                                    _react2.default.createElement('img', { src: '/thirdParty/view-grid.svg', alt: '', width: '20', height: '20' }),
 	                                    'is made by ',
-	                                    React.createElement(
+	                                    _react2.default.createElement(
 	                                        'a',
 	                                        { href: 'http://www.flaticon.com/authors/elegant-themes', title: 'Elegant Themes', target: '_blank' },
 	                                        'Elegant Themes'

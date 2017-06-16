@@ -24,7 +24,7 @@ listeners.onEnabled = function(appInfoOld) {
       });
     }
   }
-  getDB(id,recordEnable.bind(null,1));
+  getDB(id, recordEnable.bind(null,1));
   isOn('notifyStateChange', () => {
     chrome.notifications.create({
       type: 'basic',

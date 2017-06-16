@@ -1,12 +1,12 @@
-var React = require('react');
-var Helmet = require('react-helmet');
-var Link = require('react-router').Link;
+import React from 'react';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router';
 
 module.exports = React.createClass({
-  render: function(){
-    var activeList={};
-    activeList[(this.props.location.pathname.match(/(\w+)/)||[null,null])[1]]='active'
-    return(
+  render() {
+    const activeList = {};
+    activeList[(this.props.location.pathname.match(/(\w+)/) || [null,null])[1]] = 'active';
+    return (
       <div id="core">
         <nav>
           <ul>
@@ -27,4 +27,3 @@ module.exports = React.createClass({
     );
   }
 });
-

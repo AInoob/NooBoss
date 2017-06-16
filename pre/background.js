@@ -25,6 +25,7 @@ NooBoss.Util = Util;
 Management.updateAppInfo = Management.updateAppInfo.bind(NooBoss);
 NooBoss.Management = Management;
 
+listeners.onEnabled = listeners.onEnabled.bind(NooBoss);
 NooBoss.listeners = listeners;
 
 History.init = History.init.bind(NooBoss);
