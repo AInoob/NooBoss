@@ -1,11 +1,7 @@
-var React= require('react');
-var ReactDOM = require('react-dom');
-var ReactRouter = require('react-router');
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var IndexRoute = ReactRouter.IndexRoute;
-var Link = require('react-router').Link;
-var browserHistory = ReactRouter.browserHistory;
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactRouter from 'react-router';
+import { Router, Route, IndexRoute, Link, browserHistory } from 'react-router';
 
 function logPageView(){
   newCommunityRecord(true,['_trackPageview']);

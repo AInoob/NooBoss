@@ -46,34 +46,39 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var ReactDOM = __webpack_require__(38);
-	var ReactRouter = __webpack_require__(189);
-	var Router = ReactRouter.Router;
-	var Route = ReactRouter.Route;
-	var IndexRoute = ReactRouter.IndexRoute;
-	var Link = __webpack_require__(189).Link;
-	var browserHistory = ReactRouter.browserHistory;
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(38);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactRouter = __webpack_require__(189);
+
+	var _reactRouter2 = _interopRequireDefault(_reactRouter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function logPageView() {
 	  newCommunityRecord(true, ['_trackPageview']);
 	}
 
-	ReactDOM.render(React.createElement(
-	  Router,
-	  { history: browserHistory, onUpdate: logPageView },
-	  React.createElement(
-	    Route,
+	_reactDom2.default.render(_react2.default.createElement(
+	  _reactRouter.Router,
+	  { history: _reactRouter.browserHistory, onUpdate: logPageView },
+	  _react2.default.createElement(
+	    _reactRouter.Route,
 	    { component: __webpack_require__(245) },
-	    React.createElement(Route, { path: 'popup.html', component: __webpack_require__(256) }),
-	    React.createElement(Route, { path: 'overview', component: __webpack_require__(256) }),
-	    React.createElement(Route, { path: 'app', component: __webpack_require__(258) }),
-	    React.createElement(Route, { path: 'manage', component: __webpack_require__(259) }),
-	    React.createElement(Route, { path: 'manage/*', component: __webpack_require__(259) }),
-	    React.createElement(Route, { path: 'autoState', component: __webpack_require__(260) }),
-	    React.createElement(Route, { path: 'options', component: __webpack_require__(261) }),
-	    React.createElement(Route, { path: 'history', component: __webpack_require__(262) }),
-	    React.createElement(Route, { path: 'about', component: __webpack_require__(263) })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'popup.html', component: __webpack_require__(256) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'overview', component: __webpack_require__(256) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'app', component: __webpack_require__(258) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'manage', component: __webpack_require__(259) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'manage/*', component: __webpack_require__(259) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'autoState', component: __webpack_require__(260) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'options', component: __webpack_require__(261) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'history', component: __webpack_require__(262) }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: __webpack_require__(263) })
 	  )
 	), document.getElementById('nooboss'));
 
@@ -28297,11 +28302,23 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	var AppBrief = __webpack_require__(257);
-	var Link = __webpack_require__(189).Link;
-	module.exports = React.createClass({
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	var _AppBrief = __webpack_require__(257);
+
+	var _AppBrief2 = _interopRequireDefault(_AppBrief);
+
+	var _reactRouter = __webpack_require__(189);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
 	  displayName: 'Overview',
 	  getInitialState: function getInitialState() {
 	    return {
@@ -28314,6 +28331,8 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+
 	    shared.goTo = this.props.router.push;
 	    if (window.location.pathname.indexOf('popup') != -1) {
 	      var page = getParameterByName('page');
@@ -28324,44 +28343,48 @@
 	        }
 	      } else {
 	        get('defaultPage', function (url) {
-	          this.props.router.push(url || 'overview');
+	          _this.props.router.push(url || 'overview');
 	          if (!url || url == 'overview') {
-	            this.getInitialData();
+	            _this.getInitialData();
 	          }
-	        }.bind(this));
+	        });
 	      }
 	    } else {
 	      this.getInitialData();
 	    }
 	  },
 	  getInitialData: function getInitialData() {
+	    var _this2 = this;
+
 	    chrome.management.getAll(function (appInfoList) {
 	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+	        appInfoList[i].iconUrl = _this2.getIconUrl(appInfoList[i]);
 	      }
-	      this.setState({ appInfoList: appInfoList });
-	    }.bind(this));
+	      _this2.setState({ appInfoList: appInfoList });
+	    });
 	    get('autoStateRules', function (rules) {
-	      this.setState({ rules: JSON.parse(rules) });
-	    }.bind(this));
+	      _this2.setState({ rules: JSON.parse(rules) });
+	    });
 	    get('userId', function (userId) {
-	      this.setState(function (prevState) {
+	      _this2.setState(function (prevState) {
 	        prevState.userId = userId;
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	    isOn('recoExtensions', function () {
-	      this.setState({ recoExtensions: true });
+	      _this2.setState({ recoExtensions: true });
 	      chrome.permissions.contains({
 	        permissions: ['tabs']
 	      }, function (result) {
 	        if (result) {
-	          this.setState({ tabPerm: true });
+	          _this2.setState({ tabPerm: true });
 	        }
-	      }.bind(this));
+	      });
 	      chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	        var url = "";
-	        if (tabs[0]) url = tabs[0].url;
+	        if (tabs[0]) {
+	          url = tabs[0].url;
+	        }
 	        var website = extractDomain(url);
 	        if (website.match(/^undefined/)) {
 	          website = GL('all_websites');
@@ -28369,7 +28392,7 @@
 	        $.ajax({
 	          type: 'POST',
 	          contentType: "application/json",
-	          data: JSON.stringify({ website: website, userId: this.state.userId }),
+	          data: JSON.stringify({ website: website, userId: _this2.state.userId }),
 	          url: 'https://ainoob.com/api/nooboss/website'
 	        }).done(function (data) {
 	          var appInfos = {};
@@ -28379,61 +28402,73 @@
 	          }
 	          var votes = {};
 	          var tags = {};
-	          for (var i = 0; i < data.votes.length; i++) {
-	            var appId = data.votes[i].appId;
-	            votes[appId] = data.votes[i].action;
-	            tags[appId] = {};
+	          for (var _i = 0; _i < data.votes.length; _i++) {
+	            var _appId = data.votes[_i].appId;
+	            votes[_appId] = data.votes[_i].action;
+	            tags[_appId] = {};
 	          }
-	          for (var i = 0; i < data.tags.length; i++) {
-	            if (!tags[data.tags[i].appId]) {
-	              tags[data.tags[i].appId] = {};
+	          for (var _i2 = 0; _i2 < data.tags.length; _i2++) {
+	            if (!tags[data.tags[_i2].appId]) {
+	              tags[data.tags[_i2].appId] = {};
 	            }
-	            tags[data.tags[i].appId][data.tags[i].tag] = data.tags[i].tagged;
+	            tags[data.tags[_i2].appId][data.tags[_i2].tag] = data.tags[_i2].tagged;
 	          }
 	          var recoList = [];
 	          var temp = Object.keys(data.recos);
-	          for (var i = 0; i < temp.length; i++) {
-	            var appId = temp[i];
+	          for (var _i3 = 0; _i3 < temp.length; _i3++) {
+	            var _appId2 = temp[_i3];
 	            var upVoted = 0;
 	            var downVoted = 0;
-	            if (votes[appId] == 'up') {
+	            if (votes[_appId2] == 'up') {
 	              upVoted = 1;
-	            } else if (votes[appId] == 'down') {
+	            } else if (votes[_appId2] == 'down') {
 	              downVoted = 1;
 	            }
-	            recoList.push({ appId: appId, upVotes: data.recos[appId].upVotes - upVoted, downVotes: data.recos[appId].downVotes - downVoted });
+	            recoList.push({
+	              appId: _appId2,
+	              upVotes: data.recos[_appId2].upVotes - upVoted,
+	              downVotes: data.recos[_appId2].downVotes - downVoted
+	            });
 	          }
-	          this.setState({
+	          _this2.setState({
 	            recoList: recoList,
 	            appInfosWeb: appInfos,
 	            website: website,
 	            votes: votes,
 	            tags: tags
 	          }, function () {
-	            this.getInfosGoogle();
-	            this.setState(function (prevState) {
+	            _this2.getInfosGoogle();
+	            _this2.setState(function (prevState) {
 	              prevState.recoList.sort(function (a, b) {
 	                var upCountA = 0;
 	                var downCountA = 0;
 	                var upCountB = 0;
 	                var downCountB = 0;
-	                if (this.state.votes[a.appId] == 'up') {
+	                if (_this2.state.votes[a.appId] == 'up') {
 	                  upCountA = 1;
-	                } else if (this.state.votes[a.appId] == 'down') {
+	                } else if (_this2.state.votes[a.appId] == 'down') {
 	                  downCountA = 1;
 	                }
-	                if (this.state.votes[b.appId] == 'up') {
+	                if (_this2.state.votes[b.appId] == 'up') {
 	                  upCountB = 1;
-	                } else if (this.state.votes[b.appId] == 'down') {
+	                } else if (_this2.state.votes[b.appId] == 'down') {
 	                  downCountB = 1;
 	                }
-	                return b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
-	              }.bind(this));
+	                var compareVal = b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
+	                if (compareVal == 0) {
+	                  if (a.appId < b.appId) {
+	                    compareVal = 1;
+	                  } else {
+	                    compareVal = -1;
+	                  }
+	                }
+	                return compareVal;
+	              });
 	            });
-	          }.bind(this));
-	        }.bind(this));
-	      }.bind(this));
-	    }.bind(this));
+	          });
+	        });
+	      });
+	    });
 	  },
 	  select: function select(appId) {
 	    this.setState(function (prevState) {
@@ -28450,6 +28485,8 @@
 	    });
 	  },
 	  getFilteredList: function getFilteredList() {
+	    var _this3 = this;
+
 	    return (this.state.appInfoList || []).sort(function (a, b) {
 	      if (a.enabled != b.enabled) {
 	        if (a.enabled) {
@@ -28461,14 +28498,14 @@
 	        return compare(a.name.toLowerCase(), b.name.toLowerCase());
 	      }
 	    }).map(function (appInfo) {
-	      var filter = this.state.filter;
+	      var filter = _this3.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name)) && appInfo.installType != 'development' && appInfo.updateUrl && appInfo.updateUrl.indexOf('https://clients2.google.com') != -1 && appInfo.homepageUrl && appInfo.homepageUrl.indexOf('https://ext.chrome.360.cn') == -1) {
 	        return appInfo;
 	      } else {
 	        return null;
 	      }
-	    }.bind(this));
+	    });
 	  },
 	  getInfosGoogle: function getInfosGoogle() {
 	    for (var i = 0; i < this.state.recoList.length; i++) {
@@ -28526,6 +28563,8 @@
 	    return iconUrl;
 	  },
 	  toggleTag: function toggleTag(appId, tag) {
+	    var _this4 = this;
+
 	    var inc = 1;
 	    var tagged = true;
 	    var action = 'tag';
@@ -28536,8 +28575,8 @@
 	    }
 	    CW(function () {}, 'Community', 'addTag', action);
 	    var reco = {
-	      appId: appId,
 	      userId: this.state.userId,
+	      appId: appId,
 	      tag: tag,
 	      action: action
 	    };
@@ -28547,7 +28586,7 @@
 	      contentType: "application/json",
 	      data: JSON.stringify(reco)
 	    }).done(function (data) {
-	      this.setState(function (prevState) {
+	      _this4.setState(function (prevState) {
 	        if (!prevState.appInfosWeb[appId]) {
 	          prevState.appInfosWeb[appId] = { appId: appId, tags: {} };
 	        }
@@ -28562,11 +28601,12 @@
 	        prevState.tags[appId][tag] = tagged;
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	  },
 	  addReco: function addReco(appId, action) {
-	    var reco;
-	    reco = {
+	    var _this5 = this;
+
+	    var reco = {
 	      userId: this.state.userId,
 	      website: this.state.website
 	    };
@@ -28581,8 +28621,8 @@
 	      $('#goReco').prop('checked', false);
 	      reco.action = 'up';
 	      reco.appIds = Object.keys(this.state.reco.selected).filter(function (appId) {
-	        return this.state.votes[appId] != 'up' && this.state.reco.selected[appId];
-	      }.bind(this));
+	        return _this5.state.votes[appId] != 'up' && _this5.state.reco.selected[appId];
+	      });
 	      this.setState(function (prevState) {
 	        prevState.reco.selected = {};
 	        return prevState;
@@ -28594,23 +28634,27 @@
 	      contentType: "application/json",
 	      data: JSON.stringify(reco)
 	    }).done(function (data) {
-	      this.setState(function (prevState) {
+	      _this5.setState(function (prevState) {
 	        for (var i = 0; i < reco.appIds.length; i++) {
-	          var appId = reco.appIds[i];
-	          prevState.votes[appId] = reco.action;
+	          var _appId3 = reco.appIds[i];
+	          prevState.votes[_appId3] = reco.action;
 	          var listed = false;
 	          for (var j = 0; j < prevState.recoList.length; j++) {
-	            if (prevState.recoList[j].appId == appId) {
+	            if (prevState.recoList[j].appId == _appId3) {
 	              listed = true;
 	            }
 	          }
 	          if (!listed) {
-	            prevState.recoList.push({ appId: appId, upVotes: 0, downVotes: 0 });
+	            prevState.recoList.push({
+	              appId: _appId3,
+	              upVotes: 0,
+	              downVotes: 0
+	            });
 	          }
 	        }
 	        return prevState;
-	      }.bind(this), this.getInfosGoogle);
-	    }.bind(this));
+	      }, _this5.getInfosGoogle);
+	    });
 	  },
 	  requestTabsPermission: function requestTabsPermission() {
 	    chrome.notifications.create('', {
@@ -28640,6 +28684,8 @@
 	    });
 	  },
 	  render: function render() {
+	    var _this6 = this;
+
 	    var appInfoList = this.state.appInfoList || [];
 	    var overview = {};
 	    overview.app = 0;
@@ -28658,7 +28704,7 @@
 	    var discover = null;
 	    var recoList = null;
 	    if (!this.state.recoExtensions) {
-	      discover = React.createElement('div', { id: 'discover', className: 'section' });
+	      discover = _react2.default.createElement('div', { id: 'discover', className: 'section' });
 	    } else {
 	      if (this.state.tabPerm) {
 	        if ((this.state.recoList || []).length > 0) {
@@ -28667,18 +28713,26 @@
 	            var downCountA = 0;
 	            var upCountB = 0;
 	            var downCountB = 0;
-	            if (this.state.votes[a.appId] == 'up') {
+	            if (_this6.state.votes[a.appId] == 'up') {
 	              upCountA = 1;
-	            } else if (this.state.votes[a.appId] == 'down') {
+	            } else if (_this6.state.votes[a.appId] == 'down') {
 	              downCountA = 1;
 	            }
-	            if (this.state.votes[b.appId] == 'up') {
+	            if (_this6.state.votes[b.appId] == 'up') {
 	              upCountB = 1;
-	            } else if (this.state.votes[b.appId] == 'down') {
+	            } else if (_this6.state.votes[b.appId] == 'down') {
 	              downCountB = 1;
 	            }
-	            return b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
-	          }.bind(this));
+	            var compareVal = b.upVotes - b.downVotes + upCountB - downCountB - (a.upVotes - a.downVotes + upCountA - downCountA);
+	            if (compareVal == 0) {
+	              if (a.appId < b.appId) {
+	                compareVal = 1;
+	              } else {
+	                compareVal = -1;
+	              }
+	            }
+	            return compareVal;
+	          });
 	          recoList = (tempRecoList || []).map(function (elem, index) {
 	            var app = null;
 	            var appInfo = null;
@@ -28687,163 +28741,163 @@
 	            var downActive = '';
 	            var upCount = 0;
 	            var downCount = 0;
-	            if (this.state.votes[appId] == 'up') {
+	            if (_this6.state.votes[appId] == 'up') {
 	              upActive = 'active';
 	              upCount = 1;
-	            } else if (this.state.votes[appId] == 'down') {
+	            } else if (_this6.state.votes[appId] == 'down') {
 	              downActive = 'active';
 	              downCount = 1;
 	            }
-	            if (this.state.appInfosWeb) {
-	              appInfo = this.state.appInfosWeb[appId];
+	            if (_this6.state.appInfosWeb) {
+	              appInfo = _this6.state.appInfosWeb[appId];
 	            }
 	            appInfo = appInfo || { tags: [], upVotes: 0, downVotes: 0 };
 	            var active = {};
-	            var temp = Object.keys(this.state.tags[appId] || {});
+	            var temp = Object.keys(_this6.state.tags[appId] || {});
 	            for (var j = 0; j < temp.length; j++) {
-	              if (this.state.tags[appId][temp[j]]) {
+	              if (_this6.state.tags[appId][temp[j]]) {
 	                active[temp[j]] = 'active';
 	              }
 	            }
-	            var tags = React.createElement(
+	            var tags = _react2.default.createElement(
 	              'div',
 	              { className: 'tags' },
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'tagColumn' },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'useful'), className: "tag wtf " + active['useful'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'useful'), className: "tag wtf " + active['useful'] },
 	                  GL('useful'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['useful'] || 0
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'working'), className: "tag wtf " + active['working'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'working'), className: "tag wtf " + active['working'] },
 	                  GL('working'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['working'] || 0
 	                )
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'tagColumn' },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'laggy'), className: "tag soso " + active['laggy'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'laggy'), className: "tag soso " + active['laggy'] },
 	                  GL('laggy'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['laggy'] || 0
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'buggy'), className: "tag soso " + active['buggy'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'buggy'), className: "tag soso " + active['buggy'] },
 	                  GL('buggy'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['buggy'] || 0
 	                )
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'tagColumn' },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'not_working'), className: "tag bad " + active['not_working'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'not_working'), className: "tag bad " + active['not_working'] },
 	                  GL('not_working'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['not_working'] || 0
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { onClick: this.toggleTag.bind(this, appId, 'ASM'), className: "tag bad " + active['ASM'] },
+	                  { onClick: _this6.toggleTag.bind(_this6, appId, 'ASM'), className: "tag bad " + active['ASM'] },
 	                  GL('ASM'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.tags['ASM'] || 0
 	                )
 	              )
 	            );
-	            var ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
+	            var ratingBar = _react2.default.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, grey 100%, #01e301 0%)', width: '16px', height: '50px' } });
 	            if (appInfo.upVotes != 0 || appInfo.downVotes != 0) {
-	              ratingBar = React.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
+	              ratingBar = _react2.default.createElement('div', { className: 'ratingBar front', style: { background: 'linear-gradient(180deg, red ' + appInfo.downVotes / (appInfo.upVotes + appInfo.downVotes) * 100 + '%, #01e301 0%)', width: '16px', height: '50px' } });
 	            }
-	            var rating = React.createElement(
+	            var rating = _react2.default.createElement(
 	              'div',
 	              { className: 'flip rating' },
 	              ratingBar,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'back ratingDetail' },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'upVotes' },
 	                  GL('up'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.upVotes
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'downVotes' },
 	                  GL('down'),
-	                  React.createElement('br', null),
+	                  _react2.default.createElement('br', null),
 	                  appInfo.downVotes
 	                )
 	              )
 	            );
-	            app = React.createElement(
+	            app = _react2.default.createElement(
 	              'div',
 	              { className: 'app' },
-	              React.createElement(
+	              _react2.default.createElement(
 	                'a',
 	                { target: '_blank', className: 'appBrief flip', href: "https://chrome.google.com/webstore/detail/" + appId },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'front' },
-	                  React.createElement(
+	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'name' },
-	                    (this.state.infosGoogle[appId] || {}).name
+	                    (_this6.state.infosGoogle[appId] || {}).name
 	                  ),
-	                  React.createElement('img', { src: (this.state.infosGoogle[appId] || {}).imgUrl })
+	                  _react2.default.createElement('img', { src: (_this6.state.infosGoogle[appId] || {}).imgUrl })
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'description back' },
-	                  (this.state.infosGoogle[appId] || {}).description
+	                  (_this6.state.infosGoogle[appId] || {}).description
 	                )
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'appReview' },
 	                tags
 	              )
 	            );
-	            return React.createElement(
+	            return _react2.default.createElement(
 	              'div',
 	              { className: 'reco', key: index },
-	              React.createElement(
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'votes' },
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { className: 'upVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'up'), 'Community', 'addReco', 'up') },
-	                  React.createElement('div', { className: "front arrowUp " + upActive }),
-	                  React.createElement(
+	                  { className: 'upVotes flip', onClick: CW.bind(null, _this6.addReco.bind(_this6, appId, 'up'), 'Community', 'addReco', 'up') },
+	                  _react2.default.createElement('div', { className: "front arrowUp " + upActive }),
+	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'back count' },
 	                    elem.upVotes + upCount
 	                  )
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'score' },
 	                  elem.upVotes - elem.downVotes + upCount - downCount
 	                ),
-	                React.createElement(
+	                _react2.default.createElement(
 	                  'div',
-	                  { className: 'downVotes flip', onClick: CW.bind(null, this.addReco.bind(this, appId, 'down'), 'Community', 'addReco', 'down') },
-	                  React.createElement('div', { className: "front arrowDown " + downActive }),
-	                  React.createElement(
+	                  { className: 'downVotes flip', onClick: CW.bind(null, _this6.addReco.bind(_this6, appId, 'down'), 'Community', 'addReco', 'down') },
+	                  _react2.default.createElement('div', { className: "front arrowDown " + downActive }),
+	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'back count' },
 	                    elem.downVotes + downCount
@@ -28852,9 +28906,9 @@
 	              ),
 	              app
 	            );
-	          }.bind(this));
+	          });
 	        } else {
-	          recoList = React.createElement(
+	          recoList = _react2.default.createElement(
 	            'div',
 	            { className: 'noReco' },
 	            GL('ls_1'),
@@ -28866,30 +28920,30 @@
 	        var appList = this.getFilteredList().map(function (appInfo, index) {
 	          if (appInfo) {
 	            var dimmer = 'dimmer';
-	            if (this.state.reco.selected[appInfo.id]) {
+	            if (_this6.state.reco.selected[appInfo.id]) {
 	              dimmer = 'nonDimmer';
 	            }
-	            return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	            return _react2.default.createElement(_AppBrief2.default, { isAutoState: 'true', select: _this6.select.bind(_this6, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	          }
-	        }.bind(this));
-	        var recoApps = React.createElement(
+	        });
+	        var recoApps = _react2.default.createElement(
 	          'div',
 	          { className: 'recoApp' },
-	          React.createElement('input', { type: 'checkbox', className: 'hide', id: 'goReco' }),
-	          React.createElement('div', null),
-	          React.createElement(
+	          _react2.default.createElement('input', { type: 'checkbox', className: 'hide', id: 'goReco' }),
+	          _react2.default.createElement('div', null),
+	          _react2.default.createElement(
 	            'label',
 	            { id: 'goRecoLabel', className: 'btn', htmlFor: 'goReco' },
 	            GL('recommend_extensions_for_this_website')
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { id: 'recoBoard', className: 'section' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'div',
 	              { className: 'actionBar' },
-	              React.createElement('input', { id: 'keyword', onChange: this.updateFilter, placeholder: GL('filter'), type: 'text' }),
-	              React.createElement(
+	              _react2.default.createElement('input', { id: 'keyword', onChange: this.updateFilter, placeholder: GL('filter'), type: 'text' }),
+	              _react2.default.createElement(
 	                'div',
 	                { className: 'addReco btn', onClick: CW.bind(null, this.addReco.bind(this, null), 'Community', 'addReco', 'up') },
 	                capFirst(GL('recommend'))
@@ -28898,15 +28952,15 @@
 	            appList
 	          )
 	        );
-	        discover = React.createElement(
+	        discover = _react2.default.createElement(
 	          'div',
 	          { id: 'discover', className: 'section container' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'h5',
 	            null,
 	            GL('extensions_for'),
 	            ' ',
-	            React.createElement(
+	            _react2.default.createElement(
 	              'span',
 	              { className: 'website' },
 	              this.state.website
@@ -28917,12 +28971,12 @@
 	          recoApps
 	        );
 	      } else {
-	        discover = React.createElement(
+	        discover = _react2.default.createElement(
 	          'div',
 	          { id: 'discover', className: 'section container' },
 	          GL('ls_2'),
 	          ' ',
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'btn', onClick: this.requestTabsPermission },
 	            GL('enable')
@@ -28930,50 +28984,49 @@
 	        );
 	      }
 	    }
-
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { id: 'overview' },
-	      React.createElement(Helmet, {
+	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'Home'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'manage container section' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h5',
 	          null,
 	          GL('you_have')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'status important' },
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/manage/app' },
 	            overview.app
 	          ),
 	          ' ',
 	          GL('app_s'),
 	          ',\xA0',
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/manage/extension' },
 	            overview.extension
 	          ),
 	          ' ',
 	          GL('extension_s'),
 	          ',\xA0',
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/manage/theme' },
 	            overview.theme
 	          ),
 	          ' ',
 	          GL('theme'),
-	          React.createElement('br', null),
-	          React.createElement(
-	            Link,
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            _reactRouter.Link,
 	            { to: '/autoState' },
 	            (this.state.rules || []).length
 	          ),
@@ -29754,11 +29807,23 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	var AppBrief = __webpack_require__(257);
-	var Link = __webpack_require__(189).Link;
-	module.exports = React.createClass({
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	var _AppBrief = __webpack_require__(257);
+
+	var _AppBrief2 = _interopRequireDefault(_AppBrief);
+
+	var _reactRouter = __webpack_require__(189);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
 	  displayName: "Manage",
 	  getInitialState: function getInitialState() {
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
@@ -29769,24 +29834,26 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+
 	    isOn('listView', function () {
-	      this.setState({ listView: true });
-	    }.bind(this));
+	      _this.setState({ listView: true });
+	    });
 	    get('sortOrder', function (sortOrder) {
-	      this.setState({ sortOrder: sortOrder });
-	    }.bind(this));
+	      _this.setState({ sortOrder: sortOrder });
+	    });
 	    chrome.management.getAll(function (appInfoList) {
 	      var originalStates = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
-	        var action = 'disable';
+	        appInfoList[i].iconUrl = _this.getIconUrl(appInfoList[i]);
+	        var _action = 'disable';
 	        if (appInfoList[i].enabled) {
-	          action = 'enable';
+	          _action = 'enable';
 	        }
-	        originalStates[appInfoList[i].id] = action;
+	        originalStates[appInfoList[i].id] = _action;
 	      }
-	      this.setState({ appInfoList: appInfoList, originalStates: originalStates });
-	    }.bind(this));
+	      _this.setState({ appInfoList: appInfoList, originalStates: originalStates });
+	    });
 	  },
 	  getIconUrl: function getIconUrl(appInfo) {
 	    var iconUrl = undefined;
@@ -29817,7 +29884,6 @@
 	  enableAll: function enableAll() {
 	    newCommunityRecord(true, ['_trackEvent', 'Manage', 'enableAll', '']);
 	    var appList = this.getFilteredList();
-	    console.log(appList);
 	    for (var i = 0; i < appList.length; i++) {
 	      if (!appList[i] || appList[i].type.match(/theme/i)) {
 	        continue;
@@ -29856,19 +29922,25 @@
 	    }
 	  },
 	  getFilteredList: function getFilteredList() {
+	    var _this2 = this;
+
 	    var orderFunc = this.orderByNameState;
 	    return (this.state.appInfoList || []).sort(orderFunc).map(function (appInfo) {
-	      var filter = this.state.filter;
+	      var filter = _this2.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
 	        return appInfo;
 	      } else {
 	        return null;
 	      }
-	    }.bind(this));
+	    });
 	  },
 	  toggleState: function toggleState(info, newAction) {
-	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') return;
+	    var _this3 = this;
+
+	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
+	      return;
+	    }
 	    var action = 'enable';
 	    if (info.enabled) {
 	      action = 'disable';
@@ -29881,7 +29953,7 @@
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      this.setState(function (prevState) {
+	      _this3.setState(function (prevState) {
 	        for (var i = 0; i < prevState.appInfoList.length; i++) {
 	          if (info.id == prevState.appInfoList[i].id) {
 	            prevState.appInfoList[i].enabled = !info.enabled;
@@ -29890,9 +29962,11 @@
 	        }
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	  },
 	  uninstall: function uninstall(info) {
+	    var _this4 = this;
+
 	    var result = 'removal_success';
 	    if (info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
 	      if (!confirm(GL('ls_21'))) {
@@ -29911,7 +29985,7 @@
 	          imageUrl: info.icon
 	        });
 	      } else {
-	        this.setState(function (prevState) {
+	        _this4.setState(function (prevState) {
 	          for (var i = 0; i < prevState.appInfoList.length; i++) {
 	            if (info.id == prevState.appInfoList[i].id) {
 	              prevState.appInfoList.splice(i, 1);
@@ -29921,7 +29995,7 @@
 	          return prevState;
 	        });
 	      }
-	    }.bind(this));
+	    });
 	  },
 	  openOptions: function openOptions(url) {
 	    chrome.tabs.create({ url: url });
@@ -29947,75 +30021,77 @@
 	    this.setState({ listView: listView });
 	  },
 	  render: function render() {
+	    var _this5 = this;
+
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
-	        return React.createElement(AppBrief, { key: index, uninstall: this.uninstall.bind(this, appInfo), toggle: this.toggleState.bind(this, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: this.openOptions.bind(this, appInfo.optionsUrl), chromeOption: this.chromeOption.bind(this, appInfo.id, null), info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { key: index, uninstall: _this5.uninstall.bind(_this5, appInfo), toggle: _this5.toggleState.bind(_this5, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: _this5.openOptions.bind(_this5, appInfo.optionsUrl), chromeOption: _this5.chromeOption.bind(_this5, appInfo.id, null), info: appInfo });
 	      }
-	    }.bind(this));
+	    });
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'div',
 	      { id: 'manage', className: 'section container' },
-	      React.createElement(Helmet, {
+	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'Manage'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'h5',
 	        null,
 	        capFirst(GL('manage'))
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'actionBar' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'select',
 	          { defaultValue: type, onChange: this.updateFilter, id: 'type' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'option',
 	            { value: 'all' },
 	            GL('all')
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'option',
 	            { value: 'app' },
 	            GL('app')
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'option',
 	            { value: 'extension' },
 	            GL('extension')
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'option',
 	            { value: 'theme' },
 	            GL('theme')
 	          )
 	        ),
-	        React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') }),
-	        React.createElement(
+	        _react2.default.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') }),
+	        _react2.default.createElement(
 	          'span',
 	          { id: 'enableAll', className: 'btn', onClick: this.enableAll },
 	          GL('enable_all')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'span',
 	          { id: 'disableAll', className: 'btn', onClick: this.disableAll },
 	          GL('disable_all')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'span',
 	          { id: 'undo', className: 'btn', onClick: this.undoAll },
 	          GL('undo_all')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'changeView' },
-	          React.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
-	          React.createElement('label', { className: 'viewGrid', onClick: this.toggleView }),
-	          React.createElement('label', { className: 'viewList', onClick: this.toggleView })
+	          _react2.default.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
+	          _react2.default.createElement('label', { className: 'viewGrid', onClick: this.toggleView }),
+	          _react2.default.createElement('label', { className: 'viewList', onClick: this.toggleView })
 	        )
 	      ),
-	      React.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
+	      _react2.default.createElement('input', { type: 'checkbox', className: 'listView', checked: this.state.listView }),
 	      appList
 	    );
 	  }
@@ -30027,12 +30103,23 @@
 
 	'use strict';
 
-	var React = __webpack_require__(7);
-	var Helmet = __webpack_require__(246);
-	var AppBrief = __webpack_require__(257);
-	var Link = __webpack_require__(189).Link;
-	var browserHistory = __webpack_require__(189).browserHistory;
-	module.exports = React.createClass({
+	var _react = __webpack_require__(7);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactHelmet = __webpack_require__(246);
+
+	var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
+
+	var _AppBrief = __webpack_require__(257);
+
+	var _AppBrief2 = _interopRequireDefault(_AppBrief);
+
+	var _reactRouter = __webpack_require__(189);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _react2.default.createClass({
 	  displayName: "AutoState",
 	  getInitialState: function getInitialState() {
 	    return {
@@ -30048,21 +30135,23 @@
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    var _this = this;
+
 	    chrome.management.getAll(function (appInfoList) {
 	      var names = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+	        appInfoList[i].iconUrl = _this.getIconUrl(appInfoList[i]);
 	        var action = 'disable';
 	        if (appInfoList[i].enabled) {
 	          action = 'enable';
 	        }
 	        names[appInfoList[i].id] = appInfoList[i].name;
 	      }
-	      this.setState({ appInfoList: appInfoList, names: names });
-	    }.bind(this));
+	      _this.setState({ appInfoList: appInfoList, names: names });
+	    });
 	    get('autoStateRules', function (rules) {
-	      this.setState({ rules: JSON.parse(rules) });
-	    }.bind(this));
+	      _this.setState({ rules: JSON.parse(rules) });
+	    });
 	    isOn('autoState', function () {
 	      chrome.permissions.contains({
 	        permissions: ['tabs']
@@ -30107,6 +30196,8 @@
 	    return iconUrl;
 	  },
 	  getFilteredList: function getFilteredList() {
+	    var _this2 = this;
+
 	    return (this.state.appInfoList || []).sort(function (a, b) {
 	      if (a.enabled != b.enabled) {
 	        if (a.enabled) {
@@ -30118,14 +30209,14 @@
 	        return compare(a.name.toLowerCase(), b.name.toLowerCase());
 	      }
 	    }).map(function (appInfo) {
-	      var filter = this.state.filter;
+	      var filter = _this2.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
 	        return appInfo;
 	      } else {
 	        return null;
 	      }
-	    }.bind(this));
+	    });
 	  },
 	  updateFilter: function updateFilter(e) {
 	    var id = e.target.id;
@@ -30150,6 +30241,8 @@
 	    });
 	  },
 	  addRule: function addRule() {
+	    var _this3 = this;
+
 	    var ids = [];
 	    var keys = Object.keys(this.state.rule.selected);
 	    if (keys.length == 0) {
@@ -30181,24 +30274,29 @@
 	      prevState.rule.match = '';
 	      return prevState;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	      set('autoStateRules', JSON.stringify(_this3.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
 	  },
 	  deleteRule: function deleteRule(index) {
+	    var _this4 = this;
+
 	    var decision = confirm('Do you want to remove rule #' + (index + 1) + '?');
 	    if (decision) {
 	      this.setState(function (prevState) {
 	        prevState.rules.splice(index, 1);
+	        return prevState;
 	      }, function () {
-	        set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	        set('autoStateRules', JSON.stringify(_this4.state.rules), function () {
 	          chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	        });
 	      });
 	    }
 	  },
 	  editRule: function editRule(index) {
+	    var _this5 = this;
+
 	    this.setState(function (prevState) {
 	      var rule = prevState.rules.splice(index, 1)[0];
 	      prevState.rule.selected = {};
@@ -30208,241 +30306,247 @@
 	      prevState.rule.action = rule.action;
 	      prevState.rule.match = rule.match.url;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(this.state.rules), function () {
+	      set('autoStateRules', JSON.stringify(_this5.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
 	  },
 	  setCurrentWebsite: function setCurrentWebsite() {
+	    var _this6 = this;
+
 	    var rule = this.state.rule;
 	    chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	      var url = "";
-	      if (tabs[0]) url = tabs[0].url;
-	      this.setState(function (prevState) {
+	      if (tabs[0]) {
+	        url = tabs[0].url;
+	      }
+	      _this6.setState(function (prevState) {
 	        prevState.rule.match = getA(url).origin;
 	        return prevState;
 	      });
-	    }.bind(this));
+	    });
 	  },
 	  render: function render() {
+	    var _this7 = this;
+
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
 	        var dimmer = 'dimmer';
-	        if (this.state.rule.selected[appInfo.id]) {
+	        if (_this7.state.rule.selected[appInfo.id]) {
 	          dimmer = 'nonDimmer';
 	        }
-	        return React.createElement(AppBrief, { isAutoState: 'true', select: this.select.bind(this, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { isAutoState: 'true', select: _this7.select.bind(_this7, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	      }
-	    }.bind(this));
+	    });
 	    var preRuleList = [{ ids: [], action: "Hello", match: { url: GL('ls_3') } }];
 	    if (this.state.rules && this.state.rules.length > 0) {
 	      preRuleList = this.state.rules;
 	    }
 	    var ruleList = preRuleList.map(function (rule, index) {
 	      var icons = rule.ids.map(function (id, index) {
-	        return React.createElement('img', { key: index, title: this.state.names[id], src: this.state.icons[id] });
-	      }.bind(this));
-	      return React.createElement(
+	        return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
+	      });
+	      return _react2.default.createElement(
 	        'tr',
 	        { className: 'rule', key: index },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          index + 1
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          icons
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          GL(rule.action)
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
 	          null,
 	          rule.match.url
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
-	          { onClick: CW.bind(null, this.editRule.bind(this, index), 'AutoState', 'editRule', '') },
+	          { onClick: CW.bind(null, _this7.editRule.bind(_this7, index), 'AutoState', 'editRule', '') },
 	          GL('edit')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'td',
-	          { onClick: CW.bind(null, this.deleteRule.bind(this, index), 'AutoState', 'deleteRule') },
+	          { onClick: CW.bind(null, _this7.deleteRule.bind(_this7, index), 'AutoState', 'deleteRule') },
 	          GL('delete')
 	        )
 	      );
-	    }.bind(this));
+	    });
 	    var selectedIcons = (Object.keys(this.state.rule.selected) || []).map(function (id, index) {
-	      if (this.state.rule.selected[id]) return React.createElement('img', { key: index, title: this.state.names[id], src: this.state.icons[id] });
-	    }.bind(this));
-	    return React.createElement(
+	      if (_this7.state.rule.selected[id]) return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
+	    });
+	    return _react2.default.createElement(
 	      'div',
 	      { id: 'autoState' },
-	      React.createElement(Helmet, {
+	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'Manage'
 	      }),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'rules section container' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h5',
 	          null,
 	          GL('rules')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'table',
 	          { className: 'autoState-table' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'thead',
 	            null,
-	            React.createElement(
+	            _react2.default.createElement(
 	              'tr',
 	              null,
-	              React.createElement(
+	              _react2.default.createElement(
 	                'th',
 	                null,
 	                '#'
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'th',
 	                null,
 	                capFirst(GL('extension_s'))
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'th',
 	                null,
 	                capFirst(GL('action'))
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'th',
 	                null,
 	                capFirst(GL('match'))
 	              )
 	            )
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'tbody',
 	            null,
 	            ruleList
 	          )
 	        )
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'newRule section container' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'h5',
 	          null,
 	          GL('new_rule')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'selectedApps' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'header' },
 	            capFirst(GL('app_s')),
 	            ':'
 	          ),
 	          ' ',
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'selected' },
 	            selectedIcons
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'selectedAction' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'header' },
 	            capFirst(GL('action')),
 	            ':'
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'select',
 	            { value: this.state.rule.action, onChange: this.updateRule, id: 'action' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'option',
 	              { value: 'enableOnly' },
 	              GL('only_enable_when_matched')
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'option',
 	              { value: 'disableOnly' },
 	              GL('only_disable_when_matched')
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'option',
 	              { value: 'enableWhen' },
 	              GL('enable_when_matched')
 	            ),
-	            React.createElement(
+	            _react2.default.createElement(
 	              'option',
 	              { value: 'disableWhen' },
 	              GL('disable_when_matched')
 	            )
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'match' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'header' },
 	            capFirst(GL('url')),
 	            ':'
 	          ),
-	          React.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' }),
-	          React.createElement(
+	          _react2.default.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' }),
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'btn', onClick: this.setCurrentWebsite },
 	            GL('currentWebsite')
 	          )
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'addRule btn', onClick: CW.bind(null, this.addRule, 'AutoState', 'addRule', '') },
 	          GL('add_rule')
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'actionBar autoState' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { className: 'type' },
-	            React.createElement(
+	            _react2.default.createElement(
 	              'select',
 	              { onChange: this.updateFilter, id: 'type' },
-	              React.createElement(
+	              _react2.default.createElement(
 	                'option',
 	                { value: 'all' },
 	                GL('all')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'option',
 	                { value: 'app' },
 	                GL('app')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'option',
 	                { value: 'extension' },
 	                GL('extension')
 	              ),
-	              React.createElement(
+	              _react2.default.createElement(
 	                'option',
 	                { value: 'theme' },
 	                GL('theme')
 	              )
 	            )
 	          ),
-	          React.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') })
+	          _react2.default.createElement('input', { id: 'keyword', onChange: this.updateFilter, type: 'text', placeholder: GL('filter') })
 	        ),
 	        appList
 	      )

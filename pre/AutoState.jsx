@@ -1,15 +1,15 @@
-var React = require('react');
-var Helmet = require('react-helmet');
-var AppBrief = require('./AppBrief.jsx');
-var Link = require('react-router').Link;
-var browserHistory = require('react-router').browserHistory;
+import React from 'react';
+import Helmet from 'react-helmet';
+import AppBrief from './AppBrief.jsx';
+import { Link, borwserHistory } from 'react-router';
+
 module.exports = React.createClass({
   displayName: "AutoState",
-  getInitialState: function(){
+  getInitialState() {
     return {
-      filter:{type:'all',keyword: ''},
-      rule:{
-        selected:{},
+      filter:{ type:'all', keyword: '' },
+      rule: {
+        selected: {},
         action: 'enableOnly',
         match: ''
       },
@@ -18,67 +18,67 @@ module.exports = React.createClass({
       names: {}
     };
   },
-  componentDidMount: function(){
-    chrome.management.getAll(function(appInfoList){
-      var names={};
-      for(var i=0;i<appInfoList.length;i++){
-        appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
-        var action='disable';
-        if(appInfoList[i].enabled){
-          action='enable';
+  componentDidMount() {
+    chrome.management.getAll((appInfoList) => {
+      const names={};
+      for(let i = 0; i < appInfoList.length; i++) {
+        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+        let action = 'disable';
+        if(appInfoList[i].enabled) {
+          action = 'enable';
         }
-        names[appInfoList[i].id]=appInfoList[i].name;
+        names[appInfoList[i].id] = appInfoList[i].name;
       }
-      this.setState({appInfoList:appInfoList,names:names});
-    }.bind(this));
-    get('autoStateRules',function(rules){
-      this.setState({rules:JSON.parse(rules)});
-    }.bind(this));
-    isOn('autoState',function(){
+      this.setState({ appInfoList, names });
+    });
+    get('autoStateRules', (rules) => {
+      this.setState({ rules: JSON.parse(rules) });
+    });
+    isOn('autoState', () => {
       chrome.permissions.contains({
         permissions: ['tabs']
-      },function(result){
+      }, (result) => {
         if(!result){
           set('autoState',false,function(){
             swal(GL('ls_20'));
           });
         }
       });
-    },function(){
+    }, () => {
       swal(GL('ls_20'));
     })
   },
-  getIconUrl: function(appInfo){
-    var iconUrl=undefined;
-    if(appInfo.icons){
-      var maxSize=0;
-      for(var j=0;j<appInfo.icons.length;j++){
-        var iconInfo=appInfo.icons[j];
-        if(iconInfo.size>maxSize){
-          maxSize=iconInfo.size;
-          iconUrl=iconInfo.url;
+  getIconUrl(appInfo) {
+    let iconUrl = undefined;
+    if(appInfo.icons) {
+      let maxSize = 0;
+      for(let j = 0; j < appInfo.icons.length; j++) {
+        let iconInfo = appInfo.icons[j];
+        if(iconInfo.size > maxSize) {
+          maxSize = iconInfo.size;
+          iconUrl = iconInfo.url;
         }
       }
     }
-    if(!iconUrl){
-      var canvas=document.createElement("canvas");
-      canvas.width=128;
-      canvas.height=128;
-      var ctx=canvas.getContext('2d');
-      ctx.font="120px Arial";
-      ctx.fillStyle="grey";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle="white";
-      ctx.fillText(appInfo.name[0],22,110);
-      iconUrl=canvas.toDataURL();
+    if(!iconUrl) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.font = "120px Arial";
+      ctx.fillStyle = "grey";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+      ctx.fillText(appInfo.name[0], 22, 110);
+      iconUrl = canvas.toDataURL();
     }
-    this.setState(function(prevState){
-      prevState.icons[appInfo.id]=iconUrl;
+    this.setState((prevState) => {
+      prevState.icons[appInfo.id] = iconUrl;
     });
     return iconUrl;
   },
-  getFilteredList: function(){
-    return (this.state.appInfoList||[]).sort(function(a,b){
+  getFilteredList() {
+    return (this.state.appInfoList||[]).sort((a,b) => {
       if(a.enabled!=b.enabled){
         if(a.enabled){
           return -1;
@@ -90,59 +90,59 @@ module.exports = React.createClass({
       else{
         return compare(a.name.toLowerCase(),b.name.toLowerCase());
       }
-    }).map(function(appInfo){
-      var filter=this.state.filter;
-      var pattern=new RegExp(filter.keyword,'i');
-      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
+    }).map((appInfo) => {
+      const filter=this.state.filter;
+      const pattern=new RegExp(filter.keyword,'i');
+      if((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
         return appInfo;
       }
-      else{
+      else {
         return null;
       }
-    }.bind(this));
+    });
   },
-  updateFilter: function(e){
-    var id=e.target.id;
-    var value=e.target.value;
-    this.setState(function(prevState){
-      prevState.filter[id]=value;
+  updateFilter(e) {
+    const id = e.target.id;
+    const value = e.target.value;
+    this.setState((prevState) => {
+      prevState.filter[id] = value;
       return prevState;
     });
   },
-  select: function(id){
-    this.setState(function(prevState){
-      prevState.rule.selected[id]=!prevState.rule.selected[id];
+  select(id) {
+    this.setState((prevState) => {
+      prevState.rule.selected[id] = !prevState.rule.selected[id];
       return prevState;
     });
   },
-  updateRule: function(e){
-    var id=e.target.id;
-    var value=e.target.value;
-    this.setState(function(prevState){
-      prevState.rule[id]=value;
+  updateRule(e) {
+    const id = e.target.id;
+    const value = e.target.value;
+    this.setState((prevState) => {
+      prevState.rule[id] = value;
       return prevState;
     });
   },
-  addRule: function(){
-    var ids=[];
-    var keys=Object.keys(this.state.rule.selected);
-    if(keys.length==0){
+  addRule() {
+    const ids = [];
+    const keys = Object.keys(this.state.rule.selected);
+    if(keys.length == 0) {
       swal(GL('ls_32'));
       return;
     }
-    else if(this.state.rule.match.length==0){
+    else if(this.state.rule.match.length == 0) {
       swal(GL('ls_33'));
       return;
     }
-    for(var i=0;i<keys.length;i++){
-      var id=keys[i];
-      if(this.state.rule.selected[id]){
+    for(let i = 0; i < keys.length; i++) {
+      const id = keys[i];
+      if(this.state.rule.selected[id]) {
         ids.push(id);
       }
     }
-    this.setState(function(prevState){
-      if(!prevState.rules){
-        prevState.rules=[];
+    this.setState((prevState) => {
+      if(!prevState.rules) {
+        prevState.rules = [];
       }
       prevState.rules.push({
         ids: ids,
@@ -151,76 +151,78 @@ module.exports = React.createClass({
           url: prevState.rule.match
         }
       });
-      prevState.rule.selected={};
-      prevState.rule.action='enableOnly';
-      prevState.rule.match='';
+      prevState.rule.selected = {};
+      prevState.rule.action = 'enableOnly';
+      prevState.rule.match = '';
       return prevState;
-    },function(){
-      set('autoStateRules',JSON.stringify(this.state.rules),function(){
+    }, () => {
+      set('autoStateRules', JSON.stringify(this.state.rules),() => {
         chrome.runtime.sendMessage({job:'updateAutoStateRules'});
       });
     });
   },
-  deleteRule: function(index){
-    var decision=confirm('Do you want to remove rule #'+(index+1)+'?');
-    if(decision){
-      this.setState(function(prevState){
+  deleteRule(index) {
+    const decision=confirm('Do you want to remove rule #'+(index+1)+'?');
+    if(decision) {
+      this.setState((prevState) => {
         prevState.rules.splice(index,1);
-      },function(){
-        set('autoStateRules',JSON.stringify(this.state.rules),function(){
+        return prevState;
+      }, () => {
+        set('autoStateRules', JSON.stringify(this.state.rules), () => {
           chrome.runtime.sendMessage({job:'updateAutoStateRules'});
         });
       });
     }
   },
-  editRule: function(index){
-    this.setState(function(prevState){
-      var rule=prevState.rules.splice(index,1)[0];
-      prevState.rule.selected={};
-      for(var i=0;i<rule.ids.length;i++){
-        prevState.rule.selected[rule.ids[i]]=true;
+  editRule(index) {
+    this.setState((prevState) => {
+      const rule = prevState.rules.splice(index, 1)[0];
+      prevState.rule.selected = {};
+      for(let i = 0; i < rule.ids.length; i++) {
+        prevState.rule.selected[rule.ids[i]] = true;
       }
-      prevState.rule.action=rule.action;
-      prevState.rule.match=rule.match.url;
-    },function(){
-      set('autoStateRules',JSON.stringify(this.state.rules),function(){
-        chrome.runtime.sendMessage({job:'updateAutoStateRules'});
+      prevState.rule.action = rule.action;
+      prevState.rule.match = rule.match.url;
+    }, () => {
+      set('autoStateRules',JSON.stringify(this.state.rules), () => {
+        chrome.runtime.sendMessage({ job:'updateAutoStateRules' });
       });
     });
   },
-  setCurrentWebsite: function(){
-    var rule=this.state.rule;
-    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-      var url="";
-      if(tabs[0])
-      url = tabs[0].url;
-      this.setState(function(prevState){
+  setCurrentWebsite() {
+    const rule=this.state.rule;
+    chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, (tabs) => {
+      let url = "";
+      if(tabs[0]) {
+        url = tabs[0].url;
+      }
+      this.setState((prevState) => {
         prevState.rule.match=getA(url).origin;
         return prevState;
       });
-    }.bind(this));
+    });
   },
-  render: function(){
-    var appList=this.getFilteredList().map(function(appInfo,index){
-      if(appInfo){
-        var dimmer='dimmer';
-        if(this.state.rule.selected[appInfo.id]){
-          dimmer='nonDimmer';
+  render() {
+    const appList = this.getFilteredList().map((appInfo,index) => {
+      if(appInfo) {
+        let dimmer = 'dimmer';
+        if(this.state.rule.selected[appInfo.id]) {
+          dimmer = 'nonDimmer';
         }
         return (
             <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
         );
       }
-    }.bind(this));
-    var preRuleList=[{ids:[],action:"Hello",match:{url:GL('ls_3')}}];
-    if(this.state.rules&&this.state.rules.length>0){
-      preRuleList=this.state.rules;
+    });
+    let preRuleList=[{ ids: [], action: "Hello", match: { url: GL('ls_3') } }];
+    if(this.state.rules && this.state.rules.length > 0) {
+      preRuleList = this.state.rules;
     }
-    var ruleList=(preRuleList).map(function(rule,index){
-      var icons=rule.ids.map(function(id,index){
+    const ruleList = (preRuleList).map((rule, index) => {
+      const icons=rule.ids.map((id,index) => {
         return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
-      }.bind(this));
-      return(
+      });
+      return (
         <tr className="rule" key={index}>
           <td>{index+1}</td>
           <td>{icons}</td>
@@ -230,12 +232,12 @@ module.exports = React.createClass({
           <td onClick={CW.bind(null,this.deleteRule.bind(this,index),'AutoState','deleteRule')}>{GL('delete')}</td>
         </tr>
       );
-    }.bind(this));
-    var selectedIcons=(Object.keys(this.state.rule.selected)||[]).map(function(id,index){
+    });
+    const selectedIcons = (Object.keys(this.state.rule.selected) || []).map((id, index) => {
       if(this.state.rule.selected[id])
         return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
-    }.bind(this));
-    return(
+    });
+    return (
       <div id="autoState">
         <Helmet
           title="Manage"

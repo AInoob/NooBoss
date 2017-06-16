@@ -1,209 +1,210 @@
-var React = require('react');
-var Helmet = require('react-helmet');
-var AppBrief = require('./AppBrief.jsx');
-var Link = require('react-router').Link;
+import React from 'react';
+import Helmet from 'react-helmet';
+import AppBrief from './AppBrief.jsx';
+import { Link } from 'react-router';
+
 module.exports = React.createClass({
   displayName: "Manage",
-  getInitialState: function(){
-    var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
+  getInitialState() {
+    const type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return {
-      filter:{type:type,keyword: ''},
+      filter:{ type, keyword: '' },
       listView: false,
       sortOrder: 'nameState'
     };
   },
-  componentDidMount: function(){
-    isOn('listView',function(){
-      this.setState({listView:true});
-    }.bind(this));
-    get('sortOrder',function(sortOrder){this.setState({sortOrder:sortOrder});}.bind(this));
-    chrome.management.getAll(function(appInfoList){
-      var originalStates={};
-      for(var i=0;i<appInfoList.length;i++){
-        appInfoList[i].iconUrl=this.getIconUrl(appInfoList[i]);
-        var action='disable';
-        if(appInfoList[i].enabled){
-          action='enable';
+  componentDidMount() {
+    isOn('listView', () => {
+      this.setState({ listView:true });
+    });
+    get('sortOrder', (sortOrder) => {this.setState({ sortOrder });});
+    chrome.management.getAll((appInfoList) => {
+      const originalStates={};
+      for(let i = 0; i < appInfoList.length; i++) {
+        appInfoList[i].iconUrl = this.getIconUrl(appInfoList[i]);
+        let action = 'disable';
+        if(appInfoList[i].enabled) {
+          action = 'enable';
         }
-        originalStates[appInfoList[i].id]=action;
+        originalStates[appInfoList[i].id] = action;
       }
-      this.setState({appInfoList:appInfoList,originalStates:originalStates});
-    }.bind(this));
+      this.setState({ appInfoList, originalStates });
+    });
   },
-  getIconUrl: function(appInfo){
-    var iconUrl=undefined;
-    if(appInfo.icons){
-      var maxSize=0;
-      for(var j=0;j<appInfo.icons.length;j++){
-        var iconInfo=appInfo.icons[j];
-        if(iconInfo.size>maxSize){
-          maxSize=iconInfo.size;
-          iconUrl=iconInfo.url;
+  getIconUrl(appInfo) {
+    let iconUrl = undefined;
+    if(appInfo.icons) {
+      let maxSize = 0;
+      for(let j = 0; j < appInfo.icons.length; j++) {
+        const iconInfo = appInfo.icons[j];
+        if(iconInfo.size > maxSize) {
+          maxSize = iconInfo.size;
+          iconUrl = iconInfo.url;
         }
       }
     }
-    if(!iconUrl){
-      var canvas=document.createElement("canvas");
-      canvas.width=128;
-      canvas.height=128;
-      var ctx=canvas.getContext('2d');
-      ctx.font="120px Arial";
-      ctx.fillStyle="grey";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle="white";
-      ctx.fillText(appInfo.name[0],22,110);
-      iconUrl=canvas.toDataURL();
+    if(!iconUrl) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 128;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.font = "120px Arial";
+      ctx.fillStyle = "grey";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+      ctx.fillText(appInfo.name[0], 22, 110);
+      iconUrl = canvas.toDataURL();
     }
     return iconUrl;
   },
-  enableAll: function(){
-    newCommunityRecord(true,['_trackEvent', 'Manage', 'enableAll','']);
-    var appList=this.getFilteredList();
-    console.log(appList);
-    for(var i=0;i<appList.length;i++){
-      if(!appList[i]||appList[i].type.match(/theme/i)){
+  enableAll() {
+    newCommunityRecord(true, ['_trackEvent', 'Manage', 'enableAll','']);
+    const appList = this.getFilteredList();
+    for(let i = 0; i < appList.length; i++) {
+      if(!appList[i] || appList[i].type.match(/theme/i)) {
         continue;
       }
-      this.toggleState(appList[i],'enable');
+      this.toggleState(appList[i], 'enable');
     }
   },
-  disableAll: function(){
-    newCommunityRecord(true,['_trackEvent', 'Manage', 'disableAll','']);
-    var appList=this.getFilteredList();
-    for(var i=0;i<appList.length;i++){
-      if(!appList[i]||appList[i].type.match(/theme/i)){
+  disableAll() {
+    newCommunityRecord(true, ['_trackEvent', 'Manage', 'disableAll', '']);
+    const appList = this.getFilteredList();
+    for(let i = 0; i < appList.length; i++) {
+      if(!appList[i] || appList[i].type.match(/theme/i)) {
         continue;
       }
-      this.toggleState(appList[i],'disable');
+      this.toggleState(appList[i], 'disable');
     }
   },
-  undoAll: function(){
-    newCommunityRecord(true,['_trackEvent', 'Manage', 'undoAll','']);
-    var appList=this.getFilteredList();
-    for(var i=0;i<appList.length;i++){
-      if(appList[i]){
-        this.toggleState(appList[i],this.state.originalStates[appList[i].id]);
+  undoAll() {
+    newCommunityRecord(true, ['_trackEvent', 'Manage', 'undoAll', '']);
+    const appList = this.getFilteredList();
+    for(let i = 0; i < appList.length; i++) {
+      if(appList[i]) {
+        this.toggleState(appList[i], this.state.originalStates[appList[i].id]);
       }
     }
   },
-  orderByNameState: function(a,b){
-    if(a.enabled!=b.enabled){
-      if(a.enabled){
+  orderByNameState(a, b) {
+    if(a.enabled != b.enabled) {
+      if(a.enabled) {
         return -1;
       }
-      else{
+      else {
         return 1;
       }
     }
-    else{
-      return compare(a.name.toLowerCase(),b.name.toLowerCase());
+    else {
+      return compare(a.name.toLowerCase(), b.name.toLowerCase());
     }
   },
-  getFilteredList: function(){
-    var orderFunc=this.orderByNameState;
-    return (this.state.appInfoList||[]).sort(orderFunc).map(function(appInfo){
-      var filter=this.state.filter;
-      var pattern=new RegExp(filter.keyword,'i');
-      if((filter.type=='all'||appInfo.type.indexOf(filter.type)!=-1)&&(filter.keyword==''||pattern.exec(appInfo.name))){
+  getFilteredList() {
+    const orderFunc=this.orderByNameState;
+    return (this.state.appInfoList||[]).sort(orderFunc).map((appInfo) => {
+      const filter = this.state.filter;
+      const pattern = new RegExp(filter.keyword, 'i');
+      if((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
         return appInfo;
       }
-      else{
+      else {
         return null;
       }
-    }.bind(this));
+    });
   },
-  toggleState: function(info,newAction){
-    if(!info||info.id=='aajodjghehmlpahhboidcpfjcncmcklf'||info.id=='mgehojanhfgnndgffijeglgahakgmgkj')
-      return;
-    var action='enable';
-    if(info.enabled){
-      action='disable';
-    }
-    if(newAction&&newAction!=action){
+  toggleState(info,newAction) {
+    if(!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
       return;
     }
-    chrome.management.setEnabled(info.id,!info.enabled,function(){
-      var result='enabled';
-      if(info.enabled){
-        result='disabled';
+    let action = 'enable';
+    if(info.enabled) {
+      action = 'disable';
+    }
+    if(newAction && newAction != action) {
+      return;
+    }
+    chrome.management.setEnabled(info.id, !info.enabled, () => {
+      let result='enabled';
+      if(info.enabled) {
+        result = 'disabled';
       }
-      this.setState(function(prevState){
-        for(var i=0;i<prevState.appInfoList.length;i++){
-          if(info.id==prevState.appInfoList[i].id){
-            prevState.appInfoList[i].enabled=!info.enabled;
+      this.setState((prevState) => {
+        for(let i = 0; i < prevState.appInfoList.length; i++) {
+          if(info.id == prevState.appInfoList[i].id) {
+            prevState.appInfoList[i].enabled = !info.enabled;
             break;
           }
         }
         return prevState;
       });
-    }.bind(this));
+    });
   },
-  uninstall: function(info){
-    var result='removal_success';
-    if(info.id=='aajodjghehmlpahhboidcpfjcncmcklf'||info.id=='mgehojanhfgnndgffijeglgahakgmgkj'){
-      if(!confirm(GL('ls_21'))){
+  uninstall(info) {
+    const result='removal_success';
+    if(info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
+      if(!confirm(GL('ls_21'))) {
         return;
       }
     }
-    chrome.management.uninstall(info.id,function(){
-      if(chrome.runtime.lastError){
-        action='removal_fail';
+    chrome.management.uninstall(info.id, () => {
+      if(chrome.runtime.lastError) {
+        action = 'removal_fail';
         console.log(chrome.runtime.lastError);
         chrome.notifications.create({
-          type:'basic',
+          type: 'basic',
           iconUrl: '/images/icon_128.png',
           title: (GL('ls_22')),
           message: (GL('ls_23'))+info.name,
           imageUrl: info.icon
         });
       }
-      else{
-        this.setState(function(prevState){
-          for(var i=0;i<prevState.appInfoList.length;i++){
+      else {
+        this.setState((prevState) => {
+          for(let i = 0; i < prevState.appInfoList.length; i++) {
             if(info.id==prevState.appInfoList[i].id){
-              prevState.appInfoList.splice(i,1);
+              prevState.appInfoList.splice(i, 1);
               break;
             }
           }
           return prevState;
         });
       }
-    }.bind(this));
+    });
   },
-  openOptions: function(url){
-    chrome.tabs.create({url:url});
+  openOptions(url) {
+    chrome.tabs.create({ url });
   },
-  chromeOption: function(id){
+  chromeOption(id) {
     chrome.tabs.create({url:'chrome://extensions/?id='+id});
   },
-  updateFilter: function(e){
-    var id=e.target.id;
-    var value=e.target.value;
-    this.setState(function(prevState){
+  updateFilter(e) {
+    const id = e.target.id;
+    const value=e.target.value;
+    this.setState((prevState) => {
       prevState.filter[id]=value;
       return prevState;
     });
   },
-  toggleView: function(){
-    var listView=!this.state.listView;
+  toggleView() {
+    const listView=!this.state.listView;
     if(listView){
       set('listView','1');
     }
     else{
       set('listView','-1');
     }
-    this.setState({listView:listView});
+    this.setState({ listView });
   },
-  render: function(){
-    var appList=this.getFilteredList().map(function(appInfo,index){
+  render() {
+    const appList = this.getFilteredList().map((appInfo,index) => {
       if(appInfo){
         return (
             <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo,null)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} chromeOption={this.chromeOption.bind(this,appInfo.id,null)} info={appInfo} />
         );
       }
-    }.bind(this));
-    var type=(this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
-    return(
+    });
+    const type = (this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
+    return (
       <div id="manage" className="section container">
         <Helmet
           title="Manage"
