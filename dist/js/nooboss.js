@@ -33759,6 +33759,8 @@
 
 	'use strict';
 
+	var _templateObject = _taggedTemplateLiteral(['\n  #match{\n    height: initial !important;\n    margin-top: 0px !important;\n    margin-right: 0px !important;\n    #matchingRuleDiv{\n      float: left;\n    }\n    #currentWebsite{\n      margin-left: 8px;\n    }\n  }\n'], ['\n  #match{\n    height: initial !important;\n    margin-top: 0px !important;\n    margin-right: 0px !important;\n    #matchingRuleDiv{\n      float: left;\n    }\n    #currentWebsite{\n      margin-left: 8px;\n    }\n  }\n']);
+
 	var _react = __webpack_require__(7);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -33773,7 +33775,15 @@
 
 	var _reactRouter = __webpack_require__(177);
 
+	var _styledComponents = __webpack_require__(249);
+
+	var _styledComponents2 = _interopRequireDefault(_styledComponents);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+	var AutoStateDiv = _styledComponents2.default.div(_templateObject);
 
 	module.exports = _react2.default.createClass({
 	  displayName: "AutoState",
@@ -33783,7 +33793,8 @@
 	      rule: {
 	        selected: {},
 	        action: 'enableOnly',
-	        match: ''
+	        match: '',
+	        isWildcard: false
 	      },
 	      rules: [],
 	      icons: {},
@@ -33896,6 +33907,12 @@
 	      return prevState;
 	    });
 	  },
+	  updateRuleIsWildcard: function updateRuleIsWildcard(isWildcard) {
+	    this.setState(function (prevState) {
+	      prevState.rule.isWildcard = isWildcard;
+	      return prevState;
+	    });
+	  },
 	  addRule: function addRule() {
 	    var _this3 = this;
 
@@ -33922,9 +33939,11 @@
 	        ids: ids,
 	        action: prevState.rule.action,
 	        match: {
-	          url: prevState.rule.match
+	          url: prevState.rule.match,
+	          isWildcard: prevState.rule.isWildcard
 	        }
 	      });
+	      prevState.rule.isWildcard = false;
 	      prevState.rule.selected = {};
 	      prevState.rule.action = 'enableOnly';
 	      prevState.rule.match = '';
@@ -33968,6 +33987,7 @@
 	      }
 	      prevState.rule.action = rule.action;
 	      prevState.rule.match = rule.match.url;
+	      prevState.rule.isWildcard = rule.match.isWildcard;
 	    }, function () {
 	      set('autoStateRules', JSON.stringify(_this5.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
@@ -33977,13 +33997,13 @@
 	  setCurrentWebsite: function setCurrentWebsite() {
 	    var _this6 = this;
 
-	    var rule = this.state.rule;
 	    chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	      var url = "";
 	      if (tabs[0]) {
 	        url = tabs[0].url;
 	      }
 	      _this6.setState(function (prevState) {
+	        prevState.rule.isWildcard = false;
 	        prevState.rule.match = getA(url).origin;
 	        return prevState;
 	      });
@@ -34048,7 +34068,7 @@
 	      if (_this7.state.rule.selected[id]) return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
 	    });
 	    return _react2.default.createElement(
-	      'div',
+	      AutoStateDiv,
 	      { id: 'autoState' },
 	      _react2.default.createElement(_reactHelmet2.default, {
 	        title: 'Manage'
@@ -34159,7 +34179,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'match' },
+	          { id: 'match', className: 'match' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'header' },
@@ -34169,7 +34189,31 @@
 	          _react2.default.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' }),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'btn', onClick: this.setCurrentWebsite },
+	            { id: 'matchingRuleDiv' },
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              _react2.default.createElement('input', { type: 'radio', id: 'matchingRule_1', name: 'matchingRule', checked: !this.state.rule.isWildcard }),
+	              _react2.default.createElement(
+	                'label',
+	                { onClick: this.updateRuleIsWildcard.bind(this, false), htmlFor: 'matchingRule_1' },
+	                GL('regular_expression')
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              _react2.default.createElement('input', { type: 'radio', id: 'matchingRule_2', name: 'matchingRule', checked: this.state.rule.isWildcard }),
+	              _react2.default.createElement(
+	                'label',
+	                { onClick: this.updateRuleIsWildcard.bind(this, true), htmlFor: 'matchingRule_2' },
+	                GL('wildcard')
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { id: 'currentWebsite', className: 'btn', onClick: this.setCurrentWebsite },
 	            GL('currentWebsite')
 	          )
 	        ),

@@ -335,6 +335,12 @@
   "ainoob_is_koo":{
 	"message":"组名"
   },
+  "regular_expression":{
+	"message":"正则表达式"
+  },
+  "wildcard":{
+	"message":"通配符"
+  },
   "ls_1":{
 	"message":"还没有人给这个网站推荐相关拓展呢，你有什么针对这个网站的好用的拓展吗？"
   },

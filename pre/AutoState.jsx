@@ -2,6 +2,21 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import AppBrief from './AppBrief.jsx';
 import { Link, borwserHistory } from 'react-router';
+import styled from 'styled-components';
+
+const AutoStateDiv = styled.div`
+  #match{
+    height: initial !important;
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    #matchingRuleDiv{
+      float: left;
+    }
+    #currentWebsite{
+      margin-left: 8px;
+    }
+  }
+`;
 
 module.exports = React.createClass({
   displayName: "AutoState",
@@ -11,7 +26,8 @@ module.exports = React.createClass({
       rule: {
         selected: {},
         action: 'enableOnly',
-        match: ''
+        match: '',
+        isWildcard: false,
       },
       rules: [],
       icons: {},
@@ -123,6 +139,12 @@ module.exports = React.createClass({
       return prevState;
     });
   },
+  updateRuleIsWildcard(isWildcard) {
+    this.setState((prevState) => {
+      prevState.rule.isWildcard = isWildcard;
+      return prevState;
+    });
+  },
   addRule() {
     const ids = [];
     const keys = Object.keys(this.state.rule.selected);
@@ -148,9 +170,11 @@ module.exports = React.createClass({
         ids: ids,
         action: prevState.rule.action,
         match: {
-          url: prevState.rule.match
+          url: prevState.rule.match,
+          isWildcard: prevState.rule.isWildcard,
         }
       });
+      prevState.rule.isWildcard = false;
       prevState.rule.selected = {};
       prevState.rule.action = 'enableOnly';
       prevState.rule.match = '';
@@ -191,6 +215,7 @@ module.exports = React.createClass({
       }
       prevState.rule.action = rule.action;
       prevState.rule.match = rule.match.url;
+      prevState.rule.isWildcard = rule.match.isWildcard;
     }, () => {
       set('autoStateRules',JSON.stringify(this.state.rules), () => {
         chrome.runtime.sendMessage({ job:'updateAutoStateRules' });
@@ -198,13 +223,13 @@ module.exports = React.createClass({
     });
   },
   setCurrentWebsite() {
-    const rule=this.state.rule;
     chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, (tabs) => {
       let url = "";
       if(tabs[0]) {
         url = tabs[0].url;
       }
       this.setState((prevState) => {
+        prevState.rule.isWildcard = false;
         prevState.rule.match=getA(url).origin;
         return prevState;
       });
@@ -246,7 +271,7 @@ module.exports = React.createClass({
         return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
     });
     return (
-      <div id="autoState">
+      <AutoStateDiv id="autoState">
         <Helmet
           title="Manage"
         />
@@ -274,15 +299,31 @@ module.exports = React.createClass({
             </div>
           </div>
           <div className="selectedAction">
-            <div className="header">{capFirst(GL('action'))}:</div><select value={this.state.rule.action} onChange={this.updateRule} id="action">
+            <div className="header">{capFirst(GL('action'))}:</div>
+            <select value={this.state.rule.action} onChange={this.updateRule} id="action">
               <option value="enableOnly">{GL('only_enable_when_matched')}</option>
               <option value="disableOnly">{GL('only_disable_when_matched')}</option>
               <option value="enableWhen">{GL('enable_when_matched')}</option>
               <option value="disableWhen">{GL('disable_when_matched')}</option>
             </select>
           </div>
-          <div className="match">
-            <div className="header">{capFirst(GL('url'))}:</div><input id="match" value={this.state.rule.match} onChange={this.updateRule} placeholder="RegExp matching" type="text" /><div className="btn" onClick={this.setCurrentWebsite}>{GL('currentWebsite')}</div>
+          <div id="match" className="match">
+            <div className="header">
+              {capFirst(GL('url'))}:
+            </div>
+            <input id="match" value={this.state.rule.match} onChange={this.updateRule} placeholder="RegExp matching" type="text" />
+            <div id="matchingRuleDiv">
+              <div>
+                <input type="radio" id="matchingRule_1" name="matchingRule" checked={!this.state.rule.isWildcard} />
+                <label onClick={this.updateRuleIsWildcard.bind(this, false)} htmlFor="matchingRule_1">{GL('regular_expression')}</label>
+              </div>
+              <div>
+                <input type="radio" id="matchingRule_2" name="matchingRule" checked={this.state.rule.isWildcard} />
+                <label onClick={this.updateRuleIsWildcard.bind(this, true)} htmlFor="matchingRule_2">{GL('wildcard')}</label>
+              </div>
+            </div>
+            <div id="currentWebsite" className="btn" onClick={this.setCurrentWebsite}>{GL('currentWebsite')}
+            </div>
           </div>
           <div className="addRule btn" onClick={CW.bind(null,this.addRule,'AutoState','addRule','')}>{GL('add_rule')}</div>
           <div className="actionBar autoState">
@@ -298,7 +339,7 @@ module.exports = React.createClass({
           </div>
           {appList}
         </div>
-      </div>
+      </AutoStateDiv>
     );
   }
 });
