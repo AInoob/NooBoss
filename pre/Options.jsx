@@ -118,8 +118,8 @@ module.exports = React.createClass({
   },
   exportOptions: function(){
     chrome.storage.sync.get(function(data){
-      dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
-      var a = document.createElement('a');
+      const dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
+      const a = document.createElement('a');
       a.href = dataURI;
       a.download = 'NooBoss.options';
       a.style.display = 'none';

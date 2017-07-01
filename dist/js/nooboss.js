@@ -34333,7 +34333,7 @@
 	  },
 	  exportOptions: function exportOptions() {
 	    chrome.storage.sync.get(function (data) {
-	      dataURI = 'data:text;charset=utf-8,NooBoss-Options:' + JSON.stringify(data);
+	      var dataURI = 'data:text;charset=utf-8,NooBoss-Options:' + JSON.stringify(data);
 	      var a = document.createElement('a');
 	      a.href = dataURI;
 	      a.download = 'NooBoss.options';
