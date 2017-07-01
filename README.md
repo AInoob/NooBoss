@@ -9,21 +9,21 @@ As you can see, NooBoss is an open source software, it is free and does not have
 ## Showcase
 
 ### Overview
-![overview](https://a.ainoob.com/crx/nooboss/overview.png)
+![overview](https://ainoob.com/crx/nooboss/overview.png)
 
 ### Manage
-![manage](https://a.ainoob.com/crx/nooboss/manage_1.png)
-![list view](https://a.ainoob.com/crx/nooboss/manage_2.png)
+![manage](https://ainoob.com/crx/nooboss/manage_1.png)
+![list view](https://ainoob.com/crx/nooboss/manage_2.png)
 
 ### App detail
-![app detail](https://a.ainoob.com/crx/nooboss/app_1.png)
-![app detail 2](https://a.ainoob.com/crx/nooboss/app_2.png)
+![app detail](https://ainoob.com/crx/nooboss/app_1.png)
+![app detail 2](https://ainoob.com/crx/nooboss/app_2.png)
 
 ### Auto State
-![auto state](https://a.ainoob.com/crx/nooboss/autostate.png)
+![auto state](https://ainoob.com/crx/nooboss/autostate.png)
 
 ### History
-![history](https://a.ainoob.com/crx/nooboss/history.png)
+![history](https://ainoob.com/crx/nooboss/history.png)
 
 ## To-do
 - Functions
