@@ -20,7 +20,8 @@ const defaultValues = [
   ['notificationDuration_installation',-1],
   ['notificationDuration_removal',-1],
   ['listView',true],
-  ['sendUsage',true]
+  ['sendUsage',true],
+  ['groupList', []],
 ];
 
 export { defaultValues };

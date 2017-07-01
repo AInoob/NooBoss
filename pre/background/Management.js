@@ -48,13 +48,14 @@ Management.autoState.disable = () => {
   chrome.tabs.onReplaced.removeListener();
 }
 
+// find those that the status need to be changed, and change their state at the end
 Management.autoState.manage = (tabId) => {
   const autoState = Management.autoState;
   const tabs = autoState.tabs;
   const nextPhases = {};
   const enableOnlys = {};
   const disableOnlys={};
-  for(let i = 0; i < autoState.rules.length; i++){
+  for(let i = 0; i < autoState.rules.length; i++) {
     const rule=autoState.rules[i];
     const appIds=rule.ids;
     const pattern=new RegExp(rule.match.url,'i');

@@ -1,7 +1,36 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import AppBrief from './AppBrief.jsx';
+import GroupBrief from './GroupBrief.jsx';
 import { Link } from 'react-router';
+import styled from 'styled-components';
+
+const ManageDiv = styled.div`
+  #header{
+  }
+  #changeView{
+    position: absolute;
+    right: 30px;
+    top: 50px;
+  }
+  #actionBar{
+    width: 100%;
+  }
+  #groupList{
+    .app-holder{
+      .app-brief{
+        margin-left: 10%;
+      }
+    }
+    #detail{
+      #selected{
+        img{
+          height: 23px;
+        }
+      }
+    }
+  }
+`;
 
 module.exports = React.createClass({
   displayName: "Manage",
@@ -10,12 +39,19 @@ module.exports = React.createClass({
     return {
       filter:{ type, keyword: '' },
       listView: false,
-      sortOrder: 'nameState'
+      sortOrder: 'nameState',
+      groupList: [],
+      selectedGroup: -1,
+      icons: {},
+      names: {},
     };
   },
   componentDidMount() {
     isOn('listView', () => {
       this.setState({ listView:true });
+    });
+    get('groupList', (groupList) => {
+      this.setState({ groupList });
     });
     get('sortOrder', (sortOrder) => {this.setState({ sortOrder });});
     chrome.management.getAll((appInfoList) => {
@@ -55,6 +91,10 @@ module.exports = React.createClass({
       ctx.fillText(appInfo.name[0], 22, 110);
       iconUrl = canvas.toDataURL();
     }
+    this.setState((prevState) => {
+      prevState.icons[appInfo.id] = iconUrl;
+      prevState.names[appInfo.id] = appInfo.name;
+    });
     return iconUrl;
   },
   enableAll() {
@@ -112,7 +152,7 @@ module.exports = React.createClass({
       }
     });
   },
-  toggleState(info,newAction) {
+  toggleState(info, newAction) {
     if(!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
       return;
     }
@@ -195,41 +235,157 @@ module.exports = React.createClass({
     }
     this.setState({ listView });
   },
+  saveGroupList() {
+    set('groupList', this.state.groupList);
+  },
+  newGroup() {
+    this.setState((prevState) => {
+      prevState.groupList.push({
+        name: '',
+        imgUrl: 'images',
+        appList: [],
+      });
+      prevState.selectedGroup = prevState.groupList.length - 1;
+      return prevState;
+    }, this.saveGroupList.bind(this));
+  },
+  changeGroupName(index, e) {
+    const newVal = e.target.value;
+    this.setState((prevState) => {
+      prevState.groupList[index].name = newVal;
+      return prevState;
+    }, this.saveGroupList.bind(this));
+  },
+  duplicateGroup(index) {
+    this.setState((prevState) => {
+      prevState.groupList.push(prevState.groupList[index]);
+      return prevState;
+    }, this.saveGroupList.bind(this));
+  },
+  showGroup(index) {
+    this.setState((prevState) => {
+      if(prevState.selectedGroup == index) {
+        prevState.selectedGroup = -1;
+      }
+      else {
+        prevState.selectedGroup = index;
+      }
+      return prevState;
+    }, this.saveGroupList.bind(this));
+  },
+  removeGroup(index) {
+    swal({
+      title: "Are you sure?",
+      text: 'Do you want to remove group '+this.state.groupList[index].name+'?',
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, delete it!",
+      closeOnConfirm: true
+    },
+    () => {
+      this.setState((prevState) => {
+        prevState.groupList.splice(index, 1);
+        return prevState;
+      }, this.saveGroupList.bind(this));
+    });
+  },
+  selectGroupApp(id) {
+    this.setState((prevState) => {
+      const group = prevState.groupList[prevState.selectedGroup];
+      const index = group.appList.indexOf(id);
+      if(index >= 0) {
+        group.appList.splice(index, 1);
+        console.log('1');
+      }
+      else {
+        group.appList.push(id);
+        console.log('2');
+      }
+      return prevState;
+    }, this.saveGroupList.bind(this));
+  },
+  getAppIcons(index) {
+    if(index != this.state.selectedGroup) {
+      return null;
+    }
+    const group = this.state.groupList[this.state.selectedGroup];
+    const selectedIcons = (group.appList || []).map((id, index) => {
+      return <img key={index} title={this.state.names[id]} src={this.state.icons[id]}/>
+    });
+    return selectedIcons;
+  },
+  getAppList(index) {
+    if(index != this.state.selectedGroup) {
+      return null;
+    }
+    const includedAppList = this.state.groupList[this.state.selectedGroup].appList;
+    const appList = this.getFilteredList().map((appInfo, index2) => {
+      if(appInfo){
+        let dimmer = 'dimmer';
+        if(includedAppList.indexOf(appInfo.id) != -1) {
+          dimmer = 'nonDimmer';
+        }
+        return (
+            <AppBrief isMini={true} select={this.selectGroupApp.bind(this,appInfo.id)} dimmer={dimmer} key={index2} info={appInfo} />
+        );
+      }
+    });
+    return appList;
+  },
+  groupToggleAll(index, action) {
+    const selected = this.state.groupList[index].appList;
+    let appList = this.getFilteredList().filter((appInfo) => {
+      return selected.indexOf(appInfo.id) >= 0;
+    });
+    for(let i = 0; i < appList.length; i ++) {
+      this.toggleState(appList[i], action);
+    }
+  },
   render() {
-    const appList = this.getFilteredList().map((appInfo,index) => {
+    const appList = this.getFilteredList().map((appInfo, index) => {
       if(appInfo){
         return (
             <AppBrief key={index} uninstall={this.uninstall.bind(this,appInfo)} toggle={this.toggleState.bind(this,appInfo,null)} optionsUrl={appInfo.optionsUrl} openOptions={this.openOptions.bind(this,appInfo.optionsUrl)} chromeOption={this.chromeOption.bind(this,appInfo.id,null)} info={appInfo} />
         );
       }
     });
+    const groupList = this.state.groupList.map((groupInfo, index) => {
+      return <GroupBrief onMore={index==this.state.selectedGroup} isLast={index+1==this.state.groupList.length} index={index} key={index} groupInfo={groupInfo} changeName={this.changeGroupName} duplicate={this.duplicateGroup} remove={this.removeGroup} showMore={this.showGroup} appList={this.getAppList(index)} appIcons={this.getAppIcons(index)} toggle={this.groupToggleAll} />;
+    });
     const type = (this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return (
-      <div id="manage" className="section container">
-        <Helmet
-          title="Manage"
-        />
-        <h5>{capFirst(GL('manage'))}</h5>
-        <div className="actionBar">
-          <select defaultValue={type} onChange={this.updateFilter} id="type">
-            <option value="all">{GL('all')}</option>
-            <option value="app">{GL('app')}</option>
-            <option value="extension">{GL('extension')}</option>
-            <option value="theme">{GL('theme')}</option>
-          </select>
-          <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
-          <span id="enableAll" className="btn" onClick={this.enableAll}>{GL('enable_all')}</span>
-          <span id="disableAll" className="btn" onClick={this.disableAll}>{GL('disable_all')}</span>
-          <span id="undo" className="btn" onClick={this.undoAll}>{GL('undo_all')}</span>
-          <div className="changeView">
+      <ManageDiv>
+        <div id="manage" className="section container">
+          <Helmet
+            title="Manage"
+          />
+          <h5 id="header">{capFirst(GL('manage'))}</h5>
+          <div id="changeView" className="changeView">
             <input type="checkbox" className="listView" checked={this.state.listView}  />
             <label className="viewGrid" onClick={this.toggleView}></label>
             <label className="viewList" onClick={this.toggleView}></label>
           </div>
+          <div id="groupList">
+          {groupList}
+          </div>
+          <div id="actionBar" className="actionBar">
+            <select defaultValue={type} onChange={this.updateFilter} id="type">
+              <option value="all">{GL('all')}</option>
+              <option value="app">{GL('app')}</option>
+              <option value="extension">{GL('extension')}</option>
+              <option value="theme">{GL('theme')}</option>
+            </select>
+            <input id="keyword" onChange={this.updateFilter} type="text" placeholder={GL('filter')}/>
+            <span id="enableAll" className="btn" onClick={this.enableAll}>{GL('enable_all')}</span>
+            <span id="disableAll" className="btn" onClick={this.disableAll}>{GL('disable_all')}</span>
+            <span id="undo" className="btn" onClick={this.undoAll}>{GL('undo_all')}</span>
+            <span id="newGroup" className="btn" onClick={this.newGroup}>{GL('new_group')}</span>
+          </div>
+          <input type="checkbox" className="listView" checked={this.state.listView}  />
+          {appList}
         </div>
-        <input type="checkbox" className="listView" checked={this.state.listView}  />
-        {appList}
-      </div>
+      </ManageDiv>
     );
   }
 });

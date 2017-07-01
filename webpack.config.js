@@ -1,8 +1,8 @@
-var path=require('path');
+const webpack = require('webpack');
 module.exports={
   entry: {
     nooboss: './pre/NooBoss.jsx',
-    background: './pre/background.js',
+    background: './pre/background/background.js',
   },
   output: {
     path: 'dist/js',
@@ -18,5 +18,10 @@ module.exports={
         }
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  ]
 }

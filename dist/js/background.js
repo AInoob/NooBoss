@@ -133,7 +133,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var defaultValues = [['userId', (Math.random().toString(36) + '00000000000000000').slice(2, 19)], ['showAds', false], ['notifyStateChange', true], ['notifyInstallation', true], ['notifyRemoval', true], ['historyInstall', true], ['historyRemove', true], ['historyUpdate', true], ['historyEnable', true], ['historyDisable', true], ['autoState', true], ['autoStateNotification', true], ['autoStateRules', '[]'], ['sortOrder', 'nameState'], ['recoExtensions', true], ['defaultPage', 'manage'], ['notificationDuration_autoState', 5], ['notificationDuration_stateChange', 5], ['notificationDuration_installation', -1], ['notificationDuration_removal', -1], ['listView', true], ['sendUsage', true]];
+	var defaultValues = [['userId', (Math.random().toString(36) + '00000000000000000').slice(2, 19)], ['showAds', false], ['notifyStateChange', true], ['notifyInstallation', true], ['notifyRemoval', true], ['historyInstall', true], ['historyRemove', true], ['historyUpdate', true], ['historyEnable', true], ['historyDisable', true], ['autoState', true], ['autoStateNotification', true], ['autoStateRules', '[]'], ['sortOrder', 'nameState'], ['recoExtensions', true], ['defaultPage', 'manage'], ['notificationDuration_autoState', 5], ['notificationDuration_stateChange', 5], ['notificationDuration_installation', -1], ['notificationDuration_removal', -1], ['listView', true], ['sendUsage', true], ['groupList', []]];
 
 	exports.defaultValues = defaultValues;
 
@@ -277,6 +277,7 @@
 	  chrome.tabs.onReplaced.removeListener();
 	};
 
+	// find those that the status need to be changed, and change their state at the end
 	Management.autoState.manage = function (tabId) {
 	  var autoState = Management.autoState;
 	  var tabs = autoState.tabs;
@@ -534,23 +535,31 @@
 	  value: true
 	});
 	var History = {};
+
+	// get app info list from database
 	History.init = function () {
 	  getDB('history_records', function (recordList) {
 	    this.History.recordList = recordList || [];
 	  }.bind(this));
 	};
+
+	// add app info to both database and NooBoss.History.recordList(memory)
 	History.addRecord = function (record) {
 	  record.date = new Date().getTime();
 	  this.History.recordList.push(record);
 	  setDB('history_records', this.History.recordList);
 	};
+
+	// listen to install, remove, enable, and disable events
 	History.listen = function () {
 	  var NooBoss = this;
+
 	  chrome.management.onInstalled.addListener(function (appInfo) {
 	    NooBoss.Management.apps[appInfo.id] = {
 	      enabled: appInfo.enabled,
 	      name: appInfo.name
 	    };
+	    // display notification
 	    getDB(appInfo.id, function (appInfoRecord) {
 	      if (!appInfoRecord) {
 	        appInfoRecord = {};
@@ -558,6 +567,7 @@
 	      var time = new Date().getTime();
 	      var event = 'installed';
 	      var message = GL('ls_26');
+	      // check if the app is updated to a new version or newly installed
 	      if (!appInfoRecord.lastUpdateDate || !appInfoRecord.uninstalledDate || appInfoRecord.lastUpdateDate > appInfoRecord.uninstalledDate) {
 	        if (appInfoRecord.version < appInfo.version) {
 	          event = 'updated';
@@ -565,6 +575,7 @@
 	        }
 	      }
 	      if (event == 'installed') {
+	        // check whether install event should be recorded or not
 	        isOn('historyInstall', function () {
 	          NooBoss.Management.updateAppInfo(appInfo, { lastUpdateDate: time }, function (data) {
 	            getDB(appInfo.id, function (appInfo) {
@@ -583,6 +594,7 @@
 	                  message: appInfo.name + ' ' + message,
 	                  requireInteraction: true
 	                }, function (notificationId) {
+	                  // display notification for a certain peroid
 	                  get('notificationDuration_installation', function (time) {
 	                    if (time > 0) {
 	                      setTimeout(function () {
@@ -627,6 +639,7 @@
 	      }
 	    });
 	  });
+
 	  chrome.management.onUninstalled.addListener(function (id) {
 	    isOn('historyRemove', function () {
 	      NooBoss.Management.apps[id] = null;
@@ -668,9 +681,11 @@
 	      });
 	    });
 	  });
+
 	  chrome.management.onEnabled.addListener(function (appInfo) {
 	    isOn('historyEnable', NooBoss.listeners.onEnabled.bind(null, appInfo));
 	  });
+
 	  chrome.management.onDisabled.addListener(function (appInfoOld) {
 	    isOn('historyDisable', function () {
 	      var id = appInfoOld.id;

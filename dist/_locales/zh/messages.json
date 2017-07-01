@@ -44,9 +44,6 @@
   "recommend_extensions_for_this_website":{
 	"message":"当前网站推荐拓展"
   },
-  "recoExtensions":{
-	"message":"推荐拓展"
-  },
   "up":{
 	"message":"顶"
   },
@@ -127,6 +124,9 @@
   },
   "undo_all":{
 	"message":"全部撤销"
+  },
+  "new_group":{
+	"message":"新建分组"
   },
   "when":{
 	"message":"啥时候"
@@ -331,6 +331,9 @@
   },
   "historyDisable":{
 	"message":"记录关闭事件"
+  },
+  "ainoob_is_koo":{
+	"message":"组名"
   },
   "ls_1":{
 	"message":"还没有人给这个网站推荐相关拓展呢，你有什么针对这个网站的好用的拓展吗？"

@@ -1,9 +1,9 @@
-import { defaultValues } from './background/defaultValues';
-import { resetSettings, resetIndexedDB, initDefaultValues } from './background/options';
-import Util from './background/Util';
-import Management from './background/Management';
-import listeners from './background/listeners';
-import History from './background/History';
+import { defaultValues } from './defaultValues';
+import { resetSettings, resetIndexedDB, initDefaultValues } from './options';
+import Util from './Util';
+import Management from './Management';
+import listeners from './listeners';
+import History from './History';
 
 const NooBoss={};
 

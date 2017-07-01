@@ -15,6 +15,7 @@
     "react-dom": "^15.4.1",
     "react-helmet": "^3.2.2",
     "react-router": "^3.0.0",
+    "styled-components": "^2.1.0",
     "webpack": "^1.13.3"
   },
   "devDependencies": {

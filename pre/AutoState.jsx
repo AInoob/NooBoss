@@ -162,8 +162,16 @@ module.exports = React.createClass({
     });
   },
   deleteRule(index) {
-    const decision=confirm('Do you want to remove rule #'+(index+1)+'?');
-    if(decision) {
+    swal({
+      title: "Are you sure?",
+      text: 'Do you want to remove rule #'+(index+1)+'?',
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, delete it!",
+      closeOnConfirm: true
+    },
+    () => {
       this.setState((prevState) => {
         prevState.rules.splice(index,1);
         return prevState;
@@ -172,7 +180,7 @@ module.exports = React.createClass({
           chrome.runtime.sendMessage({job:'updateAutoStateRules'});
         });
       });
-    }
+    });
   },
   editRule(index) {
     this.setState((prevState) => {
@@ -210,7 +218,7 @@ module.exports = React.createClass({
           dimmer = 'nonDimmer';
         }
         return (
-            <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
+            <AppBrief isMini={true} select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
         );
       }
     });
