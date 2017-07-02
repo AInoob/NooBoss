@@ -31,8 +31,23 @@ module.exports = React.createClass({
       },
       rules: [],
       icons: {},
-      names: {}
+      names: {},
+      groupList: [],
+      groupIcons: {},
     };
+  },
+  componentWillMount() {
+    getDB('groupIcons', (groupIcons) => {
+      this.setState((prevState) => {
+        prevState.groupIcons = groupIcons || {};
+        const iconList = Object.keys(groupIcons);
+        for(let i = 0; i < iconList.length; i++) {
+          const key = iconList[i];
+          prevState.icons[key] = groupIcons[key];
+        }
+        return prevState;
+      });
+    });
   },
   componentDidMount() {
     chrome.management.getAll((appInfoList) => {
@@ -50,6 +65,12 @@ module.exports = React.createClass({
     get('autoStateRules', (rules) => {
       this.setState({ rules: JSON.parse(rules) });
     });
+    get('groupList', (groupList) => {
+      this.setState((prevState) => {
+        prevState.groupList = groupList;
+        return prevState;
+      });
+    });
     isOn('autoState', () => {
       chrome.permissions.contains({
         permissions: ['tabs']
@@ -63,6 +84,9 @@ module.exports = React.createClass({
     }, () => {
       swal(GL('ls_20'));
     })
+  },
+  getGroupIcon(id) {
+    return this.state.groupIcons[id];
   },
   getIconUrl(appInfo) {
     let iconUrl = undefined;
@@ -90,6 +114,7 @@ module.exports = React.createClass({
     }
     this.setState((prevState) => {
       prevState.icons[appInfo.id] = iconUrl;
+      return prevState;
     });
     return iconUrl;
   },
@@ -216,6 +241,7 @@ module.exports = React.createClass({
       prevState.rule.action = rule.action;
       prevState.rule.match = rule.match.url;
       prevState.rule.isWildcard = rule.match.isWildcard;
+      return prevState;
     }, () => {
       set('autoStateRules',JSON.stringify(this.state.rules), () => {
         chrome.runtime.sendMessage({ job:'updateAutoStateRules' });
@@ -236,7 +262,14 @@ module.exports = React.createClass({
     });
   },
   render() {
-    const appList = this.getFilteredList().map((appInfo,index) => {
+    let appList = this.state.groupList.map((group) => {
+      return {
+        id: group.id,
+        name: group.name,
+        iconUrl: this.getGroupIcon(group.id),
+      };
+    });
+    appList = appList.concat(this.getFilteredList()).map((appInfo,index) => {
       if(appInfo) {
         let dimmer = 'dimmer';
         if(this.state.rule.selected[appInfo.id]) {

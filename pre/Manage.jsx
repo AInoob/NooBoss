@@ -48,7 +48,13 @@ module.exports = React.createClass({
       groupIconIndex: -1,
       icons: {},
       names: {},
+      groupIcons: {},
     };
+  },
+  componentWillMount() {
+    getDB('groupIcons', (groupIcons) => {
+      this.setState({ groupIcons: groupIcons || {} });
+    });
   },
   componentDidMount() {
     isOn('listView', () => {
@@ -239,15 +245,21 @@ module.exports = React.createClass({
     }
     this.setState({ listView });
   },
+  saveGroupIcons() {
+    console.log(this.state.groupIcons);
+    setDB('groupIcons', this.state.groupIcons);
+  },
   saveGroupList() {
-    set('groupList', this.state.groupList);
+    set('groupList', this.state.groupList, () => {
+      chrome.runtime.sendMessage({job:'updateGroupList'});
+    });
   },
   newGroup() {
     this.setState((prevState) => {
       prevState.groupList.push({
         name: '',
-        imgUrl: 'images',
         appList: [],
+        id: 'NooBoss-Group-'+(Math.random().toString(36)+'00000000000000000').slice(2, 19),
       });
       prevState.selectedGroup = prevState.groupList.length - 1;
       return prevState;
@@ -263,6 +275,7 @@ module.exports = React.createClass({
   duplicateGroup(index) {
     this.setState((prevState) => {
       prevState.groupList.push(prevState.groupList[index]);
+      prevState.groupList[prevState.groupList.length - 1].id = 'NooBoss-Group-'+(Math.random().toString(36)+'00000000000000000').slice(2, 19);
       return prevState;
     }, this.saveGroupList.bind(this));
   },
@@ -346,15 +359,20 @@ module.exports = React.createClass({
       this.toggleState(appList[i], action);
     }
   },
+  getGroupIcon(id) {
+    return this.state.groupIcons[id];
+  },
+  setGroupIcon(id, dataUrl) {
+    this.setState((prevState) => {
+      prevState.groupIcons[id] = dataUrl;
+      return prevState;
+    }, this.saveGroupIcons.bind(this));
+  },
   groupChangeIcon(e) {
     const file = (e.target.files || e.dataTransfer.files)[0];
     const reader = new FileReader();
     reader.addEventListener("load", () => {
-      console.log(reader.result);
-      this.setState((prevState) => {
-        prevState.groupList[prevState.groupIconIndex].icon = reader.result;
-        return prevState;
-      }, this.saveGroupList.bind(this));
+      this.setGroupIcon(this.state.groupList[this.state.groupIconIndex].id, reader.result);
     }, false);
     if (file) {
       reader.readAsDataURL(file);
@@ -372,7 +390,7 @@ module.exports = React.createClass({
       }
     });
     const groupList = this.state.groupList.map((groupInfo, index) => {
-      return <GroupBrief onMore={index==this.state.selectedGroup} isLast={index+1==this.state.groupList.length} index={index} key={index} groupInfo={groupInfo} changeName={this.changeGroupName} duplicate={this.duplicateGroup} remove={this.removeGroup} showMore={this.showGroup} appList={this.getAppList(index)} appIcons={this.getAppIcons(index)} toggle={this.groupToggleAll} changeGroupIconIndex={this.changeGroupIconIndex} />;
+      return <GroupBrief onMore={index==this.state.selectedGroup} isLast={index+1==this.state.groupList.length} index={index} key={index} groupInfo={groupInfo} changeName={this.changeGroupName} duplicate={this.duplicateGroup} remove={this.removeGroup} showMore={this.showGroup} appList={this.getAppList(index)} appIcons={this.getAppIcons(index)} toggle={this.groupToggleAll} changeGroupIconIndex={this.changeGroupIconIndex} getIcon={this.getGroupIcon.bind(this, groupInfo.id)} />;
     });
     const type = (this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return (

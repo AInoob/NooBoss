@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', function(){
         else if(request.job == 'updateAutoStateRules'){
           NooBoss.Management.autoState.updateRules();
         }
+        else if(request.job == 'updateGroupList') {
+          NooBoss.Management.updateGroupList();
+        }
       }
     });
 });

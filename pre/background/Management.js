@@ -119,21 +119,64 @@ Management.autoState.manage = (tabId) => {
     switch(rule.action){
       case 'enableOnly':
         if(matched){
-          for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: true,
-              tabId: tabId,
-              ruleId: i
+          console.log('a');
+          for(let k = 0; k < appIds.length; k++) {
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              console.log('aa');
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: true,
+                  tabId: tabId,
+                  ruleId: i
+                }
+                enableOnlys[appId]=true;
+              }
             }
-            enableOnlys[appIds[k]]=true;
+            else {
+              console.log('ab');
+              nextPhases[appIds[k]]={
+                enabled: true,
+                tabId: tabId,
+                ruleId: i
+              }
+              enableOnlys[appIds[k]]=true;
+            }
           }
         }
         else{
+          console.log('b');
           for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: enableOnlys[appIds[k]]||false,
-              tabId: null,
-              ruleId: i
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              console.log('bb');
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: enableOnlys[appId] || false,
+                  tabId: null,
+                  ruleId: i
+                }
+              }
+            }
+            else {
+              console.log('bc');
+              nextPhases[appIds[k]]={
+                enabled: enableOnlys[appIds[k]] || false,
+                tabId: null,
+                ruleId: i
+              }
             }
           }
         }
@@ -141,20 +184,57 @@ Management.autoState.manage = (tabId) => {
       case 'disableOnly':
         if(matched){
           for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: false,
-              tabId: tabId,
-              ruleId: i
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: false,
+                  tabId: tabId,
+                  ruleId: i
+                }
+                disableOnlys[appId]=true;
+              }
             }
-            disableOnlys[appIds[k]]=true;
+            else {
+              nextPhases[appIds[k]]={
+                enabled: false,
+                tabId: tabId,
+                ruleId: i
+              }
+              disableOnlys[appIds[k]]=true;
+            }
           }
         }
         else{
           for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: (!disableOnlys[appIds[k]])&&true,
-              tabId: null,
-              ruleId: i
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: (!disableOnlys[appId])&&true,
+                  tabId: null,
+                  ruleId: i
+                }
+              }
+            }
+            else {
+              nextPhases[appIds[k]]={
+                enabled: (!disableOnlys[appIds[k]])&&true,
+                tabId: null,
+                ruleId: i
+              }
             }
           }
         }
@@ -162,10 +242,28 @@ Management.autoState.manage = (tabId) => {
       case 'enableWhen':
         if(matched){
           for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: true,
-              tabId: tabId,
-              ruleId: i
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: true,
+                  tabId: tabId,
+                  ruleId: i
+                }
+              }
+            }
+            else {
+              nextPhases[appIds[k]]={
+                enabled: true,
+                tabId: tabId,
+                ruleId: i
+              }
             }
           }
         }
@@ -173,10 +271,28 @@ Management.autoState.manage = (tabId) => {
       case 'disableWhen':
         if(matched){
           for(let k=0;k<appIds.length;k++){
-            nextPhases[appIds[k]]={
-              enabled: false,
-              tabId: null,
-              ruleId: i
+            if(appIds[k].match(/^NooBoss-Group/)) {
+              const group = Management.groupList.filter((group) => {
+                return group.id == appIds[k];
+              })[0];
+              if(!group) {
+                return;
+              }
+              for(let m = 0; m < group.appList.length; m++) {
+                const appId = group.appList[m];
+                nextPhases[appId]={
+                  enabled: false,
+                  tabId: null,
+                  ruleId: i
+                }
+              }
+            }
+            else {
+              nextPhases[appIds[k]]={
+                enabled: false,
+                tabId: null,
+                ruleId: i
+              }
             }
           }
         }
@@ -229,9 +345,16 @@ Management.autoState.setAppState = (id,enabled,tabId,ruleId) => {
   }
 }
 
+Management.updateGroupList = () => {
+  get('groupList', (groupList) => {
+    Management.groupList = groupList;
+  });
+}
+
 Management.autoState.init = () => {
   Management.autoState.rules=[];
   Management.autoState.tabs={};
+  Management.updateGroupList();
   chrome.tabs.query({}, (tabList) => {
     for(let i=0;i<tabList.length;i++){
       const tabInfo=tabList[i];

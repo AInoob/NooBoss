@@ -28555,32 +28555,40 @@
 	      selectedGroup: -1,
 	      groupIconIndex: -1,
 	      icons: {},
-	      names: {}
+	      names: {},
+	      groupIcons: {}
 	    };
 	  },
-	  componentDidMount: function componentDidMount() {
+	  componentWillMount: function componentWillMount() {
 	    var _this = this;
 
+	    getDB('groupIcons', function (groupIcons) {
+	      _this.setState({ groupIcons: groupIcons || {} });
+	    });
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var _this2 = this;
+
 	    isOn('listView', function () {
-	      _this.setState({ listView: true });
+	      _this2.setState({ listView: true });
 	    });
 	    get('groupList', function (groupList) {
-	      _this.setState({ groupList: groupList });
+	      _this2.setState({ groupList: groupList });
 	    });
 	    get('sortOrder', function (sortOrder) {
-	      _this.setState({ sortOrder: sortOrder });
+	      _this2.setState({ sortOrder: sortOrder });
 	    });
 	    chrome.management.getAll(function (appInfoList) {
 	      var originalStates = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = _this.getIconUrl(appInfoList[i]);
+	        appInfoList[i].iconUrl = _this2.getIconUrl(appInfoList[i]);
 	        var _action = 'disable';
 	        if (appInfoList[i].enabled) {
 	          _action = 'enable';
 	        }
 	        originalStates[appInfoList[i].id] = _action;
 	      }
-	      _this.setState({ appInfoList: appInfoList, originalStates: originalStates });
+	      _this2.setState({ appInfoList: appInfoList, originalStates: originalStates });
 	    });
 	  },
 	  getIconUrl: function getIconUrl(appInfo) {
@@ -28654,11 +28662,11 @@
 	    }
 	  },
 	  getFilteredList: function getFilteredList() {
-	    var _this2 = this;
+	    var _this3 = this;
 
 	    var orderFunc = this.orderByNameState;
 	    return (this.state.appInfoList || []).sort(orderFunc).map(function (appInfo) {
-	      var filter = _this2.state.filter;
+	      var filter = _this3.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
 	        return appInfo;
@@ -28668,7 +28676,7 @@
 	    });
 	  },
 	  toggleState: function toggleState(info, newAction) {
-	    var _this3 = this;
+	    var _this4 = this;
 
 	    if (!info || info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
 	      return;
@@ -28685,7 +28693,7 @@
 	      if (info.enabled) {
 	        result = 'disabled';
 	      }
-	      _this3.setState(function (prevState) {
+	      _this4.setState(function (prevState) {
 	        for (var i = 0; i < prevState.appInfoList.length; i++) {
 	          if (info.id == prevState.appInfoList[i].id) {
 	            prevState.appInfoList[i].enabled = !info.enabled;
@@ -28697,7 +28705,7 @@
 	    });
 	  },
 	  uninstall: function uninstall(info) {
-	    var _this4 = this;
+	    var _this5 = this;
 
 	    var result = 'removal_success';
 	    if (info.id == 'aajodjghehmlpahhboidcpfjcncmcklf' || info.id == 'mgehojanhfgnndgffijeglgahakgmgkj') {
@@ -28717,7 +28725,7 @@
 	          imageUrl: info.icon
 	        });
 	      } else {
-	        _this4.setState(function (prevState) {
+	        _this5.setState(function (prevState) {
 	          for (var i = 0; i < prevState.appInfoList.length; i++) {
 	            if (info.id == prevState.appInfoList[i].id) {
 	              prevState.appInfoList.splice(i, 1);
@@ -28752,15 +28760,21 @@
 	    }
 	    this.setState({ listView: listView });
 	  },
+	  saveGroupIcons: function saveGroupIcons() {
+	    console.log(this.state.groupIcons);
+	    setDB('groupIcons', this.state.groupIcons);
+	  },
 	  saveGroupList: function saveGroupList() {
-	    set('groupList', this.state.groupList);
+	    set('groupList', this.state.groupList, function () {
+	      chrome.runtime.sendMessage({ job: 'updateGroupList' });
+	    });
 	  },
 	  newGroup: function newGroup() {
 	    this.setState(function (prevState) {
 	      prevState.groupList.push({
 	        name: '',
-	        imgUrl: 'images',
-	        appList: []
+	        appList: [],
+	        id: 'NooBoss-Group-' + (Math.random().toString(36) + '00000000000000000').slice(2, 19)
 	      });
 	      prevState.selectedGroup = prevState.groupList.length - 1;
 	      return prevState;
@@ -28776,6 +28790,7 @@
 	  duplicateGroup: function duplicateGroup(index) {
 	    this.setState(function (prevState) {
 	      prevState.groupList.push(prevState.groupList[index]);
+	      prevState.groupList[prevState.groupList.length - 1].id = 'NooBoss-Group-' + (Math.random().toString(36) + '00000000000000000').slice(2, 19);
 	      return prevState;
 	    }, this.saveGroupList.bind(this));
 	  },
@@ -28790,7 +28805,7 @@
 	    }, this.saveGroupList.bind(this));
 	  },
 	  removeGroup: function removeGroup(index) {
-	    var _this5 = this;
+	    var _this6 = this;
 
 	    swal({
 	      title: "Are you sure?",
@@ -28801,10 +28816,10 @@
 	      confirmButtonText: "Yes, delete it!",
 	      closeOnConfirm: true
 	    }, function () {
-	      _this5.setState(function (prevState) {
+	      _this6.setState(function (prevState) {
 	        prevState.groupList.splice(index, 1);
 	        return prevState;
-	      }, _this5.saveGroupList.bind(_this5));
+	      }, _this6.saveGroupList.bind(_this6));
 	    });
 	  },
 	  selectGroupApp: function selectGroupApp(id) {
@@ -28822,19 +28837,19 @@
 	    }, this.saveGroupList.bind(this));
 	  },
 	  getAppIcons: function getAppIcons(index) {
-	    var _this6 = this;
+	    var _this7 = this;
 
 	    if (index != this.state.selectedGroup) {
 	      return null;
 	    }
 	    var group = this.state.groupList[this.state.selectedGroup];
 	    var selectedIcons = (group.appList || []).map(function (id, index) {
-	      return _react2.default.createElement('img', { key: index, title: _this6.state.names[id], src: _this6.state.icons[id] });
+	      return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
 	    });
 	    return selectedIcons;
 	  },
 	  getAppList: function getAppList(index) {
-	    var _this7 = this;
+	    var _this8 = this;
 
 	    if (index != this.state.selectedGroup) {
 	      return null;
@@ -28846,7 +28861,7 @@
 	        if (includedAppList.indexOf(appInfo.id) != -1) {
 	          dimmer = 'nonDimmer';
 	        }
-	        return _react2.default.createElement(_AppBrief2.default, { isMini: true, select: _this7.selectGroupApp.bind(_this7, appInfo.id), dimmer: dimmer, key: index2, info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { isMini: true, select: _this8.selectGroupApp.bind(_this8, appInfo.id), dimmer: dimmer, key: index2, info: appInfo });
 	      }
 	    });
 	    return appList;
@@ -28860,17 +28875,22 @@
 	      this.toggleState(appList[i], action);
 	    }
 	  },
+	  getGroupIcon: function getGroupIcon(id) {
+	    return this.state.groupIcons[id];
+	  },
+	  setGroupIcon: function setGroupIcon(id, dataUrl) {
+	    this.setState(function (prevState) {
+	      prevState.groupIcons[id] = dataUrl;
+	      return prevState;
+	    }, this.saveGroupIcons.bind(this));
+	  },
 	  groupChangeIcon: function groupChangeIcon(e) {
-	    var _this8 = this;
+	    var _this9 = this;
 
 	    var file = (e.target.files || e.dataTransfer.files)[0];
 	    var reader = new FileReader();
 	    reader.addEventListener("load", function () {
-	      console.log(reader.result);
-	      _this8.setState(function (prevState) {
-	        prevState.groupList[prevState.groupIconIndex].icon = reader.result;
-	        return prevState;
-	      }, _this8.saveGroupList.bind(_this8));
+	      _this9.setGroupIcon(_this9.state.groupList[_this9.state.groupIconIndex].id, reader.result);
 	    }, false);
 	    if (file) {
 	      reader.readAsDataURL(file);
@@ -28880,15 +28900,15 @@
 	    this.setState({ groupIconIndex: index });
 	  },
 	  render: function render() {
-	    var _this9 = this;
+	    var _this10 = this;
 
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
-	        return _react2.default.createElement(_AppBrief2.default, { key: index, uninstall: _this9.uninstall.bind(_this9, appInfo), toggle: _this9.toggleState.bind(_this9, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: _this9.openOptions.bind(_this9, appInfo.optionsUrl), chromeOption: _this9.chromeOption.bind(_this9, appInfo.id, null), info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { key: index, uninstall: _this10.uninstall.bind(_this10, appInfo), toggle: _this10.toggleState.bind(_this10, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: _this10.openOptions.bind(_this10, appInfo.optionsUrl), chromeOption: _this10.chromeOption.bind(_this10, appInfo.id, null), info: appInfo });
 	      }
 	    });
 	    var groupList = this.state.groupList.map(function (groupInfo, index) {
-	      return _react2.default.createElement(_GroupBrief2.default, { onMore: index == _this9.state.selectedGroup, isLast: index + 1 == _this9.state.groupList.length, index: index, key: index, groupInfo: groupInfo, changeName: _this9.changeGroupName, duplicate: _this9.duplicateGroup, remove: _this9.removeGroup, showMore: _this9.showGroup, appList: _this9.getAppList(index), appIcons: _this9.getAppIcons(index), toggle: _this9.groupToggleAll, changeGroupIconIndex: _this9.changeGroupIconIndex });
+	      return _react2.default.createElement(_GroupBrief2.default, { onMore: index == _this10.state.selectedGroup, isLast: index + 1 == _this10.state.groupList.length, index: index, key: index, groupInfo: groupInfo, changeName: _this10.changeGroupName, duplicate: _this10.duplicateGroup, remove: _this10.removeGroup, showMore: _this10.showGroup, appList: _this10.getAppList(index), appIcons: _this10.getAppIcons(index), toggle: _this10.groupToggleAll, changeGroupIconIndex: _this10.changeGroupIconIndex, getIcon: _this10.getGroupIcon.bind(_this10, groupInfo.id) });
 	    });
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return _react2.default.createElement(
@@ -29020,7 +29040,7 @@
 	      _react2.default.createElement(
 	        'label',
 	        { id: 'iconHolder', onClick: this.props.changeGroupIconIndex.bind(null, this.props.index), htmlFor: 'changeIcon' },
-	        _react2.default.createElement('img', { id: 'icon', src: groupInfo.icon || 'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0' })
+	        _react2.default.createElement('img', { id: 'icon', src: this.props.getIcon() || 'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0' })
 	      ),
 	      _react2.default.createElement('input', { id: 'name', placeholder: GL('ainoob_is_koo'), value: groupInfo.name, onChange: this.props.changeName.bind(null, this.props.index) }),
 	      _react2.default.createElement('label', { id: 'duplicate', onClick: this.props.duplicate.bind(null, this.props.index) }),
@@ -33823,26 +33843,49 @@
 	      },
 	      rules: [],
 	      icons: {},
-	      names: {}
+	      names: {},
+	      groupList: [],
+	      groupIcons: {}
 	    };
 	  },
-	  componentDidMount: function componentDidMount() {
+	  componentWillMount: function componentWillMount() {
 	    var _this = this;
+
+	    getDB('groupIcons', function (groupIcons) {
+	      _this.setState(function (prevState) {
+	        prevState.groupIcons = groupIcons || {};
+	        var iconList = Object.keys(groupIcons);
+	        for (var i = 0; i < iconList.length; i++) {
+	          var key = iconList[i];
+	          prevState.icons[key] = groupIcons[key];
+	        }
+	        return prevState;
+	      });
+	    });
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var _this2 = this;
 
 	    chrome.management.getAll(function (appInfoList) {
 	      var names = {};
 	      for (var i = 0; i < appInfoList.length; i++) {
-	        appInfoList[i].iconUrl = _this.getIconUrl(appInfoList[i]);
+	        appInfoList[i].iconUrl = _this2.getIconUrl(appInfoList[i]);
 	        var action = 'disable';
 	        if (appInfoList[i].enabled) {
 	          action = 'enable';
 	        }
 	        names[appInfoList[i].id] = appInfoList[i].name;
 	      }
-	      _this.setState({ appInfoList: appInfoList, names: names });
+	      _this2.setState({ appInfoList: appInfoList, names: names });
 	    });
 	    get('autoStateRules', function (rules) {
-	      _this.setState({ rules: JSON.parse(rules) });
+	      _this2.setState({ rules: JSON.parse(rules) });
+	    });
+	    get('groupList', function (groupList) {
+	      _this2.setState(function (prevState) {
+	        prevState.groupList = groupList;
+	        return prevState;
+	      });
 	    });
 	    isOn('autoState', function () {
 	      chrome.permissions.contains({
@@ -33857,6 +33900,9 @@
 	    }, function () {
 	      swal(GL('ls_20'));
 	    });
+	  },
+	  getGroupIcon: function getGroupIcon(id) {
+	    return this.state.groupIcons[id];
 	  },
 	  getIconUrl: function getIconUrl(appInfo) {
 	    var iconUrl = undefined;
@@ -33884,11 +33930,12 @@
 	    }
 	    this.setState(function (prevState) {
 	      prevState.icons[appInfo.id] = iconUrl;
+	      return prevState;
 	    });
 	    return iconUrl;
 	  },
 	  getFilteredList: function getFilteredList() {
-	    var _this2 = this;
+	    var _this3 = this;
 
 	    return (this.state.appInfoList || []).sort(function (a, b) {
 	      if (a.enabled != b.enabled) {
@@ -33901,7 +33948,7 @@
 	        return compare(a.name.toLowerCase(), b.name.toLowerCase());
 	      }
 	    }).map(function (appInfo) {
-	      var filter = _this2.state.filter;
+	      var filter = _this3.state.filter;
 	      var pattern = new RegExp(filter.keyword, 'i');
 	      if ((filter.type == 'all' || appInfo.type.indexOf(filter.type) != -1) && (filter.keyword == '' || pattern.exec(appInfo.name))) {
 	        return appInfo;
@@ -33939,7 +33986,7 @@
 	    });
 	  },
 	  addRule: function addRule() {
-	    var _this3 = this;
+	    var _this4 = this;
 
 	    var ids = [];
 	    var keys = Object.keys(this.state.rule.selected);
@@ -33974,13 +34021,13 @@
 	      prevState.rule.match = '';
 	      return prevState;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(_this3.state.rules), function () {
+	      set('autoStateRules', JSON.stringify(_this4.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
 	  },
 	  deleteRule: function deleteRule(index) {
-	    var _this4 = this;
+	    var _this5 = this;
 
 	    swal({
 	      title: "Are you sure?",
@@ -33991,18 +34038,18 @@
 	      confirmButtonText: "Yes, delete it!",
 	      closeOnConfirm: true
 	    }, function () {
-	      _this4.setState(function (prevState) {
+	      _this5.setState(function (prevState) {
 	        prevState.rules.splice(index, 1);
 	        return prevState;
 	      }, function () {
-	        set('autoStateRules', JSON.stringify(_this4.state.rules), function () {
+	        set('autoStateRules', JSON.stringify(_this5.state.rules), function () {
 	          chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	        });
 	      });
 	    });
 	  },
 	  editRule: function editRule(index) {
-	    var _this5 = this;
+	    var _this6 = this;
 
 	    this.setState(function (prevState) {
 	      var rule = prevState.rules.splice(index, 1)[0];
@@ -34013,21 +34060,22 @@
 	      prevState.rule.action = rule.action;
 	      prevState.rule.match = rule.match.url;
 	      prevState.rule.isWildcard = rule.match.isWildcard;
+	      return prevState;
 	    }, function () {
-	      set('autoStateRules', JSON.stringify(_this5.state.rules), function () {
+	      set('autoStateRules', JSON.stringify(_this6.state.rules), function () {
 	        chrome.runtime.sendMessage({ job: 'updateAutoStateRules' });
 	      });
 	    });
 	  },
 	  setCurrentWebsite: function setCurrentWebsite() {
-	    var _this6 = this;
+	    var _this7 = this;
 
 	    chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, function (tabs) {
 	      var url = "";
 	      if (tabs[0]) {
 	        url = tabs[0].url;
 	      }
-	      _this6.setState(function (prevState) {
+	      _this7.setState(function (prevState) {
 	        prevState.rule.isWildcard = false;
 	        prevState.rule.match = getA(url).origin;
 	        return prevState;
@@ -34035,15 +34083,22 @@
 	    });
 	  },
 	  render: function render() {
-	    var _this7 = this;
+	    var _this8 = this;
 
-	    var appList = this.getFilteredList().map(function (appInfo, index) {
+	    var appList = this.state.groupList.map(function (group) {
+	      return {
+	        id: group.id,
+	        name: group.name,
+	        iconUrl: _this8.getGroupIcon(group.id)
+	      };
+	    });
+	    appList = appList.concat(this.getFilteredList()).map(function (appInfo, index) {
 	      if (appInfo) {
 	        var dimmer = 'dimmer';
-	        if (_this7.state.rule.selected[appInfo.id]) {
+	        if (_this8.state.rule.selected[appInfo.id]) {
 	          dimmer = 'nonDimmer';
 	        }
-	        return _react2.default.createElement(_AppBrief2.default, { isMini: true, select: _this7.select.bind(_this7, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { isMini: true, select: _this8.select.bind(_this8, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	      }
 	    });
 	    var preRuleList = [{ ids: [], action: "Hello", match: { url: GL('ls_3') } }];
@@ -34052,7 +34107,7 @@
 	    }
 	    var ruleList = preRuleList.map(function (rule, index) {
 	      var icons = rule.ids.map(function (id, index) {
-	        return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
+	        return _react2.default.createElement('img', { key: index, title: _this8.state.names[id], src: _this8.state.icons[id] });
 	      });
 	      return _react2.default.createElement(
 	        'tr',
@@ -34079,18 +34134,18 @@
 	        ),
 	        _react2.default.createElement(
 	          'td',
-	          { onClick: CW.bind(null, _this7.editRule.bind(_this7, index), 'AutoState', 'editRule', '') },
+	          { onClick: CW.bind(null, _this8.editRule.bind(_this8, index), 'AutoState', 'editRule', '') },
 	          GL('edit')
 	        ),
 	        _react2.default.createElement(
 	          'td',
-	          { onClick: CW.bind(null, _this7.deleteRule.bind(_this7, index), 'AutoState', 'deleteRule') },
+	          { onClick: CW.bind(null, _this8.deleteRule.bind(_this8, index), 'AutoState', 'deleteRule') },
 	          GL('delete')
 	        )
 	      );
 	    });
 	    var selectedIcons = (Object.keys(this.state.rule.selected) || []).map(function (id, index) {
-	      if (_this7.state.rule.selected[id]) return _react2.default.createElement('img', { key: index, title: _this7.state.names[id], src: _this7.state.icons[id] });
+	      if (_this8.state.rule.selected[id]) return _react2.default.createElement('img', { key: index, title: _this8.state.names[id], src: _this8.state.icons[id] });
 	    });
 	    return _react2.default.createElement(
 	      AutoStateDiv,

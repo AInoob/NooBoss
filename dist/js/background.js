@@ -119,6 +119,8 @@
 	        isOn('autoState', NooBoss.Management.autoState.enable, NooBoss.Management.autoState.disable);
 	      } else if (request.job == 'updateAutoStateRules') {
 	        NooBoss.Management.autoState.updateRules();
+	      } else if (request.job == 'updateGroupList') {
+	        NooBoss.Management.updateGroupList();
 	      }
 	    }
 	  });
@@ -227,6 +229,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var Management = {};
 
 	Management.autoState = {};
@@ -331,7 +336,8 @@
 	  var nextPhases = {};
 	  var enableOnlys = {};
 	  var disableOnlys = {};
-	  for (var i = 0; i < autoState.rules.length; i++) {
+
+	  var _loop = function _loop(i) {
 	    var rule = autoState.rules[i];
 	    var appIds = rule.ids;
 	    var pattern = Management.autoState.getRegExp(rule.match.url, rule.match.isWildcard);
@@ -347,71 +353,249 @@
 	    switch (rule.action) {
 	      case 'enableOnly':
 	        if (matched) {
+	          console.log('a');
+
+	          var _loop2 = function _loop2(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              console.log('aa');
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: true,
+	                  tabId: tabId,
+	                  ruleId: i
+	                };
+	                enableOnlys[appId] = true;
+	              }
+	            } else {
+	              console.log('ab');
+	              nextPhases[appIds[k]] = {
+	                enabled: true,
+	                tabId: tabId,
+	                ruleId: i
+	              };
+	              enableOnlys[appIds[k]] = true;
+	            }
+	          };
+
 	          for (var k = 0; k < appIds.length; k++) {
-	            nextPhases[appIds[k]] = {
-	              enabled: true,
-	              tabId: tabId,
-	              ruleId: i
-	            };
-	            enableOnlys[appIds[k]] = true;
+	            var _ret2 = _loop2(k);
+
+	            if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
 	          }
 	        } else {
-	          for (var _k = 0; _k < appIds.length; _k++) {
-	            nextPhases[appIds[_k]] = {
-	              enabled: enableOnlys[appIds[_k]] || false,
-	              tabId: null,
-	              ruleId: i
-	            };
+	          console.log('b');
+
+	          var _loop3 = function _loop3(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              console.log('bb');
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: enableOnlys[appId] || false,
+	                  tabId: null,
+	                  ruleId: i
+	                };
+	              }
+	            } else {
+	              console.log('bc');
+	              nextPhases[appIds[k]] = {
+	                enabled: enableOnlys[appIds[k]] || false,
+	                tabId: null,
+	                ruleId: i
+	              };
+	            }
+	          };
+
+	          for (var k = 0; k < appIds.length; k++) {
+	            var _ret3 = _loop3(k);
+
+	            if ((typeof _ret3 === "undefined" ? "undefined" : _typeof(_ret3)) === "object") return _ret3.v;
 	          }
 	        }
 	        break;
 	      case 'disableOnly':
 	        if (matched) {
-	          for (var _k2 = 0; _k2 < appIds.length; _k2++) {
-	            nextPhases[appIds[_k2]] = {
-	              enabled: false,
-	              tabId: tabId,
-	              ruleId: i
-	            };
-	            disableOnlys[appIds[_k2]] = true;
+	          var _loop4 = function _loop4(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: false,
+	                  tabId: tabId,
+	                  ruleId: i
+	                };
+	                disableOnlys[appId] = true;
+	              }
+	            } else {
+	              nextPhases[appIds[k]] = {
+	                enabled: false,
+	                tabId: tabId,
+	                ruleId: i
+	              };
+	              disableOnlys[appIds[k]] = true;
+	            }
+	          };
+
+	          for (var k = 0; k < appIds.length; k++) {
+	            var _ret4 = _loop4(k);
+
+	            if ((typeof _ret4 === "undefined" ? "undefined" : _typeof(_ret4)) === "object") return _ret4.v;
 	          }
 	        } else {
-	          for (var _k3 = 0; _k3 < appIds.length; _k3++) {
-	            nextPhases[appIds[_k3]] = {
-	              enabled: !disableOnlys[appIds[_k3]] && true,
-	              tabId: null,
-	              ruleId: i
-	            };
+	          var _loop5 = function _loop5(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: !disableOnlys[appId] && true,
+	                  tabId: null,
+	                  ruleId: i
+	                };
+	              }
+	            } else {
+	              nextPhases[appIds[k]] = {
+	                enabled: !disableOnlys[appIds[k]] && true,
+	                tabId: null,
+	                ruleId: i
+	              };
+	            }
+	          };
+
+	          for (var k = 0; k < appIds.length; k++) {
+	            var _ret5 = _loop5(k);
+
+	            if ((typeof _ret5 === "undefined" ? "undefined" : _typeof(_ret5)) === "object") return _ret5.v;
 	          }
 	        }
 	        break;
 	      case 'enableWhen':
 	        if (matched) {
-	          for (var _k4 = 0; _k4 < appIds.length; _k4++) {
-	            nextPhases[appIds[_k4]] = {
-	              enabled: true,
-	              tabId: tabId,
-	              ruleId: i
-	            };
+	          var _loop6 = function _loop6(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: true,
+	                  tabId: tabId,
+	                  ruleId: i
+	                };
+	              }
+	            } else {
+	              nextPhases[appIds[k]] = {
+	                enabled: true,
+	                tabId: tabId,
+	                ruleId: i
+	              };
+	            }
+	          };
+
+	          for (var k = 0; k < appIds.length; k++) {
+	            var _ret6 = _loop6(k);
+
+	            if ((typeof _ret6 === "undefined" ? "undefined" : _typeof(_ret6)) === "object") return _ret6.v;
 	          }
 	        }
 	        break;
 	      case 'disableWhen':
 	        if (matched) {
-	          for (var _k5 = 0; _k5 < appIds.length; _k5++) {
-	            nextPhases[appIds[_k5]] = {
-	              enabled: false,
-	              tabId: null,
-	              ruleId: i
-	            };
+	          var _loop7 = function _loop7(k) {
+	            if (appIds[k].match(/^NooBoss-Group/)) {
+	              var group = Management.groupList.filter(function (group) {
+	                return group.id == appIds[k];
+	              })[0];
+	              if (!group) {
+	                return {
+	                  v: {
+	                    v: void 0
+	                  }
+	                };
+	              }
+	              for (var m = 0; m < group.appList.length; m++) {
+	                var appId = group.appList[m];
+	                nextPhases[appId] = {
+	                  enabled: false,
+	                  tabId: null,
+	                  ruleId: i
+	                };
+	              }
+	            } else {
+	              nextPhases[appIds[k]] = {
+	                enabled: false,
+	                tabId: null,
+	                ruleId: i
+	              };
+	            }
+	          };
+
+	          for (var k = 0; k < appIds.length; k++) {
+	            var _ret7 = _loop7(k);
+
+	            if ((typeof _ret7 === "undefined" ? "undefined" : _typeof(_ret7)) === "object") return _ret7.v;
 	          }
 	        }
 	        break;
 	    }
+	  };
+
+	  for (var i = 0; i < autoState.rules.length; i++) {
+	    var _ret = _loop(i);
+
+	    if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
 	  }
 	  var ids = Object.keys(nextPhases);
-	  for (var _i = 0; _i < ids.length; _i++) {
-	    var id = ids[_i];
+	  for (var i = 0; i < ids.length; i++) {
+	    var id = ids[i];
 	    var phase = nextPhases[id];
 	    autoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
 	  }
@@ -455,9 +639,16 @@
 	  }
 	};
 
+	Management.updateGroupList = function () {
+	  get('groupList', function (groupList) {
+	    Management.groupList = groupList;
+	  });
+	};
+
 	Management.autoState.init = function () {
 	  Management.autoState.rules = [];
 	  Management.autoState.tabs = {};
+	  Management.updateGroupList();
 	  chrome.tabs.query({}, function (tabList) {
 	    for (var i = 0; i < tabList.length; i++) {
 	      var tabInfo = tabList[i];

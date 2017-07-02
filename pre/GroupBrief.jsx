@@ -77,7 +77,7 @@ module.exports = React.createClass({
       <GroupDiv onMore={this.props.onMore} isLast={this.props.isLast}>
         <label id="on" onClick={this.props.toggle.bind(null, this.props.index, 'enable')} />
         <label id="off" onClick={this.props.toggle.bind(null, this.props.index, 'disable')} />
-        <label id="iconHolder" onClick={this.props.changeGroupIconIndex.bind(null, this.props.index)} htmlFor="changeIcon"><img id="icon" src={groupInfo.icon||'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0'} /></label>
+        <label id="iconHolder" onClick={this.props.changeGroupIconIndex.bind(null, this.props.index)} htmlFor="changeIcon"><img id="icon" src={this.props.getIcon()||'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0'} /></label>
         <input id="name" placeholder={GL('ainoob_is_koo')} value={groupInfo.name} onChange={this.props.changeName.bind(null, this.props.index)} />
         <label id="duplicate" onClick={this.props.duplicate.bind(null, this.props.index)} />
         <label id="remove" onClick={this.props.remove.bind(null, this.props.index)} />
