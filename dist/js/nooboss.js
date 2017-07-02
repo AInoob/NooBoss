@@ -33854,7 +33854,7 @@
 	    getDB('groupIcons', function (groupIcons) {
 	      _this.setState(function (prevState) {
 	        prevState.groupIcons = groupIcons || {};
-	        var iconList = Object.keys(groupIcons);
+	        var iconList = Object.keys(groupIcons || {});
 	        for (var i = 0; i < iconList.length; i++) {
 	          var key = iconList[i];
 	          prevState.icons[key] = groupIcons[key];
