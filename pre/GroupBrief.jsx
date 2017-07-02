@@ -41,11 +41,17 @@ const GroupDiv = styled.div`
     left: ${props => props.onMore ? '464px' : '470px'};
     transform: ${props => props.onMore ? 'rotate(180deg)' : 'rotate(0deg)'};
   }
-  #icon{
+  #iconHolder{
+    cursor: pointer;
     left: 0px;
     display: block;
     position: absolute;
     width: 23px;
+    height: 23px;
+    #icon{
+      width: 100%;
+      height: 100%;
+    }
   }
   #name{
     left: 36px;
@@ -71,7 +77,7 @@ module.exports = React.createClass({
       <GroupDiv onMore={this.props.onMore} isLast={this.props.isLast}>
         <label id="on" onClick={this.props.toggle.bind(null, this.props.index, 'enable')} />
         <label id="off" onClick={this.props.toggle.bind(null, this.props.index, 'disable')} />
-        <img id="icon" src={"chrome://extension-icon/daoldhappdmckdbifgkppchkehjlnbpo/128/0"} />
+        <label id="iconHolder" onClick={this.props.changeGroupIconIndex.bind(null, this.props.index)} htmlFor="changeIcon"><img id="icon" src={groupInfo.icon||'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0'} /></label>
         <input id="name" placeholder={GL('ainoob_is_koo')} value={groupInfo.name} onChange={this.props.changeName.bind(null, this.props.index)} />
         <label id="duplicate" onClick={this.props.duplicate.bind(null, this.props.index)} />
         <label id="remove" onClick={this.props.remove.bind(null, this.props.index)} />

@@ -341,6 +341,9 @@
   "wildcard":{
 	"message":"通配符"
   },
+  "matching_pattern":{
+	"message":"匹配规则"
+  },
   "ls_1":{
 	"message":"还没有人给这个网站推荐相关拓展呢，你有什么针对这个网站的好用的拓展吗？"
   },

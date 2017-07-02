@@ -17,6 +17,9 @@ const ManageDiv = styled.div`
     width: 100%;
   }
   #groupList{
+    #changeIcon{
+      display: none;
+    }
     .app-holder{
       .app-brief{
         margin-left: 10%;
@@ -42,6 +45,7 @@ module.exports = React.createClass({
       sortOrder: 'nameState',
       groupList: [],
       selectedGroup: -1,
+      groupIconIndex: -1,
       icons: {},
       names: {},
     };
@@ -342,6 +346,23 @@ module.exports = React.createClass({
       this.toggleState(appList[i], action);
     }
   },
+  groupChangeIcon(e) {
+    const file = (e.target.files || e.dataTransfer.files)[0];
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      console.log(reader.result);
+      this.setState((prevState) => {
+        prevState.groupList[prevState.groupIconIndex].icon = reader.result;
+        return prevState;
+      }, this.saveGroupList.bind(this));
+    }, false);
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  },
+  changeGroupIconIndex(index) {
+    this.setState({ groupIconIndex: index });
+  },
   render() {
     const appList = this.getFilteredList().map((appInfo, index) => {
       if(appInfo){
@@ -351,7 +372,7 @@ module.exports = React.createClass({
       }
     });
     const groupList = this.state.groupList.map((groupInfo, index) => {
-      return <GroupBrief onMore={index==this.state.selectedGroup} isLast={index+1==this.state.groupList.length} index={index} key={index} groupInfo={groupInfo} changeName={this.changeGroupName} duplicate={this.duplicateGroup} remove={this.removeGroup} showMore={this.showGroup} appList={this.getAppList(index)} appIcons={this.getAppIcons(index)} toggle={this.groupToggleAll} />;
+      return <GroupBrief onMore={index==this.state.selectedGroup} isLast={index+1==this.state.groupList.length} index={index} key={index} groupInfo={groupInfo} changeName={this.changeGroupName} duplicate={this.duplicateGroup} remove={this.removeGroup} showMore={this.showGroup} appList={this.getAppList(index)} appIcons={this.getAppIcons(index)} toggle={this.groupToggleAll} changeGroupIconIndex={this.changeGroupIconIndex} />;
     });
     const type = (this.props.location.pathname.match(/\/manage\/(\w*)/)||[null,'all'])[1];
     return (
@@ -367,7 +388,8 @@ module.exports = React.createClass({
             <label className="viewList" onClick={this.toggleView}></label>
           </div>
           <div id="groupList">
-          {groupList}
+            <input type="file" id="changeIcon" accept="image/*" onChange={this.groupChangeIcon} />
+            {groupList}
           </div>
           <div id="actionBar" className="actionBar">
             <select defaultValue={type} onChange={this.updateFilter} id="type">

@@ -28513,7 +28513,7 @@
 
 	'use strict';
 
-	var _templateObject = _taggedTemplateLiteral(['\n  #header{\n  }\n  #changeView{\n    position: absolute;\n    right: 30px;\n    top: 50px;\n  }\n  #actionBar{\n    width: 100%;\n  }\n  #groupList{\n    .app-holder{\n      .app-brief{\n        margin-left: 10%;\n      }\n    }\n    #detail{\n      #selected{\n        img{\n          height: 23px;\n        }\n      }\n    }\n  }\n'], ['\n  #header{\n  }\n  #changeView{\n    position: absolute;\n    right: 30px;\n    top: 50px;\n  }\n  #actionBar{\n    width: 100%;\n  }\n  #groupList{\n    .app-holder{\n      .app-brief{\n        margin-left: 10%;\n      }\n    }\n    #detail{\n      #selected{\n        img{\n          height: 23px;\n        }\n      }\n    }\n  }\n']);
+	var _templateObject = _taggedTemplateLiteral(['\n  #header{\n  }\n  #changeView{\n    position: absolute;\n    right: 30px;\n    top: 50px;\n  }\n  #actionBar{\n    width: 100%;\n  }\n  #groupList{\n    #changeIcon{\n      display: none;\n    }\n    .app-holder{\n      .app-brief{\n        margin-left: 10%;\n      }\n    }\n    #detail{\n      #selected{\n        img{\n          height: 23px;\n        }\n      }\n    }\n  }\n'], ['\n  #header{\n  }\n  #changeView{\n    position: absolute;\n    right: 30px;\n    top: 50px;\n  }\n  #actionBar{\n    width: 100%;\n  }\n  #groupList{\n    #changeIcon{\n      display: none;\n    }\n    .app-holder{\n      .app-brief{\n        margin-left: 10%;\n      }\n    }\n    #detail{\n      #selected{\n        img{\n          height: 23px;\n        }\n      }\n    }\n  }\n']);
 
 	var _react = __webpack_require__(7);
 
@@ -28553,6 +28553,7 @@
 	      sortOrder: 'nameState',
 	      groupList: [],
 	      selectedGroup: -1,
+	      groupIconIndex: -1,
 	      icons: {},
 	      names: {}
 	    };
@@ -28859,16 +28860,35 @@
 	      this.toggleState(appList[i], action);
 	    }
 	  },
-	  render: function render() {
+	  groupChangeIcon: function groupChangeIcon(e) {
 	    var _this8 = this;
+
+	    var file = (e.target.files || e.dataTransfer.files)[0];
+	    var reader = new FileReader();
+	    reader.addEventListener("load", function () {
+	      console.log(reader.result);
+	      _this8.setState(function (prevState) {
+	        prevState.groupList[prevState.groupIconIndex].icon = reader.result;
+	        return prevState;
+	      }, _this8.saveGroupList.bind(_this8));
+	    }, false);
+	    if (file) {
+	      reader.readAsDataURL(file);
+	    }
+	  },
+	  changeGroupIconIndex: function changeGroupIconIndex(index) {
+	    this.setState({ groupIconIndex: index });
+	  },
+	  render: function render() {
+	    var _this9 = this;
 
 	    var appList = this.getFilteredList().map(function (appInfo, index) {
 	      if (appInfo) {
-	        return _react2.default.createElement(_AppBrief2.default, { key: index, uninstall: _this8.uninstall.bind(_this8, appInfo), toggle: _this8.toggleState.bind(_this8, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: _this8.openOptions.bind(_this8, appInfo.optionsUrl), chromeOption: _this8.chromeOption.bind(_this8, appInfo.id, null), info: appInfo });
+	        return _react2.default.createElement(_AppBrief2.default, { key: index, uninstall: _this9.uninstall.bind(_this9, appInfo), toggle: _this9.toggleState.bind(_this9, appInfo, null), optionsUrl: appInfo.optionsUrl, openOptions: _this9.openOptions.bind(_this9, appInfo.optionsUrl), chromeOption: _this9.chromeOption.bind(_this9, appInfo.id, null), info: appInfo });
 	      }
 	    });
 	    var groupList = this.state.groupList.map(function (groupInfo, index) {
-	      return _react2.default.createElement(_GroupBrief2.default, { onMore: index == _this8.state.selectedGroup, isLast: index + 1 == _this8.state.groupList.length, index: index, key: index, groupInfo: groupInfo, changeName: _this8.changeGroupName, duplicate: _this8.duplicateGroup, remove: _this8.removeGroup, showMore: _this8.showGroup, appList: _this8.getAppList(index), appIcons: _this8.getAppIcons(index), toggle: _this8.groupToggleAll });
+	      return _react2.default.createElement(_GroupBrief2.default, { onMore: index == _this9.state.selectedGroup, isLast: index + 1 == _this9.state.groupList.length, index: index, key: index, groupInfo: groupInfo, changeName: _this9.changeGroupName, duplicate: _this9.duplicateGroup, remove: _this9.removeGroup, showMore: _this9.showGroup, appList: _this9.getAppList(index), appIcons: _this9.getAppIcons(index), toggle: _this9.groupToggleAll, changeGroupIconIndex: _this9.changeGroupIconIndex });
 	    });
 	    var type = (this.props.location.pathname.match(/\/manage\/(\w*)/) || [null, 'all'])[1];
 	    return _react2.default.createElement(
@@ -28895,6 +28915,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'groupList' },
+	          _react2.default.createElement('input', { type: 'file', id: 'changeIcon', accept: 'image/*', onChange: this.groupChangeIcon }),
 	          groupList
 	        ),
 	        _react2.default.createElement(
@@ -28959,7 +28980,7 @@
 
 	'use strict';
 
-	var _templateObject = _taggedTemplateLiteral(['\n  margin-bottom: ', ';\n  border-bottom: ', ';\n  overflow: hidden;\n  width: 100%;\n  min-height: 33px;\n  padding-top: 5px;\n  position: relative;\n  #on, #off, #duplicate, #remove, #more{\n    cursor: pointer;\n    background-repeat: no-repeat;\n    display: block;\n    background-size: 17px 17px;\n    width: 22px;\n    height: 22px;\n    position: absolute;\n    top: 5px;\n  }\n  #on{\n    left: 354px;\n    background-image: url(/thirdParty/power-button-on.svg);\n  }\n  #off{\n    background-image: url(/thirdParty/power-button-off.svg);\n    left: 383px;\n  }\n  #duplicate{\n    background-image: url(/thirdParty/copy.svg);\n    left: 410px;\n  }\n  #remove{\n    background-image: url(/thirdParty/remove.svg);\n    left: 440px;\n  }\n  #more{\n    background-image: url(/thirdParty/more.svg);\n    top: ', ';\n    left: ', ';\n    transform: ', ';\n  }\n  #icon{\n    left: 0px;\n    display: block;\n    position: absolute;\n    width: 23px;\n  }\n  #name{\n    left: 36px;\n    position: absolute;\n    border-bottom: none;\n    height: 18px;\n    width: 300px;\n  }\n  #detail{\n    margin-top: 33px;\n    display: ', ';\n    border-bottom: 2px solid #c27ae8;\n    overflow: hidden;\n    padding-bottom: 8px;\n    margin-bottom: 8px;\n  }\n'], ['\n  margin-bottom: ', ';\n  border-bottom: ', ';\n  overflow: hidden;\n  width: 100%;\n  min-height: 33px;\n  padding-top: 5px;\n  position: relative;\n  #on, #off, #duplicate, #remove, #more{\n    cursor: pointer;\n    background-repeat: no-repeat;\n    display: block;\n    background-size: 17px 17px;\n    width: 22px;\n    height: 22px;\n    position: absolute;\n    top: 5px;\n  }\n  #on{\n    left: 354px;\n    background-image: url(/thirdParty/power-button-on.svg);\n  }\n  #off{\n    background-image: url(/thirdParty/power-button-off.svg);\n    left: 383px;\n  }\n  #duplicate{\n    background-image: url(/thirdParty/copy.svg);\n    left: 410px;\n  }\n  #remove{\n    background-image: url(/thirdParty/remove.svg);\n    left: 440px;\n  }\n  #more{\n    background-image: url(/thirdParty/more.svg);\n    top: ', ';\n    left: ', ';\n    transform: ', ';\n  }\n  #icon{\n    left: 0px;\n    display: block;\n    position: absolute;\n    width: 23px;\n  }\n  #name{\n    left: 36px;\n    position: absolute;\n    border-bottom: none;\n    height: 18px;\n    width: 300px;\n  }\n  #detail{\n    margin-top: 33px;\n    display: ', ';\n    border-bottom: 2px solid #c27ae8;\n    overflow: hidden;\n    padding-bottom: 8px;\n    margin-bottom: 8px;\n  }\n']);
+	var _templateObject = _taggedTemplateLiteral(['\n  margin-bottom: ', ';\n  border-bottom: ', ';\n  overflow: hidden;\n  width: 100%;\n  min-height: 33px;\n  padding-top: 5px;\n  position: relative;\n  #on, #off, #duplicate, #remove, #more{\n    cursor: pointer;\n    background-repeat: no-repeat;\n    display: block;\n    background-size: 17px 17px;\n    width: 22px;\n    height: 22px;\n    position: absolute;\n    top: 5px;\n  }\n  #on{\n    left: 354px;\n    background-image: url(/thirdParty/power-button-on.svg);\n  }\n  #off{\n    background-image: url(/thirdParty/power-button-off.svg);\n    left: 383px;\n  }\n  #duplicate{\n    background-image: url(/thirdParty/copy.svg);\n    left: 410px;\n  }\n  #remove{\n    background-image: url(/thirdParty/remove.svg);\n    left: 440px;\n  }\n  #more{\n    background-image: url(/thirdParty/more.svg);\n    top: ', ';\n    left: ', ';\n    transform: ', ';\n  }\n  #iconHolder{\n    cursor: pointer;\n    left: 0px;\n    display: block;\n    position: absolute;\n    width: 23px;\n    height: 23px;\n    #icon{\n      width: 100%;\n      height: 100%;\n    }\n  }\n  #name{\n    left: 36px;\n    position: absolute;\n    border-bottom: none;\n    height: 18px;\n    width: 300px;\n  }\n  #detail{\n    margin-top: 33px;\n    display: ', ';\n    border-bottom: 2px solid #c27ae8;\n    overflow: hidden;\n    padding-bottom: 8px;\n    margin-bottom: 8px;\n  }\n'], ['\n  margin-bottom: ', ';\n  border-bottom: ', ';\n  overflow: hidden;\n  width: 100%;\n  min-height: 33px;\n  padding-top: 5px;\n  position: relative;\n  #on, #off, #duplicate, #remove, #more{\n    cursor: pointer;\n    background-repeat: no-repeat;\n    display: block;\n    background-size: 17px 17px;\n    width: 22px;\n    height: 22px;\n    position: absolute;\n    top: 5px;\n  }\n  #on{\n    left: 354px;\n    background-image: url(/thirdParty/power-button-on.svg);\n  }\n  #off{\n    background-image: url(/thirdParty/power-button-off.svg);\n    left: 383px;\n  }\n  #duplicate{\n    background-image: url(/thirdParty/copy.svg);\n    left: 410px;\n  }\n  #remove{\n    background-image: url(/thirdParty/remove.svg);\n    left: 440px;\n  }\n  #more{\n    background-image: url(/thirdParty/more.svg);\n    top: ', ';\n    left: ', ';\n    transform: ', ';\n  }\n  #iconHolder{\n    cursor: pointer;\n    left: 0px;\n    display: block;\n    position: absolute;\n    width: 23px;\n    height: 23px;\n    #icon{\n      width: 100%;\n      height: 100%;\n    }\n  }\n  #name{\n    left: 36px;\n    position: absolute;\n    border-bottom: none;\n    height: 18px;\n    width: 300px;\n  }\n  #detail{\n    margin-top: 33px;\n    display: ', ';\n    border-bottom: 2px solid #c27ae8;\n    overflow: hidden;\n    padding-bottom: 8px;\n    margin-bottom: 8px;\n  }\n']);
 
 	var _react = __webpack_require__(7);
 
@@ -28996,7 +29017,11 @@
 	      { onMore: this.props.onMore, isLast: this.props.isLast },
 	      _react2.default.createElement('label', { id: 'on', onClick: this.props.toggle.bind(null, this.props.index, 'enable') }),
 	      _react2.default.createElement('label', { id: 'off', onClick: this.props.toggle.bind(null, this.props.index, 'disable') }),
-	      _react2.default.createElement('img', { id: 'icon', src: "chrome://extension-icon/daoldhappdmckdbifgkppchkehjlnbpo/128/0" }),
+	      _react2.default.createElement(
+	        'label',
+	        { id: 'iconHolder', onClick: this.props.changeGroupIconIndex.bind(null, this.props.index), htmlFor: 'changeIcon' },
+	        _react2.default.createElement('img', { id: 'icon', src: groupInfo.icon || 'chrome://extension-icon/aajodjghehmlpahhboidcpfjcncmcklf/128/0' })
+	      ),
 	      _react2.default.createElement('input', { id: 'name', placeholder: GL('ainoob_is_koo'), value: groupInfo.name, onChange: this.props.changeName.bind(null, this.props.index) }),
 	      _react2.default.createElement('label', { id: 'duplicate', onClick: this.props.duplicate.bind(null, this.props.index) }),
 	      _react2.default.createElement('label', { id: 'remove', onClick: this.props.remove.bind(null, this.props.index) }),
@@ -34186,7 +34211,7 @@
 	            capFirst(GL('url')),
 	            ':'
 	          ),
-	          _react2.default.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: 'RegExp matching', type: 'text' }),
+	          _react2.default.createElement('input', { id: 'match', value: this.state.rule.match, onChange: this.updateRule, placeholder: GL('matching_pattern'), type: 'text' }),
 	          _react2.default.createElement(
 	            'div',
 	            { id: 'matchingRuleDiv' },

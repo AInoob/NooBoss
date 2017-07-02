@@ -311,7 +311,7 @@ module.exports = React.createClass({
             <div className="header">
               {capFirst(GL('url'))}:
             </div>
-            <input id="match" value={this.state.rule.match} onChange={this.updateRule} placeholder="RegExp matching" type="text" />
+            <input id="match" value={this.state.rule.match} onChange={this.updateRule} placeholder={GL('matching_pattern')} type="text" />
             <div id="matchingRuleDiv">
               <div>
                 <input type="radio" id="matchingRule_1" name="matchingRule" checked={!this.state.rule.isWildcard} />

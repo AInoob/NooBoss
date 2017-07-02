@@ -341,6 +341,9 @@
   "wildcard":{
 	"message":"Wildcard"
   },
+  "matching_pattern":{
+	"message":"Matching pattern"
+  },
   "ls_1":{
 	"message":"No one has recommended any extension for this website yet, do you have a wonderful extension for"
   },
