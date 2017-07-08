@@ -533,7 +533,7 @@ module.exports = React.createClass({
               dimmer = 'nonDimmer';
             }
             return (
-                <AppBrief isAutoState="true" select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
+                <AppBrief isMini={true} select={this.select.bind(this,appInfo.id)} dimmer={dimmer} key={index} info={appInfo} />
             );
           }
         });

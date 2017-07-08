@@ -27610,7 +27610,7 @@
 	            if (_this6.state.reco.selected[appInfo.id]) {
 	              dimmer = 'nonDimmer';
 	            }
-	            return _react2.default.createElement(_AppBrief2.default, { isAutoState: 'true', select: _this6.select.bind(_this6, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
+	            return _react2.default.createElement(_AppBrief2.default, { isMini: true, select: _this6.select.bind(_this6, appInfo.id), dimmer: dimmer, key: index, info: appInfo });
 	          }
 	        });
 	        var recoApps = _react2.default.createElement(

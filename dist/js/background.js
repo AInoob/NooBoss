@@ -353,11 +353,8 @@
 	    switch (rule.action) {
 	      case 'enableOnly':
 	        if (matched) {
-	          console.log('a');
-
 	          var _loop2 = function _loop2(k) {
 	            if (appIds[k].match(/^NooBoss-Group/)) {
-	              console.log('aa');
 	              var group = Management.groupList.filter(function (group) {
 	                return group.id == appIds[k];
 	              })[0];
@@ -378,7 +375,6 @@
 	                enableOnlys[appId] = true;
 	              }
 	            } else {
-	              console.log('ab');
 	              nextPhases[appIds[k]] = {
 	                enabled: true,
 	                tabId: tabId,
@@ -394,11 +390,8 @@
 	            if ((typeof _ret2 === "undefined" ? "undefined" : _typeof(_ret2)) === "object") return _ret2.v;
 	          }
 	        } else {
-	          console.log('b');
-
 	          var _loop3 = function _loop3(k) {
 	            if (appIds[k].match(/^NooBoss-Group/)) {
-	              console.log('bb');
 	              var group = Management.groupList.filter(function (group) {
 	                return group.id == appIds[k];
 	              })[0];
@@ -418,7 +411,6 @@
 	                };
 	              }
 	            } else {
-	              console.log('bc');
 	              nextPhases[appIds[k]] = {
 	                enabled: enableOnlys[appIds[k]] || false,
 	                tabId: null,

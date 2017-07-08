@@ -7,8 +7,8 @@ Management.autoState.enable = () => {
   chrome.tabs.onCreated.addListener((tab) => {
     Management.autoState.newTab(tab);
   });
-  chrome.tabs.onUpdated.addListener((tabId,info,tab) => {
-    Management.autoState.updateTab(tabId,info,tab);
+  chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+    Management.autoState.updateTab(tabId, info, tab);
   });
   chrome.tabs.onRemoved.addListener((tabId) => {
     Management.autoState.removeTab(tabId);
@@ -26,7 +26,7 @@ Management.autoState.newTab = (tab) => {
   Management.autoState.manage(tab.id);
 }
 
-Management.autoState.updateTab = (tabId,changeInfo,tab) => {
+Management.autoState.updateTab = (tabId, changeInfo, tab) => {
   if(changeInfo.url){
     const oldUrl = (Management.autoState.tabs[tabId] || {}).url;
     if(oldUrl != changeInfo.url) {
@@ -119,10 +119,8 @@ Management.autoState.manage = (tabId) => {
     switch(rule.action){
       case 'enableOnly':
         if(matched){
-          console.log('a');
           for(let k = 0; k < appIds.length; k++) {
             if(appIds[k].match(/^NooBoss-Group/)) {
-              console.log('aa');
               const group = Management.groupList.filter((group) => {
                 return group.id == appIds[k];
               })[0];
@@ -140,7 +138,6 @@ Management.autoState.manage = (tabId) => {
               }
             }
             else {
-              console.log('ab');
               nextPhases[appIds[k]]={
                 enabled: true,
                 tabId: tabId,
@@ -151,10 +148,8 @@ Management.autoState.manage = (tabId) => {
           }
         }
         else{
-          console.log('b');
           for(let k=0;k<appIds.length;k++){
             if(appIds[k].match(/^NooBoss-Group/)) {
-              console.log('bb');
               const group = Management.groupList.filter((group) => {
                 return group.id == appIds[k];
               })[0];
@@ -171,7 +166,6 @@ Management.autoState.manage = (tabId) => {
               }
             }
             else {
-              console.log('bc');
               nextPhases[appIds[k]]={
                 enabled: enableOnlys[appIds[k]] || false,
                 tabId: null,
