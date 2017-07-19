@@ -1,6 +1,6 @@
 const Util = {};
 
-Util.getIcon=function(appInfo,callback){
+Util.getIcon = function(appInfo,callback){
   var iconUrl=undefined;
   if(appInfo.icons){
     var maxSize=0;

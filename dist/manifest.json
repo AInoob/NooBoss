@@ -14,10 +14,10 @@
     "128": "images/icon_128.png"
   },
   "background": {
-    "scripts":["thirdParty/jquery.min.js","thirdParty/timeago.min.js","js/util.js","js/background.js"]
+    "scripts":["thirdParty/jquery.min.js", "thirdParty/timeago.min.js", "js/util.js", "js/background.js"]
   },
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-  "permissions":[
+  "permissions": [
     "tabs",
     "management",
     "notifications",
