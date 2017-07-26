@@ -2,8 +2,8 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports={
   entry: {
-    nooboss: './src/popup/NooBoss.jsx',
-    background: './src/background/background.js',
+    popup: './src/popup/index.js',
+    background: './src/background/index.js',
   },
   output: {
     path: 'dist',
@@ -15,7 +15,17 @@ module.exports={
         test: /\.jsx?$/,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015']
+          presets: ['react', 'es2015'],
+					plugins: [
+						'transform-object-rest-spread',
+						'transform-async-to-generator',
+						["transform-runtime", {
+							"helpers": false,
+							"polyfill": false,
+							"regenerator": true,
+							"moduleName": "babel-runtime"
+						}],
+					]
         }
       }
     ]
@@ -27,9 +37,6 @@ module.exports={
 		new CopyWebpackPlugin([
 			{ from: './src/options.html'},
 			{ from: './src/popup/popup.html' },
-			{ from: './src/js/util.js', to: './js' },
-			{ from: './src/js/options.js', to: './js' },
-			{ from: './src/js/hi.js', to: './js' },
 		])
   ]
 }
