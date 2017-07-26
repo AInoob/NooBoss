@@ -24,7 +24,7 @@ const getDB = (key, callback) => {
 			}
 		}
 	}
-}
+};
 
 const setDB = (key, value, callback) => {
 	const indexedDB = window.indexedDB;
@@ -47,6 +47,30 @@ const setDB = (key, value, callback) => {
 			console.log('setDB fail');
 		}
 	}
+};
+
+const getParameterByName = (name, url) => {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+	const results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
+
+const getString = (elem) => {
+	if(elem===undefined||elem===null){
+		return '';
+	}
+	else{
+		return elem.toString();
+	}
 }
 
-export { getDB, setDB };
+const capFirst = (elem) => {
+	const str = getString(elem);
+	return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export { getDB, setDB, getParameterByName, capFirst };

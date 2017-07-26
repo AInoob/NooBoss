@@ -32,10 +32,9 @@ module.exports={
   },
   plugins:[
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      /*'process.env.NODE_ENV': JSON.stringify('production')*/
     }),
 		new CopyWebpackPlugin([
-			{ from: './src/options.html'},
 			{ from: './src/popup/popup.html' },
 		])
   ]

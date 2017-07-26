@@ -4,12 +4,13 @@ import styled, { injectGlobal } from 'styled-components';
 import Overview from './Overview';
 import Navigator from './Navigator';
 import { updateState, updateLocation } from '../actions';
-import { getDB } from '../utils'
+import { getDB, getParameterByName } from '../utils'
 
 
 injectGlobal`
 	body{
 		width: 800px;
+		margin: 4px;
 	}
 `;
 
@@ -35,8 +36,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		},
 		updateLocationIfOptions: () => {
 			return new Promise(resolve => {
-				if (window.location.pathname == '/options.html' ) {
-					dispatch(updateLocation(options));
+				const location = getParameterByName('page');
+				if (location) {
+					dispatch(updateLocation(location));
 				}
 				resolve();
 			});
