@@ -73,4 +73,8 @@ const capFirst = (elem) => {
 	return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export { getDB, setDB, getParameterByName, capFirst };
+const GL = (string) => {
+	return chrome.i18n.getMessage(string);
+};
+
+export { getDB, setDB, getParameterByName, capFirst, GL };

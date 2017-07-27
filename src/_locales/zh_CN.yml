@@ -1,0 +1,16 @@
+extension_name:
+  message: 二管家
+extension_description:
+  message: 一个全能的拓展管理和用户脚本管理拓展
+overview:
+  message: 总览
+options:
+  message: 选项
+extensions:
+  message: 拓展
+userscripts:
+  message: 用户脚本
+history:
+  message: 历史
+about:
+  message: 关于

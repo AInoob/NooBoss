@@ -1,0 +1,16 @@
+extension_name:
+  message: NooBoss
+extension_description:
+  message: A powerful Extensions Manager and Userscript Manager with many unique features
+overview:
+  message: Overview
+options:
+  message: Options
+extensions:
+  message: Extensions
+userscripts:
+  message: Userscripts
+history:
+  message: History
+about:
+  message: About

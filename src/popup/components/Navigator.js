@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateLocation, navigatorUpdateHoverPosition } from '../actions';
 import styled from 'styled-components';
-import { capFirst } from '../utils';
+import { GL } from '../utils';
 
 const NavigatorDiv = styled.nav`
 	position: relative;
@@ -22,6 +22,7 @@ const NavigatorDiv = styled.nav`
 		transition: margin-left 0.309s;
 	}
 	a{
+		user-select: none;
 		color: #9b9b9b;
 		display: block;
 		float: left;
@@ -73,7 +74,7 @@ class Navigator extends Component{
 					this.props.navigatorUpdateHoverPosition(index);
 				}}
 			>
-				{capFirst(name)}
+				{GL(name)}
 			</a>
 		);
 	}

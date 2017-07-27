@@ -4,7 +4,7 @@ const initialState = {
 		'overview',
 		'extensions',
 		'userscripts',
-		'autoState',
+		'history',
 		'options',
 		'about'
 	]

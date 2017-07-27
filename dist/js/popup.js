@@ -60,11 +60,11 @@
 
 	var _NooBoss2 = _interopRequireDefault(_NooBoss);
 
-	var _reducers = __webpack_require__(266);
+	var _reducers = __webpack_require__(267);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _utils = __webpack_require__(265);
+	var _utils = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24616,13 +24616,17 @@
 
 	var _Overview2 = _interopRequireDefault(_Overview);
 
-	var _Navigator = __webpack_require__(264);
+	var _Options = __webpack_require__(264);
+
+	var _Options2 = _interopRequireDefault(_Options);
+
+	var _Navigator = __webpack_require__(265);
 
 	var _Navigator2 = _interopRequireDefault(_Navigator);
 
 	var _actions = __webpack_require__(263);
 
-	var _utils = __webpack_require__(265);
+	var _utils = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24706,12 +24710,18 @@
 		_createClass(NooBoss, [{
 			key: 'render',
 			value: function render() {
+				var page = null;
+				if (this.props.location == 'overview') {
+					page = _react2.default.createElement(_Overview2.default, null);
+				}
+				if (this.props.location == 'options') {
+					page = _react2.default.createElement(_Options2.default, null);
+				}
 				return _react2.default.createElement(
 					NooBossDiv,
 					null,
 					_react2.default.createElement(_Navigator2.default, null),
-					'Bello',
-					_react2.default.createElement(_Overview2.default, null)
+					page
 				);
 			}
 		}]);
@@ -29981,7 +29991,76 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _templateObject = _taggedTemplateLiteral(['\n\tposition: relative;\n\twidth: 100%;\n\toverflow: hidden;\n\t&:hover{\n\t\tbox-shadow: grey 0px 0px 5px 0px;\n\t}\n\ttransition: box-shadow 0.309s;\n\t#selector{\n\t\tposition: absolute;\n\t\twidth: ', ';\n\t\tbackground-color: #eeeeee;\n\t\theight: 33px;\n\t\tz-index: -1;\n\t\tmargin-left: ', ';\n\t\ttransition: margin-left 0.309s;\n\t}\n\ta{\n\t\tcolor: #9b9b9b;\n\t\tdisplay: block;\n\t\tfloat: left;\n\t\tfont-size: large;\n\t\ttext-align: center;\n\t\twidth: ', ';\n\t\ttransition: color 0.309s;\n\t\tcursor: pointer;\n\t\theight: 33px;\n\t\tline-height: 33px;\n\t}\n\ta.active{\n\t\tcolor: black;\n\t}\n'], ['\n\tposition: relative;\n\twidth: 100%;\n\toverflow: hidden;\n\t&:hover{\n\t\tbox-shadow: grey 0px 0px 5px 0px;\n\t}\n\ttransition: box-shadow 0.309s;\n\t#selector{\n\t\tposition: absolute;\n\t\twidth: ', ';\n\t\tbackground-color: #eeeeee;\n\t\theight: 33px;\n\t\tz-index: -1;\n\t\tmargin-left: ', ';\n\t\ttransition: margin-left 0.309s;\n\t}\n\ta{\n\t\tcolor: #9b9b9b;\n\t\tdisplay: block;\n\t\tfloat: left;\n\t\tfont-size: large;\n\t\ttext-align: center;\n\t\twidth: ', ';\n\t\ttransition: color 0.309s;\n\t\tcursor: pointer;\n\t\theight: 33px;\n\t\tline-height: 33px;\n\t}\n\ta.active{\n\t\tcolor: black;\n\t}\n']);
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(205);
+
+	__webpack_require__(263);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+		return _extends({}, ownProps, {
+			options: state.options
+		});
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+		return _extends({}, ownProps);
+	};
+
+	var Options = function (_Component) {
+		_inherits(Options, _Component);
+
+		function Options() {
+			_classCallCheck(this, Options);
+
+			return _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).apply(this, arguments));
+		}
+
+		_createClass(Options, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'h2',
+						null,
+						'Yo'
+					)
+				);
+			}
+		}]);
+
+		return Options;
+	}(_react.Component);
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Options);
+
+/***/ }),
+/* 265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _templateObject = _taggedTemplateLiteral(['\n\tposition: relative;\n\twidth: 100%;\n\toverflow: hidden;\n\t&:hover{\n\t\tbox-shadow: grey 0px 0px 5px 0px;\n\t}\n\ttransition: box-shadow 0.309s;\n\t#selector{\n\t\tposition: absolute;\n\t\twidth: ', ';\n\t\tbackground-color: #eeeeee;\n\t\theight: 33px;\n\t\tz-index: -1;\n\t\tmargin-left: ', ';\n\t\ttransition: margin-left 0.309s;\n\t}\n\ta{\n\t\tuser-select: none;\n\t\tcolor: #9b9b9b;\n\t\tdisplay: block;\n\t\tfloat: left;\n\t\tfont-size: large;\n\t\ttext-align: center;\n\t\twidth: ', ';\n\t\ttransition: color 0.309s;\n\t\tcursor: pointer;\n\t\theight: 33px;\n\t\tline-height: 33px;\n\t}\n\ta.active{\n\t\tcolor: black;\n\t}\n'], ['\n\tposition: relative;\n\twidth: 100%;\n\toverflow: hidden;\n\t&:hover{\n\t\tbox-shadow: grey 0px 0px 5px 0px;\n\t}\n\ttransition: box-shadow 0.309s;\n\t#selector{\n\t\tposition: absolute;\n\t\twidth: ', ';\n\t\tbackground-color: #eeeeee;\n\t\theight: 33px;\n\t\tz-index: -1;\n\t\tmargin-left: ', ';\n\t\ttransition: margin-left 0.309s;\n\t}\n\ta{\n\t\tuser-select: none;\n\t\tcolor: #9b9b9b;\n\t\tdisplay: block;\n\t\tfloat: left;\n\t\tfont-size: large;\n\t\ttext-align: center;\n\t\twidth: ', ';\n\t\ttransition: color 0.309s;\n\t\tcursor: pointer;\n\t\theight: 33px;\n\t\tline-height: 33px;\n\t}\n\ta.active{\n\t\tcolor: black;\n\t}\n']);
 
 	var _react = __webpack_require__(1);
 
@@ -29995,7 +30074,7 @@
 
 	var _styledComponents2 = _interopRequireDefault(_styledComponents);
 
-	var _utils = __webpack_require__(265);
+	var _utils = __webpack_require__(266);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30058,7 +30137,7 @@
 							_this2.props.navigatorUpdateHoverPosition(index);
 						}
 					},
-					(0, _utils.capFirst)(name)
+					(0, _utils.GL)(name)
 				);
 			}
 		}, {
@@ -30096,7 +30175,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Navigator);
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -30177,13 +30256,18 @@
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	};
 
+	var GL = function GL(string) {
+		return chrome.i18n.getMessage(string);
+	};
+
 	exports.getDB = getDB;
 	exports.setDB = setDB;
 	exports.getParameterByName = getParameterByName;
 	exports.capFirst = capFirst;
+	exports.GL = GL;
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30194,15 +30278,15 @@
 
 	var _redux = __webpack_require__(184);
 
-	var _location = __webpack_require__(267);
+	var _location = __webpack_require__(268);
 
 	var _location2 = _interopRequireDefault(_location);
 
-	var _navigator = __webpack_require__(268);
+	var _navigator = __webpack_require__(269);
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _overview = __webpack_require__(269);
+	var _overview = __webpack_require__(270);
 
 	var _overview2 = _interopRequireDefault(_overview);
 
@@ -30230,7 +30314,7 @@
 	exports.default = noobossReducer;
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -30253,7 +30337,7 @@
 	exports.default = location;
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -30263,7 +30347,7 @@
 	});
 	var initialState = {
 		hoverPosition: 0,
-		linkList: ['overview', 'extensions', 'userscripts', 'autoState', 'options', 'about']
+		linkList: ['overview', 'extensions', 'userscripts', 'history', 'options', 'about']
 	};
 
 	var navigator = function navigator() {
@@ -30281,7 +30365,7 @@
 	exports.default = navigator;
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, exports) {
 
 	'use strict';

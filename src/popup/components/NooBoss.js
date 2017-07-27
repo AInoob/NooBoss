@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { injectGlobal } from 'styled-components';
 import Overview from './Overview';
+import Options from './Options';
 import Navigator from './Navigator';
 import { updateState, updateLocation } from '../actions';
 import { getDB, getParameterByName } from '../utils'
@@ -56,11 +57,13 @@ class NooBoss extends Component{
 		props.initialize(props);
 	}
 	render() {
+		let page = null;
+		if (this.props.location == 'overview') { page = <Overview />; }
+		if (this.props.location == 'options') { page = <Options />; }
 		return (
 			<NooBossDiv>
 				<Navigator />
-					Bello
-				<Overview />
+				{page}
 			</NooBossDiv>
 		);
 	}
