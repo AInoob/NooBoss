@@ -14,3 +14,27 @@ history:
   message: History
 about:
   message: About
+notifications:
+  message: Notifications
+auto_state:
+  message: Auto State
+join_community:
+  message: Join community
+experience:
+  message: Experience
+clear_history:
+  message: Clear history
+reset_everything:
+  message: Reset everything (Be careful!)
+auto_state:
+  message: Auto State
+join_nooboss_community:
+  message: Join NooBoss Community
+advanced_settings:
+  message: Advanced_settings
+theme:
+  message: Theme
+main_color:
+  message: Main color
+sub_color:
+  message: Sub color

@@ -1,4 +1,4 @@
-const getDB = (key, callback) => {
+export const getDB = (key, callback) => {
 	if(callback) {
 		const indexedDB = window.indexedDB;
 		const open = indexedDB.open('NooBoss', 1);
@@ -26,7 +26,7 @@ const getDB = (key, callback) => {
 	}
 };
 
-const setDB = (key, value, callback) => {
+export const setDB = (key, value, callback) => {
 	const indexedDB = window.indexedDB;
 	const open = indexedDB.open('NooBoss', 1);
 	open.onupgradeneeded = () => {
@@ -49,7 +49,7 @@ const setDB = (key, value, callback) => {
 	}
 };
 
-const getParameterByName = (name, url) => {
+export const getParameterByName = (name, url) => {
 	if (!url) url = window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
 	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -59,7 +59,7 @@ const getParameterByName = (name, url) => {
 	return decodeURIComponent(results[2].replace(/\+/g, " "));
 };
 
-const getString = (elem) => {
+export const getString = (elem) => {
 	if(elem===undefined||elem===null){
 		return '';
 	}
@@ -68,13 +68,29 @@ const getString = (elem) => {
 	}
 }
 
-const capFirst = (elem) => {
+export const capFirst = (elem) => {
 	const str = getString(elem);
 	return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const GL = (string) => {
+export const GL = (string) => {
 	return chrome.i18n.getMessage(string);
 };
 
-export { getDB, setDB, getParameterByName, capFirst, GL };
+export const get = (key, callback) => {
+	chrome.storage.sync.get(key, (result) => {
+		if(callback)
+			callback(result[key]);
+	});
+}
+
+export const set = (key, value, callback) => {
+	const temp = {};
+	temp[key] = value;
+	chrome.storage.sync.set(temp, callback);
+}
+
+
+export const generateRGBAString = (rgbaObject) => {
+	return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';
+}

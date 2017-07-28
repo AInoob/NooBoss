@@ -14,3 +14,27 @@ history:
   message: 历史
 about:
   message: 关于
+notifications:
+  message: 通知
+auto_state:
+  message: 自动管理
+join_community:
+  message: 加入社区
+experience:
+  message: 体验
+clear_history:
+  message: 清空历史
+reset_everything:
+  message: 重置(注意！)
+auto_state:
+  message: 自动管理
+join_nooboss_community:
+  message: 加入二管家社区
+advanced_settings:
+  message: 高级设置
+theme:
+  message: 主题
+main_color:
+  message: 主颜色
+sub_color:
+  message: 辅颜色

@@ -12,6 +12,9 @@ const initialState = {
 
 const navigator = (state = initialState, action) => {
 	switch (action.type) {
+		case 'UPDATE_LOCATION':
+			state.hoverPosition = state.linkList.indexOf(action.location);
+			break;
 		case 'NAVIGATOR_UPDATE_HOVER_POSITION':
 			state.hoverPosition = action.position;
 			break;

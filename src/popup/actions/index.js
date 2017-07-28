@@ -2,6 +2,9 @@ const UPDATE_STATE = 'UPDATE_STATE';
 const UPDATE_LOCATION = 'UPDATE_LOCATION';
 const NAVIGATOR_UPDATE_HOVER_POSITION = 'NAVIGATOR_UPDATE_HOVER_POSITION';
 const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
+const OPTIONS_UPDATE_THEME_MAIN_COLOR = 'OPTIONS_UPDATE_THEME_MAIN_COLOR';
+const OPTIONS_UPDATE_THEME_SUB_COLOR = 'OPTIONS_UPDATE_THEME_SUB_COLOR';
+		
 
 export const updateState = (state) => ({
 	type: UPDATE_STATE,
@@ -21,4 +24,14 @@ export const navigatorUpdateHoverPosition = (position) => ({
 export const overviewUpdateBello = (bello) => ({
 	type: OVERVIEW_UPDATE_BELLO,
 	bello
+});
+
+export const optionsUpdateThemeMainColor = (color) => ({
+	type: OPTIONS_UPDATE_THEME_MAIN_COLOR,
+	color
+});
+
+export const optionsUpdateThemeSubColor = (color) => ({
+	type: OPTIONS_UPDATE_THEME_SUB_COLOR,
+	color
 });
