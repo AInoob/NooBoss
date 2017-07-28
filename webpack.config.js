@@ -17,6 +17,7 @@ module.exports={
         query: {
           presets: ['react', 'es2015'],
 					plugins: [
+						'babel-plugin-lodash',
 						'transform-object-rest-spread',
 						'transform-async-to-generator',
 						["transform-runtime", {

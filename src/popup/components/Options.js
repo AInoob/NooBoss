@@ -7,10 +7,16 @@ import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actio
 import styled from 'styled-components';
 
 const OptionsDiv = styled.div`
-	.sketch-picker{
+	.colorPickerHolder{
+		overflow: hidden;
 		margin-left: 32px;
 		float: left;
 		margin-top: 6px;
+		box-shadow: grey -1px -1px 3px 0px;
+		&:focus{
+			box-shadow: grey -1px -1px 8px 0px;
+			outline: none;
+		}
 	}
 	#themeMainColorPicker, #themeSubColorPicker{
 		cursor: pointer;
@@ -102,21 +108,33 @@ class Options extends Component{
 								<span className="left">{GL('main_color')}</span>
 								<div className="left" id="themeMainColorPicker" onClick={this.updateColorPicker.bind(this, 'themeMainColor')} />
 								{this.state.colorPicker == 'themeMainColor' ?
-									<SketchPicker
-										className="color-picker"
-										color={this.props.options.themeMainColor}
-										onChange={this.updateColor.bind(this, 'themeMainColor')}
-									/> : null}
+									<div
+										ref={div => div && div.focus()}
+										className="colorPickerHolder"
+									 	tabIndex="-1"
+										onBlur={()=>{console.log('blur');this.setState({ colorPicker: null })}}
+									>
+										<SketchPicker
+											color={this.props.options.themeMainColor}
+											onChange={this.updateColor.bind(this, 'themeMainColor')}
+										/>
+									</div> : null}
 							</div>
 							<div className="line">
 								<span className="left">{GL('sub_color')}</span>
 								<div className="left" id="themeSubColorPicker" onClick={this.updateColorPicker.bind(this, 'themeSubColor')} />
 								{this.state.colorPicker == 'themeSubColor' ?
-									<SketchPicker
-										className="color-picker"
-										color={this.props.options.themeSubColor}
-										onChange={this.updateColor.bind(this, 'themeSubColor')}
-									/> : null}
+									<div
+										ref={div => div && div.focus()}
+										className="colorPickerHolder"
+									 	tabIndex="-1"
+										onBlur={()=>{console.log('blur');this.setState({ colorPicker: null })}}
+									>
+										<SketchPicker
+											color={this.props.options.themeSubColor}
+											onChange={this.updateColor.bind(this, 'themeSubColor')}
+										/>
+									</div> : null}
 							</div>
 						</section>
 					</section>
