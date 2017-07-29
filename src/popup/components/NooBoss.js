@@ -5,7 +5,7 @@ import Overview from './Overview';
 import Options from './Options';
 import Navigator from './Navigator';
 import { updateState, updateLocation, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
-import { getDB, getParameterByName, get, generateRGBAString } from '../utils';
+import { getDB, getParameterByName, get, generateRGBAString } from '../../utils';
 
 
 injectGlobal`
@@ -16,7 +16,7 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
-	background-color: ${props => props.themeSubColor};
+	color: ${props => props.themeSubColor};
 	section{
 		margin-top: 8px;
 		margin-left: 32px;

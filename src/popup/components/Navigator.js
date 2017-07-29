@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateLocation, navigatorUpdateHoverPosition } from '../actions';
 import styled from 'styled-components';
-import { GL, generateRGBAString } from '../utils';
+import { GL, generateRGBAString } from '../../utils';
 
 const NavigatorDiv = styled.nav`
 	position: relative;
@@ -18,7 +18,7 @@ const NavigatorDiv = styled.nav`
 		position: absolute;
 		width: ${props => (100 / props.numOfLinks) + '%'};
 		height: 33px;
-		background-color: ${props => props.themeSubColor};
+		background-color: white;
 		z-index: -1;
 		margin-left: ${props => (props.hoverPosition * 100 / props.numOfLinks) + '%'};
 		transition: margin-left 0.309s;
@@ -35,12 +35,9 @@ const NavigatorDiv = styled.nav`
 		cursor: pointer;
 		height: 33px;
 		line-height: 33px;
-		&:hover{
+		&:nth-child(${props => props.hoverPosition + 2}){
 			color: ${props => props.themeMainColor};
 		}
-	}
-	a.active{
-		color: ${props => props.themeMainColor};
 	}
 `;
 

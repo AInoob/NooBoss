@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { } from '../actions';
-import { GL, set, generateRGBAString } from '../utils';
+import { GL, set, generateRGBAString } from '../../utils';
 import { SketchPicker } from 'react-color';
 import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
 import styled from 'styled-components';

@@ -4,7 +4,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import NooBoss from './components/NooBoss'
 import reducer from './reducers'
-import { setDB } from './utils'
+import { setDB } from '../utils'
 
 const store = createStore(reducer)
 
