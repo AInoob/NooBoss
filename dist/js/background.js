@@ -65,41 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 459:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _values = __webpack_require__(460);
-
-var _Options = __webpack_require__(461);
-
-var _Options2 = _interopRequireDefault(_Options);
-
-var _Bello = __webpack_require__(462);
-
-var _Bello2 = _interopRequireDefault(_Bello);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var NooBoss = {
-	defaultValues: _values.defaultValues,
-	constantValues: _values.constantValues
-};
-window.NooBoss = NooBoss;
-
-NooBoss.initiate = function () {
-	NooBoss.Options = (0, _Options2.default)(NooBoss);
-	NooBoss.Options.initiate();
-	NooBoss.Bello = (0, _Bello2.default)(NooBoss);
-};
-
-document.addEventListener('DOMContentLoaded', NooBoss.initiate);
-
-/***/ }),
-
-/***/ 46:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -191,6 +157,20 @@ var get = exports.get = function get(key, callback) {
 	});
 };
 
+var isOn = exports.isOn = function isOn(key, callbackTrue, callbackFalse, param) {
+	get(key, function (value) {
+		if (value == '1' || value == true) {
+			if (callbackTrue) {
+				callbackTrue(param);
+			}
+		} else {
+			if (callbackFalse) {
+				callbackFalse(param);
+			}
+		}
+	});
+};
+
 var set = exports.set = function set(key, value, callback) {
 	var temp = {};
 	temp[key] = value;
@@ -212,6 +192,74 @@ var setIfNull = exports.setIfNull = function setIfNull(key, setValue, callback) 
 var generateRGBAString = exports.generateRGBAString = function generateRGBAString(rgbaObject) {
 	return 'rgba(' + rgbaObject.r + ',' + rgbaObject.g + ',' + rgbaObject.b + ',' + rgbaObject.a + ')';
 };
+
+var sendMessage = exports.sendMessage = function sendMessage(message) {
+	var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+	chrome.runtime.sendMessage(message, callback);
+};
+
+/***/ }),
+
+/***/ 459:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _values = __webpack_require__(460);
+
+var _Options = __webpack_require__(461);
+
+var _Options2 = _interopRequireDefault(_Options);
+
+var _Bello = __webpack_require__(462);
+
+var _Bello2 = _interopRequireDefault(_Bello);
+
+var _utils = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NooBoss = {
+	defaultValues: _values.defaultValues,
+	constantValues: _values.constantValues
+};
+window.NooBoss = NooBoss;
+
+NooBoss.initiate = function () {
+	NooBoss.Options = (0, _Options2.default)(NooBoss);
+	NooBoss.Options.initiate();
+	NooBoss.Bello = (0, _Bello2.default)(NooBoss);
+	chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+		switch (request.job) {
+			case 'bello':
+				NooBoss.Bello.bello(request.bananana);
+				break;
+			case 'set':
+				(0, _utils.set)(request.key, request.value);
+				(0, _utils.isOn)('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: request.key }));
+				break;
+			case 'reset':
+				NooBoss.Options.resetOptions();
+				NooBoss.Options.resetIndexedDB(function () {
+					NooBoss.Management.init();
+					NooBoss.History.init();
+				});
+				break;
+			case 'clearHistory':
+				break;
+			case 'toggleAutoState':
+				break;
+			case 'updateAutoStateRules':
+				break;
+			case 'updateGroupList':
+				break;
+		}
+	});
+};
+
+document.addEventListener('DOMContentLoaded', NooBoss.initiate);
 
 /***/ }),
 
@@ -238,6 +286,7 @@ var defaultValues = exports.defaultValues = {
 	autoStateNotification: true,
 	autoStateRules: [],
 	sortOrder: 'nameState',
+	bello: true,
 	joinCommunity: true,
 	notificationDuration_autoState: 5,
 	notificationDuration_stateChange: 5,
@@ -268,7 +317,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _utils = __webpack_require__(46);
+var _utils = __webpack_require__(29);
 
 exports.default = function (NooBoss) {
 	return {
@@ -343,6 +392,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 exports.default = function (NooBoss) {
 	return {
 		belloOnce: false,
+		history: {},
 		bananana: {
 			path: NooBoss.constantValues.version,
 			title: 'NooBoss ' + NooBoss.constantValues.version,
@@ -352,6 +402,12 @@ exports.default = function (NooBoss) {
 			ul: navigator.language || navigator.userLanguage
 		},
 		bello: function bello(obj) {
+			var id = '' + obj.category + '_' + obj.action + '_' + obj.label;
+			if (NooBoss.Bello.history[id] && NooBoss.Bello.history[id] + 10000 > new Date().getTime()) {
+				NooBoss.Bello.history[id] = new Date().getTime();
+				return;
+			}
+			NooBoss.Bello.history[id] = new Date().getTime();
 			var data = JSON.parse(JSON.stringify(NooBoss.Bello.bananana));
 			if (!NooBoss.Bello.belloOnce) {
 				NooBoss.Bello.belloOnce = true;

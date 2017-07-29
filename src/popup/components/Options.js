@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { } from '../actions';
-import { GL, set, generateRGBAString } from '../../utils';
+import { GL, set, generateRGBAString, sendMessage } from '../../utils';
 import { SketchPicker } from 'react-color';
-import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
+import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor } from '../actions';
 import styled from 'styled-components';
 
 const OptionsDiv = styled.div`
@@ -36,6 +36,9 @@ const OptionsDiv = styled.div`
 	#themeSubColorPicker{
 		background-color: ${props => props.themeSubColor}
 	}
+	.line{
+		margin-left: 32px;
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -61,8 +64,48 @@ class Options extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			colorPicker: null
+			colorPicker: null,
+			notificationDuration_autoState: 6,
+			notificationDuration_installation: 6,
+			notificationDuration_removal: 6,
+			notificationDuration_stateChange: 6,
+			historyInstall: false,
+			historyRemove: false,
+			historyUpdate: false,
+			historyEnable: false,
+			historyDisable: false,
+			recoExtensions: false,
+			notifyStateChange: false,
+			notifyInstallation: false,
+			notifyRemoval: false,
+			autoState: false,
+			autoStateNotification: false,
 		};
+	}
+
+	componentWillMount() {
+		const options=[
+			'recoExtensions',
+			'notifyStateChange',
+			'notifyInstallation',
+			'notifyRemoval',
+			'autoState',
+			'autoStateNotification',
+			'historyInstall',
+			'historyRemove',
+			'historyUpdate',
+			'historyEnable',
+			'historyDisable',
+			'notificationDuration_installation',
+			'notificationDuration_autoState',
+			'notificationDuration_removal',
+			'notificationDuration_stateChange'
+		];
+		for(let i = 0; i < options.length; i++) {
+			get(options[i], function(key, value) {
+				this.setState({ key: value });
+			}.bind(this, options[i]));
+		}
 	}
 
 	generateRGBAString(rgbaObject) {
@@ -74,13 +117,21 @@ class Options extends Component{
 		switch (name) {
 			case 'themeMainColor':
 				this.props.updateThemeMainColor(color);
-				console.log(color);
-				set('mainColor', color);
 				break;
 			case 'themeSubColor':
 				this.props.updateThemeSubColor(color);
-				console.log(color);
-				set('subColor', color);
+				break;
+		}
+	}
+
+	setColor(name, color) {
+		color = color.rgb;
+		switch (name) {
+			case 'themeMainColor':
+				sendMessage({ job: 'set', key: 'mainColor', value: color });
+				break;
+			case 'themeSubColor':
+				sendMessage({ job: 'set', key: 'subColor', value: color });
 				break;
 		}
 	}
@@ -94,16 +145,22 @@ class Options extends Component{
 		}
 	}
 
+	getSwitch(name, key) {
+		return (
+			<div className="line">
+			</div>
+		);
+	}
+
 	render() {
 		const themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		const themeSubColor = generateRGBAString(this.props.options.themeSubColor);
 		return (
 			<OptionsDiv themeMainColor={themeMainColor} themeSubColor={themeSubColor}>
-				<section>
-					<h2>{GL('experience')}</h2>
 					<section>
-						<h3>{GL('theme')}</h3>
+						<h2>{GL('experience')}</h2>
 						<section>
+							<h3>{GL('theme')}</h3>
 							<div className="line">
 								<span className="left">{GL('main_color')}</span>
 								<div className="left" id="themeMainColorPicker" onClick={this.updateColorPicker.bind(this, 'themeMainColor')} />
@@ -112,11 +169,12 @@ class Options extends Component{
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
 									 	tabIndex="-1"
-										onBlur={()=>{console.log('blur');this.setState({ colorPicker: null })}}
+										onBlur={()=>{this.setState({ colorPicker: null })}}
 									>
 										<SketchPicker
 											color={this.props.options.themeMainColor}
 											onChange={this.updateColor.bind(this, 'themeMainColor')}
+											onChangeComplete={this.setColor.bind(this, 'themeMainColor')}
 										/>
 									</div> : null}
 							</div>
@@ -128,33 +186,51 @@ class Options extends Component{
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
 									 	tabIndex="-1"
-										onBlur={()=>{console.log('blur');this.setState({ colorPicker: null })}}
+										onBlur={()=>{this.setState({ colorPicker: null })}}
 									>
 										<SketchPicker
 											color={this.props.options.themeSubColor}
 											onChange={this.updateColor.bind(this, 'themeSubColor')}
+											onChangeComplete={this.setColor.bind(this, 'themeSubColor')}
 										/>
 									</div> : null}
 							</div>
 						</section>
 					</section>
 
-					<h2>{GL('extensions')}</h2>
 					<section>
-						<h3>{GL('notifications')}</h3>
-						<h3>{GL('history')}</h3>
-						<h3>{GL('auto_state')}</h3>
-						<h3>{GL('join_community')}</h3>
-					</section>
-
-					<h2>{GL('userscripts')}</h2>
-
-					<h2>{GL('advanced_settings')}</h2>
+						<h2>{GL('extensions')}</h2>
 						<section>
-						<h3>{GL('clear_history')}</h3>
-						<h3>{GL('reset_everything')}</h3>
+							<h3>{GL('notifications')}</h3>
+							{this.getSwitch('notify_state_change', 'notifyStateChange')}
+						</section>
+
+						<section>
+							<h3>{GL('history')}</h3>
+						</section>
+
+						<section>
+							<h3>{GL('auto_state')}</h3>
+						</section>
+
+						<section>
+							<h3>{GL('join_community')}</h3>
+						</section>
 					</section>
-				</section>
+
+					<section>
+						<h2>{GL('userscripts')}</h2>
+					</section>
+
+					<section>
+						<h2>{GL('advanced_settings')}</h2>
+						<section>
+							<h3>{GL('clear_history')}</h3>
+						</section>
+						<section>
+							<h3>{GL('reset_everything')}</h3>
+						</section>
+					</section>
 			</OptionsDiv>
 		);
 	}

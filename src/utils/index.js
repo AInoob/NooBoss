@@ -84,6 +84,21 @@ export const get = (key, callback) => {
 	});
 };
 
+export const isOn = (key, callbackTrue, callbackFalse, param) => {
+	get(key, (value) => {
+		if (value == '1' || value == true) {
+			if(callbackTrue) {
+				callbackTrue(param);
+			}
+		}
+		else {
+			if(callbackFalse) {
+				callbackFalse(param);
+			}
+		}
+	});
+};
+
 export const set = (key, value, callback) => {
 	const temp = {};
 	temp[key] = value;
@@ -107,3 +122,7 @@ export const setIfNull = (key, setValue, callback) => {
 export const generateRGBAString = (rgbaObject) => {
 	return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';
 };
+
+export const sendMessage = (message, callback = () => {}) => {
+	chrome.runtime.sendMessage(message, callback);
+}

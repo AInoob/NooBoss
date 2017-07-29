@@ -12,6 +12,7 @@ export const defaultValues = {
 	autoStateNotification: true,
 	autoStateRules: [],
 	sortOrder: 'nameState',
+	bello: true,
 	joinCommunity: true,
 	notificationDuration_autoState: 5,
 	notificationDuration_stateChange: 5,

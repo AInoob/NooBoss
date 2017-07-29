@@ -1,6 +1,7 @@
 export default (NooBoss) => {
 	return {
 		belloOnce: false,
+		history: {},
 		bananana: {
 			path: NooBoss.constantValues.version,
 			title: 'NooBoss ' + NooBoss.constantValues.version,
@@ -10,6 +11,12 @@ export default (NooBoss) => {
 			ul: navigator.language || navigator.userLanguage,
 		},
 		bello: (obj) => {
+			const id = '' + obj.category + '_' + obj.action + '_' + obj.label;
+			if (NooBoss.Bello.history[id] && NooBoss.Bello.history[id] + 10000 > new Date().getTime()) {
+				NooBoss.Bello.history[id] = new Date().getTime();
+				return;
+			}
+			NooBoss.Bello.history[id] = new Date().getTime();
 			let data = JSON.parse(JSON.stringify(NooBoss.Bello.bananana));
 			if (!NooBoss.Bello.belloOnce) {
 				NooBoss.Bello.belloOnce = true;
