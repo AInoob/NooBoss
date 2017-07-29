@@ -66,7 +66,7 @@ export const getString = (elem) => {
 	else{
 		return elem.toString();
 	}
-}
+};
 
 export const capFirst = (elem) => {
 	const str = getString(elem);
@@ -82,15 +82,28 @@ export const get = (key, callback) => {
 		if(callback)
 			callback(result[key]);
 	});
-}
+};
 
 export const set = (key, value, callback) => {
 	const temp = {};
 	temp[key] = value;
 	chrome.storage.sync.set(temp, callback);
-}
+};
+
+export const setIfNull = (key, setValue, callback) => {
+	get(key, (value) => {
+		if (value == undefined || value == null) {
+			set(key, setValue, callback);
+		}
+		else {
+			if (callback) {
+				callback();
+			}
+		}
+	});
+};
 
 
 export const generateRGBAString = (rgbaObject) => {
 	return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';
-}
+};

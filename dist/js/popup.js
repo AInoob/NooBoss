@@ -4605,6 +4605,18 @@ var set = exports.set = function set(key, value, callback) {
 	chrome.storage.sync.set(temp, callback);
 };
 
+var setIfNull = exports.setIfNull = function setIfNull(key, setValue, callback) {
+	get(key, function (value) {
+		if (value == undefined || value == null) {
+			set(key, setValue, callback);
+		} else {
+			if (callback) {
+				callback();
+			}
+		}
+	});
+};
+
 var generateRGBAString = exports.generateRGBAString = function generateRGBAString(rgbaObject) {
 	return 'rgba(' + rgbaObject.r + ',' + rgbaObject.g + ',' + rgbaObject.b + ',' + rgbaObject.a + ')';
 };
