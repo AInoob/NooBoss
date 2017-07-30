@@ -30,6 +30,14 @@ const NooBossDiv = styled.div`
 	.left{
 		float: left;
 	}
+	button{
+		border: none;
+		color: white;
+		padding: 2px 8px;
+		cursor: pointer;
+		outline: none;
+		background-color: ${props => props.themeMainColor};
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {

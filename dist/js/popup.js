@@ -1833,6 +1833,66 @@ var sendMessage = exports.sendMessage = function sendMessage(message) {
 	chrome.runtime.sendMessage(message, callback);
 };
 
+var alerty = exports.alerty = function alerty(text, mainColor, callbackConfirm, callbackCancel) {
+	var alertHolder = document.createElement('div');
+	var alertDiv = document.createElement('div');
+	var texty = document.createElement('div');
+	texty.innerHTML = text;
+	var confirmy = document.createElement('button');
+	confirmy.innerHTML = GL('confirm');
+	confirmy.onclick = function () {
+		if (callbackConfirm) {
+			callbackConfirm();
+		}
+		document.body.removeChild(alertHolder);
+	};
+	var cancely = document.createElement('button');
+	cancely.innerHTML = GL('cancel');
+	cancely.onclick = function () {
+		if (callbackCancel) {
+			callbackCancel();
+		}
+		document.body.removeChild(alertHolder);
+	};
+
+	alertHolder.style.position = 'fixed';
+	alertHolder.style.width = '100%';
+	alertHolder.style.height = '100%';
+	alertHolder.style.top = '0';
+	alertHolder.style.background = 'rgba(0,0,0,0.4)';
+
+	alertDiv.style.width = '300px';
+	alertDiv.style.padding = '13px';
+	alertDiv.style.marginLeft = '250px';
+	alertDiv.style.marginTop = '100px';
+	alertDiv.style.textAlign = 'center';
+	alertDiv.style.backgroundColor = 'white';
+
+	texty.style.fontSize = 'large';
+	texty.style.marginBottom = '13px';
+
+	confirmy.style.border = 'none';
+	confirmy.style.color = 'white';
+	confirmy.style.padding = '2px 8px';
+	confirmy.style.cursor = 'pointer';
+	confirmy.style.outline = 'none';
+	confirmy.style.backgroundColor = mainColor;
+
+	cancely.style.border = 'none';
+	cancely.style.color = 'white';
+	cancely.style.padding = '2px 8px';
+	cancely.style.cursor = 'pointer';
+	cancely.style.outline = 'none';
+	cancely.style.backgroundColor = mainColor;
+	cancely.style.marginLeft = '30px';
+
+	alertDiv.appendChild(texty);
+	alertDiv.appendChild(confirmy);
+	alertDiv.appendChild(cancely);
+	alertHolder.appendChild(alertDiv);
+	document.body.appendChild(alertHolder);
+};
+
 /***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -28630,7 +28690,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _templateObject = _taggedTemplateLiteral(['\n\tbody{\n\t\twidth: 800px;\n\t\tmargin: 0px;\n\t}\n'], ['\n\tbody{\n\t\twidth: 800px;\n\t\tmargin: 0px;\n\t}\n']),
-    _templateObject2 = _taggedTemplateLiteral(['\n\tcolor: ', ';\n\tsection{\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t}\n\t.line{\n\t\theight: 32px;\n\t\tline-height: 32px;\n\t\tfloat: left;\n\t\twidth: 100%;\n\t}\n\t.left{\n\t\tfloat: left;\n\t}\n'], ['\n\tcolor: ', ';\n\tsection{\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t}\n\t.line{\n\t\theight: 32px;\n\t\tline-height: 32px;\n\t\tfloat: left;\n\t\twidth: 100%;\n\t}\n\t.left{\n\t\tfloat: left;\n\t}\n']);
+    _templateObject2 = _taggedTemplateLiteral(['\n\tcolor: ', ';\n\tsection{\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t}\n\t.line{\n\t\theight: 32px;\n\t\tline-height: 32px;\n\t\tfloat: left;\n\t\twidth: 100%;\n\t}\n\t.left{\n\t\tfloat: left;\n\t}\n\tbutton{\n\t\tborder: none;\n\t\tcolor: white;\n\t\tpadding: 2px 8px;\n\t\tcursor: pointer;\n\t\toutline: none;\n\t\tbackground-color: ', ';\n\t}\n'], ['\n\tcolor: ', ';\n\tsection{\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t}\n\t.line{\n\t\theight: 32px;\n\t\tline-height: 32px;\n\t\tfloat: left;\n\t\twidth: 100%;\n\t}\n\t.left{\n\t\tfloat: left;\n\t}\n\tbutton{\n\t\tborder: none;\n\t\tcolor: white;\n\t\tpadding: 2px 8px;\n\t\tcursor: pointer;\n\t\toutline: none;\n\t\tbackground-color: ', ';\n\t}\n']);
 
 var _react = __webpack_require__(0);
 
@@ -28674,6 +28734,8 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 
 var NooBossDiv = _styledComponents2.default.div(_templateObject2, function (props) {
 	return props.themeSubColor;
+}, function (props) {
+	return props.themeMainColor;
 });
 
 var mapStateToProps = function mapStateToProps(state, ownProps) {
@@ -31307,7 +31369,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _templateObject = _taggedTemplateLiteral(['\n\tuser-select: none;\n\t.colorPickerHolder{\n\t\toverflow: hidden;\n\t\tmargin-left: 32px;\n\t\tfloat: left;\n\t\tmargin-top: 6px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:focus{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t\toutline: none;\n\t\t}\n\t}\n\t[type="checkbox"]{\n\t\tdisplay: none;\n\t\t&:checked + label\n\t\t{\n\t\t\t&:before{\n\t\t\t\ttop: -8px;\n\t\t\t\tleft: -5px;\n\t\t\t\twidth: 7px;\n\t\t\t\theight: 19px;\n\t\t\t\tborder-top: 2px solid transparent;\n\t\t\t\tborder-left: 2px solid transparent;\n\t\t\t\tborder-right: 2px solid ', ';\n\t\t\t\tborder-bottom: 2px solid ', ';\n\t\t\t\ttransform: rotate(40deg);\n\t\t\t\tbackface-visibility: hidden;\n\t\t\t\ttransform-origin: 100% 100%;\n\t\t\t}\n\t\t\t& + span + .appending{\n\t\t\t\tdisplay: inline-block;\n\t\t\t}\n\t\t}\n\t\t& + label{\n\t\t\tcursor: pointer;\n\t\t\tposition: relative;\n\t\t\t&:before{\n\t\t\t\tcontent: \'\';\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: 0;\n\t\t\t\tleft: 0;\n\t\t\t\twidth: 13px;\n\t\t\t\theight: 13px;\n\t\t\t\tz-index: 0;\n\t\t\t\tborder: 2px solid ', ';\n\t\t\t\tborder-radius: 1px;\n\t\t\t\tmargin-top: 2px;\n\t\t\t\ttransition: .2s;\n\t\t\t}\n\t\t\t& + span{\n\t\t\t\tmargin-left: 30px;\n\t\t\t\tcursor: pointer;\n\t\t\t\t& + .appending{\n\t\t\t\t\tdisplay: none;\n\t\t\t\t\tmargin-left: 13px;\n\t\t\t\t\tcursor: default;\n\t\t\t\t\tinput{\n\t\t\t\t\t\tborder: none;\n\t\t\t\t\t\toutline: none;\n\t\t\t\t\t\tborder-bottom: 1px solid ', ';\n\t\t\t\t\t\twidth: 33px;\n\t\t\t\t\t\ttext-align: center;\n\t\t\t\t\t\t& + span{\n\t\t\t\t\t\t\tcursor: default;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t#themeMainColorPicker, #themeSubColorPicker{\n\t\tcursor: pointer;\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t\twidth: 36px;\n\t\theight: 16px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:hover{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t}\n\t\ttransition: box-shadow 0.309s;\n\t}\n\t#themeMainColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t#themeSubColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t.line{\n\t\tmargin-left: 32px;\n\t}\n'], ['\n\tuser-select: none;\n\t.colorPickerHolder{\n\t\toverflow: hidden;\n\t\tmargin-left: 32px;\n\t\tfloat: left;\n\t\tmargin-top: 6px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:focus{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t\toutline: none;\n\t\t}\n\t}\n\t[type="checkbox"]{\n\t\tdisplay: none;\n\t\t&:checked + label\n\t\t{\n\t\t\t&:before{\n\t\t\t\ttop: -8px;\n\t\t\t\tleft: -5px;\n\t\t\t\twidth: 7px;\n\t\t\t\theight: 19px;\n\t\t\t\tborder-top: 2px solid transparent;\n\t\t\t\tborder-left: 2px solid transparent;\n\t\t\t\tborder-right: 2px solid ', ';\n\t\t\t\tborder-bottom: 2px solid ', ';\n\t\t\t\ttransform: rotate(40deg);\n\t\t\t\tbackface-visibility: hidden;\n\t\t\t\ttransform-origin: 100% 100%;\n\t\t\t}\n\t\t\t& + span + .appending{\n\t\t\t\tdisplay: inline-block;\n\t\t\t}\n\t\t}\n\t\t& + label{\n\t\t\tcursor: pointer;\n\t\t\tposition: relative;\n\t\t\t&:before{\n\t\t\t\tcontent: \'\';\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: 0;\n\t\t\t\tleft: 0;\n\t\t\t\twidth: 13px;\n\t\t\t\theight: 13px;\n\t\t\t\tz-index: 0;\n\t\t\t\tborder: 2px solid ', ';\n\t\t\t\tborder-radius: 1px;\n\t\t\t\tmargin-top: 2px;\n\t\t\t\ttransition: .2s;\n\t\t\t}\n\t\t\t& + span{\n\t\t\t\tmargin-left: 30px;\n\t\t\t\tcursor: pointer;\n\t\t\t\t& + .appending{\n\t\t\t\t\tdisplay: none;\n\t\t\t\t\tmargin-left: 13px;\n\t\t\t\t\tcursor: default;\n\t\t\t\t\tinput{\n\t\t\t\t\t\tborder: none;\n\t\t\t\t\t\toutline: none;\n\t\t\t\t\t\tborder-bottom: 1px solid ', ';\n\t\t\t\t\t\twidth: 33px;\n\t\t\t\t\t\ttext-align: center;\n\t\t\t\t\t\t& + span{\n\t\t\t\t\t\t\tcursor: default;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t#themeMainColorPicker, #themeSubColorPicker{\n\t\tcursor: pointer;\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t\twidth: 36px;\n\t\theight: 16px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:hover{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t}\n\t\ttransition: box-shadow 0.309s;\n\t}\n\t#themeMainColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t#themeSubColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t.line{\n\t\tmargin-left: 32px;\n\t}\n']);
+var _templateObject = _taggedTemplateLiteral(['\n\tuser-select: none;\n\t.colorPickerHolder{\n\t\toverflow: hidden;\n\t\tmargin-left: 32px;\n\t\tfloat: left;\n\t\tmargin-top: 6px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:focus{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t\toutline: none;\n\t\t}\n\t}\n\t[type="checkbox"]{\n\t\tdisplay: none;\n\t\t&:checked + label\n\t\t{\n\t\t\t&:before{\n\t\t\t\ttop: -8px;\n\t\t\t\tleft: -5px;\n\t\t\t\twidth: 7px;\n\t\t\t\theight: 19px;\n\t\t\t\tborder-top: 2px solid transparent;\n\t\t\t\tborder-left: 2px solid transparent;\n\t\t\t\tborder-right: 2px solid ', ';\n\t\t\t\tborder-bottom: 2px solid ', ';\n\t\t\t\ttransform: rotate(40deg);\n\t\t\t\tbackface-visibility: hidden;\n\t\t\t\ttransform-origin: 100% 100%;\n\t\t\t}\n\t\t\t& + span + .appending{\n\t\t\t\tdisplay: inline-block;\n\t\t\t}\n\t\t}\n\t\t& + label{\n\t\t\tcursor: pointer;\n\t\t\tposition: relative;\n\t\t\t&:before{\n\t\t\t\tcontent: \'\';\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -2px;\n\t\t\t\tleft: 0;\n\t\t\t\twidth: 13px;\n\t\t\t\theight: 13px;\n\t\t\t\tz-index: 0;\n\t\t\t\tborder: 2px solid ', ';\n\t\t\t\tborder-radius: 1px;\n\t\t\t\tmargin-top: 2px;\n\t\t\t\ttransition: .2s;\n\t\t\t}\n\t\t\t& + span{\n\t\t\t\tmargin-left: 30px;\n\t\t\t\tcursor: pointer;\n\t\t\t\t& + .appending{\n\t\t\t\t\tdisplay: none;\n\t\t\t\t\tmargin-left: 13px;\n\t\t\t\t\tcursor: default;\n\t\t\t\t\tinput{\n\t\t\t\t\t\tborder: none;\n\t\t\t\t\t\toutline: none;\n\t\t\t\t\t\tborder-bottom: 1px solid ', ';\n\t\t\t\t\t\twidth: 33px;\n\t\t\t\t\t\ttext-align: center;\n\t\t\t\t\t\t& + span{\n\t\t\t\t\t\t\tcursor: default;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t#themeMainColorPicker, #themeSubColorPicker{\n\t\tcursor: pointer;\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t\twidth: 36px;\n\t\theight: 16px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:hover{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t}\n\t\ttransition: box-shadow 0.309s;\n\t}\n\t#themeMainColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t#themeSubColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t.line{\n\t\tmargin-left: 32px;\n\t}\n'], ['\n\tuser-select: none;\n\t.colorPickerHolder{\n\t\toverflow: hidden;\n\t\tmargin-left: 32px;\n\t\tfloat: left;\n\t\tmargin-top: 6px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:focus{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t\toutline: none;\n\t\t}\n\t}\n\t[type="checkbox"]{\n\t\tdisplay: none;\n\t\t&:checked + label\n\t\t{\n\t\t\t&:before{\n\t\t\t\ttop: -8px;\n\t\t\t\tleft: -5px;\n\t\t\t\twidth: 7px;\n\t\t\t\theight: 19px;\n\t\t\t\tborder-top: 2px solid transparent;\n\t\t\t\tborder-left: 2px solid transparent;\n\t\t\t\tborder-right: 2px solid ', ';\n\t\t\t\tborder-bottom: 2px solid ', ';\n\t\t\t\ttransform: rotate(40deg);\n\t\t\t\tbackface-visibility: hidden;\n\t\t\t\ttransform-origin: 100% 100%;\n\t\t\t}\n\t\t\t& + span + .appending{\n\t\t\t\tdisplay: inline-block;\n\t\t\t}\n\t\t}\n\t\t& + label{\n\t\t\tcursor: pointer;\n\t\t\tposition: relative;\n\t\t\t&:before{\n\t\t\t\tcontent: \'\';\n\t\t\t\tposition: absolute;\n\t\t\t\ttop: -2px;\n\t\t\t\tleft: 0;\n\t\t\t\twidth: 13px;\n\t\t\t\theight: 13px;\n\t\t\t\tz-index: 0;\n\t\t\t\tborder: 2px solid ', ';\n\t\t\t\tborder-radius: 1px;\n\t\t\t\tmargin-top: 2px;\n\t\t\t\ttransition: .2s;\n\t\t\t}\n\t\t\t& + span{\n\t\t\t\tmargin-left: 30px;\n\t\t\t\tcursor: pointer;\n\t\t\t\t& + .appending{\n\t\t\t\t\tdisplay: none;\n\t\t\t\t\tmargin-left: 13px;\n\t\t\t\t\tcursor: default;\n\t\t\t\t\tinput{\n\t\t\t\t\t\tborder: none;\n\t\t\t\t\t\toutline: none;\n\t\t\t\t\t\tborder-bottom: 1px solid ', ';\n\t\t\t\t\t\twidth: 33px;\n\t\t\t\t\t\ttext-align: center;\n\t\t\t\t\t\t& + span{\n\t\t\t\t\t\t\tcursor: default;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\t#themeMainColorPicker, #themeSubColorPicker{\n\t\tcursor: pointer;\n\t\tmargin-top: 8px;\n\t\tmargin-left: 32px;\n\t\twidth: 36px;\n\t\theight: 16px;\n\t\tbox-shadow: grey -1px -1px 3px 0px;\n\t\t&:hover{\n\t\t\tbox-shadow: grey -1px -1px 8px 0px;\n\t\t}\n\t\ttransition: box-shadow 0.309s;\n\t}\n\t#themeMainColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t#themeSubColorPicker{\n\t\tbackground-color: ', '\n\t}\n\t.line{\n\t\tmargin-left: 32px;\n\t}\n']);
 
 var _react = __webpack_require__(0);
 
@@ -31390,15 +31452,27 @@ var Options = function (_Component) {
 			notifyInstallation: false,
 			notifyRemoval: false,
 			autoState: false,
-			autoStateNotification: false
+			autoStateNotification: false,
+			extensionsJoinCommunity: false,
+			userscriptsJoinCommunity: false
 		};
+		_this.initiate();
+		chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+			if (message) {
+				switch (message.job) {
+					case 'popupOptionsInitiate':
+						_this.initiate();
+						break;
+				}
+			}
+		});
 		return _this;
 	}
 
 	_createClass(Options, [{
-		key: 'componentWillMount',
-		value: function componentWillMount() {
-			var options = ['recoExtensions', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification', 'historyInstall', 'historyRemoval', 'historyUpdate', 'historyEnable', 'historyDisable', 'notificationDuration_installation', 'notificationDuration_autoState', 'notificationDuration_removal', 'notificationDuration_stateChange'];
+		key: 'initiate',
+		value: function initiate() {
+			var options = ['recoExtensions', 'notifyStateChange', 'notifyInstallation', 'notifyRemoval', 'autoState', 'autoStateNotification', 'historyInstall', 'historyRemoval', 'historyUpdate', 'historyEnable', 'historyDisable', 'notificationDuration_installation', 'notificationDuration_autoState', 'notificationDuration_removal', 'notificationDuration_stateChange', 'extensionsJoinCommunity', 'userscriptsJoinCommunity'];
 			for (var i = 0; i < options.length; i++) {
 				(0, _utils.get)(options[i], function (key, value) {
 					var temp = {};
@@ -31493,6 +31567,20 @@ var Options = function (_Component) {
 			temp[key] = !this.state[key];
 			this.setState(temp);
 			(0, _utils.sendMessage)({ job: 'set', key: key, value: temp[key] });
+		}
+	}, {
+		key: 'clearHistory',
+		value: function clearHistory() {
+			(0, _utils.alerty)((0, _utils.GL)('are_you_sure'), (0, _utils.generateRGBAString)(this.props.options.themeMainColor), function () {
+				(0, _utils.sendMessage)({ job: 'clearHistory' });
+			});
+		}
+	}, {
+		key: 'resetEverything',
+		value: function resetEverything() {
+			(0, _utils.alerty)((0, _utils.GL)('are_you_sure'), (0, _utils.generateRGBAString)(this.props.options.themeMainColor), function () {
+				(0, _utils.sendMessage)({ job: 'reset' });
+			});
 		}
 	}, {
 		key: 'render',
@@ -31621,7 +31709,8 @@ var Options = function (_Component) {
 							'h3',
 							null,
 							(0, _utils.GL)('auto_state')
-						)
+						),
+						this.getSwitch('auto_state', 'autoState')
 					),
 					_react2.default.createElement(
 						'section',
@@ -31630,7 +31719,8 @@ var Options = function (_Component) {
 							'h3',
 							null,
 							(0, _utils.GL)('join_community')
-						)
+						),
+						this.getSwitch('join_community', 'extensionsJoinCommunity')
 					)
 				),
 				_react2.default.createElement(
@@ -31640,6 +31730,16 @@ var Options = function (_Component) {
 						'h2',
 						null,
 						(0, _utils.GL)('userscripts')
+					),
+					_react2.default.createElement(
+						'section',
+						null,
+						_react2.default.createElement(
+							'h3',
+							null,
+							(0, _utils.GL)('join_community')
+						),
+						this.getSwitch('join_community', 'userscriptsJoinCommunity')
 					)
 				),
 				_react2.default.createElement(
@@ -31656,16 +31756,25 @@ var Options = function (_Component) {
 						_react2.default.createElement(
 							'h3',
 							null,
-							(0, _utils.GL)('clear_history')
-						)
-					),
-					_react2.default.createElement(
-						'section',
-						null,
+							(0, _utils.GL)('clean')
+						),
 						_react2.default.createElement(
-							'h3',
-							null,
-							(0, _utils.GL)('reset_everything')
+							'div',
+							{ className: 'line' },
+							_react2.default.createElement(
+								'button',
+								{ onClick: this.clearHistory.bind(this) },
+								(0, _utils.GL)('clear_history')
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'line' },
+							_react2.default.createElement(
+								'button',
+								{ onClick: this.resetEverything.bind(this) },
+								(0, _utils.GL)('reset_everything')
+							)
 						)
 					)
 				)

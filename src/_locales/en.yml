@@ -24,6 +24,8 @@ experience:
   message: Experience
 clear_history:
   message: Clear history
+clean:
+  message: Clean
 reset_everything:
   message: Reset everything (Be careful!)
 auto_state:
@@ -58,3 +60,9 @@ record_enable:
   message: Record enable event
 record_disable:
   message: Record disable event
+confirm:
+  message: Confirm
+cancel:
+  message: Cancel
+are_you_sure:
+  message: Are you sure?

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { } from '../actions';
-import { GL, get, generateRGBAString, sendMessage } from '../../utils';
+import { alerty, GL, get, generateRGBAString, sendMessage } from '../../utils';
 import { SketchPicker } from 'react-color';
 import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor } from '../actions';
 import styled from 'styled-components';
@@ -46,7 +46,7 @@ const OptionsDiv = styled.div`
 			&:before{
 				content: '';
 				position: absolute;
-				top: 0;
+				top: -2px;
 				left: 0;
 				width: 13px;
 				height: 13px;
@@ -139,10 +139,22 @@ class Options extends Component{
 			notifyRemoval: false,
 			autoState: false,
 			autoStateNotification: false,
+			extensionsJoinCommunity: false,
+			userscriptsJoinCommunity: false,
 		};
+		this.initiate();
+		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+			if (message) {
+				switch (message.job) {
+					case 'popupOptionsInitiate':
+						this.initiate();
+						break;
+				}
+			}
+		});
 	}
 
-	componentWillMount() {
+	initiate() {
 		const options=[
 			'recoExtensions',
 			'notifyStateChange',
@@ -158,7 +170,9 @@ class Options extends Component{
 			'notificationDuration_installation',
 			'notificationDuration_autoState',
 			'notificationDuration_removal',
-			'notificationDuration_stateChange'
+			'notificationDuration_stateChange',
+			'extensionsJoinCommunity',
+			'userscriptsJoinCommunity',
 		];
 		for(let i = 0; i < options.length; i++) {
 			get(options[i], function(key, value) {
@@ -238,6 +252,26 @@ class Options extends Component{
 		sendMessage({ job: 'set', key, value: temp[key] });
 	}
 
+	clearHistory() {
+		alerty(
+			GL('are_you_sure'),
+			generateRGBAString(this.props.options.themeMainColor),
+			() => {
+				sendMessage({ job: 'clearHistory' });
+			}
+		);
+	}
+
+	resetEverything() {
+		alerty(
+			GL('are_you_sure'),
+			generateRGBAString(this.props.options.themeMainColor),
+			() => {
+				sendMessage({ job: 'reset' });
+			}
+		);
+	}
+
 	render() {
 		console.log(this.state);
 		const themeMainColor = generateRGBAString(this.props.options.themeMainColor);
@@ -306,24 +340,30 @@ class Options extends Component{
 
 						<section>
 							<h3>{GL('auto_state')}</h3>
+							{this.getSwitch('auto_state', 'autoState')}
 						</section>
 
 						<section>
 							<h3>{GL('join_community')}</h3>
+							{this.getSwitch('join_community', 'extensionsJoinCommunity')}
 						</section>
 					</section>
 
 					<section>
 						<h2>{GL('userscripts')}</h2>
+
+						<section>
+							<h3>{GL('join_community')}</h3>
+							{this.getSwitch('join_community', 'userscriptsJoinCommunity')}
+						</section>
 					</section>
 
 					<section>
 						<h2>{GL('advanced_settings')}</h2>
 						<section>
-							<h3>{GL('clear_history')}</h3>
-						</section>
-						<section>
-							<h3>{GL('reset_everything')}</h3>
+							<h3>{GL('clean')}</h3>
+							<div className="line"><button onClick={this.clearHistory.bind(this)}>{GL('clear_history')}</button></div>
+							<div className="line"><button onClick={this.resetEverything.bind(this)}>{GL('reset_everything')}</button></div>
 						</section>
 					</section>
 			</OptionsDiv>

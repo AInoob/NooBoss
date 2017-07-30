@@ -25,6 +25,8 @@ export const defaultValues = {
 	subColor: { r: 0, g: 0, b: 0, a: 1 },
 	extensions: true,
 	userscripts: true,
+	extensionsJoinCommunity: true,
+	userscriptsJoinCommunity: true,
 };
 
 export const constantValues = {

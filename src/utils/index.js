@@ -126,3 +126,65 @@ export const generateRGBAString = (rgbaObject) => {
 export const sendMessage = (message, callback = () => {}) => {
 	chrome.runtime.sendMessage(message, callback);
 }
+
+export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
+	const alertHolder = document.createElement('div');
+	const alertDiv = document.createElement('div');
+	const texty = document.createElement('div');
+	texty.innerHTML = text;
+	const confirmy = document.createElement('button');
+	confirmy.innerHTML = GL('confirm');
+	confirmy.onclick = () => {
+		if (callbackConfirm) {
+			callbackConfirm();
+		}
+		document.body.removeChild(alertHolder);
+	};
+	const cancely = document.createElement('button');
+	cancely.innerHTML = GL('cancel');
+	cancely.onclick = () => {
+		if (callbackCancel) {
+			callbackCancel();
+		}
+		document.body.removeChild(alertHolder);
+	};
+
+	alertHolder.style.position = 'fixed';
+	alertHolder.style.width = '100%';
+	alertHolder.style.height = '100%';
+	alertHolder.style.top = '0';
+	alertHolder.style.background = 'rgba(0,0,0,0.4)';
+
+	alertDiv.style.width = '300px';
+	alertDiv.style.padding = '13px';
+	alertDiv.style.marginLeft = '250px';
+	alertDiv.style.marginTop = '100px';
+	alertDiv.style.textAlign = 'center';
+	alertDiv.style.backgroundColor = 'white';
+
+	texty.style.fontSize = 'large';
+	texty.style.marginBottom = '13px';
+
+
+	confirmy.style.border = 'none';
+	confirmy.style.color = 'white';
+	confirmy.style.padding = '2px 8px';
+	confirmy.style.cursor = 'pointer';
+	confirmy.style.outline = 'none';
+	confirmy.style.backgroundColor = mainColor;
+
+	cancely.style.border = 'none';
+	cancely.style.color = 'white';
+	cancely.style.padding = '2px 8px';
+	cancely.style.cursor = 'pointer';
+	cancely.style.outline = 'none';
+	cancely.style.backgroundColor = mainColor;
+	cancely.style.marginLeft = '30px';
+
+
+	alertDiv.appendChild(texty);
+	alertDiv.appendChild(confirmy);
+	alertDiv.appendChild(cancely);
+	alertHolder.appendChild(alertDiv);
+	document.body.appendChild(alertHolder);
+}

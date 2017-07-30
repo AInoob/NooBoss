@@ -24,6 +24,8 @@ experience:
   message: 体验
 clear_history:
   message: 清空历史
+clean:
+  message: 清理
 reset_everything:
   message: 重置(注意！)
 auto_state:
@@ -58,3 +60,9 @@ record_enable:
   message: 记录开启事件
 record_disable:
   message: 记录关闭事件
+confirm:
+  message: 确认
+cancel:
+  message: 取消
+are_you_sure:
+  message: 你确定吗？
