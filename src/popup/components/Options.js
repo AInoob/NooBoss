@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { } from '../actions';
-import { GL, set, generateRGBAString, sendMessage } from '../../utils';
+import { GL, get, generateRGBAString, sendMessage } from '../../utils';
 import { SketchPicker } from 'react-color';
 import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor } from '../actions';
 import styled from 'styled-components';
 
 const OptionsDiv = styled.div`
+	user-select: none;
 	.colorPickerHolder{
 		overflow: hidden;
 		margin-left: 32px;
@@ -16,6 +17,64 @@ const OptionsDiv = styled.div`
 		&:focus{
 			box-shadow: grey -1px -1px 8px 0px;
 			outline: none;
+		}
+	}
+	[type="checkbox"]{
+		display: none;
+		&:checked + label
+		{
+			&:before{
+				top: -8px;
+				left: -5px;
+				width: 7px;
+				height: 19px;
+				border-top: 2px solid transparent;
+				border-left: 2px solid transparent;
+				border-right: 2px solid ${props => props.themeMainColor};
+				border-bottom: 2px solid ${props => props.themeMainColor};
+				transform: rotate(40deg);
+				backface-visibility: hidden;
+				transform-origin: 100% 100%;
+			}
+			& + span + .appending{
+				display: inline-block;
+			}
+		}
+		& + label{
+			cursor: pointer;
+			position: relative;
+			&:before{
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 13px;
+				height: 13px;
+				z-index: 0;
+				border: 2px solid ${props => props.themeMainColor};
+				border-radius: 1px;
+				margin-top: 2px;
+				transition: .2s;
+			}
+			& + span{
+				margin-left: 30px;
+				cursor: pointer;
+				& + .appending{
+					display: none;
+					margin-left: 13px;
+					cursor: default;
+					input{
+						border: none;
+						outline: none;
+						border-bottom: 1px solid ${props => props.themeMainColor};
+						width: 33px;
+						text-align: center;
+						& + span{
+							cursor: default;
+						}
+					}
+				}
+			}
 		}
 	}
 	#themeMainColorPicker, #themeSubColorPicker{
@@ -70,7 +129,7 @@ class Options extends Component{
 			notificationDuration_removal: 6,
 			notificationDuration_stateChange: 6,
 			historyInstall: false,
-			historyRemove: false,
+			historyRemoval: false,
 			historyUpdate: false,
 			historyEnable: false,
 			historyDisable: false,
@@ -92,7 +151,7 @@ class Options extends Component{
 			'autoState',
 			'autoStateNotification',
 			'historyInstall',
-			'historyRemove',
+			'historyRemoval',
 			'historyUpdate',
 			'historyEnable',
 			'historyDisable',
@@ -103,7 +162,9 @@ class Options extends Component{
 		];
 		for(let i = 0; i < options.length; i++) {
 			get(options[i], function(key, value) {
-				this.setState({ key: value });
+				const temp = {};
+				temp[key] = value;
+				this.setState(temp);
 			}.bind(this, options[i]));
 		}
 	}
@@ -145,14 +206,40 @@ class Options extends Component{
 		}
 	}
 
-	getSwitch(name, key) {
+	getSwitch(name, key, name2, key2) {
+		const appending = name2 ? (
+			<div className="appending">
+				<span>{GL('for_X_seconds').split('X')[0]}</span>
+				<input value={this.state[key2]} onChange={this.changeOption.bind(this, key2)} />
+				<span>{GL('for_X_seconds').split('X')[1]}</span>
+			</div>
+		): null;
 		return (
 			<div className="line">
+				<input type="checkbox" checked={this.state[key]} />
+				<label className="checkbox" onClick={this.toggleState.bind(this, key)} />
+				<span onClick={this.toggleState.bind(this, key)}>{GL(name)}</span>
+				{appending}
 			</div>
 		);
 	}
 
+	changeOption(key, e) {
+		const temp = {};
+		temp[key] = e.target.value;
+		this.setState(temp);
+		sendMessage({ job: 'set', key, value: temp[key] });
+	}
+
+	toggleState(key) {
+		const temp = {};
+		temp[key] = !this.state[key];
+		this.setState(temp);
+		sendMessage({ job: 'set', key, value: temp[key] });
+	}
+
 	render() {
+		console.log(this.state);
 		const themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		const themeSubColor = generateRGBAString(this.props.options.themeSubColor);
 		return (
@@ -202,11 +289,19 @@ class Options extends Component{
 						<h2>{GL('extensions')}</h2>
 						<section>
 							<h3>{GL('notifications')}</h3>
-							{this.getSwitch('notify_state_change', 'notifyStateChange')}
+							{this.getSwitch('notify_state_change', 'notifyStateChange', 'for_X_seconds', 'notificationDuration_stateChange')}
+							{this.getSwitch('notify_installation', 'notifyInstallation', 'for_X_seconds', 'notificationDuration_installation')}
+							{this.getSwitch('notify_removal', 'notifyRemoval', 'for_X_seconds', 'notificationDuration_removal')}
+							{this.getSwitch('auto_state_notification', 'autoStateNotification', 'for_X_seconds', 'notificationDuration_autoState')}
 						</section>
 
 						<section>
 							<h3>{GL('history')}</h3>
+							{this.getSwitch('record_installation', 'historyInstall')}
+							{this.getSwitch('record_update', 'historyUpdate')}
+							{this.getSwitch('record_removal', 'historyRemoval')}
+							{this.getSwitch('record_enable', 'historyEnable')}
+							{this.getSwitch('record_disable', 'historyDisable')}
 						</section>
 
 						<section>

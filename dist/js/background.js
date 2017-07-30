@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 29:
+/***/ 20:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -217,7 +217,7 @@ var _Bello = __webpack_require__(462);
 
 var _Bello2 = _interopRequireDefault(_Bello);
 
-var _utils = __webpack_require__(29);
+var _utils = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -278,7 +278,7 @@ var defaultValues = exports.defaultValues = {
 	notifyInstallation: true,
 	notifyRemoval: true,
 	historyInstall: true,
-	historyRemove: true,
+	historyRemoval: true,
 	historyUpdate: true,
 	historyEnable: true,
 	historyDisable: true,
@@ -317,7 +317,7 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _utils = __webpack_require__(29);
+var _utils = __webpack_require__(20);
 
 exports.default = function (NooBoss) {
 	return {

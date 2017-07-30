@@ -38,3 +38,23 @@ main_color:
   message: Main color
 sub_color:
   message: Sub color
+notify_state_change:
+  message: Notify state change
+notify_installation:
+  message: Notify installation/update
+notify_removal:
+  message: Notify removal
+auto_state_notification:
+  message: Auto State notification
+for_X_seconds:
+  message: for X second(s)
+record_installation:
+  message: Record installation
+record_update:
+  message: Record update
+record_removal:
+  message: Record removal
+record_enable:
+  message: Record enable event
+record_disable:
+  message: Record disable event

@@ -4,7 +4,7 @@ export const defaultValues = {
 	notifyInstallation: true,
 	notifyRemoval: true,
 	historyInstall: true,
-	historyRemove: true,
+	historyRemoval: true,
 	historyUpdate: true,
 	historyEnable: true,
 	historyDisable: true,
