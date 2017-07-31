@@ -1,4 +1,4 @@
-import { setIfNull, set, get } from '../utils';
+import { setIfNull, set, get, setAsync } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -30,23 +30,26 @@ export default (NooBoss) => {
 			}
 		},
 		resetOptions: () => {
-			let temp;
-			for(let i = 1; i < NooBoss.defaultValues.length; i++){
-				temp = NooBoss.defaultValues[i];
-				set(temp[0], temp[1]);
-			}
+			return new Promise(async resolve => {
+				const keyList = Object.keys(NooBoss.defaultValues);
+				for(let i = 0; i < keyList.length; i++) {
+					const key = keyList[i];
+					await setAsync(key, NooBoss.defaultValues[key]);
+				}
+				resolve();
+			});
 		},
-		resetIndexedDB: (callback) => {
-			let req = window.indexedDB.deleteDatabase('NooBoss');
-			req.onerror = (e) => {
-				console.log(e);
-			}
-			if(callback) {
-				req.onsuccess = callback;
-			}
-		},
-		set: (name, value, callback) => {
-			set(name, value, callback);
+		resetIndexedDB: () => {
+			return new Promise(resolve => {
+				const req = window.indexedDB.deleteDatabase('NooBoss');
+				req.onerror = (e) => {
+					console.log(e);
+					resolve();
+				}
+				req.onsuccess = () => {
+					resolve();
+				};
+			});
 		},
 	};
 };

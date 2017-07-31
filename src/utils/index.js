@@ -105,6 +105,16 @@ export const set = (key, value, callback) => {
 	chrome.storage.sync.set(temp, callback);
 };
 
+export const setAsync = (key, value) => {
+	return new Promise(resolve => {
+		const temp = {};
+		temp[key] = value;
+		chrome.storage.sync.set(temp, () => {
+			resolve();
+		});
+	});
+};
+
 export const setIfNull = (key, setValue, callback) => {
 	get(key, (value) => {
 		if (value == undefined || value == null) {
@@ -125,7 +135,23 @@ export const generateRGBAString = (rgbaObject) => {
 
 export const sendMessage = (message, callback = () => {}) => {
 	chrome.runtime.sendMessage(message, callback);
-}
+};
+
+export const notify = (title, message, duration) => {
+	chrome.notifications.create({
+		type: 'basic',
+		iconUrl: '/images/icon_128.png',
+		title,
+		message,
+		requireInteraction: true
+	}, (notificationId) => {
+		if (duration > 0) {
+			setTimeout(() => {
+				chrome.notifications.clear(notificationId, () => {});
+			}, duration * 1000);
+		}
+	});
+};
 
 export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	const alertHolder = document.createElement('div');
@@ -187,4 +213,4 @@ export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	alertDiv.appendChild(cancely);
 	alertHolder.appendChild(alertDiv);
 	document.body.appendChild(alertHolder);
-}
+};

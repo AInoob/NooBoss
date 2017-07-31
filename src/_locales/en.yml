@@ -33,7 +33,7 @@ auto_state:
 join_nooboss_community:
   message: Join NooBoss Community
 advanced_settings:
-  message: Advanced_settings
+  message: Advanced settings
 theme:
   message: Theme
 main_color:
@@ -66,3 +66,7 @@ cancel:
   message: Cancel
 are_you_sure:
   message: Are you sure?
+successfully_cleared_history:
+  message: Successfully cleared history
+successfully_reset_everything:
+  message: Successfully reset everything

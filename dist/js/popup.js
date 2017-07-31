@@ -1811,6 +1811,16 @@ var set = exports.set = function set(key, value, callback) {
 	chrome.storage.sync.set(temp, callback);
 };
 
+var setAsync = exports.setAsync = function setAsync(key, value) {
+	return new Promise(function (resolve) {
+		var temp = {};
+		temp[key] = value;
+		chrome.storage.sync.set(temp, function () {
+			resolve();
+		});
+	});
+};
+
 var setIfNull = exports.setIfNull = function setIfNull(key, setValue, callback) {
 	get(key, function (value) {
 		if (value == undefined || value == null) {
@@ -1831,6 +1841,22 @@ var sendMessage = exports.sendMessage = function sendMessage(message) {
 	var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
 	chrome.runtime.sendMessage(message, callback);
+};
+
+var notify = exports.notify = function notify(title, message, duration) {
+	chrome.notifications.create({
+		type: 'basic',
+		iconUrl: '/images/icon_128.png',
+		title: title,
+		message: message,
+		requireInteraction: true
+	}, function (notificationId) {
+		if (duration > 0) {
+			setTimeout(function () {
+				chrome.notifications.clear(notificationId, function () {});
+			}, duration * 1000);
+		}
+	});
 };
 
 var alerty = exports.alerty = function alerty(text, mainColor, callbackConfirm, callbackCancel) {

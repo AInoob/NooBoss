@@ -1,7 +1,7 @@
 import { defaultValues, constantValues } from './values';
 import createOptions from './Options';
 import createBello from './Bello';
-import { set, isOn, GL } from '../utils';
+import { set, isOn, GL, notify } from '../utils';
 
 const NooBoss = {
 	defaultValues,
@@ -13,7 +13,7 @@ NooBoss.initiate = () => {
 	NooBoss.Options = createOptions(NooBoss);
 	NooBoss.Options.initiate();
 	NooBoss.Bello = createBello(NooBoss);
-	chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+	chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 		switch (message.job) {
 			case 'bello':
 				NooBoss.Bello.bello(message.bananana);
@@ -23,29 +23,25 @@ NooBoss.initiate = () => {
 				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: message.key }));
 				break;
 			case 'reset':
-				NooBoss.Options.resetOptions();
-				NooBoss.Options.resetIndexedDB(() => {
-					NooBoss.Management.init();
-					NooBoss.History.init();
-				});
+				await NooBoss.Options.resetOptions();
+				await NooBoss.Options.resetIndexedDB();
+				await NooBoss.Extensions.initiate();
+				await NooBoss.History.initiate();
+				notify(GL('extension_name'), GL('successfully_reset_everything'), 3);
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'reset', label: '' }));
 				break;
 			case 'clearHistory':
-				console.log(sender);
-				set('history_records', [], () => {
-					chrome.runtime.sendMessage({ job: 'popupOptionsInitiate' });
-					chrome.notifications.create({
-						type:'basic',
-						iconUrl: '/images/icon_128.png',
-						title: GL(''),
-						message: GL(''),
-					});
-				});
+				notify(GL('extension_name'), GL('successfully_cleared_history'), 3);
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'clearHistory', label: '' }));
 				break;
 			case 'toggleAutoState':
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: 'autoState' }));
 				break;
 			case 'updateAutoStateRules':
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'AutoState', action: 'updateAutoStateRules', label: '' }));
 				break;
 			case 'updateGroupList':
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Extensions', action: 'updateGroupList', label: '' }));
 				break;
 		}
 	});

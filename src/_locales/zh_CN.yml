@@ -66,3 +66,7 @@ cancel:
   message: 取消
 are_you_sure:
   message: 你确定吗？
+successfully_cleared_history:
+  message: 成功清空历史
+successfully_reset_everything:
+  message: 成功重置
