@@ -139,8 +139,7 @@ class Options extends Component{
 			notifyRemoval: false,
 			autoState: false,
 			autoStateNotification: false,
-			extensionsJoinCommunity: false,
-			userscriptsJoinCommunity: false,
+			joinCommunity: false,
 		};
 		this.initiate();
 		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -171,8 +170,7 @@ class Options extends Component{
 			'notificationDuration_autoState',
 			'notificationDuration_removal',
 			'notificationDuration_stateChange',
-			'extensionsJoinCommunity',
-			'userscriptsJoinCommunity',
+			'joinCommunity',
 		];
 		for(let i = 0; i < options.length; i++) {
 			get(options[i], function(key, value) {
@@ -252,12 +250,12 @@ class Options extends Component{
 		sendMessage({ job: 'set', key, value: temp[key] });
 	}
 
-	clearHistory() {
+	emptyHistory() {
 		alerty(
 			GL('are_you_sure'),
 			generateRGBAString(this.props.options.themeMainColor),
 			() => {
-				sendMessage({ job: 'clearHistory' });
+				sendMessage({ job: 'emptyHistory' });
 			}
 		);
 	}
@@ -326,7 +324,6 @@ class Options extends Component{
 							{this.getSwitch('notify_state_change', 'notifyStateChange', 'for_X_seconds', 'notificationDuration_stateChange')}
 							{this.getSwitch('notify_installation', 'notifyInstallation', 'for_X_seconds', 'notificationDuration_installation')}
 							{this.getSwitch('notify_removal', 'notifyRemoval', 'for_X_seconds', 'notificationDuration_removal')}
-							{this.getSwitch('auto_state_notification', 'autoStateNotification', 'for_X_seconds', 'notificationDuration_autoState')}
 						</section>
 
 						<section>
@@ -338,31 +335,31 @@ class Options extends Component{
 							{this.getSwitch('record_disable', 'historyDisable')}
 						</section>
 
-						<section>
-							<h3>{GL('auto_state')}</h3>
-							{this.getSwitch('auto_state', 'autoState')}
-						</section>
+					</section>
 
+					<section>
+						<h2>{GL('auto_state')}</h2>
 						<section>
-							<h3>{GL('join_community')}</h3>
-							{this.getSwitch('join_community', 'extensionsJoinCommunity')}
+							<h3>{GL('basics')}</h3>
+							{this.getSwitch('auto_state', 'autoState')}
+							{this.getSwitch('notify_extension_state_change', 'autoStateNotification', 'for_X_seconds', 'notificationDuration_autoState')}
 						</section>
 					</section>
 
 					<section>
 						<h2>{GL('userscripts')}</h2>
 
-						<section>
-							<h3>{GL('join_community')}</h3>
-							{this.getSwitch('join_community', 'userscriptsJoinCommunity')}
-						</section>
 					</section>
 
 					<section>
 						<h2>{GL('advanced_settings')}</h2>
 						<section>
+							<h3>{GL('basics')}</h3>
+							{this.getSwitch('join_community', 'joinCommunity')}
+						</section>
+						<section>
 							<h3>{GL('clean')}</h3>
-							<div className="line"><button onClick={this.clearHistory.bind(this)}>{GL('clear_history')}</button></div>
+							<div className="line"><button onClick={this.emptyHistory.bind(this)}>{GL('empty_history')}</button></div>
 							<div className="line"><button onClick={this.resetEverything.bind(this)}>{GL('reset_everything')}</button></div>
 						</section>
 					</section>

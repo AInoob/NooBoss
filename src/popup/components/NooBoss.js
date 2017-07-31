@@ -4,6 +4,7 @@ import styled, { injectGlobal } from 'styled-components';
 import Overview from './Overview';
 import Options from './Options';
 import Navigator from './Navigator';
+import About from './About';
 import { updateState, updateLocation, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
 import { getDB, getParameterByName, get, generateRGBAString } from '../../utils';
 
@@ -94,6 +95,7 @@ class NooBoss extends Component{
 		let page = null;
 		if (this.props.location == 'overview') { page = <Overview />; }
 		if (this.props.location == 'options') { page = <Options />; }
+		if (this.props.location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
 				themeMainColor={generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1})}

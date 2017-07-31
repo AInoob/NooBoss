@@ -22,7 +22,7 @@ join_community:
   message: 加入社区
 experience:
   message: 体验
-clear_history:
+empty_history:
   message: 清空历史
 clean:
   message: 清理
@@ -46,8 +46,8 @@ notify_installation:
   message: 通知拓展的安装和更新
 notify_removal:
   message: 通知拓展的卸载
-auto_state_notification:
-  message: 自动管理通知
+notify_extension_state_change:
+  message: 通知拓展状态更新
 for_X_seconds:
   message: 持续X秒
 record_installation:
@@ -66,7 +66,9 @@ cancel:
   message: 取消
 are_you_sure:
   message: 你确定吗？
-successfully_cleared_history:
+successfully_emptied_history:
   message: 成功清空历史
 successfully_reset_everything:
   message: 成功重置
+basics:
+  message: 基本

@@ -22,8 +22,8 @@ join_community:
   message: Join community
 experience:
   message: Experience
-clear_history:
-  message: Clear history
+empty_history:
+  message: Empty history
 clean:
   message: Clean
 reset_everything:
@@ -46,8 +46,8 @@ notify_installation:
   message: Notify installation/update
 notify_removal:
   message: Notify removal
-auto_state_notification:
-  message: Auto State notification
+notify_extension_state_change:
+  message: Notify extension state change
 for_X_seconds:
   message: for X second(s)
 record_installation:
@@ -66,7 +66,9 @@ cancel:
   message: Cancel
 are_you_sure:
   message: Are you sure?
-successfully_cleared_history:
-  message: Successfully cleared history
+successfully_emptied_history:
+  message: Successfully emptied history
 successfully_reset_everything:
   message: Successfully reset everything
+basics:
+  message: Basics
