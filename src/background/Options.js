@@ -1,4 +1,4 @@
-import { setIfNull, set, get, setAsync } from '../utils';
+import { setIfNull, set, get, promisedSet } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -34,7 +34,7 @@ export default (NooBoss) => {
 				const keyList = Object.keys(NooBoss.defaultValues);
 				for(let i = 0; i < keyList.length; i++) {
 					const key = keyList[i];
-					await setAsync(key, NooBoss.defaultValues[key]);
+					await promisedSet(key, NooBoss.defaultValues[key]);
 				}
 				resolve();
 			});

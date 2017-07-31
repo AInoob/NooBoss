@@ -3,18 +3,22 @@ export default (NooBoss) => {
 		initiate: () => {
 			chrome.management.onInstalled.addListener(appInfo => {
 				console.log('install/update');
+				console.log(new Date().getTime());
 				console.log(appInfo);
 			});
 			chrome.management.onUninstalled.addListener(id => {
 				console.log('uninstall');
+				console.log(new Date().getTime());
 				console.log(id);
 			});
 			chrome.management.onEnabled.addListener(appInfo => {
 				console.log('enable');
+				console.log(new Date().getTime());
 				console.log(appInfo);
 			});
 			chrome.management.onDisabled.addListener(appInfo => {
 				console.log('disable');
+				console.log(new Date().getTime());
 				console.log(appInfo);
 			});
 
