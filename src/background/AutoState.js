@@ -1,4 +1,4 @@
-import { promisedGet, getRegExpFromWildcard, notify } from '../utils';
+import { promisedGet, getRegExpFromWildcard, notify, isOn } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -69,9 +69,9 @@ export default (NooBoss) => {
 			for(let i = 0; i < autoState.rules.length; i++) {
 				const rule = autoState.rules[i];
 				const appIds = rule.ids;
-				const pattern = rule.match.isWildcard ? getRegExpFromWildcard(rule.mtch.url): new RegExp(rule.match.url, 'i');
+				const pattern = rule.match.isWildcard ? getRegExpFromWildcard(rule.match.url): new RegExp(rule.match.url, 'i');
 				const tabIds = Object.keys(tabs);
-				let matched=false;
+				let matched = false;
 				const affectedIds = NooBoss.Extensions.getIdsFromGroupsAndIds(appIds);
 				for(let j = 0; j < tabIds.length; j++) {
 					const url = tabs[tabIds[j]];

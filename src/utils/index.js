@@ -140,7 +140,9 @@ export const isOn = (key, callbackTrue, callbackFalse, param) => {
 export const set = (key, value, callback) => {
 	const temp = {};
 	temp[key] = value;
-	chrome.storage.sync.set(temp, callback);
+	chrome.storage.sync.set(temp, () => {
+		callback(value);
+	});
 };
 
 export const promisedSet = (key, value) => {
@@ -156,7 +158,7 @@ export const setIfNull = (key, setValue, callback) => {
 		}
 		else {
 			if (callback) {
-				callback();
+				callback(value);
 			}
 		}
 	});
@@ -296,7 +298,7 @@ export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	document.body.appendChild(alertHolder);
 };
 
-export const getRegExpFromWildcard = (wildcard) => {
+export const getRegExpFromWildcard = (expr) => {
 	// via Greasemonkey/content/convert2RegExp.js
 	// Converts a pattern in this programs simple notation to a regular expression.
 	// thanks AdBlock! http://www.mozdev.org/source/browse/adblock/adblock/

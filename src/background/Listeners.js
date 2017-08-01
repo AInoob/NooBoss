@@ -25,22 +25,22 @@ export default (NooBoss) => {
 
 				chrome.tabs.onCreated.addListener(tab => {
 					if (NooBoss.Options.options['autoState']) {
-						NooBoss.Options.newTab(tab);
+						NooBoss.AutoState.newTab(tab);
 					}
 				});
 				chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
 					if (NooBoss.Options.options['autoState']) {
-						NooBoss.Options.updateTab(tabId, info, tab);
+						NooBoss.AutoState.updateTab(tabId, info, tab);
 					}
 				});
 				chrome.tabs.onRemoved.addListener(tabId => {
 					if (NooBoss.Options.options['autoState']) {
-						NooBoss.Options.removeTab(tabId);
+						NooBoss.AutoState.removeTab(tabId);
 					}
 				});
 				chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
 					if (NooBoss.Options.options['autoState']) {
-						NooBoss.Options.replace(addedTabId, removedTabId);
+						NooBoss.AutoState.replace(addedTabId, removedTabId);
 					}
 				});
 				resolve();

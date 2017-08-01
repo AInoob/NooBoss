@@ -32,6 +32,9 @@ const NooBossDiv = styled.div`
 		float: left;
 	}
 	button{
+		label{
+			cursor: pointer;
+		}
 		border: none;
 		color: white;
 		padding: 2px 8px;

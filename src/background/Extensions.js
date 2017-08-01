@@ -4,13 +4,9 @@ export default (NooBoss) => {
 	return {
 		initiate: () => {
 			return new Promise(async resolve => {
-				console.log(1);
 				NooBoss.Extensions.apps = {};
-				console.log(2);
 				NooBoss.Extensions.groupList = await promisedGet('groupList');
-				console.log(3);
 				await NooBoss.Extensions.getAllApps();
-				console.log(4);
 				resolve();
 			});
 		},
@@ -29,7 +25,7 @@ export default (NooBoss) => {
 		getIdsFromGroupsAndIds: (groupsAndIds) => {
 			const appIds = {};
 			for(let i = 0; i < groupsAndIds.length; i++) {
-				const name = groupAndIds[k];
+				const name = groupsAndIds[i];
 				let appId;
 				if(name.match(/^NooBoss-Group/)) {
 					const group = NooBoss.Extension.groupList.filter((group) => {

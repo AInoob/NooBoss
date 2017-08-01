@@ -72,3 +72,9 @@ successfully_reset_everything:
   message: 成功重置
 basics:
   message: 基本
+backup:
+  message: 备份
+import_options:
+  message: 导入
+export_options:
+  message: 导出

@@ -4,9 +4,9 @@ export default (NooBoss) => {
 	return {
 		initiate: () => {
 			return new Promise(async resolve => {
+				NooBoss.Options.options = {};
 				await NooBoss.Options.initiateDefaultValues();
 				await NooBoss.Options.initiateConstantValues();
-				NooBoss.Options.options = {};
 				resolve();
 			});
 		},
@@ -15,11 +15,11 @@ export default (NooBoss) => {
 				const keyList = Object.keys(NooBoss.defaultValues);
 				for(let i = 0; i < keyList.length; i++) {
 					const key = keyList[i];
-					await promisedSetIfNull(key, NooBoss.defaultValues[key]);
+					NooBoss.Options.options[key] = await promisedSetIfNull(key, NooBoss.defaultValues[key]);
 					if (key == 'autoStateRules') {
 						const value = await promisedGet(key);
 						if (typeof(value) == 'string') {
-							await promisedSet(key, JSON.parse(value));
+							NooBoss.Options.options[key] = await promisedSet(key, JSON.parse(value));
 						}
 					}
 				}
@@ -31,7 +31,7 @@ export default (NooBoss) => {
 				const keyList = Object.keys(NooBoss.constantValues);
 				for(let i = 0; i < keyList.length; i++) {
 					const key = keyList[i];
-					await promisedSet(key, NooBoss.constantValues[key]);
+					NooBoss.Options.options[key] = await promisedSet(key, NooBoss.constantValues[key]);
 				}
 				resolve();
 			});

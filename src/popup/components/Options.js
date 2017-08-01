@@ -8,6 +8,9 @@ import styled from 'styled-components';
 
 const OptionsDiv = styled.div`
 	user-select: none;
+	#upload{
+		display: none;
+	}
 	.colorPickerHolder{
 		overflow: hidden;
 		margin-left: 32px;
@@ -266,6 +269,45 @@ class Options extends Component{
 		);
 	}
 
+	importOptions(e) {
+		const file=e.target.files[0];
+		const r = new FileReader();
+		r.onload = (e) => {
+			let options = null;
+			if (!e.target.result.match(/^NooBoss-Options/)) {
+				error();
+				return;
+			}
+			try {
+				options=JSON.parse(e.target.result.substr(16));
+			}
+			catch (e) {
+				console.log(e);
+				//error();
+				return;
+			}
+			if (!options) {
+				//error();
+				return;
+			}
+			chrome.storage.sync.set(options, this.initiate.bind(this));
+			//success();
+		}
+		r.readAsText(file);
+	}
+
+	async exportOptions() {
+		chrome.storage.sync.get(function(data){
+			const dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
+			const a = document.createElement('a');
+			a.href = dataURI;
+			a.download = 'NooBoss.options';
+			a.style.display = 'none';
+			document.body.appendChild(a);
+			a.click();
+		});
+	}
+
 	render() {
 		const themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		const themeSubColor = generateRGBAString(this.props.options.themeSubColor);
@@ -356,6 +398,12 @@ class Options extends Component{
 							<h3>{GL('clean')}</h3>
 							<div className="line"><button onClick={this.emptyHistory.bind(this)}>{GL('empty_history')}</button></div>
 							<div className="line"><button onClick={this.resetEverything.bind(this)}>{GL('reset_everything')}</button></div>
+						</section>
+						<section>
+							<h3>{GL('backup')}</h3>
+							<input id="upload" type="file" onChange={this.importOptions.bind(this)}/>
+							<div className="line"><button><label htmlFor="upload">{GL('import_options')}</label></button></div>
+							<div className="line"><button onClick={this.exportOptions.bind(this)}>{GL('export_options')}</button></div>
 						</section>
 					</section>
 			</OptionsDiv>

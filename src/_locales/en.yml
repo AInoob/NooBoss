@@ -72,3 +72,9 @@ successfully_reset_everything:
   message: Successfully reset everything
 basics:
   message: Basics
+backup:
+  message: Backup
+import_options:
+  message: Import options
+export_options:
+  message: Export options
