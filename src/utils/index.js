@@ -26,6 +26,12 @@ export const getDB = (key, callback) => {
 	}
 };
 
+export const promisedGetDB = (key) => {
+	return new Promise(resolve => {
+		getDB(key, resolve);
+	});
+};
+
 export const clearDB = () => {
 	new Promise(resolve => {
 		const indexedDB = window.indexedDB;
@@ -69,6 +75,12 @@ export const setDB = (key, value, callback) => {
 	}
 };
 
+export const promisedSetDB = (key, value) => {
+	return new Promise(resolve => {
+		setDB(key, value, resolve);
+	});
+};
+
 export const getParameterByName = (name, url) => {
 	if (!url) url = window.location.href;
 	name = name.replace(/[\[\]]/g, "\\$&");
@@ -106,9 +118,7 @@ export const get = (key, callback) => {
 
 export const promisedGet = (key) => {
 	return new Promise(resolve => {
-		chrome.storage.sync.get(key, (result) => {
-			resolve(result);
-		});
+		get(key, resolve);
 	});
 };
 
@@ -135,11 +145,7 @@ export const set = (key, value, callback) => {
 
 export const promisedSet = (key, value) => {
 	return new Promise(resolve => {
-		const temp = {};
-		temp[key] = value;
-		chrome.storage.sync.set(temp, () => {
-			resolve();
-		});
+		set(key, value, resolve);
 	});
 };
 
@@ -158,11 +164,7 @@ export const setIfNull = (key, setValue, callback) => {
 
 export const promisedSetIfNull = (key, setValue) => {
 	return new Promise(async resolve => {
-		const value = await promisedGet(key);
-		if (value == undefined || value == null) {
-			await promisedSet(key, setValue);
-		}
-		resolve();
+		setIfNull(key, setValue, resolve);
 	});
 };
 
@@ -189,6 +191,48 @@ export const notify = (title, message, duration) => {
 		}
 	});
 };
+
+export const getIcon = (appInfo, callback) => {
+	return new Promise(resolve => {
+		let iconUrl = undefined;
+		if (appInfo.icons) {
+			let maxSize = 0;
+			for(let j = 0; j < appInfo.icons.length; j++) {
+				const iconInfo = appInfo.icons[j];
+				if (iconInfo.size > maxSize) {
+					maxSize = iconInfo.size;
+					iconUrl = iconInfo.url;
+				}
+			}
+		}
+		if(!iconUrl) {
+			const canvas = document.createElement("canvas");
+			canvas.width = 128;
+			canvas.height = 128;
+			const ctx = canvas.getContext('2d');
+			ctx.font = "120px Arial";
+			ctx.fillStyle = "grey";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = "white";
+			ctx.fillText(appInfo.name[0], 22, 110);
+			const dataUrl = canvas.toDataURL();
+			resolve(dataUrl);
+		}
+		else {
+			const img = new Image();
+			img.addEventListener('load', () => {
+				const canvas = document.createElement("canvas");
+				canvas.width = img.width;
+				canvas.height = img.height;
+				const ctx = canvas.getContext('2d');
+				ctx.drawImage(img, 0, 0, img.width, img.height);
+				const dataUrl = canvas.toDataURL();
+				resolve(dataUrl);
+			});
+			img.src = iconUrl;
+		}
+	});
+}
 
 export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	const alertHolder = document.createElement('div');
