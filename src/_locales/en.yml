@@ -78,3 +78,10 @@ import_options:
   message: Import options
 export_options:
   message: Export options
+successfully_exported:
+  message: Successfully exported, the file name is "NooBoss.options"
+successfully_imported:
+  message: Successfully imported
+failed_to_import:
+  message: Failed to import
+

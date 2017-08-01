@@ -61,6 +61,14 @@ NooBoss.initiate = async () => {
 			case 'updateGroupList':
 				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Extensions', action: 'updateGroupList', label: '' }));
 				break;
+			case 'importOptions':
+				NooBoss.Options.importOptions(message.optionsString);
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'importOptions' }));
+				break;
+			case 'exportOptions':
+				NooBoss.Options.exportOptions();
+				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'exportOptions' }));
+				break;
 		}
 	});
 };

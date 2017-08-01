@@ -1,4 +1,4 @@
-import { setIfNull, promisedGet, promisedSet, promisedSetIfNull, clearDB } from '../utils';
+import { setIfNull, promisedGet, promisedSet, promisedSetIfNull, clearDB, notify, GL } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -54,5 +54,41 @@ export default (NooBoss) => {
 			});
 		},
 		resetIndexedDB: clearDB,
+		importOptions: (optionsString) => {
+			let options = null;
+			if (!optionsString.match(/^NooBoss-Options/)) {
+				notify(GL('backup'), GL('failed_to_import'), 5);
+				return;
+			}
+			try {
+				options = JSON.parse(optionsString.substr(16));
+			}
+			catch (e) {
+				console.log(e);
+				notify(GL('backup'), GL('failed_to_import'), 5);
+				return;
+			}
+			if (!options) {
+				notify(GL('backup'), GL('failed_to_import'), 5);
+				return;
+			}
+			chrome.storage.sync.set(options, () => {
+				sendMessage({ job: 'popupNooBossUpdateTheme' });
+				sendMessage({ job: 'popupOptionsInitiate' });
+			});
+			notify(GL('backup'), GL('successfully_imported'), 5);
+		},
+		exportOptions: () => {
+			chrome.storage.sync.get(data => {
+				const dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
+				const a = document.createElement('a');
+				a.href = dataURI;
+				a.download = 'NooBoss.options';
+				a.style.display = 'none';
+				document.body.appendChild(a);
+				a.click();
+				notify(GL('backup'), GL('successfully_exported'), 5);
+			});
+		},
 	};
 };

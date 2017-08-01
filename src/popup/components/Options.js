@@ -273,39 +273,13 @@ class Options extends Component{
 		const file=e.target.files[0];
 		const r = new FileReader();
 		r.onload = (e) => {
-			let options = null;
-			if (!e.target.result.match(/^NooBoss-Options/)) {
-				error();
-				return;
-			}
-			try {
-				options=JSON.parse(e.target.result.substr(16));
-			}
-			catch (e) {
-				console.log(e);
-				//error();
-				return;
-			}
-			if (!options) {
-				//error();
-				return;
-			}
-			chrome.storage.sync.set(options, this.initiate.bind(this));
-			//success();
+			sendMessage({ job: 'importOptions', optionsString: e.target.result });
 		}
 		r.readAsText(file);
 	}
 
-	async exportOptions() {
-		chrome.storage.sync.get(function(data){
-			const dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
-			const a = document.createElement('a');
-			a.href = dataURI;
-			a.download = 'NooBoss.options';
-			a.style.display = 'none';
-			document.body.appendChild(a);
-			a.click();
-		});
+	exportOptions() {
+		sendMessage({ job: 'exportOptions' });
 	}
 
 	render() {

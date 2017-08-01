@@ -78,3 +78,9 @@ import_options:
   message: 导入
 export_options:
   message: 导出
+successfully_exported:
+  message: 成功导出，文字名为"NooBoss.options"
+successfully_imported:
+  message: 成功导入
+failed_to_import:
+  message: 导入失败
