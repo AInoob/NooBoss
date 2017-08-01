@@ -16,7 +16,7 @@ about:
   message: About
 notifications:
   message: Notifications
-auto_state:
+autoState:
   message: Auto State
 join_community:
   message: Join community
@@ -28,12 +28,10 @@ clean:
   message: Clean
 reset_everything:
   message: Reset everything (Be careful!)
-auto_state:
-  message: Auto State
 join_nooboss_community:
   message: Join NooBoss Community
-advanced_settings:
-  message: Advanced settings
+advanced:
+  message: Advanced
 theme:
   message: Theme
 main_color:

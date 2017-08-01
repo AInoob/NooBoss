@@ -3,11 +3,20 @@ import { connect } from 'react-redux';
 import { } from '../actions';
 import { alerty, GL, get, generateRGBAString, sendMessage } from '../../utils';
 import { SketchPicker } from 'react-color';
-import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor } from '../actions';
+import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor, optionsToggleDisplay } from '../actions';
 import styled from 'styled-components';
 
 const OptionsDiv = styled.div`
 	user-select: none;
+	section{
+		font-size: 18px;
+		section{
+			font-size: 14px;
+			section{
+				font-size: 12px;
+			}
+		}
+	}
 	#upload{
 		display: none;
 	}
@@ -22,10 +31,39 @@ const OptionsDiv = styled.div`
 			outline: none;
 		}
 	}
+	.displayMore{
+		display: none;
+		& + label[class='displayToggle']{
+			cursor: pointer;
+			&:after{
+				content: '▼';
+				opacity: 0.3;
+				margin-left: 6px;
+			}
+		}
+		& ~ section{
+			display: none;
+		}
+		& ~ .line{
+			display: none;
+		}
+		&:checked{
+			& + label[class='displayToggle']{
+				&:after{
+					content: '';
+				}
+			}
+			& ~ section{
+				display: block;
+			}
+			& ~ .line{
+				display: block;
+			}
+		}
+	}
 	[type="checkbox"]{
 		display: none;
-		&:checked + label
-		{
+		&:checked + label[class='checkbox']{
 			&:before{
 				top: -8px;
 				left: -5px;
@@ -43,7 +81,7 @@ const OptionsDiv = styled.div`
 				display: inline-block;
 			}
 		}
-		& + label{
+		& + label[class='checkbox']{
 			cursor: pointer;
 			position: relative;
 			&:before{
@@ -99,7 +137,7 @@ const OptionsDiv = styled.div`
 		background-color: ${props => props.themeSubColor}
 	}
 	.line{
-		margin-left: 32px;
+		padding-left: 32px;
 	}
 `;
 
@@ -118,6 +156,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		},
 		updateThemeSubColor: (color) => {
 			dispatch(optionsUpdateThemeSubColor(color || { r: 195, g: 147, b: 220, a: 1 }));
+		},
+		toggleDisplay: (name) => {
+			dispatch(optionsToggleDisplay(name));
 		},
 	})
 }
@@ -217,6 +258,22 @@ class Options extends Component{
 		}
 	}
 
+	getDisplayLabel(name) {
+		return (
+			<label htmlFor={'display_'+name} className="displayToggle">{GL(name)}</label>
+		);
+	}
+
+	getDisplayInput(name, id) {
+		id = id || name;
+		return (
+			<input id={'display_'+name} type="checkbox" className="displayMore"
+				checked={this.props.options.display[id]}
+				onChange={this.props.toggleDisplay.bind(this, id)}
+			/>
+		);
+	}
+
 	getSwitch(name, key, name2, key2) {
 		const appending = name2 ? (
 			<div className="appending">
@@ -288,9 +345,11 @@ class Options extends Component{
 		return (
 			<OptionsDiv themeMainColor={themeMainColor} themeSubColor={themeSubColor}>
 					<section>
-						<h2>{GL('experience')}</h2>
+						{this.getDisplayInput('experience')}
+						{this.getDisplayLabel('experience')}
 						<section>
-							<h3>{GL('theme')}</h3>
+							{this.getDisplayInput('theme', 'experienceTheme')}
+							{this.getDisplayLabel('theme')}
 							<div className="line">
 								<span className="left">{GL('main_color')}</span>
 								<div className="left" id="themeMainColorPicker" onClick={this.updateColorPicker.bind(this, 'themeMainColor')} />
@@ -329,16 +388,19 @@ class Options extends Component{
 					</section>
 
 					<section>
-						<h2>{GL('extensions')}</h2>
+						{this.getDisplayInput('extensions')}
+						{this.getDisplayLabel('extensions')}
 						<section>
-							<h3>{GL('notifications')}</h3>
+							{this.getDisplayInput('notifications', 'extensionsNotifications')}
+							{this.getDisplayLabel('notifications')}
 							{this.getSwitch('notify_state_change', 'notifyStateChange', 'for_X_seconds', 'notificationDuration_stateChange')}
 							{this.getSwitch('notify_installation', 'notifyInstallation', 'for_X_seconds', 'notificationDuration_installation')}
 							{this.getSwitch('notify_removal', 'notifyRemoval', 'for_X_seconds', 'notificationDuration_removal')}
 						</section>
 
 						<section>
-							<h3>{GL('history')}</h3>
+							{this.getDisplayInput('history', 'extensionsHistory')}
+							{this.getDisplayLabel('history')}
 							{this.getSwitch('record_installation', 'historyInstall')}
 							{this.getSwitch('record_update', 'historyUpdate')}
 							{this.getSwitch('record_removal', 'historyRemoval')}
@@ -346,35 +408,36 @@ class Options extends Component{
 							{this.getSwitch('record_disable', 'historyDisable')}
 						</section>
 
-					</section>
-
-					<section>
-						<h2>{GL('auto_state')}</h2>
 						<section>
-							<h3>{GL('basics')}</h3>
-							{this.getSwitch('auto_state', 'autoState')}
+							{this.getDisplayInput('autoState', 'extensionsAutoState')}
+							{this.getDisplayLabel('autoState')}
+							{this.getSwitch('autoState', 'autoState')}
 							{this.getSwitch('notify_extension_state_change', 'autoStateNotification', 'for_X_seconds', 'notificationDuration_autoState')}
 						</section>
 					</section>
 
 					<section>
-						<h2>{GL('userscripts')}</h2>
-
+						{this.getDisplayInput('userscripts')}
+						{this.getDisplayLabel('userscripts')}
 					</section>
 
 					<section>
-						<h2>{GL('advanced_settings')}</h2>
+						{this.getDisplayInput('advanced')}
+						{this.getDisplayLabel('advanced')}
 						<section>
-							<h3>{GL('basics')}</h3>
+							{this.getDisplayInput('advanced', 'advancedBasics')}
+							{this.getDisplayLabel('advanced')}
 							{this.getSwitch('join_community', 'joinCommunity')}
 						</section>
 						<section>
-							<h3>{GL('clean')}</h3>
+							{this.getDisplayInput('clean', 'advancedClean')}
+							{this.getDisplayLabel('clean')}
 							<div className="line"><button onClick={this.emptyHistory.bind(this)}>{GL('empty_history')}</button></div>
 							<div className="line"><button onClick={this.resetEverything.bind(this)}>{GL('reset_everything')}</button></div>
 						</section>
 						<section>
-							<h3>{GL('backup')}</h3>
+							{this.getDisplayInput('backup', 'advancedBackup')}
+							{this.getDisplayLabel('backup')}
 							<input id="upload" type="file" onChange={this.importOptions.bind(this)}/>
 							<div className="line"><button><label htmlFor="upload">{GL('import_options')}</label></button></div>
 							<div className="line"><button onClick={this.exportOptions.bind(this)}>{GL('export_options')}</button></div>

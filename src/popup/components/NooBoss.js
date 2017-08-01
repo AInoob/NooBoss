@@ -11,7 +11,7 @@ import { getDB, getParameterByName, get, generateRGBAString } from '../../utils'
 
 injectGlobal`
 	body{
-		width: 800px;
+		width: 760px;
 		margin: 0px;
 	}
 `;
@@ -20,13 +20,11 @@ const NooBossDiv = styled.div`
 	color: ${props => props.themeSubColor};
 	section{
 		margin-top: 8px;
-		margin-left: 32px;
+		padding-left: 32px;
 	}
 	.line{
 		height: 32px;
 		line-height: 32px;
-		float: left;
-		width: 100%;
 	}
 	.left{
 		float: left;

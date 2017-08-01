@@ -16,7 +16,7 @@ about:
   message: 关于
 notifications:
   message: 通知
-auto_state:
+autoState:
   message: 自动管理
 join_community:
   message: 加入社区
@@ -28,12 +28,10 @@ clean:
   message: 清理
 reset_everything:
   message: 重置(注意！)
-auto_state:
-  message: 自动管理
 join_nooboss_community:
   message: 加入二管家社区
-advanced_settings:
-  message: 高级设置
+advanced:
+  message: 高级
 theme:
   message: 主题
 main_color:
