@@ -6,7 +6,7 @@ import createAutoState from './AutoState';
 import createUserscripts from './Userscripts';
 import createHistory from './History';
 import createListeners from './Listeners';
-import { set, isOn, GL, notify } from '../utils';
+import { set, isOn, GL, notify, sendMessage } from '../utils';
 
 const NooBoss = {
 	defaultValues,
@@ -14,32 +14,37 @@ const NooBoss = {
 };
 window.NooBoss = NooBoss;
 
-NooBoss.initiate = () => {
+NooBoss.initiate = async () => {
 	NooBoss.Options = createOptions(NooBoss);
-	NooBoss.Options.initiate();
 	NooBoss.Bello = createBello(NooBoss);
 	NooBoss.Extensions = createExtensions(NooBoss);
 	NooBoss.AutoState = createAutoState(NooBoss);
-	NooBoss.Userscripts = createUserscripts(NooBoss);
+	//NooBoss.Userscripts = createUserscripts(NooBoss);
 	NooBoss.History = createHistory(NooBoss);
-	NooBoss.History.initiate();
 	NooBoss.Listeners = createListeners(NooBoss);
-	NooBoss.Listeners.initiate();
+	await NooBoss.Options.initiate();
+	await NooBoss.Extensions.initiate();
+	await NooBoss.AutoState.initiate();
+	await NooBoss.History.initiate();
+	await NooBoss.Listeners.initiate();
 	chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 		switch (message.job) {
 			case 'bello':
 				NooBoss.Bello.bello(message.bananana);
 				break;
 			case 'set':
-				set(message.key, message.value);
+				await NooBoss.Options.promisedSet(message.key, message.value);
 				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: message.key }));
 				break;
 			case 'reset':
 				await NooBoss.Options.resetOptions();
 				await NooBoss.Options.resetIndexedDB();
+				await NooBoss.Options.initiate();
 				await NooBoss.Extensions.initiate();
 				await NooBoss.History.initiate();
 				notify(GL('extension_name'), GL('successfully_reset_everything'), 3);
+				sendMessage({ job: 'popupNooBossUpdateTheme' });
+				sendMessage({ job: 'popupOptionsInitiate' });
 				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'reset', label: '' }));
 				break;
 			case 'emptyHistory':

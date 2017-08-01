@@ -1,33 +1,47 @@
-import { setIfNull, set, get, promisedSet } from '../utils';
+import { setIfNull, promisedGet, promisedSet, promisedSetIfNull, clearDB } from '../utils';
 
 export default (NooBoss) => {
 	return {
 		initiate: () => {
-			NooBoss.Options.initiateDefaultValues();
-			NooBoss.Options.initiateConstantValues();
+			return new Promise(async resolve => {
+				await NooBoss.Options.initiateDefaultValues();
+				await NooBoss.Options.initiateConstantValues();
+				NooBoss.Options.options = {};
+				resolve();
+			});
 		},
 		initiateDefaultValues: () => {
-			const keyList = Object.keys(NooBoss.defaultValues);
-			for(let i = 0; i < keyList.length; i++) {
-				const key = keyList[i];
-				setIfNull(key, NooBoss.defaultValues[key], () => {
-					// if is autoState, change it from string to array
+			return new Promise(async resolve => {
+				const keyList = Object.keys(NooBoss.defaultValues);
+				for(let i = 0; i < keyList.length; i++) {
+					const key = keyList[i];
+					await promisedSetIfNull(key, NooBoss.defaultValues[key]);
 					if (key == 'autoStateRules') {
-						get(key, (value) => {
-							if (typeof(value) == 'string') {
-								set(key, JSON.parse(value));
-							}
-						});
+						const value = await promisedGet(key);
+						if (typeof(value) == 'string') {
+							await promisedSet(key, JSON.parse(value));
+						}
 					}
-				});
-			}
+				}
+				resolve();
+			});
 		},
 		initiateConstantValues: () => {
-			const keyList = Object.keys(NooBoss.constantValues);
-			for(let i = 0; i < keyList.length; i++) {
-				const key = keyList[i];
-				set(key, NooBoss.constantValues[key]);
-			}
+			return new Promise(async resolve => {
+				const keyList = Object.keys(NooBoss.constantValues);
+				for(let i = 0; i < keyList.length; i++) {
+					const key = keyList[i];
+					await promisedSet(key, NooBoss.constantValues[key]);
+				}
+				resolve();
+			});
+		},
+		promisedSet: (key, value) => {
+			return new Promise(async resolve => {
+				await promisedSet(key, value);
+				NooBoss.Options.options[key] = value;
+				resolve();
+			});
 		},
 		resetOptions: () => {
 			return new Promise(async resolve => {
@@ -39,17 +53,6 @@ export default (NooBoss) => {
 				resolve();
 			});
 		},
-		resetIndexedDB: () => {
-			return new Promise(resolve => {
-				const req = window.indexedDB.deleteDatabase('NooBoss');
-				req.onerror = (e) => {
-					console.log(e);
-					resolve();
-				}
-				req.onsuccess = () => {
-					resolve();
-				};
-			});
-		},
+		resetIndexedDB: clearDB,
 	};
 };

@@ -72,7 +72,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 				get('mainColor', (color) => {
 					dispatch(optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 }));
 					get('subColor', (color) => {
-						dispatch(optionsUpdateThemeSubColor(color || { r: 255, g: 255, b: 255, a: 1 }));
+						dispatch(optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 }));
 						resolve();
 					});
 				});
@@ -82,6 +82,21 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			await props.loadPrevState();
 			await props.updateLocationIfOptions();
 			await props.initialRequiredOptions();
+			chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+				if (message) {
+					switch (message.job) {
+						case 'popupNooBossUpdateTheme':
+							get('mainColor', (color) => {
+								dispatch(optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 }));
+								get('subColor', (color) => {
+									dispatch(optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 }));
+									resolve();
+								});
+							});
+							break;
+					}
+				}
+			});
 		},
 	});
 }
@@ -92,6 +107,7 @@ class NooBoss extends Component{
 		props.initialize(props);
 	}
 	render() {
+		console.log(this.props.options);
 		let page = null;
 		if (this.props.location == 'overview') { page = <Overview />; }
 		if (this.props.location == 'options') { page = <Options />; }
@@ -99,7 +115,7 @@ class NooBoss extends Component{
 		return (
 			<NooBossDiv
 				themeMainColor={generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1})}
-				themeSubColor={generateRGBAString(this.props.options.themeSubColor || {"r":255,"g":255,"b":255,"a":1})}
+				themeSubColor={generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1})}
 			>
 				<Navigator />
 				{page}

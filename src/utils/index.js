@@ -18,12 +18,32 @@ export const getDB = (key, callback) => {
 				else {
 					callback(null);
 				}
-			}
+			};
 			action.onerror = () => {
 				console.log('getDB fail');
-			}
+			};
 		}
 	}
+};
+
+export const clearDB = () => {
+	new Promise(resolve => {
+		const indexedDB = window.indexedDB;
+		const open = indexedDB.open('NooBoss', 1);
+		open.onsuccess = () => {
+			const db = open.result;
+			const tx = db.transaction('Store', 'readwrite');
+			const store = tx.objectStore('Store');
+			const action = store.clear();
+			action.onsuccess = () => {
+				resolve(0);
+			};
+			action.onerror = (err) => {
+				console.log(err);
+				resolve(1);
+			};
+		};
+	});
 };
 
 export const setDB = (key, value, callback) => {
@@ -42,10 +62,10 @@ export const setDB = (key, value, callback) => {
 			if(callback) {
 				callback();
 			}
-		}
+		};
 		action.onerror = () => {
 			console.log('setDB fail');
-		}
+		};
 	}
 };
 
@@ -136,6 +156,15 @@ export const setIfNull = (key, setValue, callback) => {
 	});
 };
 
+export const promisedSetIfNull = (key, setValue) => {
+	return new Promise(async resolve => {
+		const value = await promisedGet(key);
+		if (value == undefined || value == null) {
+			await promisedSet(key, setValue);
+		}
+		resolve();
+	});
+};
 
 export const generateRGBAString = (rgbaObject) => {
 	return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';

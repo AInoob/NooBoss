@@ -2,8 +2,11 @@ import { promisedGet } from '../utils';
 
 export default (NooBoss) => {
 	return {
-		initiate: async () => {
-			NooBoss.Extensions.groupList = await promisedGet('groupList');
+		initiate: () => {
+			return new Promise(async resolve => {
+				NooBoss.Extensions.groupList = await promisedGet('groupList');
+				resolve();
+			});
 		},
 		getIdsFromGroupsAndIds: (groupsAndIds) => {
 			const appIds = {};

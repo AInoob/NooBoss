@@ -181,10 +181,6 @@ class Options extends Component{
 		}
 	}
 
-	generateRGBAString(rgbaObject) {
-		return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';
-	}
-
 	updateColor(name, color) {
 		color = color.rgb;
 		switch (name) {
@@ -271,7 +267,6 @@ class Options extends Component{
 	}
 
 	render() {
-		console.log(this.state);
 		const themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		const themeSubColor = generateRGBAString(this.props.options.themeSubColor);
 		return (
