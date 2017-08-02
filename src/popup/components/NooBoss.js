@@ -6,8 +6,8 @@ import Overview from './Overview';
 import Options from './Options';
 import History from './History';
 import About from './About';
-import { updateState, updateLocation, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
-import { getDB, getParameterByName, get, generateRGBAString } from '../../utils';
+import { updateState, updateLocation, updateLanguage, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
+import { getDB, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
@@ -18,6 +18,7 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	font-size: 12px;
 	color: ${props => props.themeSubColor};
 	section{
 		margin-top: 8px;
@@ -59,6 +60,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 					resolve();
 				});
 			})
+		},
+		updateLanguage: () => {
+			return new Promise(async resolve => {
+				const language = await getLanguage();
+				dispatch(updateLanguage(language));
+				resolve();
+			});
 		},
 		updateLocationIfOptions: () => {
 			return new Promise(resolve => {
@@ -123,18 +131,23 @@ class NooBoss extends Component{
 	}
 
 	render() {
+		const shared = {
+			themeMainColor: generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1}),
+			themeSubColor: generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1}),
+			icons: this.state.icons,
+		};
 		console.log(this.props.options);
 		let page = null;
 		if (this.props.location == 'overview') { page = <Overview />; }
 		else if (this.props.location == 'options') { page = <Options />; }
-		else if (this.props.location == 'history') { page = <History getIcon={this.getIcon.bind(this)} icons={this.state.icons} />; }
+		else if (this.props.location == 'history') { page = <History getIcon={this.getIcon.bind(this)} shared={shared} />; }
 		else if (this.props.location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
-				themeMainColor={generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1})}
-				themeSubColor={generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1})}
+				themeMainColor={shared.themeMainColor}
+				themeSubColor={shared.themeSubColor}
 			>
-				<Navigator />
+				<Navigator shared={shared} />
 				{page}
 			</NooBossDiv>
 		);

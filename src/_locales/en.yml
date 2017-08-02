@@ -94,3 +94,13 @@ was_enabled:
   message: ' was enabled'
 was_disabled:
   message: ' was disabled'
+when:
+  message: When
+event:
+  message: Event
+icon:
+  message: Icon
+name:
+  message: Name
+version:
+  message: Version

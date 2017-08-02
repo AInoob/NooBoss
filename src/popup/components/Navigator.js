@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateLocation, navigatorUpdateHoverPosition } from '../actions';
 import styled from 'styled-components';
-import { GL, generateRGBAString } from '../../utils';
+import { GL } from '../../utils';
 
 const NavigatorDiv = styled.nav`
 	position: relative;
@@ -94,8 +94,8 @@ class Navigator extends Component{
 		});
 		return (
 			<NavigatorDiv
-				themeMainColor={generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1})}
-				themeSubColor={generateRGBAString(this.props.options.themeSubColor || {"r":255,"g":255,"b":255,"a":1})}
+				themeMainColor={this.props.shared.themeMainColor}
+				themeSubColor={this.props.shared.themeSubColor}
 				numOfLinks={links.length}
 				hoverPosition={this.props.navigator.hoverPosition}
 				onMouseOut={() => {

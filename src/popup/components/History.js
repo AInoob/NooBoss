@@ -1,8 +1,45 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { GL, getDB } from '../../utils';
+import { GL, getDB, generateRGBAString } from '../../utils';
+import TimeAgo from 'timeago-react';
 
 const HistoryDiv = styled.div`
+	padding: 16px;
+	padding-left: 32px;
+	padding-right: 32px;
+	table{
+		width: 100%;
+		border-collapse: collapse;
+		#when{
+			width: 116px;
+		}
+		#event{
+			width: 80px;
+		}
+		#icon{
+			width: 50px;
+		}
+		#name{
+			width: 333px;
+		}
+		#version{
+		}
+		td, th{
+			text-align: left;
+		}
+		.record{
+			& + .record{
+				border-top: ${props => props.themeMainColor} solid 1px;
+			}
+			.icon{
+				img{
+					margin-top: 3px;
+					width: 22px;
+					height: 22px;
+				}
+			}
+		}
+	}
 `;
 
 class History extends Component{
@@ -16,7 +53,7 @@ class History extends Component{
 			this.setState({ recordList });
 			for(let i = 0; i < recordList.length; i++) {
 				const record = recordList[i];
-				if (!this.props.icons[record.icon]) {
+				if (!this.props.shared.icons[record.icon]) {
 					await this.props.getIcon(record.icon);
 				}
 			}
@@ -26,25 +63,27 @@ class History extends Component{
 	render() {
 		const recordList = (this.state.recordList || []).map((record, index) => {
 			return (
-				<tr key={index}>
-					<th>{record.date}</th>
-					<th>{record.event}</th>
-					<th><img src={this.props.icons[record.icon]} /></th>
-					<th>{record.name}</th>
-					<th>{record.version}</th>
+				<tr key={index} className="record">
+					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>
+					<td>{record.event}</td>
+					<td className="icon"><img src={this.props.shared.icons[record.icon]} /></td>
+					<td>{record.name}</td>
+					<td>{record.version}</td>
 				</tr>
 			);
 		});
 		return (
-			<HistoryDiv>
+			<HistoryDiv
+				themeMainColor={this.props.shared.themeMainColor}
+			>
 				<table>
 					<thead>
 						<tr>
-							<th>GL('when')</th>
-							<th>GL('event')</th>
-							<th>GL('icon')</th>
-							<th>GL('name')</th>
-							<th>GL('version')</th>
+							<th id="when">{GL('when')}</th>
+							<th id="event">{GL('event')}</th>
+							<th id="icon">{GL('icon')}</th>
+							<th id="name">{GL('name')}</th>
+							<th id="version">{GL('version')}</th>
 						</tr>
 					</thead>
 					<tbody>

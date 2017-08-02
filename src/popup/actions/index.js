@@ -1,5 +1,6 @@
 const UPDATE_STATE = 'UPDATE_STATE';
 const UPDATE_LOCATION = 'UPDATE_LOCATION';
+const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE';
 const NAVIGATOR_UPDATE_HOVER_POSITION = 'NAVIGATOR_UPDATE_HOVER_POSITION';
 const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
 const OPTIONS_UPDATE_THEME_MAIN_COLOR = 'OPTIONS_UPDATE_THEME_MAIN_COLOR';
@@ -15,6 +16,12 @@ export const updateState = (state) => ({
 export const updateLocation = (location) => ({
 	type: UPDATE_LOCATION,
 	location
+});
+
+
+export const updateLanguage = (language) => ({
+	type: UPDATE_LANGUAGE,
+	language
 });
 
 export const navigatorUpdateHoverPosition = (position) => ({

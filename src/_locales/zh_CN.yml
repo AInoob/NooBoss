@@ -94,3 +94,13 @@ was_enabled:
   message: '已被开启'
 was_disabled:
   message: '已被关闭'
+when:
+  message: 时间
+event:
+  message: 事件
+icon:
+  message: 图标
+name:
+  message: 名字
+version:
+  message: 版本

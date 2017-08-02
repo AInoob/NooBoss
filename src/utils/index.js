@@ -272,6 +272,21 @@ export const getIconDBKey = (appInfo) => {
 	});
 };
 
+export const getLanguage = () => {
+	return new Promise(resolve => {
+		chrome.i18n.getAcceptLanguages(languageList => {
+			const supportedLanguageList = [ 'ar', 'be', 'bg', 'ca', 'da', 'de', 'el', 'en', 'en_short', 'es', 'eu', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'in_BG', 'in_HI', 'in_ID', 'it', 'ja', 'ko', 'ml', 'my', 'nb_NO', 'nl', 'nn_NO', 'pl', 'pt_BR', 'ro', 'ru', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'zh_CN', 'zh_TW' ];
+			const bestLanguageIndex = supportedLanguagesList.reduce((index, language) => {
+				const languageIndex = languageList.indexOf(language);
+				if (index == -1 || (languageIndex != -1 && languageIndex < index)) {
+					return languageIndex;
+				}
+			}, -1);
+			resolve(bestLanguageIndex == -1 ? 'en' : languageList[bestLanguageIndex]);
+		});
+	});
+};
+
 export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	const alertHolder = document.createElement('div');
 	const alertDiv = document.createElement('div');

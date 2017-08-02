@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import location from './location';
+import language from './language';
 import navigator from './navigator';
 import overview from './overview';
 import options from './options';
@@ -12,6 +13,7 @@ const noobossReducer = (state = {}, action) => {
 	}
 
 	state = {
+		language: language(state.language, action),
 		location: location(state.location, action),
 		navigator: navigator(state.navigator, action),
 		overview: overview(state.overview, action),

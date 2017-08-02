@@ -23,6 +23,7 @@ module.exports={
 						'babel-plugin-lodash',
 						'transform-object-rest-spread',
 						'transform-async-to-generator',
+						'transform-es3-property-literals',
 						['transform-runtime', {
 							'helpers': false,
 							'polyfill': false,
