@@ -39,10 +39,11 @@ export default (NooBoss) => {
 					}
 					NooBoss.Extensions.updateAppInfoById(id, { uninstalledDate: new Date().getTime() });
 				});
-				chrome.management.onEnabled.addListener(appInfo => {
+				chrome.management.onEnabled.addListener(async appInfo => {
+					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyEnable']) {
 						const event = 'enabled';
-						const { id, icon, name, version } = appInfo;
+						const { id, name, version } = appInfo;
 						NooBoss.History.addRecord({ event, id, icon, name, version });
 					}
 					if (NooBoss.Options.options['notifyStateChange']) {
@@ -54,10 +55,11 @@ export default (NooBoss) => {
 					}
 					NooBoss.Extensions.updateAppInfoById(appInfo.id, { enabled: true });
 				});
-				chrome.management.onDisabled.addListener(appInfo => {
+				chrome.management.onDisabled.addListener(async appInfo => {
+					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyDisable']) {
 						const event = 'disnabled';
-						const { id, icon, name, version } = appInfo;
+						const { id, name, version } = appInfo;
 						NooBoss.History.addRecord({ event, id, icon, name, version });
 					}
 					if (NooBoss.Options.options['notifyStateChange']) {

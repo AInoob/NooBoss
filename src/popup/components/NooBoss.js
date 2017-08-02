@@ -107,13 +107,27 @@ class NooBoss extends Component{
 	constructor(props) {
 		super(props);
 		props.initialize(props);
+		this.state = {
+			icons: {},
+		};
 	}
+	getIcon(iconDBKey) {
+		return new Promise(resolve => {
+			getDB(iconDBKey, icon => {
+				this.setState(prevState => {
+					prevState.icons[iconDBKey] = icon;
+					return prevState;
+				}, resolve);
+			});
+		});
+	}
+
 	render() {
 		console.log(this.props.options);
 		let page = null;
 		if (this.props.location == 'overview') { page = <Overview />; }
 		else if (this.props.location == 'options') { page = <Options />; }
-		else if (this.props.location == 'history') { page = <History />; }
+		else if (this.props.location == 'history') { page = <History getIcon={this.getIcon.bind(this)} icons={this.state.icons} />; }
 		else if (this.props.location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv

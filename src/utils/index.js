@@ -264,7 +264,7 @@ export const getIcon = (appInfo) => {
 export const getIconDBKey = (appInfo) => {
 	return new Promise(async resolve => {
 		const dataUrl = await getIcon(appInfo);
-		const iconDBKey = appInfo.name + '_' + appInfo.version + '_icon';
+		const iconDBKey = appInfo.id + '_' + appInfo.version + '_icon';
 		if (! await promisedGetDB(iconDBKey)) {
 			await promisedSetIfNullDB(iconDBKey, dataUrl);
 		}

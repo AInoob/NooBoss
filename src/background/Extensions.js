@@ -1,4 +1,4 @@
-import { promisedGet, getIcon, promisedSetDB, promisedGetDB } from '../utils';
+import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -58,8 +58,7 @@ export default (NooBoss) => {
 		},
 		updateAppInfo: (appInfo, extraInfo) => {
 			return new Promise(async resolve => {
-				const dataUrl = await getIcon(appInfo);
-				appInfo.icon = dataUrl;
+				appInfo.icon = await getIconDBKey(appInfo);
 				const oldInfo = await promisedGetDB(appInfo.id) || {};
 				const time = new Date().getTime();
 				oldInfo.installedDate = time;
