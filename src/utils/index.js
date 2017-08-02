@@ -137,6 +137,12 @@ export const isOn = (key, callbackTrue, callbackFalse, param) => {
 	});
 };
 
+export const promisedIsOn = (key) => {
+	return new Promise(resolve => {
+		isOn(key, resolve.bind(null, true), resolve.bind(null, false));
+	});
+};
+
 export const set = (key, value, callback) => {
 	const temp = {};
 	temp[key] = value;
@@ -194,7 +200,26 @@ export const notify = (title, message, duration) => {
 	});
 };
 
-export const getIcon = (appInfo, callback) => {
+export const setIfNullDB = (key, setValue, callback) => {
+	getDB(key, (value) => {
+		if (value == undefined || value == null) {
+			setDB(key, setValue, callback);
+		}
+		else {
+			if (callback) {
+				callback(value);
+			}
+		}
+	});
+};
+
+export const promisedSetIfNullDB = (key, setValue) => {
+	return new Promise(async resolve => {
+		setIfNullDB(key, setValue, resolve);
+	});
+};
+
+export const getIcon = (appInfo) => {
 	return new Promise(resolve => {
 		let iconUrl = undefined;
 		if (appInfo.icons) {
@@ -234,7 +259,18 @@ export const getIcon = (appInfo, callback) => {
 			img.src = iconUrl;
 		}
 	});
-}
+};
+
+export const getIconDBKey = (appInfo) => {
+	return new Promise(async resolve => {
+		const dataUrl = await getIcon(appInfo);
+		const iconDBKey = appInfo.name + '_' + appInfo.version + '_icon';
+		if (! await promisedGetDB(iconDBKey)) {
+			await promisedSetIfNullDB(iconDBKey, dataUrl);
+		}
+		resolve(iconDBKey);
+	});
+};
 
 export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	const alertHolder = document.createElement('div');

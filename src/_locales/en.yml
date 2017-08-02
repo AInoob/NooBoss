@@ -16,6 +16,8 @@ about:
   message: About
 notifications:
   message: Notifications
+notification:
+  message: Notification
 autoState:
   message: Auto State
 join_community:
@@ -82,4 +84,13 @@ successfully_imported:
   message: Successfully imported
 failed_to_import:
   message: Failed to import
-
+was_installed:
+  message: ' was installed'
+was_updated:
+  message: ' was updated'
+was_removed:
+  message: ' was removed'
+was_enabled:
+  message: ' was enabled'
+was_disabled:
+  message: ' was disabled'

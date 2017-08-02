@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled, { injectGlobal } from 'styled-components';
+import Navigator from './Navigator';
 import Overview from './Overview';
 import Options from './Options';
-import Navigator from './Navigator';
+import History from './History';
 import About from './About';
 import { updateState, updateLocation, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
 import { getDB, getParameterByName, get, generateRGBAString } from '../../utils';
@@ -111,8 +112,9 @@ class NooBoss extends Component{
 		console.log(this.props.options);
 		let page = null;
 		if (this.props.location == 'overview') { page = <Overview />; }
-		if (this.props.location == 'options') { page = <Options />; }
-		if (this.props.location == 'about') { page = <About />; }
+		else if (this.props.location == 'options') { page = <Options />; }
+		else if (this.props.location == 'history') { page = <History />; }
+		else if (this.props.location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
 				themeMainColor={generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1})}

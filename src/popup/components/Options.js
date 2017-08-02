@@ -34,6 +34,7 @@ const OptionsDiv = styled.div`
 	.displayMore{
 		display: none;
 		& + label[class='displayToggle']{
+			font-weight: bold;
 			cursor: pointer;
 			&:after{
 				content: '▼';
@@ -173,7 +174,7 @@ class Options extends Component{
 			notificationDuration_removal: 6,
 			notificationDuration_stateChange: 6,
 			historyInstall: false,
-			historyRemoval: false,
+			historyRemove: false,
 			historyUpdate: false,
 			historyEnable: false,
 			historyDisable: false,
@@ -206,7 +207,7 @@ class Options extends Component{
 			'autoState',
 			'autoStateNotification',
 			'historyInstall',
-			'historyRemoval',
+			'historyRemove',
 			'historyUpdate',
 			'historyEnable',
 			'historyDisable',
@@ -403,7 +404,7 @@ class Options extends Component{
 							{this.getDisplayLabel('history')}
 							{this.getSwitch('record_installation', 'historyInstall')}
 							{this.getSwitch('record_update', 'historyUpdate')}
-							{this.getSwitch('record_removal', 'historyRemoval')}
+							{this.getSwitch('record_removal', 'historyRemove')}
 							{this.getSwitch('record_enable', 'historyEnable')}
 							{this.getSwitch('record_disable', 'historyDisable')}
 						</section>

@@ -5,10 +5,21 @@ export default (NooBoss) => {
 		initiate: () => {
 			return new Promise(async resolve => {
 				NooBoss.Extensions.apps = {};
+				NooBoss.Extensions.tempActiveList = [];
 				NooBoss.Extensions.groupList = await promisedGet('groupList');
 				await NooBoss.Extensions.getAllApps();
 				resolve();
 			});
+		},
+		addTempActive(id) {
+			const tempActiveList = NooBoss.Extensions.tempActiveList;
+			if (tempActiveList.indexOf(id) == -1) {
+				tempActiveList.push(id);
+				setTimeout(() => {
+					const index = tempActiveList.indexOf(id);
+					tempActiveList.splice(index, 1);
+				}, 2333);
+			}
 		},
 		getAllApps: () => {
 			return new Promise(resolve => {
@@ -61,6 +72,9 @@ export default (NooBoss) => {
 		},
 		updateAppInfoById: (id, updateInfo) => {
 			return new Promise(async resolve => {
+				if (updateInfo.enabled == false || updateInfo.uninstalledDate) {
+					NooBoss.Extensions.addTempActive(id);
+				}
 				const oldInfo = await promisedGetDB(id);
 				if (!oldInfo) {
 					resolve();

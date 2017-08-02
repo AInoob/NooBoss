@@ -12,7 +12,7 @@ export default (NooBoss) => {
 		},
 		addRecord: (record) => {
 			return new Promise(resolve => {
-				record.date = new Date();
+				record.date = new Date().getTime();
 				NooBoss.History.recordList.push(record);
 				setDB('history_records', NooBoss.History.recordList, resolve);
 			});
@@ -33,10 +33,6 @@ export default (NooBoss) => {
 		},
 		listen: () => {
 			chrome.management.onInstalled.addListener(appInfo => {
-				NooBoss.AutoState.apps[appInfo.id] = {
-					enabled: appInfo.enabled,
-					name: appInfo.name,
-				};
 			});
 		},
 	};

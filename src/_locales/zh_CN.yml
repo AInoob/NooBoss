@@ -16,6 +16,8 @@ about:
   message: 关于
 notifications:
   message: 通知
+notification:
+  message: 通知
 autoState:
   message: 自动管理
 join_community:
@@ -82,3 +84,13 @@ successfully_imported:
   message: 成功导入
 failed_to_import:
   message: 导入失败
+was_installed:
+  message: '已被安装'
+was_updated:
+  message: '已被更新'
+was_removed:
+  message: '已被卸载'
+was_enabled:
+  message: '已被开启'
+was_disabled:
+  message: '已被关闭'
