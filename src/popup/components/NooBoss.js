@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import styled, { injectGlobal } from 'styled-components';
 import Navigator from './Navigator';
 import Overview from './Overview';
+import Extensions from './Extensions';
+import Userscripts from './Userscripts';
 import Options from './Options';
 import History from './History';
 import About from './About';
-import { updateState, updateLocation, updateLanguage, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
+import { updateState, updateMainLocation, updateLanguage, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
 import { getDB, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
@@ -68,11 +70,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 				resolve();
 			});
 		},
-		updateLocationIfOptions: () => {
+		updateMainLocationIfOptions: () => {
 			return new Promise(resolve => {
 				const location = getParameterByName('page');
 				if (location) {
-					dispatch(updateLocation(location));
+					dispatch(updateMainLocation(location));
 				}
 				resolve();
 			});
@@ -90,7 +92,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		},
 		initialize: async (props) => {
 			await props.loadPrevState();
-			await props.updateLocationIfOptions();
+			await props.updateMainLocationIfOptions();
 			await props.initialRequiredOptions();
 			chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 				if (message) {
@@ -100,7 +102,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 								dispatch(optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 }));
 								get('subColor', (color) => {
 									dispatch(optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 }));
-									resolve();
 								});
 							});
 							break;
@@ -136,12 +137,13 @@ class NooBoss extends Component{
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1}),
 			icons: this.state.icons,
 		};
-		console.log(this.props.options);
 		let page = null;
-		if (this.props.location == 'overview') { page = <Overview />; }
-		else if (this.props.location == 'options') { page = <Options />; }
-		else if (this.props.location == 'history') { page = <History getIcon={this.getIcon.bind(this)} shared={shared} />; }
-		else if (this.props.location == 'about') { page = <About />; }
+		if (this.props.location.main == 'overview') { page = <Overview />; }
+		else if (this.props.location.main == 'extensions') { page = <Extensions shared={shared} />; }
+		else if (this.props.location.main == 'userscripts') { page = <Userscripts />; }
+		else if (this.props.location.main == 'history') { page = <History getIcon={this.getIcon.bind(this)} shared={shared} />; }
+		else if (this.props.location.main == 'options') { page = <Options />; }
+		else if (this.props.location.main == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
 				themeMainColor={shared.themeMainColor}

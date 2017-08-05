@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateLocation, navigatorUpdateHoverPosition } from '../actions';
+import { updateMainLocation, navigatorUpdateHoverPosition } from '../actions';
 import styled from 'styled-components';
 import { GL } from '../../utils';
 
@@ -39,6 +39,9 @@ const NavigatorDiv = styled.nav`
 			color: ${props => props.themeMainColor};
 		}
 	}
+	a.active{
+		cursor: default;
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -46,15 +49,14 @@ const mapStateToProps = (state, ownProps) => {
 		...ownProps,
 		location: state.location,
 		navigator: state.navigator,
-		options: state.options
 	});
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return ({
 		...ownProps,
-		updateLocation: (location) => {
-			dispatch(updateLocation(location));
+		updateMainLocation: (location) => {
+			dispatch(updateMainLocation(location));
 		},
 		navigatorUpdateHoverPosition: (position) => {
 			dispatch(navigatorUpdateHoverPosition(position));
@@ -71,7 +73,8 @@ class Navigator extends Component{
 			<a key={index}
 				className={(isActive ? 'active' : '')}
 				onClick={() => {
-					this.props.updateLocation(name);
+					this.props.updateMainLocation(name);
+					this.props.navigatorUpdateHoverPosition(index);
 				}}
 				onMouseOver={() => {
 					this.props.navigatorUpdateHoverPosition(index);
@@ -84,7 +87,7 @@ class Navigator extends Component{
 	render() {
 		let activePosition = 0;
 		const links = this.props.navigator.linkList.map((name, index) => {
-			if (this.props.location == name) {
+			if (this.props.location.main == name) {
 				activePosition = index;
 				return this.getLink(name, index, true);
 			}

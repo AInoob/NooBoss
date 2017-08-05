@@ -39,7 +39,7 @@ export default (NooBoss) => {
 				const name = groupsAndIds[i];
 				let appId;
 				if(name.match(/^NooBoss-Group/)) {
-					const group = NooBoss.Extension.groupList.filter((group) => {
+					const group = NooBoss.Extensions.groupList.filter((group) => {
 						return group.id == name;
 					})[0];
 					if(!group) {

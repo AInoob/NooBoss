@@ -1,4 +1,4 @@
-import { setIfNull, promisedGet, promisedSet, promisedSetIfNull, clearDB, notify, GL } from '../utils';
+import { setIfNull, promisedGet, promisedSet, promisedSetIfNull, clearDB, notify, GL, sendMessage } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -72,9 +72,13 @@ export default (NooBoss) => {
 				notify(GL('backup'), GL('failed_to_import'), 5);
 				return;
 			}
-			chrome.storage.sync.set(options, () => {
+			chrome.storage.sync.set(options, async () => {
 				sendMessage({ job: 'popupNooBossUpdateTheme' });
 				sendMessage({ job: 'popupOptionsInitiate' });
+				await NooBoss.Options.initiate();
+				await NooBoss.Extensions.initiate();
+				await NooBoss.AutoState.initiate();
+				await NooBoss.History.initiate();
 			});
 			notify(GL('backup'), GL('successfully_imported'), 5);
 		},

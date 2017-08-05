@@ -104,3 +104,5 @@ name:
   message: 名字
 version:
   message: 版本
+menage:
+  message: 管理

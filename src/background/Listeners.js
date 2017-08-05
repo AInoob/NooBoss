@@ -4,6 +4,14 @@ export default (NooBoss) => {
 	return {
 		initiate: () => {
 			return new Promise(resolve => {
+				/*chrome.management.onInstalled.removeListener();
+				chrome.management.onUninstalled.removeListener();
+				chrome.management.onEnabled.removeListener();
+				chrome.management.onDisabled.removeListener();
+				chrome.tabs.onCreated.removeListener();
+				chrome.tabs.onUpdated.removeListener();
+				chrome.tabs.onRemoved.removeListener();
+				chrome.tabs.onReplaced.removeListener();*/
 				chrome.management.onInstalled.addListener(async appInfo => {
 					appInfo.icon = await getIconDBKey(appInfo);
 					await NooBoss.Extensions.updateAppInfo(appInfo);

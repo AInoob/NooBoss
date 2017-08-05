@@ -104,3 +104,5 @@ name:
   message: Name
 version:
   message: Version
+manage:
+  message: Manage

@@ -49,7 +49,7 @@ class History extends Component{
 			recordList: [],
 			icons: {},
 		};
-		getDB('history_records', async (recordList=[]) => {
+		getDB('history_records', async (recordList = []) => {
 			this.setState({ recordList });
 			for(let i = 0; i < recordList.length; i++) {
 				const record = recordList[i];
@@ -61,7 +61,7 @@ class History extends Component{
 	}
 
 	render() {
-		const recordList = (this.state.recordList || []).map((record, index) => {
+		const recordList = (this.state.recordList || []).sort((a, b) => { return b.date - a.date}).map((record, index) => {
 			return (
 				<tr key={index} className="record">
 					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>

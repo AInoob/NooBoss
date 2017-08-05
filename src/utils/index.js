@@ -16,7 +16,7 @@ export const getDB = (key, callback) => {
 					callback(e.target.result.value);
 				}
 				else {
-					callback(null);
+					callback();
 				}
 			};
 			action.onerror = () => {
