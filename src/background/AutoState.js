@@ -1,4 +1,4 @@
-import { promisedGet, getRegExpFromWildcard, notify, isOn } from '../utils';
+import { promisedGet, getRegExpFromWildcard, notify, isOn, GL } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -150,26 +150,25 @@ export default (NooBoss) => {
 				NooBoss.AutoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
 			}
 		},
-		setAppState: (id, enabled, tabId, ruleId) => {
+		setAppState: async (id, enabled, tabId, ruleId) => {
 			if (NooBoss.Extensions.apps[id]) {
 				const appInfo = NooBoss.Extensions.apps[id];
 				if (appInfo && appInfo.enabled != enabled) {
 					appInfo.enabled = enabled;
-					chrome.management.setEnabled(id, enabled, () => {
-						let enabledStr = 'enabled';
-						if (!enabled) {
-							enabledStr = 'disabled';
-						}
-						isOn('autoStateNotification', async () => {
-							notify(GL('auto_state'), '', await promisedGet('notificationDuration_autoState'));
-						});
-						//get('userId', userId => {
-						//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });
-						//});
-						if (tabId) {
-							chrome.tabs.reload(tabId);
-						}
+					await NooBoss.Extensions.toggle(id, enabled);
+					let enabledStr = 'enabled';
+					if (!enabled) {
+						enabledStr = 'disabled';
+					}
+					isOn('autoStateNotification', async () => {
+						notify(GL('autoState'), '', await promisedGet('notificationDuration_autoState'));
 					});
+					//get('userId', userId => {
+					//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });
+					//});
+					if (tabId) {
+						chrome.tabs.reload(tabId);
+					}
 				}
 			}
 		},

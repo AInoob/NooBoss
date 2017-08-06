@@ -53,7 +53,7 @@ class History extends Component{
 			this.setState({ recordList });
 			for(let i = 0; i < recordList.length; i++) {
 				const record = recordList[i];
-				if (!this.props.shared.icons[record.icon]) {
+				if (!window.shared.icons[record.icon]) {
 					await this.props.getIcon(record.icon);
 				}
 			}
@@ -66,7 +66,7 @@ class History extends Component{
 				<tr key={index} className="record">
 					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>
 					<td>{record.event}</td>
-					<td className="icon"><img src={this.props.shared.icons[record.icon]} /></td>
+					<td className="icon"><img src={window.shared.icons[record.icon]} /></td>
 					<td>{record.name}</td>
 					<td>{record.version}</td>
 				</tr>
@@ -74,7 +74,7 @@ class History extends Component{
 		});
 		return (
 			<HistoryDiv
-				themeMainColor={this.props.shared.themeMainColor}
+				themeMainColor={window.shared.themeMainColor}
 			>
 				<table>
 					<thead>

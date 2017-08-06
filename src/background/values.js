@@ -1,5 +1,5 @@
 export const defaultValues = {
-	userId: (Math.random().toString(36)+'00000000000000000').slice(2, 19),
+	userId: (Math.random().toString(36)).slice(2, 19)+(Math.random().toString(36)).slice(2, 19),
 	notifyStateChange: true,
 	notifyInstallation: true,
 	notifyRemoval: true,
@@ -9,7 +9,7 @@ export const defaultValues = {
 	historyEnable: true,
 	historyDisable: true,
 	autoState: true,
-	autoStateNotification: true,
+	autoStateNotification: false,
 	autoStateRules: [],
 	sortOrder: 'nameState',
 	bello: true,

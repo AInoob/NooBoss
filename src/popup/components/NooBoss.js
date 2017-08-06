@@ -132,24 +132,24 @@ class NooBoss extends Component{
 	}
 
 	render() {
-		const shared = {
+		window.shared = {
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1}),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1}),
 			icons: this.state.icons,
 		};
 		let page = null;
 		if (this.props.location.main == 'overview') { page = <Overview />; }
-		else if (this.props.location.main == 'extensions') { page = <Extensions shared={shared} />; }
+		else if (this.props.location.main == 'extensions') { page = <Extensions getIcon={this.getIcon.bind(this)} />; }
 		else if (this.props.location.main == 'userscripts') { page = <Userscripts />; }
-		else if (this.props.location.main == 'history') { page = <History getIcon={this.getIcon.bind(this)} shared={shared} />; }
+		else if (this.props.location.main == 'history') { page = <History getIcon={this.getIcon.bind(this)} />; }
 		else if (this.props.location.main == 'options') { page = <Options />; }
 		else if (this.props.location.main == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
-				themeMainColor={shared.themeMainColor}
-				themeSubColor={shared.themeSubColor}
+				themeMainColor={window.shared.themeMainColor}
+				themeSubColor={window.shared.themeSubColor}
 			>
-				<Navigator shared={shared} />
+				<Navigator />
 				{page}
 			</NooBossDiv>
 		);

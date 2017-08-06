@@ -180,6 +180,53 @@ export const generateRGBAString = (rgbaObject) => {
 	return 'rgba('+rgbaObject.r+','+rgbaObject.g+','+rgbaObject.b+','+rgbaObject.a+')';
 };
 
+export const rgbaStringToObject = (rgbaString) => {
+	let values = rgbaString.substr(5, rgbaString.length - 6).split(',');
+	values = values.map((elem, index) => {
+		if (index < 3) {
+			return parseInt(elem);
+		}
+		else {
+			return parseFloat(elem);
+		}
+	});
+	return { r: values[0], g: values[1], b: values[2], a: values[3] };
+};
+
+export const colorToRGBA = (color) => {
+	if (color.indexOf('rgba(') != -1) {
+		return color;
+	}
+	else {
+		const hex = color;
+		var c;
+		if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+			c= hex.substring(1).split('');
+			if(c.length== 3){
+				c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+			}
+			c= '0x'+c.join('');
+			return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
+		}
+		throw new Error('Bad Hex');
+	}
+};
+
+export const rgbaChange = (color, changeRGBA) => {
+	let rgba = color;
+	if (typeof rgba == 'string') {
+		rgba = colorToRGBA(rgba);
+		rgba = rgbaStringToObject(rgba);
+	}
+	if (typeof changeRGBA == 'string') {
+		changeRGBA = rgbaStringToObject(changeRGBA);
+	}
+	Object.keys(rgba).map(elem => {
+		rgba[elem] = rgba[elem] + changeRGBA[elem];
+	});
+	return generateRGBAString(rgba);
+};
+
 export const sendMessage = (message, callback = () => {}) => {
 	chrome.runtime.sendMessage(message, callback);
 };

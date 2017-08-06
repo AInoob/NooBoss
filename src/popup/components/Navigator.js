@@ -97,8 +97,8 @@ class Navigator extends Component{
 		});
 		return (
 			<NavigatorDiv
-				themeMainColor={this.props.shared.themeMainColor}
-				themeSubColor={this.props.shared.themeSubColor}
+				themeMainColor={window.shared.themeMainColor}
+				themeSubColor={window.shared.themeSubColor}
 				numOfLinks={links.length}
 				hoverPosition={this.props.navigator.hoverPosition}
 				onMouseOut={() => {

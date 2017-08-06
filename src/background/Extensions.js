@@ -1,4 +1,4 @@
-import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB } from '../utils';
+import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB, sendMessage } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -83,6 +83,30 @@ export default (NooBoss) => {
 				await promisedSetDB(id, newInfo);
 				resolve();
 			});
-		}
+		},
+		toggle: (id, enabled) => {
+			return new Promise(resolve => {
+				if (enabled == undefined) {
+					enabled = !NooBoss.Extensions.apps[id].enabled;
+				}
+				if (id == 'aajodjghehmlpahhboidcpfjcncmcklf' || id == 'nkkbbadgjkchmggnpbammldmkbnhndme') {
+					enabled = true;
+				}
+				chrome.management.setEnabled(id, enabled, () => {
+					sendMessage({ job: 'extensionToggled',id, enabled });
+					resolve();
+				});
+			});
+		},
+		options: (id) => {
+			const url = NooBoss.Extensions.apps[id].optionsUrl;
+			chrome.tabs.create({ url });
+		},
+		remove: (id) => {
+			chrome.management.uninstall(id, { showConfirmDialog: true });
+		},
+		browserOptions: (id) => {
+			chrome.tabs.create({ url: 'chrome://extensions/?id=' + id });
+		},
 	};
 };

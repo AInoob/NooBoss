@@ -23,15 +23,10 @@ NooBoss.initiate = async () => {
 	NooBoss.History = createHistory(NooBoss);
 	NooBoss.Listeners = createListeners(NooBoss);
 	await NooBoss.Options.initiate();
-	console.log(1);
 	await NooBoss.Extensions.initiate();
-	console.log(2);
 	await NooBoss.AutoState.initiate();
-	console.log(3);
 	await NooBoss.History.initiate();
-	console.log(4);
 	await NooBoss.Listeners.initiate();
-	console.log(5);
 	chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 		switch (message.job) {
 			case 'bello':
@@ -82,6 +77,18 @@ NooBoss.initiate = async () => {
 				break;
 			case 'getAutoStateRuleList':
 				sendResponse(NooBoss.AutoState.rules);
+				break;
+			case 'extensionToggle':
+				NooBoss.Extensions.toggle(message.id);
+				break;
+			case 'extensionOptions':
+				NooBoss.Extensions.options(message.id);
+				break;
+			case 'extensionRemove':
+				NooBoss.Extensions.remove(message.id);
+				break;
+			case 'extensionBrowserOptions':
+				NooBoss.Extensions.browserOptions(message.id);
 				break;
 		}
 	});
