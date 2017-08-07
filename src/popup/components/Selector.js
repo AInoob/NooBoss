@@ -6,7 +6,7 @@ import { GL, sendMessage } from '../../utils';
 const SelectorDiv = styled.div`
 	overflow: hidden;
 	#actionBar{
-		width: 80%;
+		width: 460px;
 		margin: auto;
 		margin-top: 10px;
 		margin-bottom: 10px;

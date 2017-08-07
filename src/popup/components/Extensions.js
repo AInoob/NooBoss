@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { updateSubLocation } from '../actions';
 import { GL } from '../../utils';
 import Manage from './Manage.js';
 import AutoState from './AutoState.js';
@@ -47,9 +46,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return ({
 		...ownProps,
-		updateSubLocation: (mainLocation, subLocation) => {
-			dispatch(updateSubLocation(mainLocation, subLocation));
-		},
 	})
 }
 
@@ -110,14 +106,6 @@ class Extensions extends Component{
 	}
 
 	render() {
-		const subAddressList = ['manage', 'autoState'];
-		const subNavigator = subAddressList.map((elem, index) => {
-			let active = '';
-			if (this.props.location.sub['extensions'] == elem) {
-				active = 'active';
-			}
-			return <a className={active} onClick={this.props.updateSubLocation.bind(this, 'extensions', elem)} key={index}>{GL(elem)}</a>
-		});
 		let core;
 		if (this.props.location.sub['extensions'] == 'manage') {
 			core = <Manage extensions={this.state.extensions} groupList={this.state.groupList} />
@@ -127,9 +115,6 @@ class Extensions extends Component{
 		}
 		return (
 			<ExtensionsDiv themeMainColor={window.shared.themeMainColor} themeSubColor={window.shared.themeSubColor}>
-				<nav>
-					{subNavigator}
-				</nav>
 				{core}
 			</ExtensionsDiv>
 		);

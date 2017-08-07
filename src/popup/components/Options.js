@@ -22,7 +22,7 @@ const OptionsDiv = styled.div`
 	}
 	.colorPickerHolder{
 		overflow: hidden;
-		margin-left: 32px;
+		margin-left: 88px;
 		float: left;
 		margin-top: 6px;
 		box-shadow: grey -1px -1px 3px 0px;
@@ -120,9 +120,10 @@ const OptionsDiv = styled.div`
 		}
 	}
 	#themeMainColorPicker, #themeSubColorPicker{
+		position: absolute;
 		cursor: pointer;
-		margin-top: 8px;
-		margin-left: 32px;
+		left: 132px;
+		top: 9px;
 		width: 36px;
 		height: 16px;
 		box-shadow: grey -1px -1px 3px 0px;
@@ -139,6 +140,7 @@ const OptionsDiv = styled.div`
 	}
 	.line{
 		padding-left: 32px;
+		position: relative;
 	}
 `;
 

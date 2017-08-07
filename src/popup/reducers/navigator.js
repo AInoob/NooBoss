@@ -1,13 +1,5 @@
 const initialState = {
 	hoverPosition: 0,
-	linkList: [
-		'overview',
-		'extensions',
-		'userscripts',
-		'history',
-		'options',
-		'about'
-	]
 };
 
 const navigator = (state = initialState, action) => {

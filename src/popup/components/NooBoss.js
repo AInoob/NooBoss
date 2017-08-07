@@ -20,6 +20,7 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	min-height: 300px;
 	* {
 		transition: box-shadow 0.309s;
 	}

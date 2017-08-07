@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateMainLocation, navigatorUpdateHoverPosition } from '../actions';
+import { updateMainLocation, updateSubLocation, navigatorUpdateHoverPosition } from '../actions';
 import styled from 'styled-components';
 import { GL } from '../../utils';
 
 const NavigatorDiv = styled.nav`
 	position: relative;
 	width: 100%;
-	overflow: hidden;
+	height: 38px;
+	overflow: visible;
 	box-shadow: grey 0px 1px 4px;
 	&:hover{
 		box-shadow: grey 0px 3px 8px;
 	}
 	transition: box-shadow 0.1s;
 	background-color: ${props => props.themeMainColor};
-	z-index: 0;
+	z-index: 1;
 	#selector{
 		position: absolute;
 		width: ${props => (100 / props.numOfLinks) + '%'};
@@ -39,9 +40,46 @@ const NavigatorDiv = styled.nav`
 		&:nth-child(${props => props.hoverPosition + 2}){
 			color: ${props => props.themeMainColor};
 		}
+		overflow: visible;
+		.sub{
+			display: none;
+			background-color: white;
+			position: fixed;
+			width: 126.6px;
+			a{
+				color: ${props => props.themeMainColor};
+				width: 126.6px;
+				padding-bottom: 3px;
+			}
+		}
+		&:hover{
+			.sub{
+				display: block;
+			}
+		}
 	}
 	a.active{
 		cursor: default;
+	}
+	a.hasSub{
+		&:hover{
+			&:after{
+				transform: rotate(180deg);
+				margin-top: 2px;
+			}
+			.sub{
+				box-shadow: grey 0px 3px 8px;
+			}
+		}
+		&:after{
+			transition: transform 0.309s;
+			display: block;
+			float: right;
+			font-size: 0.9em;
+			content: '▼';
+			margin-right: 4px;
+			margin-left: -10px;
+		}
 	}
 `;
 
@@ -62,39 +100,67 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		navigatorUpdateHoverPosition: (position) => {
 			dispatch(navigatorUpdateHoverPosition(position));
 		},
+		updateSubLocation: (mainLocation, subLocation) => {
+			dispatch(updateSubLocation(mainLocation, subLocation));
+		},
 	})
 }
 
 class Navigator extends Component{
 	constructor(props) {
 		super(props);
+		this.state = {
+			linkList: [
+				{ main: 'overview' },
+				{ main: 'extensions', sub: ['manage', 'autoState'] },
+				{ main: 'userscripts' },
+				{ main: 'history' },
+				{ main: 'options' },
+				{ main: 'about' }
+			]
+		};
 	}
-	getLink(name, index, isActive) {
+	getLink(link, index, isActive) {
+		let hasSub = '';
+		if (link.sub) {
+			hasSub = 'hasSub';
+		}
 		return (
 			<a key={index}
-				className={(isActive ? 'active' : '')}
+				className={(isActive ? 'active' : '') + ' ' + hasSub}
 				onClick={() => {
-					this.props.updateMainLocation(name);
+					this.props.updateMainLocation(link.main);
 					this.props.navigatorUpdateHoverPosition(index);
 				}}
 				onMouseOver={() => {
 					this.props.navigatorUpdateHoverPosition(index);
 				}}
 			>
-				{GL(name)}
+				{GL(link.main)}
+				{
+					link.sub ? (
+						<div className="sub">
+							{
+								link.sub.map((elem, index) => {
+									return <a key={index} onClick={this.props.updateSubLocation.bind(this, link.main, elem)}>{GL(elem)}</a>
+								})
+							}
+						</div>
+					) : null
+				}
 			</a>
 		);
 	}
 
 	render() {
 		let activePosition = 0;
-		const links = this.props.navigator.linkList.map((name, index) => {
-			if (this.props.location.main == name) {
+		const links = this.state.linkList.map((link, index) => {
+			if (this.props.location.main == link.main) {
 				activePosition = index;
-				return this.getLink(name, index, true);
+				return this.getLink(link, index, true);
 			}
 			else {
-				return this.getLink(name, index);
+				return this.getLink(link, index);
 			}
 		});
 		return (
