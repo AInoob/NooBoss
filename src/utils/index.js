@@ -106,11 +106,11 @@ export const capFirst = (elem) => {
 };
 
 export const GL = (string) => {
-	return chrome.i18n.getMessage(string);
+	return browser.i18n.getMessage(string);
 };
 
 export const get = (key, callback) => {
-	chrome.storage.sync.get(key, (result) => {
+	browser.storage.sync.get(key, (result) => {
 		if(callback)
 			callback(result[key]);
 	});
@@ -146,7 +146,7 @@ export const promisedIsOn = (key) => {
 export const set = (key, value, callback) => {
 	const temp = {};
 	temp[key] = value;
-	chrome.storage.sync.set(temp, () => {
+	browser.storage.sync.set(temp, () => {
 		callback(value);
 	});
 };
@@ -228,11 +228,11 @@ export const rgbaChange = (color, changeRGBA) => {
 };
 
 export const sendMessage = (message, callback = () => {}) => {
-	chrome.runtime.sendMessage(message, callback);
+	browser.runtime.sendMessage(message, callback);
 };
 
 export const notify = (title, message, duration) => {
-	chrome.notifications.create({
+	browser.notifications.create({
 		type: 'basic',
 		iconUrl: '/images/icon_128.png',
 		title,
@@ -241,7 +241,7 @@ export const notify = (title, message, duration) => {
 	}, (notificationId) => {
 		if (duration > 0) {
 			setTimeout(() => {
-				chrome.notifications.clear(notificationId, () => {});
+				browser.notifications.clear(notificationId, () => {});
 			}, duration * 1000);
 		}
 	});
@@ -321,7 +321,7 @@ export const getIconDBKey = (appInfo) => {
 
 export const getLanguage = () => {
 	return new Promise(resolve => {
-		chrome.i18n.getAcceptLanguages(languageList => {
+		browser.i18n.getAcceptLanguages(languageList => {
 			const supportedLanguageList = [ 'ar', 'be', 'bg', 'ca', 'da', 'de', 'el', 'en', 'en_short', 'es', 'eu', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'in_BG', 'in_HI', 'in_ID', 'it', 'ja', 'ko', 'ml', 'my', 'nb_NO', 'nl', 'nn_NO', 'pl', 'pt_BR', 'ro', 'ru', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'zh_CN', 'zh_TW' ];
 			const bestLanguageIndex = supportedLanguagesList.reduce((index, language) => {
 				const languageIndex = languageList.indexOf(language);

@@ -14,7 +14,7 @@ export default (NooBoss) => {
 		},
 		fetchTabs: () => {
 			return new Promise(resolve => {
-				chrome.tabs.query({}, (tabList) => {
+				browser.tabs.query({}, (tabList) => {
 					for(let i = 0; i < tabList.length; i++) {
 						const tabInfo = tabList[i];
 						NooBoss.AutoState.tabs[tabInfo.id] = tabInfo.url;
@@ -56,7 +56,7 @@ export default (NooBoss) => {
 		replaceTab: (addedTabId, removedTabId) => {
 			NooBoss.AutoState.tabs[removedTabId] = null;
 			// Not sure if we need this or not, it might be the case that the tab is already recorded
-			chrome.tabs.get(addedTabId, (tab) => {
+			browser.tabs.get(addedTabId, (tab) => {
 				NooBoss.AutoState.newTab(tab);
 			});
 		},
@@ -167,7 +167,7 @@ export default (NooBoss) => {
 					//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });
 					//});
 					if (tabId) {
-						chrome.tabs.reload(tabId);
+						browser.tabs.reload(tabId);
 					}
 				}
 			}

@@ -32,7 +32,7 @@ export default (NooBoss) => {
 		onUpdate: () => {
 		},
 		listen: () => {
-			chrome.management.onInstalled.addListener(appInfo => {
+			browser.management.onInstalled.addListener(appInfo => {
 			});
 		},
 	};

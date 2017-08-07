@@ -8,16 +8,17 @@ const NavigatorDiv = styled.nav`
 	position: relative;
 	width: 100%;
 	overflow: hidden;
+	box-shadow: grey 0px 1px 4px;
 	&:hover{
-		box-shadow: grey -2px -2px 6px 0px;
+		box-shadow: grey 0px 3px 8px;
 	}
-	transition: box-shadow 0.309s;
+	transition: box-shadow 0.1s;
 	background-color: ${props => props.themeMainColor};
 	z-index: 0;
 	#selector{
 		position: absolute;
 		width: ${props => (100 / props.numOfLinks) + '%'};
-		height: 33px;
+		height: 38px;
 		background-color: white;
 		z-index: -1;
 		margin-left: ${props => (props.hoverPosition * 100 / props.numOfLinks) + '%'};
@@ -33,8 +34,8 @@ const NavigatorDiv = styled.nav`
 		width: ${props => (100 / props.numOfLinks) + '%'};
 		transition: color 0.309s;
 		cursor: pointer;
-		height: 33px;
-		line-height: 33px;
+		height: 38px;
+		line-height: 38px;
 		&:nth-child(${props => props.hoverPosition + 2}){
 			color: ${props => props.themeMainColor};
 		}
@@ -84,6 +85,7 @@ class Navigator extends Component{
 			</a>
 		);
 	}
+
 	render() {
 		let activePosition = 0;
 		const links = this.props.navigator.linkList.map((name, index) => {

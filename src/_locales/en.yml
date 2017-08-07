@@ -106,3 +106,17 @@ version:
   message: Version
 manage:
   message: Manage
+app:
+  message: App
+extension:
+  message: Extension
+all:
+  message: All
+group:
+  message: Group
+enable:
+  message: Enable
+disable:
+  message: Disable
+undo:
+  message: Undo

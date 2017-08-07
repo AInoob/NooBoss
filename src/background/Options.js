@@ -72,7 +72,7 @@ export default (NooBoss) => {
 				notify(GL('backup'), GL('failed_to_import'), 5);
 				return;
 			}
-			chrome.storage.sync.set(options, async () => {
+			browser.storage.sync.set(options, async () => {
 				sendMessage({ job: 'popupNooBossUpdateTheme' });
 				sendMessage({ job: 'popupOptionsInitiate' });
 				await NooBoss.Options.initiate();
@@ -83,7 +83,7 @@ export default (NooBoss) => {
 			notify(GL('backup'), GL('successfully_imported'), 5);
 		},
 		exportOptions: () => {
-			chrome.storage.sync.get(data => {
+			browser.storage.sync.get(data => {
 				const dataURI='data:text;charset=utf-8,NooBoss-Options:'+JSON.stringify(data);
 				const a = document.createElement('a');
 				a.href = dataURI;

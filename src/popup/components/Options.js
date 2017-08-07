@@ -186,17 +186,28 @@ class Options extends Component{
 			autoStateNotification: false,
 			joinCommunity: false,
 		};
-		this.initiate();
-		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-			if (message) {
-				switch (message.job) {
-					case 'popupOptionsInitiate':
-						this.initiate();
-						break;
-				}
-			}
-		});
+		this.listener = this.listener.bind(this);
 	}
+
+	componentDidMount() {
+		this.initiate();
+		browser.runtime.onMessage.addListener(this.listener);
+	}
+
+	componentWillUnmount() {
+		browser.runtime.onMessage.removeListener(this.listener);
+	}
+
+	listener(message, sender, sendResponse) {
+		if (message) {
+			switch (message.job) {
+				case 'popupOptionsInitiate':
+					this.initiate();
+					break;
+			}
+		}
+	}
+	
 
 	initiate() {
 		const options=[
@@ -359,7 +370,7 @@ class Options extends Component{
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
 									 	tabIndex="-1"
-										onBlur={()=>{this.setState({ colorPicker: null })}}
+										onBlur={()=>{setTimeout(() => {this.setState({ colorPicker: null })}, 88)}}
 									>
 										<SketchPicker
 											color={this.props.options.themeMainColor}
@@ -376,7 +387,7 @@ class Options extends Component{
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
 									 	tabIndex="-1"
-										onBlur={()=>{this.setState({ colorPicker: null })}}
+										onBlur={()=>{setTimeout(() => {this.setState({ colorPicker: null })}, 88)}}
 									>
 										<SketchPicker
 											color={this.props.options.themeSubColor}

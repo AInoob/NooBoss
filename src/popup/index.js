@@ -8,8 +8,9 @@ import { setDB } from '../utils'
 
 const store = createStore(reducer)
 
+window.browser = chrome;
+
 store.subscribe(() => {
-	console.log(JSON.stringify(store.getState()));
 	setDB('prevState', store.getState());
 })
 

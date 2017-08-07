@@ -10,6 +10,14 @@ const ExtensionsDiv = styled.div`
 	nav{
 		width: 80%;
 		margin: auto;
+		overflow: hidden;
+		box-shadow: grey 0px 0px 1px;
+		&:hover{
+			box-shadow: grey 0px 0px 8px;
+		}
+		margin-top: 10px;
+		margin-bottom: 3px;
+		transition: box-shadow 0.1s;
 		a{
 			width: 50%;
 			display: block;
@@ -20,6 +28,8 @@ const ExtensionsDiv = styled.div`
 			color: ${props => props.themeMainColor};
 			opacity: 0.4;
 			cursor: pointer;
+			height: 36px;
+			line-height: 36px;
 		}
 		a.active{
 			opacity: 1;
@@ -51,26 +61,34 @@ class Extensions extends Component{
 			groupList: [],
 			autoStateRuleList: [],
 		};
+		this.listener = this.listener.bind(this);
+	}
+
+	listener(message, sender, sendResponse) {
+		if (message) {
+			console.log(message.job);
+			switch (message.job) {
+				case 'extensionToggled':
+					this.setState(prevState => {
+						if (prevState.extensions[message.id]) {
+							prevState.extensions[message.id].enabled = message.enabled;
+						}
+						return prevState;
+					});
+					break;
+				case 'extensionRemoved':
+					this.setState(prevState => {
+						delete prevState.extensions[message.id];
+						return prevState;
+					});
+					break;
+			}
+		}
 	}
 
 	componentDidMount() {
-		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-			if (message) {
-				console.log(message.job);
-				switch (message.job) {
-					case 'extensionToggled':
-						console.log('yay');
-						this.setState(prevState => {
-							if (prevState.extensions[message.id]) {
-								prevState.extensions[message.id].enabled = message.enabled;
-							}
-							return prevState;
-						});
-						break;
-				}
-			}
-		});
-		chrome.runtime.sendMessage({ job: 'getAllExtensions' }, extensions => {
+		browser.runtime.onMessage.addListener(this.listener);
+		browser.runtime.sendMessage({ job: 'getAllExtensions' }, extensions => {
 			this.setState({ extensions });
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
@@ -79,12 +97,16 @@ class Extensions extends Component{
 				}
 			}
 		});
-		chrome.runtime.sendMessage({ job: 'getGroupList' }, groupList => {
+		browser.runtime.sendMessage({ job: 'getGroupList' }, groupList => {
 			this.setState({ groupList });
 		});
-		chrome.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
+		browser.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
 			this.setState({ autoStateRuleList });
 		});
+	}
+
+	componentWillUnmount() {
+		browser.runtime.onMessage.removeListener(this.listener);
 	}
 
 	render() {

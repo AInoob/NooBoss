@@ -106,3 +106,17 @@ version:
   message: 版本
 menage:
   message: 管理
+app:
+  message: 应用
+extension:
+  message: 拓展
+all:
+  message: 全部
+group:
+  message: 组
+enable:
+  message: 开启
+disable:
+  message: 关闭
+undo:
+  message: 撤销

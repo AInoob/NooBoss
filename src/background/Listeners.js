@@ -4,15 +4,15 @@ export default (NooBoss) => {
 	return {
 		initiate: () => {
 			return new Promise(resolve => {
-				/*chrome.management.onInstalled.removeListener();
-				chrome.management.onUninstalled.removeListener();
-				chrome.management.onEnabled.removeListener();
-				chrome.management.onDisabled.removeListener();
-				chrome.tabs.onCreated.removeListener();
-				chrome.tabs.onUpdated.removeListener();
-				chrome.tabs.onRemoved.removeListener();
-				chrome.tabs.onReplaced.removeListener();*/
-				chrome.management.onInstalled.addListener(async appInfo => {
+				/*browser.management.onInstalled.removeListener();
+				browser.management.onUninstalled.removeListener();
+				browser.management.onEnabled.removeListener();
+				browser.management.onDisabled.removeListener();
+				browser.tabs.onCreated.removeListener();
+				browser.tabs.onUpdated.removeListener();
+				browser.tabs.onRemoved.removeListener();
+				browser.tabs.onReplaced.removeListener();*/
+				browser.management.onInstalled.addListener(async appInfo => {
 					appInfo.icon = await getIconDBKey(appInfo);
 					await NooBoss.Extensions.updateAppInfo(appInfo);
 					let event = 'installed';
@@ -31,7 +31,7 @@ export default (NooBoss) => {
 						);
 					}
 				});
-				chrome.management.onUninstalled.addListener(id => {
+				browser.management.onUninstalled.addListener(id => {
 					const appInfo = NooBoss.Extensions.apps[id];
 					if (NooBoss.Options.options['historyRemove']) {
 						const event = 'removed';
@@ -47,7 +47,7 @@ export default (NooBoss) => {
 					}
 					NooBoss.Extensions.updateAppInfoById(id, { uninstalledDate: new Date().getTime() });
 				});
-				chrome.management.onEnabled.addListener(async appInfo => {
+				browser.management.onEnabled.addListener(async appInfo => {
 					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyEnable']) {
 						const event = 'enabled';
@@ -63,7 +63,7 @@ export default (NooBoss) => {
 					}
 					NooBoss.Extensions.updateAppInfoById(appInfo.id, { enabled: true });
 				});
-				chrome.management.onDisabled.addListener(async appInfo => {
+				browser.management.onDisabled.addListener(async appInfo => {
 					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyDisable']) {
 						const event = 'disnabled';
@@ -80,22 +80,22 @@ export default (NooBoss) => {
 					NooBoss.Extensions.updateAppInfoById(appInfo.id, { enabled: false });
 				});
 
-				chrome.tabs.onCreated.addListener(tab => {
+				browser.tabs.onCreated.addListener(tab => {
 					if (NooBoss.Options.options['autoState']) {
 						NooBoss.AutoState.newTab(tab);
 					}
 				});
-				chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+				browser.tabs.onUpdated.addListener((tabId, info, tab) => {
 					if (NooBoss.Options.options['autoState']) {
 						NooBoss.AutoState.updateTab(tabId, info, tab);
 					}
 				});
-				chrome.tabs.onRemoved.addListener(tabId => {
+				browser.tabs.onRemoved.addListener(tabId => {
 					if (NooBoss.Options.options['autoState']) {
 						NooBoss.AutoState.removeTab(tabId);
 					}
 				});
-				chrome.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
+				browser.tabs.onReplaced.addListener((addedTabId, removedTabId) => {
 					if (NooBoss.Options.options['autoState']) {
 						NooBoss.AutoState.replace(addedTabId, removedTabId);
 					}

@@ -23,7 +23,7 @@ export default (NooBoss) => {
 		},
 		getAllApps: () => {
 			return new Promise(resolve => {
-				chrome.management.getAll(async appInfoList => {
+				browser.management.getAll(async appInfoList => {
 					const apps = {};
 					for(let i = 0; i < appInfoList.length; i++) {
 						const appInfo = appInfoList[i];
@@ -92,7 +92,8 @@ export default (NooBoss) => {
 				if (id == 'aajodjghehmlpahhboidcpfjcncmcklf' || id == 'nkkbbadgjkchmggnpbammldmkbnhndme') {
 					enabled = true;
 				}
-				chrome.management.setEnabled(id, enabled, () => {
+				browser.management.setEnabled(id, enabled, () => {
+					NooBoss.Extensions.apps[id].enabled = enabled;
 					sendMessage({ job: 'extensionToggled',id, enabled });
 					resolve();
 				});
@@ -100,13 +101,16 @@ export default (NooBoss) => {
 		},
 		options: (id) => {
 			const url = NooBoss.Extensions.apps[id].optionsUrl;
-			chrome.tabs.create({ url });
+			browser.tabs.create({ url });
 		},
 		remove: (id) => {
-			chrome.management.uninstall(id, { showConfirmDialog: true });
+			browser.management.uninstall(id, { showConfirmDialog: true }, () => {
+				delete NooBoss.Extensions.apps.id;
+				sendMessage({ job: 'extensionRemoved',id });
+			});
 		},
 		browserOptions: (id) => {
-			chrome.tabs.create({ url: 'chrome://extensions/?id=' + id });
+			browser.tabs.create({ url: 'browser://extensions/?id=' + id });
 		},
 	};
 };

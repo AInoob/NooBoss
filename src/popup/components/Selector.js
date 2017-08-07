@@ -1,112 +1,130 @@
 import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
-import { Switchy, Optioney, Removy } from '../../icons';
-import { sendMessage } from '../../utils';
+import styled from 'styled-components';
+import ExtensionBrief  from './ExtensionBrief';
+import { GL, sendMessage } from '../../utils';
 
 const SelectorDiv = styled.div`
-	.extension{
-		width: 100px;
-		height: 100px;
-		padding: 10px;
-		float: left;
-		overflow: hidden;
-		.appBrief{
-			width: 100%;
-			height: 100%;
-			position: relative;
-			.appIcon, .appInfo{
-				backface-visibility: hidden;
-				transition: transform 0.309s;
-				position: absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
+	overflow: hidden;
+	#actionBar{
+		width: 80%;
+		margin: auto;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		#nameFilter, #typeFilter{
+			width: 100px;
+			border: none;
+			box-shadow: grey 0px 0px 1px;
+			&:hover{
+				box-shadow: grey 0px 0px 8px;
 			}
-			.appIcon{
-				transform: rotate(0deg);
-			}
-			.appInfo{
-				text-align: center;
-				transform: rotateY(180deg);
-			}
+			background-color: white;
 		}
-		&:hover{
-			.appBrief{
-				.appIcon{
-					transform: rotateY(180deg);
-				}
-				.appInfo{
-					transform: rotateY(0deg);
-				}
-			}
+		*{
+			margin-right: 16px;
 		}
 	}
-	.disabled{
-		.appIcon{
-			filter: grayscale(100%);
-		}
-	}
-	${props => props.withControl && css`
-		.extension{
-			.appBrief{
-				width: 77px;
-				height: 77px;
-			}
-			.appControl{
-				position: absolute;
-				left: 80px;
-				svg{
-					cursor: pointer;
-					width: 22px;
-					height: 22px;
-				}
-			}
-		}
-	`}
 `;
 
 class Selector extends Component{
-	render() {
-		const extensionList = Object.keys(this.props.extensions).map((elem, index) => {
-			const extension = this.props.extensions[elem];
-			let switchyRGBA = undefined;
-			let disabled;
+	constructor(props) {
+		super(props);
+		this.state = {
+			filterName: '',
+			filterType: 'all',
+			stateHistoryList: [],
+		};
+	}
+
+	enable() {
+		const stateHistory = {};
+		this.getFiltered().map(id => {
+			const extension = this.props.extensions[id];
 			if (!extension.enabled) {
-				disabled = 'disabled';
-				switchyRGBA = 'rgba(-100,-100,-100,-0.618)';
+				stateHistory[extension.id] = extension.enabled;
+				sendMessage({ job: 'extensionToggle', id: extension.id, enabled: !extension.enabled }, () => {});
 			}
-			let switchy, optioney, removy, chromey;
-			if (extension.type != 'theme') {
-				switchy = <Switchy onClick={sendMessage.bind(null, { job: 'extensionToggle', id: extension.id }, () => {})} color={shared.themeMainColor} changeRGBA={switchyRGBA} />;
-			}
-			if (extension.optionsUrl && extension.optionsUrl.length > 0) {
-				optioney = <Optioney onClick={sendMessage.bind(null, { job: 'extensionOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
-			}
-			removy = <Removy onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, () => {})} color={shared.themeMainColor} />;
-			chromey = <img onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, () => {})} src="./images/chrome.svg" />;
-			const appControl = !this.props.withControl ? null : (
-				<div className="appControl">
-					{switchy}
-					{optioney}
-					{removy}
-					{chromey}
-				</div>
-			);
-			return (
-				<div className={'extension '+disabled} key={index}>
-					<div className="appBrief">
-						<img className="appIcon" src={shared.icons[extension.icon]} />
-						<div className="appInfo">
-							{extension.version}<br />
-							{extension.name}
-						</div>
-						{appControl}
-					</div>
-				</div>
-			);
 		});
+		this.addStateHistory(stateHistory);
+	}
+	
+	disable() {
+		const stateHistory = {};
+		this.getFiltered().map(id => {
+			const extension = this.props.extensions[id];
+			if (extension.enabled) {
+				stateHistory[extension.id] = extension.enabled;
+				sendMessage({ job: 'extensionToggle', id: extension.id, enable: !extension.enabled }, () => {});
+			}
+		});
+		this.addStateHistory(stateHistory);
+	}
+
+	undo() {
+		this.setState(prevState => {
+			const stateHistory = prevState.stateHistoryList.pop() || {};
+			Object.keys(stateHistory).map(id => {
+				sendMessage({ job: 'extensionToggle', id, enabled: stateHistory[id] });
+			});
+			return prevState;
+		});
+	}
+
+	addStateHistory(stateHistory) {
+		this.setState(prevState => {
+			prevState.stateHistoryList.push(stateHistory);
+			return prevState;
+		});
+	}
+
+	getFiltered() {
+		const extensions = this.props.extensions;
+		return Object.keys(extensions).filter(elem => {
+			const extension = extensions[elem];
+			let pass = true;
+			if (extension.name.toLowerCase().indexOf(this.state.filterName) == -1) {
+				pass = false;
+			}
+			switch (this.state.filterType) {
+				case 'all':
+					break;
+				case 'group':
+					if (!extension.name.match(/^NooBoss-Group/)) {
+						pass = false;
+					}
+					break;
+				default:
+					if ((extension.type || '').indexOf(this.state.filterType) == -1) {
+						pass = false;
+					}
+			}
+			return pass;
+		});
+	}
+
+	render() {
+		const extensions = this.props.extensions;
+		const extensionList = this.getFiltered().map((elem, index) => {
+			return <ExtensionBrief addStateHistory={this.addStateHistory.bind(this)} extension={extensions[elem]} withControl={this.props.withControl} key={index} />
+		});
+		let selectGroup;
+		if (this.props.groupList) {
+			selectGroup = <option value="group">{GL('group')}</option>;
+		}
 		return (
-			<SelectorDiv withControl={this.props.withControl}>
+			<SelectorDiv>
+				<div id="actionBar">
+					<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
+						<option value="all">{GL('all')}</option>
+						{selectGroup}
+						<option value="app">{GL('app')}</option>
+						<option value="extension">{GL('extension')}</option>
+						<option value="theme">{GL('theme')}</option>
+					</select>
+					<input id="nameFilter" placeholder={GL('name')} value={this.state.filterName} onChange={(e) => { this.setState({ filterName: e.target.value })} } />
+					<button onClick={this.enable.bind(this)}>{GL('enable')}</button>
+					<button onClick={this.disable.bind(this)}>{GL('disable')}</button>
+					<button onClick={this.undo.bind(this)}>{GL('undo')}</button>
+				</div>
 				{extensionList}
 			</SelectorDiv>
 		);
