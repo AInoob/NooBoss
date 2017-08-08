@@ -9,9 +9,9 @@ const NavigatorDiv = styled.nav`
 	width: 100%;
 	height: 38px;
 	overflow: visible;
-	box-shadow: grey 0px 1px 4px;
+	box-shadow: ${() => shared.themeMainColor} 0px 0px 4px;
 	&:hover{
-		box-shadow: grey 0px 3px 8px;
+		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
 	transition: box-shadow 0.1s;
 	background-color: ${props => props.themeMainColor};
@@ -50,6 +50,14 @@ const NavigatorDiv = styled.nav`
 				color: ${props => props.themeMainColor};
 				width: 126.6px;
 				padding-bottom: 3px;
+				opacity: 0.5;
+				transition: opacity 0.309s;
+				&:hover{
+					text-decoration: underline;
+				}
+			}
+			a.active{
+				opacity: 1;
 			}
 		}
 		&:hover{
@@ -68,7 +76,7 @@ const NavigatorDiv = styled.nav`
 				margin-top: 2px;
 			}
 			.sub{
-				box-shadow: grey 0px 3px 8px;
+				box-shadow: ${() => shared.themeMainColor} 0px 0px 8px;
 			}
 		}
 		&:after{
@@ -142,7 +150,11 @@ class Navigator extends Component{
 						<div className="sub">
 							{
 								link.sub.map((elem, index) => {
-									return <a key={index} onClick={this.props.updateSubLocation.bind(this, link.main, elem)}>{GL(elem)}</a>
+									let isActive = '';
+									if (elem == this.props.location.sub[link.main]) {
+										isActive = 'active';
+									}
+									return <a key={index} className={isActive} onClick={this.props.updateSubLocation.bind(this, link.main, elem)}>{GL(elem)}</a>
 								})
 							}
 						</div>

@@ -4,20 +4,24 @@ import { sendMessage } from '../../utils';
 import styled, { css } from 'styled-components';
 
 const ExtensionBriefDiv = styled.div`
-	box-shadow: grey 0px 1px 1px;
+	box-shadow: ${() => shared.themeMainColor} 0px 0px 0px 1px;
 	&:hover{
-		box-shadow: grey 0px 1px 13px;
+		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
-	width: 86.66666px;
-	height: 86.66666px;
+	width: 78px;
+	height: 78px;
+	padding: 20px;
+	margin-left: 1px;
+	margin-top: 1px;
 	padding: 20px;
 	float: left;
 	overflow: hidden;
-	.appBrief{
+	.extensionBrief{
+		margin-top: -8px;
 		width: 100%;
 		height: 100%;
 		position: relative;
-		.appIcon, .nameFront, .appInfo{
+		.extensionIcon, .nameFront, .extensionInfo{
 			backface-visibility: hidden;
 			transition: transform 0.309s;
 			position: absolute;
@@ -25,42 +29,45 @@ const ExtensionBriefDiv = styled.div`
 			top: 0;
 			width: 100%;
 		}
-		.appIcon{
-			width: 90%;
-			margin: auto;
+		.extensionIcon{
+			width: 80%;
+			margin-left: 10%;
+			margin-top: 6px;
 		}
 		.nameFront{
-			top: 86px;
+			top: 80px;
+			height: 20px;
+			overflow: hidden;
 			text-align: center;
 		}
-		.appIcon, .nameFront{
+		.extensionIcon, .nameFront{
 			transform: rotate(0deg);
 		}
-		.appInfo{
+		.extensionInfo{
 			text-align: center;
 			transform: rotateY(180deg);
 		}
 	}
 	&:hover{
-		.appBrief{
-			.appIcon, .nameFront{
+		.extensionBrief{
+			.extensionIcon, .nameFront{
 				transform: rotateY(180deg);
 			}
-			.appInfo{
+			.extensionInfo{
 				transform: rotateY(0deg);
 			}
 		}
 	}
 	${props => props.disabled && css`
-		.appIcon{
+		.extensionIcon{
 			filter: grayscale(100%);
 		}
 	`};
 	${props => props.withControl && css`
-		.appControl{
+		.extensionControl{
 			position: relative;
 			width: 109px;
-			margin-left: -10px;
+			margin-left: -12px;
 			img{
 				width: 18px;
 			}
@@ -68,7 +75,7 @@ const ExtensionBriefDiv = styled.div`
 				cursor: pointer;
 				width: 21px;
 				height: 21px;
-				margin: 3px;
+				margin-right: 3px;
 			}
 		}
 	`}
@@ -97,8 +104,8 @@ class ExtensionBrief extends Component{
 		}
 		removy = <Removy onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, () => {})} color={shared.themeMainColor} />;
 		chromey = <Chromey onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
-		const appControl = !this.props.withControl ? null : (
-			<div className="appControl">
+		const extensionControl = !this.props.withControl ? null : (
+			<div className="extensionControl">
 				{switchy}
 				{optioney}
 				{removy}
@@ -107,11 +114,11 @@ class ExtensionBrief extends Component{
 		);
 		return (
 			<ExtensionBriefDiv disabled={disabled} withControl={this.props.withControl}>
-				<div className="appBrief">
-					<img className="appIcon" src={shared.icons[extension.icon]} />
+				<div className="extensionBrief">
+					<img className="extensionIcon" src={shared.icons[extension.icon]} />
 					<span className="nameFront">{extension.name}</span>
-					<div className="appInfo">
-						{appControl}
+					<div className="extensionInfo">
+						{extensionControl}
 						{extension.version}<br />
 						{extension.name}
 					</div>

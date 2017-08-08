@@ -91,6 +91,16 @@ NooBoss.initiate = async () => {
 			case 'extensionBrowserOptions':
 				NooBoss.Extensions.browserOptions(message.id);
 				break;
+			case 'groupToggle':
+				NooBoss.Extensions.groupToggle(message.id, message.enabled);
+				break;
+			case 'groupCopy':
+				NooBoss.Extensions.groupCopy(message.id);
+				console.log('groupCopy');
+				break;
+			case 'groupRemove':
+				NooBoss.Extensions.groupRemove(message.id);
+				break;
 		}
 	});
 };

@@ -29,6 +29,8 @@ const NooBossDiv = styled.div`
 	input, select{
 		color: ${props => props.themeSubColor};
 		outline: none;
+    font-size: 16px;
+    line-height: 16px;
 	}
 	section{
 		clear: both;
@@ -44,12 +46,19 @@ const NooBossDiv = styled.div`
 		float: left;
 	}
 	button{
+		min-width: 80px;
+		&:hover{
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 8px;
+		}
+		margin-top: 10px;
 		label{
 			cursor: pointer;
 		}
 		border: none;
 		color: white;
-		padding: 2px 8px;
+		padding: 4px 11px;
+    font-size: 16px;
+    line-height: 16px;
 		cursor: pointer;
 		outline: none;
 		background-color: ${props => props.themeMainColor};
@@ -79,6 +88,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 				dispatch(updateLanguage(language));
 				resolve();
 			});
+		},
+		optionsUpdateThemeMainColor: (color) => {
+			dispatch(optionsUpdateThemeMainColor(color));
+		},
+		optionsUpdateThemeSubColor: (color) => {
+			dispatch(optionsUpdateThemeSubColor(color));
 		},
 		updateMainLocationIfOptions: (props) => {
 			return new Promise(resolve => {
@@ -152,9 +167,9 @@ class NooBoss extends Component{
 			switch (message.job) {
 				case 'popupNooBossUpdateTheme':
 					get('mainColor', (color) => {
-						dispatch(optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 }));
+						this.props.optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 });
 						get('subColor', (color) => {
-							dispatch(optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 }));
+							this.props.optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 });
 						});
 					});
 					break;

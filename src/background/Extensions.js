@@ -94,8 +94,36 @@ export default (NooBoss) => {
 				}
 				browser.management.setEnabled(id, enabled, () => {
 					NooBoss.Extensions.apps[id].enabled = enabled;
-					sendMessage({ job: 'extensionToggled',id, enabled });
+					sendMessage({ job: 'extensionToggled', id, enabled });
 					resolve();
+				});
+			});
+		},
+		groupToggle: (id, enabled) => {
+			const group = NooBoss.Extensions.groupList.filter(elem => {
+				return elem.id == id;
+			})[0];
+			group.appList.map(elem => {
+				NooBoss.Extensions.toggle(elem, enabled);
+			});
+		},
+		groupCopy: (id) => {
+			const group = NooBoss.Extensions.groupList.filter(elem => {
+				return elem.id == id;
+			})[0];
+			const newGroup = JSON.parse(JSON.stringify(group));
+			newGroup.id = 'NooBoss-Group-' + (Math.random().toString(36)).slice(2, 19)+(Math.random().toString(36)).slice(2, 19);
+			NooBoss.Extensions.groupList.push(newGroup);
+			sendMessage({ job: 'groupCopied', newGroup });
+		},
+		groupRemove: (id) => {
+			return new Promise(resolve => {
+				NooBoss.Extensions.groupList.map((elem, index) => {
+					if (elem.id == id) {
+						NooBoss.Extensions.groupList.splice(index, 1);
+						sendMessage({ job: 'groupRemoved', index });
+						resolve();
+					}
 				});
 			});
 		},

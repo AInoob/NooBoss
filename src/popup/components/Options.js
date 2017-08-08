@@ -25,9 +25,9 @@ const OptionsDiv = styled.div`
 		margin-left: 88px;
 		float: left;
 		margin-top: 6px;
-		box-shadow: grey -1px -1px 3px 0px;
+		box-shadow: ${() => shared.themeMainColor} -1px -1px 3px 0px;
 		&:focus{
-			box-shadow: grey -1px -1px 8px 0px;
+			box-shadow: ${() => shared.themeMainColor} -1px -1px 8px 0px;
 			outline: none;
 		}
 	}
@@ -126,9 +126,9 @@ const OptionsDiv = styled.div`
 		top: 9px;
 		width: 36px;
 		height: 16px;
-		box-shadow: grey -1px -1px 3px 0px;
+		box-shadow: ${() => shared.themeMainColor} -1px -1px 3px 0px;
 		&:hover{
-			box-shadow: grey -1px -1px 8px 0px;
+			box-shadow: ${() => shared.themeMainColor} -1px -1px 8px 0px;
 		}
 		transition: box-shadow 0.309s;
 	}

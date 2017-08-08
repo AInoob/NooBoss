@@ -9,7 +9,7 @@ class Manage extends Component{
 	render() {
 		return (
 			<ManageDiv>
-				<Selector extensions={this.props.extensions} withControl={true} />
+				<Selector groupList={this.props.groupList} extensions={this.props.extensions} withControl={true} />
 			</ManageDiv>
 		);
 	}

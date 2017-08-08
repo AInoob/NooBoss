@@ -6,13 +6,16 @@ import Manage from './Manage.js';
 import AutoState from './AutoState.js';
 
 const ExtensionsDiv = styled.div`
+	padding: 22px;
+	padding-top: 10px;
+	overflow: hidden;
 	nav{
 		width: 80%;
 		margin: auto;
 		overflow: hidden;
-		box-shadow: grey 0px 0px 1px;
+		box-shadow: ${() => shared.themeMainColor} 0px 0px 1px;
 		&:hover{
-			box-shadow: grey 0px 0px 8px;
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 8px;
 		}
 		margin-top: 10px;
 		margin-bottom: 3px;
@@ -78,6 +81,18 @@ class Extensions extends Component{
 						return prevState;
 					});
 					break;
+				case 'groupCopied':
+					this.setState(prevState => {
+						prevState.groupList.push(message.newGroup);
+						return prevState;
+					});
+					break;
+				case 'groupRemoved':
+					this.setState(prevState => {
+						prevState.groupList.splice(message.index, 1);
+						return prevState;
+					});
+					break;
 			}
 		}
 	}
@@ -95,6 +110,11 @@ class Extensions extends Component{
 		});
 		browser.runtime.sendMessage({ job: 'getGroupList' }, groupList => {
 			this.setState({ groupList });
+			for(let i = 0; i < groupList.length; i++) {
+				if(!window.shared.icons[groupList[i].id + '_icon']) {
+					this.props.getIcon(groupList[i].id + '_icon');
+				}
+			}
 		});
 		browser.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
 			this.setState({ autoStateRuleList });
