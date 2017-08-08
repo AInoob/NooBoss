@@ -127,6 +127,13 @@ export default (NooBoss) => {
 				});
 			});
 		},
+		groupListUpdate: (groupList) => {
+			return new Promise(resolve => {
+				NooBoss.Extensions.groupList = groupList;
+				sendMessage({ job: 'groupListUpdated', groupList })
+				resolve();
+			});
+		},
 		options: (id) => {
 			const url = NooBoss.Extensions.apps[id].optionsUrl;
 			browser.tabs.create({ url });

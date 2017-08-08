@@ -101,6 +101,9 @@ NooBoss.initiate = async () => {
 			case 'groupRemove':
 				NooBoss.Extensions.groupRemove(message.id);
 				break;
+			case 'groupListUpdate':
+				NooBoss.Extensions.groupListUpdate(message.groupList);
+				break;
 		}
 	});
 };

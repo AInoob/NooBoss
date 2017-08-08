@@ -120,3 +120,5 @@ disable:
   message: Disable
 undo:
   message: Undo
+redo:
+  message: Redo

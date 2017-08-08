@@ -83,7 +83,7 @@ class GroupBrief extends Component{
     switchyEnable = <Switchy onClick={this.props.enable} color={shared.themeMainColor} />;
 		switchyDisable = <Switchy onClick={this.props.disable} color={shared.themeMainColor} changeRGBA='rgba(-155,-155,-155,-0.8)' />;
 		copyy = <Copyy onClick={this.props.copy} color={shared.themeMainColor} />
-		removy = <Removy onClick={sendMessage.bind(null, { job: 'groupRemove', id: group.id }, () => {})} color={shared.themeMainColor} />;
+		removy = <Removy onClick={this.props.remove} color={shared.themeMainColor} />;
 		const groupControl = !this.props.withControl ? null : (
 			<div className="groupControl">
 				{switchyEnable}

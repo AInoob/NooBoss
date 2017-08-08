@@ -70,6 +70,7 @@ class Selector extends Component{
 			filterName: '',
 			filterType: 'all',
 			stateHistoryList: [],
+			redoStateHistoryList: [],
 		};
 	}
 
@@ -100,9 +101,40 @@ class Selector extends Component{
 	undo() {
 		this.setState(prevState => {
 			const stateHistory = prevState.stateHistoryList.pop() || {};
+			const redoStateHistory = {};
 			Object.keys(stateHistory).map(id => {
-				sendMessage({ job: 'extensionToggle', id, enabled: stateHistory[id] });
+				switch (id) {
+					case 'groupList':
+						redoStateHistory.groupList = JSON.parse(JSON.stringify(this.props.groupList));
+						sendMessage({ job: 'groupListUpdate', groupList: stateHistory.groupList });
+						break;
+					default: 
+						redoStateHistory[id] = this.props.extensions[id].enabled;
+						sendMessage({ job: 'extensionToggle', id, enabled: stateHistory[id] });
+				}
 			});
+			prevState.redoStateHistoryList.push(redoStateHistory);
+			return prevState;
+		});
+	}
+
+	redo() {
+		this.setState(prevState => {
+			const redoStateHistory = prevState.redoStateHistoryList.pop() || {};
+			console.log(redoStateHistory);
+			const stateHistory = {};
+			Object.keys(redoStateHistory).map(id => {
+				switch (id) {
+					case 'groupList':
+						stateHistory.groupList = JSON.parse(JSON.stringify(this.props.groupList));
+						sendMessage({ job: 'groupListUpdate', groupList: redoStateHistory.groupList });
+						break;
+					default:
+						stateHistory[id] = this.props.extensions[id].enabled;
+						sendMessage({ job: 'extensionToggle', id, enabled: redoStateHistory[id] });
+				}
+			});
+			prevState.stateHistoryList.push(stateHistory);
 			return prevState;
 		});
 	}
@@ -110,6 +142,7 @@ class Selector extends Component{
 	addStateHistory(stateHistory) {
 		this.setState(prevState => {
 			prevState.stateHistoryList.push(stateHistory);
+			prevState.redoStateHistoryList = [];
 			return prevState;
 		});
 	}
@@ -144,7 +177,7 @@ class Selector extends Component{
 		});
 	}
 
-	toggleGroup(id, enabled) {
+	groupToggle(id, enabled) {
 		const stateHistory = {};
 		const group = this.props.groupList.filter(elem => {
 			return elem.id == id;
@@ -156,6 +189,18 @@ class Selector extends Component{
 		})
 		this.addStateHistory(stateHistory);
 		sendMessage({ job: 'groupToggle', id, enabled });
+	}
+
+	groupCopy(id) {
+		const groupList = JSON.parse(JSON.stringify(this.props.groupList));
+		this.addStateHistory({ groupList });
+		sendMessage({ job: 'groupCopy', id });
+	}
+
+	groupRemove(id) {
+		const groupList = JSON.parse(JSON.stringify(this.props.groupList));
+		this.addStateHistory({ groupList });
+		sendMessage({ job: 'groupRemove', id });
 	}
 
 	componentDidMount() {
@@ -176,10 +221,10 @@ class Selector extends Component{
 		const groupList = (this.props.groupList || []).map((group, index) => {
 			return (
 				<GroupBrief group={group} withControl={true} key={index}
-					enable={this.toggleGroup.bind(this, group.id, true)}
-					disable={this.toggleGroup.bind(this, group.id, false)}
-					copy={sendMessage.bind(null, { job: 'groupCopy', id: group.id }, undefined)}
-					remove={sendMessage.bind(null, { job: 'groupRemove', id: group.id }, undefined)}
+					enable={this.groupToggle.bind(this, group.id, true)}
+					disable={this.groupToggle.bind(this, group.id, false)}
+					copy={this.groupCopy.bind(this, group.id)}
+					remove={this.groupRemove.bind(this, group.id)}
 				/>
 			);
 		});;
@@ -215,6 +260,7 @@ class Selector extends Component{
 					<button onClick={this.enable.bind(this)}>{GL('enable')}</button>
 					<button onClick={this.disable.bind(this)}>{GL('disable')}</button>
 					<button className={this.state.stateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.undo.bind(this)}>{GL('undo')}</button>
+					<button className={this.state.redoStateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.redo.bind(this)}>{GL('redo')}</button>
 				</div>
 				{groupDiv}
 				{extensionDiv}

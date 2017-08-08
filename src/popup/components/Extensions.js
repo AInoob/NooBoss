@@ -93,6 +93,9 @@ class Extensions extends Component{
 						return prevState;
 					});
 					break;
+				case 'groupListUpdated':
+					this.setState({ groupList: message.groupList });
+					break;
 			}
 		}
 	}
