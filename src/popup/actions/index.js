@@ -1,6 +1,7 @@
 const UPDATE_STATE = 'UPDATE_STATE';
 const UPDATE_MAIN_LOCATION = 'UPDATE_MAIN_LOCATION';
 const UPDATE_SUB_LOCATION = 'UPDATE_SUB_LOCATION';
+const UPDATE_SUB_WINDOW = 'UPDATE_SUB_WINDOW';
 const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE';
 const NAVIGATOR_UPDATE_HOVER_POSITION = 'NAVIGATOR_UPDATE_HOVER_POSITION';
 const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
@@ -25,6 +26,11 @@ export const updateSubLocation = (mainLocation, subLocation) => ({
 	subLocation,
 });
 
+export const updateSubWindow = (display, id) => ({
+	type: UPDATE_SUB_WINDOW,
+	display,
+	id,
+});
 
 export const updateLanguage = (language) => ({
 	type: UPDATE_LANGUAGE,

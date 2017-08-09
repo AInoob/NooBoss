@@ -4,6 +4,7 @@ import language from './language';
 import navigator from './navigator';
 import overview from './overview';
 import options from './options';
+import subWindow from './subWindow';
 
 const noobossReducer = (state = {}, action) => {
 	if (action && action.type == 'UPDATE_STATE') {
@@ -16,6 +17,7 @@ const noobossReducer = (state = {}, action) => {
 		language: language(state.language, action),
 		location: location(state.location, action),
 		navigator: navigator(state.navigator, action),
+		subWindow: subWindow(state.subWindow, action),
 		overview: overview(state.overview, action),
 		options: options(state.options, action),
 	};

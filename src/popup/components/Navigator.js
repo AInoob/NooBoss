@@ -25,7 +25,7 @@ const NavigatorDiv = styled.nav`
 		margin-left: ${props => (props.hoverPosition * 100 / props.numOfLinks) + '%'};
 		transition: margin-left 0.309s;
 	}
-	a{
+	.link{
 		user-select: none;
 		color: white;
 		display: block;
@@ -46,7 +46,7 @@ const NavigatorDiv = styled.nav`
 			background-color: white;
 			position: fixed;
 			width: 126.6px;
-			a{
+			.link{
 				color: ${props => props.themeMainColor};
 				width: 126.6px;
 				padding-bottom: 3px;
@@ -56,7 +56,7 @@ const NavigatorDiv = styled.nav`
 					text-decoration: underline;
 				}
 			}
-			a.active{
+			.link.active{
 				opacity: 1;
 			}
 		}
@@ -66,10 +66,10 @@ const NavigatorDiv = styled.nav`
 			}
 		}
 	}
-	a.active{
+	.link.active{
 		cursor: default;
 	}
-	a.hasSub{
+	.link.hasSub{
 		&:hover{
 			&:after{
 				transform: rotate(180deg);
@@ -134,8 +134,8 @@ class Navigator extends Component{
 			hasSub = 'hasSub';
 		}
 		return (
-			<a key={index}
-				className={(isActive ? 'active' : '') + ' ' + hasSub}
+			<div key={index}
+				className={(isActive ? 'active' : '') + ' link ' + hasSub}
 				onClick={() => {
 					this.props.updateMainLocation(link.main);
 					this.props.navigatorUpdateHoverPosition(index);
@@ -154,13 +154,18 @@ class Navigator extends Component{
 									if (elem == this.props.location.sub[link.main]) {
 										isActive = 'active';
 									}
-									return <a key={index} className={isActive} onClick={this.props.updateSubLocation.bind(this, link.main, elem)}>{GL(elem)}</a>
+									return (
+										<div key={index} className={isActive + ' link'}
+											onClick={this.props.updateSubLocation.bind(this, link.main, elem)}>
+											{GL(elem)}
+										</div>
+									);
 								})
 							}
 						</div>
 					) : null
 				}
-			</a>
+			</div>
 		);
 	}
 

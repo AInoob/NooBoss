@@ -8,7 +8,16 @@ import Userscripts from './Userscripts';
 import Options from './Options';
 import History from './History';
 import About from './About';
-import { updateState, navigatorUpdateHoverPosition, updateMainLocation, updateLanguage, optionsUpdateThemeMainColor, optionsUpdateThemeSubColor} from '../actions';
+import SubWindow from './SubWindow';
+import {
+	updateState,
+	navigatorUpdateHoverPosition,
+	updateMainLocation,
+	updateSubWindow,
+	updateLanguage,
+	optionsUpdateThemeMainColor,
+	optionsUpdateThemeSubColor
+} from '../actions';
 import { getDB, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
@@ -89,6 +98,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 				resolve();
 			});
 		},
+		updateSubWindow: (display, id) => {
+			dispatch(updateSubWindow(display, id));
+		},
 		optionsUpdateThemeMainColor: (color) => {
 			dispatch(optionsUpdateThemeMainColor(color));
 		},
@@ -97,16 +109,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		},
 		updateMainLocationIfOptions: (props) => {
 			return new Promise(resolve => {
-				const location = getParameterByName('page');
-				if (location) {
-					dispatch(updateMainLocation(location));
-					let activePosition = 0;
-					props.navigator.linkList.map((name, index) => {
-						if (location == name) {
-							activePosition = index;
-						}
-					});
-					dispatch(navigatorUpdateHoverPosition(activePosition));
+				const mainLocation = getParameterByName('page');
+				if (mainLocation) {
+					dispatch(updateSubWindow('', ''));
+					dispatch(updateMainLocation(mainLocation));
 				}
 				resolve();
 			});
@@ -114,9 +120,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		initialRequiredOptions: async (key) => {
 			return new Promise(resolve => {
 				get('mainColor', (color) => {
-					dispatch(optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 }));
+					dispatch(optionsUpdateThemeMainColor(color));
 					get('subColor', (color) => {
-						dispatch(optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 }));
+						dispatch(optionsUpdateThemeSubColor(color));
 						resolve();
 					});
 				});
@@ -133,6 +139,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 class NooBoss extends Component{
 	constructor(props) {
 		super(props);
+		window.shared = {};
 		props.initialize(props);
 		this.state = {
 			icons: {},
@@ -156,6 +163,11 @@ class NooBoss extends Component{
 
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
+		shared = {
+			...shared,
+			updateSubWindow: this.props.updateSubWindow,
+			icons: this.state.icons,
+		};
 	}
 
 	componentWillUnmount() {
@@ -167,9 +179,9 @@ class NooBoss extends Component{
 			switch (message.job) {
 				case 'popupNooBossUpdateTheme':
 					get('mainColor', (color) => {
-						this.props.optionsUpdateThemeMainColor(color || { r: 195, g: 147, b: 220, a: 1 });
+						this.props.optionsUpdateThemeMainColor(color);
 						get('subColor', (color) => {
-							this.props.optionsUpdateThemeSubColor(color || { r: 0, g: 0, b: 0, a: 1 });
+							this.props.optionsUpdateThemeSubColor(color);
 						});
 					});
 					break;
@@ -178,11 +190,8 @@ class NooBoss extends Component{
 	}
 
 	render() {
-		window.shared = {
-			themeMainColor: generateRGBAString(this.props.options.themeMainColor || {"r":195,"g":147,"b":220,"a":1}),
-			themeSubColor: generateRGBAString(this.props.options.themeSubColor || {"r":0,"g":0,"b":0,"a":1}),
-			icons: this.state.icons,
-		};
+		shared.themeMainColor = generateRGBAString(this.props.options.themeMainColor);
+		shared.themeSubColor = generateRGBAString(this.props.options.themeSubColor);
 		let page = null;
 		let location = getParameterByName('page') || this.props.location.main;
 		if (!this.state.loadByParam) {
@@ -196,11 +205,12 @@ class NooBoss extends Component{
 		else if (location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
-				themeMainColor={window.shared.themeMainColor}
-				themeSubColor={window.shared.themeSubColor}
+				themeMainColor={shared.themeMainColor}
+				themeSubColor={shared.themeSubColor}
 			>
 				<Navigator />
 				{page}
+				<SubWindow />
 			</NooBossDiv>
 		);
 	}

@@ -103,6 +103,7 @@ class Extensions extends Component{
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
 		browser.runtime.sendMessage({ job: 'getAllExtensions' }, extensions => {
+			shared.extensions = extensions;
 			this.setState({ extensions });
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
@@ -112,6 +113,7 @@ class Extensions extends Component{
 			}
 		});
 		browser.runtime.sendMessage({ job: 'getGroupList' }, groupList => {
+			shared.groupList = groupList;
 			this.setState({ groupList });
 			for(let i = 0; i < groupList.length; i++) {
 				if(!window.shared.icons[groupList[i].id + '_icon']) {
@@ -120,6 +122,7 @@ class Extensions extends Component{
 			}
 		});
 		browser.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
+			shared.autoStateRuleList = autoStateRuleList;
 			this.setState({ autoStateRuleList });
 		});
 	}
