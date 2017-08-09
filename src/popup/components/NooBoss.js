@@ -26,6 +26,10 @@ injectGlobal`
 		width: 760px;
 		margin: 0px;
 	}
+	@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+	}
 `;
 
 const NooBossDiv = styled.div`
@@ -40,6 +44,19 @@ const NooBossDiv = styled.div`
 		outline: none;
     font-size: 16px;
     line-height: 16px;
+	}
+	input{
+		height: 20px;
+		width: 100px;
+		border: none;
+		padding: 0px;
+		border-bottom: ${() => shared.themeMainColor} solid 1px;
+		&:hover, &:focus{
+			border-bottom: ${() => shared.themeMainColor} solid 2px;
+		}
+		&::placeholder{
+			opacity: 0.5;
+		}
 	}
 	section{
 		clear: both;

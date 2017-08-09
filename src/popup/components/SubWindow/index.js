@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import Extension from './Extension';
+import Group from './Group';
 
 const SubWindowDiv = styled.div`
   display: ${props => props.display ? 'flex' : 'none'};
@@ -15,8 +17,15 @@ const SubWindowDiv = styled.div`
     width: 80%;
     height: 80%;
     margin: auto;
-    background-color: white
+    background-color: white;
+    box-shadow: 0px 0px 20px 4px grey;
   }
+	#loader{
+		width: 200px;
+		height: 200px;
+		margin: auto;
+		animation: spin 1s linear infinite;
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -41,13 +50,21 @@ class SubWindow extends Component{
     let content;
     switch (display) {
       case 'extension':
+        content = <Extension id={id} />;
         break;
       case 'group':
+        content = <Group id={id} />;
         break;
     }
     return (
-      <SubWindowDiv display={display != ''}>
-        <div id="subWindow">
+      <SubWindowDiv onClick={() => {
+          if (shared && shared.updateSubWindow) {
+            shared.updateSubWindow('', '');
+          }
+        }}
+        display={display != ''}
+      >
+        <div id="subWindow" onClick={(e) => {e.stopPropagation()}}>
           {content}
         </div>
       </SubWindowDiv>

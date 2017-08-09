@@ -44,7 +44,7 @@ export default (NooBoss) => {
 			request.open('GET', url, true);
 			request.onload = () => {
 				if (request.status >= 200 && request.status < 400) {
-					console.log(request.responseText);
+					//console.log(request.responseText);
 				}
 			}
 			request.send();

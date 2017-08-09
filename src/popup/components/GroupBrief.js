@@ -46,6 +46,15 @@ const GroupBriefDiv = styled.div`
 		.groupInfo{
 			text-align: center;
 			transform: rotateY(180deg);
+			#groupName{
+				display: block;
+				margin-top: 10px;
+				height: 71px;
+				width: 118px;
+				margin-left: -20px;
+				color: ${() => shared.themeMainColor};
+				cursor: pointer;
+			}
 		}
 	}
 	&:hover{
@@ -99,7 +108,7 @@ class GroupBrief extends Component{
 					<span className="nameFront">{group.name}</span>
 					<div className="groupInfo">
 						{groupControl}
-						{group.name}
+						<span id="groupName" onClick={shared.updateSubWindow.bind(null, 'group', group.id)}>{group.name}</span>
 					</div>
 				</div>
 			</GroupBriefDiv>

@@ -65,7 +65,6 @@ class Extensions extends Component{
 
 	listener(message, sender, sendResponse) {
 		if (message) {
-			console.log(message.job);
 			switch (message.job) {
 				case 'extensionToggled':
 					this.setState(prevState => {
@@ -95,6 +94,17 @@ class Extensions extends Component{
 					break;
 				case 'groupListUpdated':
 					this.setState({ groupList: message.groupList });
+					break;
+				case 'groupUpdated':
+					this.setState(prevState => {
+						for(let i = 0; i < prevState.groupList.length; i++) {
+							if (prevState.groupList[i].id == message.group.id) {
+								prevState.groupList[i] = message.group;
+								break;
+							}
+						}
+						return prevState;
+					});
 					break;
 			}
 		}

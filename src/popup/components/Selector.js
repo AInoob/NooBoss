@@ -10,15 +10,21 @@ const SelectorDiv = styled.div`
 	padding-bottom: 10px;
 	#actionBar{
 		margin-left: 0px;
-		margin-bottom: 20px;
+		margin-top: 20px;
+		height: 26px;
 		#nameFilter, #typeFilter{
+			height: 20px;
 			width: 100px;
 			border: none;
-			box-shadow: ${() => shared.themeMainColor} 0px 0px 1px;
-			&:hover{
-				box-shadow: ${() => shared.themeMainColor} 0px 0px 8px;
+			padding: 0px;
+			border-bottom: ${() => shared.themeMainColor} solid 1px;
+			&:hover, &:focus{
+				border-bottom: ${() => shared.themeMainColor} solid 2px;
 			}
 			background-color: white;
+		}
+		#typeFilter{
+			height: 21px;
 		}
 		*{
 			margin-right: 16px;
@@ -49,9 +55,6 @@ const SelectorDiv = styled.div`
 			}
 		}
 		#nameFilter{
-			&::placeholder{
-				opacity: 0.5;
-			}
 			&[value=''] + #clearNameFilter{
 				display: none;
 			}
@@ -59,7 +62,7 @@ const SelectorDiv = styled.div`
 	}
 	#extensionList, #appList, #themeList, #groupList{
 		clear: both;
-		padding-top: 20px;
+		padding-top: 12px;
 	}
 `;
 
@@ -121,7 +124,6 @@ class Selector extends Component{
 	redo() {
 		this.setState(prevState => {
 			const redoStateHistory = prevState.redoStateHistoryList.pop() || {};
-			console.log(redoStateHistory);
 			const stateHistory = {};
 			Object.keys(redoStateHistory).map(id => {
 				switch (id) {
@@ -204,19 +206,41 @@ class Selector extends Component{
 	}
 
 	componentDidMount() {
-		this.nameFilter.focus();
+		if (this.props.actionBar) {
+			this.nameFilter.focus();
+		}
 	}
 
 	render() {
 		const extensions = this.props.extensions;
-		const extensionList = this.getFiltered('extension').map((elem, index) => {
-			return <ExtensionBrief addStateHistory={this.addStateHistory.bind(this)} extension={extensions[elem]} withControl={this.props.withControl} key={index} />
-		});
-		const appList = this.getFiltered('app').map((elem, index) => {
-			return <ExtensionBrief addStateHistory={this.addStateHistory.bind(this)} extension={extensions[elem]} withControl={this.props.withControl} key={index} />
-		});
-		const themeList = this.getFiltered('theme').map((elem, index) => {
-			return <ExtensionBrief addStateHistory={this.addStateHistory.bind(this)} extension={extensions[elem]} withControl={this.props.withControl} key={index} />
+		const appList = [], extensionList = [], themeList = [];
+		this.getFiltered().map((id, index) => {
+			const x = (
+				<ExtensionBrief
+					selected={this.props.selectedList ? (this.props.selectedList.indexOf(id) != -1) : null}
+					onClick={() => {
+						console.log(id);
+						if (this.props.select) {
+							this.props.select(id);
+						}
+					}}
+					addStateHistory={this.addStateHistory.bind(this)}
+					extension={extensions[id]}
+					withControl={this.props.withControl}
+					key={index}
+				/>
+			);
+			switch (extensions[id].type) {
+				case 'extension':
+					extensionList.push(x);
+					break;
+				case 'app':
+					appList.push(x);
+					break;
+				case 'theme':
+					themeList.push(x);
+					break;
+			}
 		});
 		const groupList = (this.props.groupList || []).map((group, index) => {
 			return (
@@ -228,6 +252,23 @@ class Selector extends Component{
 				/>
 			);
 		});;
+		const actionBar = !this.props.actionBar ? null : (
+			<div id="actionBar">
+				<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
+					<option value="all">{GL('all')}</option>
+					{selectGroup}
+					<option value="app">{GL('app')}</option>
+					<option value="extension">{GL('extension')}</option>
+					<option value="theme">{GL('theme')}</option>
+				</select>
+				<input id="nameFilter" placeholder={GL('name')} ref={input => {this.nameFilter = input;}} value={this.state.filterName} onChange={(e) => { this.setState({ filterName: e.target.value })} } />
+				<span id="clearNameFilter" onClick={()=>{this.setState({ filterName: '' }); this.nameFilter.focus(); }}><Cleary color={shared.themeSubColor} /></span>
+				<button onClick={this.enable.bind(this)}>{GL('enable')}</button>
+				<button onClick={this.disable.bind(this)}>{GL('disable')}</button>
+				<button className={this.state.stateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.undo.bind(this)}>{GL('undo')}</button>
+				<button className={this.state.redoStateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.redo.bind(this)}>{GL('redo')}</button>
+			</div>
+		);
 		let appDiv, extensionDiv, themeDiv, groupDiv;
 		if (appList.length > 0) {
 			appDiv = <div id="appList"><h2>{GL('app')}</h2>{appList}</div>;
@@ -247,21 +288,7 @@ class Selector extends Component{
 		}
 		return (
 			<SelectorDiv>
-				<div id="actionBar">
-					<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
-						<option value="all">{GL('all')}</option>
-						{selectGroup}
-						<option value="app">{GL('app')}</option>
-						<option value="extension">{GL('extension')}</option>
-						<option value="theme">{GL('theme')}</option>
-					</select>
-					<input id="nameFilter" placeholder={GL('name')} ref={input => {this.nameFilter = input;}} value={this.state.filterName} onChange={(e) => { this.setState({ filterName: e.target.value })} } />
-					<span id="clearNameFilter" onClick={()=>{this.setState({ filterName: '' }); this.nameFilter.focus(); }}><Cleary color={shared.themeSubColor} /></span>
-					<button onClick={this.enable.bind(this)}>{GL('enable')}</button>
-					<button onClick={this.disable.bind(this)}>{GL('disable')}</button>
-					<button className={this.state.stateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.undo.bind(this)}>{GL('undo')}</button>
-					<button className={this.state.redoStateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.redo.bind(this)}>{GL('redo')}</button>
-				</div>
+				{actionBar}
 				{groupDiv}
 				{extensionDiv}
 				{appDiv}

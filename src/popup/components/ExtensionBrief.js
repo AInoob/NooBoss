@@ -13,9 +13,13 @@ const ExtensionBriefDiv = styled.div`
 	padding: 20px;
 	margin-left: 1px;
 	margin-top: 1px;
+	position: relative;
 	padding: 20px;
 	float: left;
 	overflow: hidden;
+	.shadow{
+		display: none;
+	}
 	.extensionBrief{
 		margin-top: -8px;
 		width: 100%;
@@ -46,6 +50,14 @@ const ExtensionBriefDiv = styled.div`
 		.extensionInfo{
 			text-align: center;
 			transform: rotateY(180deg);
+			#extensionName{
+				color: ${() => shared.themeMainColor};
+				cursor: pointer;
+				width: 118px;
+				margin-left: -20px;
+				height: 64px;
+				display: block;
+			}
 		}
 	}
 	&:hover{
@@ -76,6 +88,44 @@ const ExtensionBriefDiv = styled.div`
 				width: 21px;
 				height: 21px;
 				margin-right: 3px;
+			}
+		}
+	`}
+	${props => (props.selected == true || props.selected == false) && css `
+		box-shadow: none !important;
+		cursor: pointer;
+		width: 49px;
+		height: 49px;
+		margin: 0px !important;
+		&:hover{
+			.shadow{
+				background-color: rgba(0, 0, 0, 0.2);
+			}
+		}
+		.shadow{
+			z-index: 1;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			transition: background-color 0.309s;
+			background-color: rgba(0, 0, 0, ${props => props.selected ? '0' : '0.5'});
+			position: absolute;
+			display: block !important;
+		}
+		.nameFront{
+			top: 48px !important;
+			width: 76px !important;
+			margin-left: -14px;
+		}
+		&:hover{
+			.extensionBrief{
+				.extensionIcon, .nameFront{
+					transform: rotateY(0deg);
+				}
+				.extensionInfo{
+					transform: rotateY(180deg);
+				}
 			}
 		}
 	`}
@@ -113,14 +163,15 @@ class ExtensionBrief extends Component{
 			</div>
 		);
 		return (
-			<ExtensionBriefDiv disabled={disabled} withControl={this.props.withControl}>
+			<ExtensionBriefDiv onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
+				<div className="shadow"></div>
 				<div className="extensionBrief">
 					<img className="extensionIcon" src={shared.icons[extension.icon]} />
 					<span className="nameFront">{extension.name}</span>
 					<div className="extensionInfo">
 						{extensionControl}
 						{extension.version}<br />
-						{extension.name}
+						<span id="extensionName" onClick={shared.updateSubWindow.bind(null, 'extension', extension.id)}>{extension.name}</span>
 					</div>
 				</div>
 			</ExtensionBriefDiv>

@@ -134,6 +134,19 @@ export default (NooBoss) => {
 				resolve();
 			});
 		},
+		groupUpdate: (group) => {
+			return new Promise(resolve => {
+				let groupIndex = -1;
+				for(let i = 0; i < NooBoss.Extensions.groupList.length; i++) {
+					if (NooBoss.Extensions.groupList[i].id == group.id) {
+						NooBoss.Extensions.groupList[i] = group;
+						sendMessage({ job: 'groupUpdated', group });
+						resolve();
+						break;
+					}
+				}
+			});
+		},
 		options: (id) => {
 			const url = NooBoss.Extensions.apps[id].optionsUrl;
 			browser.tabs.create({ url });

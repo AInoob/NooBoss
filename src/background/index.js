@@ -96,13 +96,15 @@ NooBoss.initiate = async () => {
 				break;
 			case 'groupCopy':
 				NooBoss.Extensions.groupCopy(message.id);
-				console.log('groupCopy');
 				break;
 			case 'groupRemove':
 				NooBoss.Extensions.groupRemove(message.id);
 				break;
 			case 'groupListUpdate':
 				NooBoss.Extensions.groupListUpdate(message.groupList);
+				break;
+			case 'groupUpdate':
+				NooBoss.Extensions.groupUpdate(message.group);
 				break;
 		}
 	});
