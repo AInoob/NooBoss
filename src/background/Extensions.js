@@ -71,6 +71,10 @@ export default (NooBoss) => {
 		},
 		updateAppInfoById: (id, updateInfo) => {
 			return new Promise(async resolve => {
+				if (!id) {
+					resolve();
+					return;
+				}
 				if (updateInfo.enabled == false || updateInfo.uninstalledDate) {
 					NooBoss.Extensions.addTempActive(id);
 				}

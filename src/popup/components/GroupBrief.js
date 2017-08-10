@@ -8,8 +8,8 @@ const GroupBriefDiv = styled.div`
 	&:hover{
 		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
-	width: 78px;
-	height: 78px;
+	width: 76px;
+	height: 76px;
 	padding: 20px;
 	margin-left: 1px;
 	margin-top: 1px;

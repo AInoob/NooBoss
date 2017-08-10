@@ -11,6 +11,15 @@ const GroupDiv = styled.div`
 	position: relative;
 	cursor: initial;
 	display: flex;
+	&::-webkit-scrollbar-track{
+		background: white;
+	}
+	&::-webkit-scrollbar{
+		width: 5px;
+	}
+	&::-webkit-scrollbar-thumb{
+		background: ${props => window.shared.themeMainColor};
+	}
 	#name{
 		margin-top: 10px;
 		font-size: 36px;
@@ -27,7 +36,7 @@ const GroupDiv = styled.div`
 	}
 	#iconHolder{
 		width: 109px;
-		height: 109px;
+		height: 1090px;
 		display: block;
     position: absolute;
 		top: 10px;

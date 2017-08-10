@@ -23,6 +23,7 @@ import { getDB, copy, getParameterByName, get, generateRGBAString, getLanguage }
 
 injectGlobal`
 	body{
+		zoom: ${100 / window.devicePixelRatio}%;
 		width: 760px;
 		margin: 0px;
 	}
@@ -44,6 +45,17 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	overflow-y: scroll;
+	&::-webkit-scrollbar-track{
+		background: white;
+	}
+	&::-webkit-scrollbar{
+		width: 5px;
+	}
+	&::-webkit-scrollbar-thumb{
+		background: ${props => props.themeMainColor};
+	}
+	height: 600px;
 	min-height: 300px;
 	* {
 		transition: opacity 0.309s, box-shadow 0.309s;
@@ -174,6 +186,8 @@ class NooBoss extends Component{
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
 			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
+			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
+			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
 		};
 		props.initialize(props);
 		this.state = {

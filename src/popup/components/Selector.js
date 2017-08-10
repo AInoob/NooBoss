@@ -153,6 +153,10 @@ class Selector extends Component{
 		const extensions = this.props.extensions;
 		return Object.keys(extensions).filter(elem => {
 			const extension = extensions[elem];
+			// There is a bug: Extensions[undefined] = { enabled: true }
+			if (!extension) {
+				return;
+			}
 			let pass = true;
 			if (type && ((extension.name.match(/NooBoss-Group/) && type == 'group') || (extension.type != type))) {
 				pass = false;
