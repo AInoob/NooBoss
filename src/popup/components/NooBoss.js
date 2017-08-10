@@ -212,9 +212,9 @@ class NooBoss extends Component{
 			}
 		});
 	}
-	getIcon(iconDBKey) {
+	getIcon(iconDBKey, update) {
 		return new Promise(resolve => {
-			if (this.state.icons[iconDBKey]) {
+			if (this.state.icons[iconDBKey] && !update) {
 				resolve();
 			}
 			else {
@@ -287,9 +287,11 @@ class NooBoss extends Component{
 					break;
 				case 'groupUpdated':
 					this.setState(prevState => {
+						const group = message.group;
 						for(let i = 0; i < prevState.groupList.length; i++) {
-							if (prevState.groupList[i].id == message.group.id) {
-								prevState.groupList[i] = message.group;
+							if (prevState.groupList[i].id == group.id) {
+								prevState.groupList[i] = group;
+								this.getIcon(group.id + '_icon', true);
 								break;
 							}
 						}
