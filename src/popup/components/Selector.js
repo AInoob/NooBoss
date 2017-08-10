@@ -219,15 +219,16 @@ class Selector extends Component{
 				<ExtensionBrief
 					selected={this.props.selectedList ? (this.props.selectedList.indexOf(id) != -1) : null}
 					onClick={() => {
-						console.log(id);
 						if (this.props.select) {
 							this.props.select(id);
 						}
 					}}
+					icon={this.props.icons[extensions[id].icon]}
 					addStateHistory={this.addStateHistory.bind(this)}
 					extension={extensions[id]}
 					withControl={this.props.withControl}
 					key={index}
+					updateSubWindow={this.props.updateSubWindow}
 				/>
 			);
 			switch (extensions[id].type) {
@@ -242,16 +243,25 @@ class Selector extends Component{
 					break;
 			}
 		});
-		const groupList = (this.props.groupList || []).map((group, index) => {
-			return (
-				<GroupBrief group={group} withControl={true} key={index}
-					enable={this.groupToggle.bind(this, group.id, true)}
-					disable={this.groupToggle.bind(this, group.id, false)}
-					copy={this.groupCopy.bind(this, group.id)}
-					remove={this.groupRemove.bind(this, group.id)}
-				/>
-			);
+		const groupList = [];
+		(this.props.groupList || []).map((group, index) => {
+			if ((this.state.filterName == '' || group.name.indexOf(this.state.filterName)) != -1 && (this.state.filterType == 'all' || this.state.filterType == 'group')) {
+				groupList.push(
+					<GroupBrief group={group} withControl={true} key={index}
+						icon = {this.props.icons[group.id + '_icon']}
+						enable={this.groupToggle.bind(this, group.id, true)}
+						disable={this.groupToggle.bind(this, group.id, false)}
+						copy={this.groupCopy.bind(this, group.id)}
+						remove={this.groupRemove.bind(this, group.id)}
+						updateSubWindow={this.props.updateSubWindow}
+					/>
+				);
+			}
 		});;
+		let selectGroup;
+		if (this.props.groupList) {
+			selectGroup = <option value="group">{GL('group')}</option>;
+		}
 		const actionBar = !this.props.actionBar ? null : (
 			<div id="actionBar">
 				<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
@@ -281,10 +291,6 @@ class Selector extends Component{
 		}
 		if (groupList.length > 0) {
 			groupDiv = <div id="groupList"><h2>{GL('group')}</h2>{groupList}</div>;
-		}
-		let selectGroup;
-		if (this.props.groupList) {
-			selectGroup = <option value="group">{GL('group')}</option>;
 		}
 		return (
 			<SelectorDiv>

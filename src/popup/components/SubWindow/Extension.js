@@ -11,20 +11,6 @@ const ExtensionDiv = styled.div`
 class Extension extends Component{
 	constructor(props) {
 		super(props);
-		this.listener = this.listener.bind(this);
-	}
-	listener(message, sender, sendResponse) {
-		if (message) {
-			if (message.job == 'extensionUpdated') {
-				this.forceUpdate();
-			}
-		}
-	}
-	componentDidMount() {
-		browser.runtime.onMessage.addListener(this.listener);
-	}
-	componentWillUnmount() {
-		browser.runtime.onMessage.removeListener(this.listener);
 	}
 	render() {
 		if (!shared || !shared.extensions || !shared.extensions[this.props.id]) {

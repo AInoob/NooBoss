@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switchy, Removy, Copyy } from '../../icons';
+import { Switchy, Removy, Copyy, Groupy } from '../../icons';
 import { sendMessage } from '../../utils';
 import styled, { css } from 'styled-components';
 
@@ -30,9 +30,11 @@ const GroupBriefDiv = styled.div`
 			width: 100%;
 		}
 		.groupIcon{
-			width: 80%;
-			margin-left: 10%;
-			margin-top: 6px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		svg.groupIcon{
+			height: 100%;
 		}
 		.nameFront{
 			top: 80px;
@@ -104,11 +106,11 @@ class GroupBrief extends Component{
 		return (
 			<GroupBriefDiv withControl={this.props.withControl}>
 				<div className="groupBrief">
-					<img className="groupIcon" src={shared.icons[group.icon]} />
+					{this.props.icon ? <img className="groupIcon" src={this.props.icon} /> : <Groupy className="groupIcon" color={shared.themeMainColor} />}
 					<span className="nameFront">{group.name}</span>
 					<div className="groupInfo">
 						{groupControl}
-						<span id="groupName" onClick={shared.updateSubWindow.bind(null, 'group', group.id)}>{group.name}</span>
+						<span id="groupName" onClick={this.props.updateSubWindow.bind(null, 'group', group.id)}>{group.name}</span>
 					</div>
 				</div>
 			</GroupBriefDiv>

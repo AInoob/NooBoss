@@ -99,7 +99,7 @@ const ExtensionBriefDiv = styled.div`
 		margin: 0px !important;
 		&:hover{
 			.shadow{
-				background-color: rgba(0, 0, 0, 0.2);
+				background-color: rgba(0, 0, 0, ${props => props.selected ? '0.09' : '0.4'});
 			}
 		}
 		.shadow{
@@ -166,12 +166,12 @@ class ExtensionBrief extends Component{
 			<ExtensionBriefDiv onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
 				<div className="shadow"></div>
 				<div className="extensionBrief">
-					<img className="extensionIcon" src={shared.icons[extension.icon]} />
+					<img className="extensionIcon" src={this.props.icon} />
 					<span className="nameFront">{extension.name}</span>
 					<div className="extensionInfo">
 						{extensionControl}
 						{extension.version}<br />
-						<span id="extensionName" onClick={shared.updateSubWindow.bind(null, 'extension', extension.id)}>{extension.name}</span>
+						<span id="extensionName" onClick={this.props.updateSubWindow.bind(null, 'extension', extension.id)}>{extension.name}</span>
 					</div>
 				</div>
 			</ExtensionBriefDiv>

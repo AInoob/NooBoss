@@ -53,101 +53,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 class Extensions extends Component{
-	constructor(props) {
-		super(props);
-		this.state = {
-			extensions: {},
-			groupList: [],
-			autoStateRuleList: [],
-		};
-		this.listener = this.listener.bind(this);
-	}
-
-	listener(message, sender, sendResponse) {
-		if (message) {
-			switch (message.job) {
-				case 'extensionToggled':
-					this.setState(prevState => {
-						if (prevState.extensions[message.id]) {
-							prevState.extensions[message.id].enabled = message.enabled;
-						}
-						return prevState;
-					});
-					break;
-				case 'extensionRemoved':
-					this.setState(prevState => {
-						delete prevState.extensions[message.id];
-						return prevState;
-					});
-					break;
-				case 'groupCopied':
-					this.setState(prevState => {
-						prevState.groupList.push(message.newGroup);
-						return prevState;
-					});
-					break;
-				case 'groupRemoved':
-					this.setState(prevState => {
-						prevState.groupList.splice(message.index, 1);
-						return prevState;
-					});
-					break;
-				case 'groupListUpdated':
-					this.setState({ groupList: message.groupList });
-					break;
-				case 'groupUpdated':
-					this.setState(prevState => {
-						for(let i = 0; i < prevState.groupList.length; i++) {
-							if (prevState.groupList[i].id == message.group.id) {
-								prevState.groupList[i] = message.group;
-								break;
-							}
-						}
-						return prevState;
-					});
-					break;
-			}
-		}
-	}
 
 	componentDidMount() {
-		browser.runtime.onMessage.addListener(this.listener);
-		browser.runtime.sendMessage({ job: 'getAllExtensions' }, extensions => {
-			shared.extensions = extensions;
-			this.setState({ extensions });
-			const keyList = Object.keys(extensions);
-			for(let i = 0; i < keyList.length; i++) {
-				if (!window.shared.icons[extensions[keyList[i]].icon]) {
-					this.props.getIcon(extensions[keyList[i]].icon);
-				}
-			}
-		});
-		browser.runtime.sendMessage({ job: 'getGroupList' }, groupList => {
-			shared.groupList = groupList;
-			this.setState({ groupList });
-			for(let i = 0; i < groupList.length; i++) {
-				if(!window.shared.icons[groupList[i].id + '_icon']) {
-					this.props.getIcon(groupList[i].id + '_icon');
-				}
-			}
-		});
-		browser.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
-			shared.autoStateRuleList = autoStateRuleList;
-			this.setState({ autoStateRuleList });
-		});
-	}
-
-	componentWillUnmount() {
-		browser.runtime.onMessage.removeListener(this.listener);
+		shared.getAllExtensions();
+		shared.getGroupList();
+		shared.getAutoStateRuleList();
 	}
 
 	render() {
 		let core;
 		if (this.props.location.sub['extensions'] == 'manage') {
-			core = <Manage extensions={this.state.extensions} groupList={this.state.groupList} />
+			core = <Manage updateSubWindow={this.props.updateSubWindow} icons={this.props.icons} extensions={this.props.extensions} groupList={this.props.groupList} />
 		}
 		else if (this.props.location.sub['extensions'] == 'autoState') {
-			core = <AutoState autoStateRuleList={this.state.autoStateRuleList} extensions={this.state.extensions} groupList={this.state.groupList} />
+			core = <AutoState autoStateRuleList={this.props.autoStateRuleList} extensions={this.props.extensions} groupList={this.props.groupList} />
 		}
 		return (
 			<ExtensionsDiv themeMainColor={window.shared.themeMainColor} themeSubColor={window.shared.themeSubColor}>

@@ -18,7 +18,7 @@ import {
 	optionsUpdateThemeMainColor,
 	optionsUpdateThemeSubColor
 } from '../actions';
-import { getDB, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import { getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
@@ -29,6 +29,17 @@ injectGlobal`
 	@keyframes spin {
     from {transform:rotate(0deg);}
     to {transform:rotate(360deg);}
+	}
+	@keyframes loader {
+    0% {transform: rotate3d(-1,1,1,0deg)}
+    10% {transform: rotate3d(-1,1,1,90deg)}
+    20% {transform: rotate3d(-1,1,1,180deg)}
+    30% {transform: rotate3d(-1,1,1,270deg)}
+    40% {transform: rotate3d(-1,1,1,360deg)}
+    50% {transform: rotate3d(-1,-1,1,90deg)}
+    60% {transform: rotate3d(-1,-1,1,180deg)}
+    70% {transform: rotate3d(-1,-1,1,270deg)}
+    100% {transform: rotate3d(-1,-1,1,360deg)}
 	}
 `;
 
@@ -44,6 +55,9 @@ const NooBossDiv = styled.div`
 		outline: none;
     font-size: 16px;
     line-height: 16px;
+	}
+	.hidden{
+		display: none;
 	}
 	input{
 		height: 20px;
@@ -156,42 +170,74 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 class NooBoss extends Component{
 	constructor(props) {
 		super(props);
-		window.shared = {};
+		window.shared = {
+			getAllExtensions: this.getAllExtensions.bind(this),
+			getGroupList: this.getGroupList.bind(this),
+			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
+		};
 		props.initialize(props);
 		this.state = {
 			icons: {},
 			loadByParam: true,
+			extensions: {},
+			gorupList: [],
+			themeMainColor: 'rgba(241,46,26,1)',
+			themeSubColor: 'rgba(0,0,0,1)',
 		};
+		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.listener = this.listener.bind(this);
 		setTimeout(() => {
 			this.setState({ loadByParam: false });
 		}, 333);
 	}
+	getAutoStateRuleList() {
+		browser.runtime.sendMessage({ job: 'getAutoStateRuleList' }, autoStateRuleList => {
+			this.setState({ autoStateRuleList });
+		});
+	}
+	getGroupList() {
+		browser.runtime.sendMessage({ job: 'getGroupList' }, async groupList => {
+			this.setState({ groupList });
+			for(let i = 0; i < groupList.length; i++) {
+				await this.getIcon(groupList[i].id + '_icon');
+			}
+		});
+	}
+	getAllExtensions() {
+		browser.runtime.sendMessage({ job: 'getAllExtensions' }, async extensions => {
+			this.setState({ extensions });
+			const keyList = Object.keys(extensions);
+			for(let i = 0; i < keyList.length; i++) {
+				await this.getIcon(extensions[keyList[i]].icon);
+			}
+		});
+	}
 	getIcon(iconDBKey) {
 		return new Promise(resolve => {
-			getDB(iconDBKey, icon => {
-				this.setState(prevState => {
-					prevState.icons[iconDBKey] = icon;
-					return prevState;
-				}, resolve);
-			});
+			if (this.state.icons[iconDBKey]) {
+				resolve();
+			}
+			else {
+				getDB(iconDBKey, icon => {
+					this.setState(prevState => {
+						prevState.icons[iconDBKey] = icon;
+						prevState.icons = copy(prevState.icons);
+						return prevState;
+					}, resolve);
+				});
+			}
 		});
 	}
 
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
-		shared = {
-			...shared,
-			updateSubWindow: this.props.updateSubWindow,
-			icons: this.state.icons,
-		};
 	}
 
 	componentWillUnmount() {
 		browser.runtime.onMessage.removeListener(this.listener);
 	}
 
-	listener(message, sender, sendResponse) {
+	async listener(message, sender, sendResponse) {
 		if (message) {
 			switch (message.job) {
 				case 'popupNooBossUpdateTheme':
@@ -202,6 +248,55 @@ class NooBoss extends Component{
 						});
 					});
 					break;
+				case 'extensionToggled':
+					this.setState(prevState => {
+						if (prevState.extensions[message.id]) {
+							prevState.extensions[message.id].enabled = message.enabled;
+							prevState.extensions = copy(prevState.extensions);
+						}
+						return prevState;
+					});
+					break;
+				case 'extensionRemoved':
+					this.setState(prevState => {
+						delete prevState.extensions[message.id];
+						prevState.extensions = copy(prevState.extensions);
+						return prevState;
+					});
+					break;
+				case 'groupCopied':
+					this.setState(prevState => {
+						prevState.groupList.push(message.newGroup);
+						prevState.groupList = copy(prevState.groupList);
+						return prevState;
+					});
+					break;
+				case 'groupRemoved':
+					this.setState(prevState => {
+						prevState.groupList.splice(message.index, 1);
+						prevState.groupList = copy(prevState.groupList);
+						return prevState;
+					});
+					break;
+				case 'groupListUpdated':
+					const groupList = message.groupList;
+					this.setState({ groupList });
+					for(let i = 0; i < groupList.length; i++) {
+						await this.getIcon(groupList[i].ic + '_icon');
+					}
+					break;
+				case 'groupUpdated':
+					this.setState(prevState => {
+						for(let i = 0; i < prevState.groupList.length; i++) {
+							if (prevState.groupList[i].id == message.group.id) {
+								prevState.groupList[i] = message.group;
+								break;
+							}
+						}
+						prevState.groupList = copy(prevState.groupList);
+						return prevState;
+					});
+					break;
 			}
 		}
 	}
@@ -209,13 +304,26 @@ class NooBoss extends Component{
 	render() {
 		shared.themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		shared.themeSubColor = generateRGBAString(this.props.options.themeSubColor);
+		const extensions = this.state.extensions || {};
+		const groupList = this.state.groupList || [];
+		const autoStateRuleList = this.state.autoStateRuleList || [];
 		let page = null;
 		let location = getParameterByName('page') || this.props.location.main;
 		if (!this.state.loadByParam) {
 			location = this.props.location.main;
 		}
 		if (location == 'overview') { page = <Overview />; }
-		else if (location == 'extensions') { page = <Extensions getIcon={this.getIcon.bind(this)} />; }
+		else if (location == 'extensions') {
+			page = (
+				<Extensions
+					icons={this.state.icons}
+					extensions={extensions}
+					groupList={groupList}
+					autoStateRuleList={autoStateRuleList}
+					updateSubWindow={this.props.updateSubWindow}
+				/>
+			);
+		}
 		else if (location == 'userscripts') { page = <Userscripts />; }
 		else if (location == 'history') { page = <History getIcon={this.getIcon.bind(this)} />; }
 		else if (location == 'options') { page = <Options />; }
@@ -227,7 +335,12 @@ class NooBoss extends Component{
 			>
 				<Navigator />
 				{page}
-				<SubWindow />
+				<SubWindow
+					icons={this.state.icons}
+					extensions={extensions}
+					groupList={groupList}
+					updateSubWindow={this.props.updateSubWindow}
+				/>
 			</NooBossDiv>
 		);
 	}

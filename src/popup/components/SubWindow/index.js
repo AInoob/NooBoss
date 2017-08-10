@@ -23,8 +23,8 @@ const SubWindowDiv = styled.div`
 	#loader{
 		width: 200px;
 		height: 200px;
-		margin: auto;
-		animation: spin 1s linear infinite;
+    margin: auto;
+    animation: loader 2s infinite linear;;
 	}
 `;
 
@@ -53,15 +53,21 @@ class SubWindow extends Component{
         content = <Extension id={id} />;
         break;
       case 'group':
-        content = <Group id={id} />;
+        const group = (this.props.groupList || []).filter(elem => elem.id == id)[0];
+        content = (
+          <Group
+						updateSubWindow={this.props.updateSubWindow}
+            extensions={this.props.extensions}
+            groupList={this.props.groupList}
+            icons={this.props.icons}
+            icon={this.props.icons[(group || {}).id + '_icon']}
+            group={group} 
+          />
+        );
         break;
     }
     return (
-      <SubWindowDiv onClick={() => {
-          if (shared && shared.updateSubWindow) {
-            shared.updateSubWindow('', '');
-          }
-        }}
+      <SubWindowDiv onClick={this.props.updateSubWindow.bind(null, '', '')}
         display={display != ''}
       >
         <div id="subWindow" onClick={(e) => {e.stopPropagation()}}>

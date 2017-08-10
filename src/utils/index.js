@@ -212,6 +212,25 @@ export const colorToRGBA = (color) => {
 	}
 };
 
+export const copy = obj => {
+	return JSON.parse(JSON.stringify(obj));
+};
+
+export const fileToDataURL =  file => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.addEventListener("load", () => {
+			resolve(reader.result)
+		}, false);
+		if (file) {
+			reader.readAsDataURL(file);
+		}
+		else {
+			reject();
+		}
+	});
+};
+
 export const rgbaChange = (color, changeRGBA) => {
 	let rgba = color;
 	if (typeof rgba == 'string') {

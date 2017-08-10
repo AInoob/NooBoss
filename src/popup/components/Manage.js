@@ -9,7 +9,14 @@ class Manage extends Component{
 	render() {
 		return (
 			<ManageDiv>
-				<Selector groupList={this.props.groupList} extensions={this.props.extensions} actionBar={true} withControl={true} />
+				<Selector
+					updateSubWindow={this.props.updateSubWindow}
+					icons={this.props.icons}
+					groupList={this.props.groupList}
+					extensions={this.props.extensions}
+					actionBar={true}
+					withControl={true}
+				/>
 			</ManageDiv>
 		);
 	}
