@@ -46,7 +46,7 @@ injectGlobal`
 const NooBossDiv = styled.div`
 	min-height: 300px;
 	* {
-		transition: box-shadow 0.309s;
+		transition: opacity 0.309s, box-shadow 0.309s;
 	}
 	font-size: 12px;
 	color: ${props => props.themeSubColor};

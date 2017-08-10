@@ -9,6 +9,7 @@ const GroupDiv = styled.div`
 	height: 100%;
 	overflow-y: scroll;
 	position: relative;
+	cursor: initial;
 	display: flex;
 	#name{
 		margin-top: 10px;

@@ -5,14 +5,17 @@ import Extension from './Extension';
 import Group from './Group';
 
 const SubWindowDiv = styled.div`
-  display: ${props => props.display ? 'flex' : 'none'};
+  display: flex;
+  opacity: ${props => props.display ? '1' : '0'};
+  pointer-events: ${props => props.display ? 'initial' : 'none'};
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.7);
+  cursor: pointer;
   #subWindow{
     width: 80%;
     height: 80%;
