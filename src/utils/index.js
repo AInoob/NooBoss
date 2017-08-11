@@ -353,6 +353,36 @@ export const getLanguage = () => {
 	});
 };
 
+export const getChromeVersion = () => {
+	var match = window.navigator.userAgent.match(/Chrom(?:e|ium)\/([0-9\.]+)/);
+  return match ? match[1] : '58.0.3029.110';
+};
+
+export const ajax = (req) => {
+	return new Promise((resolve, reject) => {
+		const request = new XMLHttpRequest();
+		const params = (typeof req.data == 'string' || !req.data) ? req.data : Object.keys(req.data).map(
+			function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(req.data[k]) }
+		).join('&');
+		request.open(req.type || 'GET', req.url, req.async, req.user, req.password);
+		request.onload = () => {
+			 if (request.status >= 200 && request.status < 400) {
+				 resolve(request.responseText);
+			 }
+			 else {
+				 reject('server error');
+			 }
+		};
+		request.onerror = (e) => {
+			reject(e);
+		};
+		if (req.contentType) {
+			request.setRequestHeader('Content-Type', req.contentType);
+		}
+		request.send(params);
+	});
+};
+
 export const alerty = (text, mainColor, callbackConfirm, callbackCancel) => {
 	const alertHolder = document.createElement('div');
 	const alertDiv = document.createElement('div');
