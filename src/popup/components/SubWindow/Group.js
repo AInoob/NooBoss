@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Sunny, Groupy } from '../../../icons';
+import { Groupy } from '../../../icons';
 import { sendMessage, fileToDataURL, promisedSetDB } from '../../../utils';
 import Selector from '../Selector';
 
 const GroupDiv = styled.div`
 	width: 100%;
 	height: 100%;
-	overflow-y: scroll;
 	position: relative;
 	cursor: initial;
 	display: flex;
+	overflow-y: scroll;
 	&::-webkit-scrollbar-track{
 		background: white;
 	}

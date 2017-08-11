@@ -431,11 +431,6 @@ class Options extends Component{
 					</section>
 
 					<section>
-						{this.getDisplayInput('userscripts')}
-						{this.getDisplayLabel('userscripts')}
-					</section>
-
-					<section>
 						{this.getDisplayInput('advanced')}
 						{this.getDisplayLabel('advanced')}
 						<section>

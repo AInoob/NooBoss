@@ -121,7 +121,6 @@ class Navigator extends Component{
 			linkList: [
 				{ main: 'overview' },
 				{ main: 'extensions', sub: ['manage', 'autoState'] },
-				{ main: 'userscripts' },
 				{ main: 'history' },
 				{ main: 'options' },
 				{ main: 'about' }

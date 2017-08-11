@@ -53,7 +53,17 @@ class SubWindow extends Component{
     let content;
     switch (display) {
       case 'extension':
-        content = <Extension id={id} />;
+        const extension = this.props.extensions[id];
+        content = (
+          <Extension
+						updateSubWindow={this.props.updateSubWindow}
+            extensions={this.props.extensions}
+            groupList={this.props.groupList}
+            icons={this.props.icons}
+            icon={this.props.icons[(group || {}).id + '_icon']}
+            extension={extension} 
+          />
+        );
         break;
       case 'group':
         const group = (this.props.groupList || []).filter(elem => elem.id == id)[0];
