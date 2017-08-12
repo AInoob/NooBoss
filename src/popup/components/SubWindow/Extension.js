@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Extensiony, Launchy, Switchy, Removy, Optioney, Chromey } from '../../../icons';
-import { ajax, promisedGet, getChromeVersion, GL, capFirst, getString, sendMessage } from '../../../utils';
+import { copy, ajax, promisedGet, getChromeVersion, GL, capFirst, getString, sendMessage } from '../../../utils';
 import TimeAgo from 'timeago-react';
 
 const ExtensionDiv = styled.div`
@@ -168,7 +168,46 @@ class Extension extends Component{
 		const rating = parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5';
 		this.setState({ rating });
 	}
-	toggleTag() {
+	async toggleTag(tag) {
+    let inc = 1;
+    let tagged = true;
+    let action = 'tag';
+    const appId = this.props.extension.id;
+    if(this.state.tags && this.state.tags[tag]) {
+      action = 'unTag';
+      tagged = false;
+      inc = -1;
+    }
+    const reco = {
+      userId: this.state.userId,
+      appId,
+      tag,
+      action
+    };
+    await ajax({
+      type: 'POST',
+      url: 'https://ainoob.com/api/nooboss/reco/app/tag',
+      contentType: 'application/json',
+      data: JSON.stringify(reco)
+    });
+    this.setState(prevState => {
+      if (!prevState.extensionWeb) {
+        prevState.extensionWeb = { appId, tags: {} };
+      }
+      if (!prevState.extensionWeb.tags[tag]) {
+        prevState.extensionWeb.tags[tag] = 1;
+      }
+      else {
+        prevState.extensionWeb.tags[tag] += inc;
+      }
+      if (!prevState.tags) {
+        prevState.tags = {};
+      }
+      prevState.tags[tag] = tagged;
+      prevState.tags = copy(prevState.tags);
+      prevState.extensionWeb = copy(prevState.extensionWeb);
+      return prevState;
+    });
 	}
 	render() {
     const extension = this.props.extension;
@@ -208,9 +247,14 @@ class Extension extends Component{
     });
     hostPermissions = <tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>;
     const manifestUrl='chrome-extension://'+extension.id+'/manifest.json';
-    const active = {useful: 'active'};
+    const active = {};
+    const tags = this.state.tags;
+    Object.keys(tags).map(elem => {
+      if (tags[elem]) {
+        active[elem] = ' active';
+      }
+    })
     const extensionWeb = this.state.extensionWeb;
-    console.log(extensionWeb)
     return (
       <ExtensionDiv>
         <div id="actions">
@@ -284,70 +328,6 @@ class Extension extends Component{
 
 
 
-
-
-    let launch = null;
-    if(extension.isApp) {
-      launch=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id })} />;
-    }
-
-    let toggle = null;
-    if(extension.type && !extension.type.match('theme')) {
-        toggle = <label onClick={CW.bind(null,this.toggleState,'Manage','switch','')} className="app-switch"></label>;
-    }
-    let chromeOption = null;
-    chromeOption = <label title="default Chrome manage page" onClick={CLR.bind(null,'chrome://extensions/?id='+extension.id,'Manage','chromeOption','')} className="app-chromeOption"></label>;
-    let config = null;
-    if(extension.state != 'removed') {
-      config = (
-        <div className="config">
-          <input type="checkbox" className="app-status-checkbox" readOnly  checked={(extension.enabled)} />
-          {toggle}
-          {options}
-          <label onClick={CW.bind(null,this.uninstall,'Manage','uninstall','')} className="app-remove"></label>
-          {chromeOption}
-        </div>
-      );
-    }
-    else {
-      config = (
-        <div className="config">
-          <a onClick={CL.bind(null,'https://chrome.google.com/webstore/detail/'+extension.id,'App','app-link')} title={'https://chrome.google.com/webstore/detail/'+extension.id}><label className='app-add'></label></a>
-        </div>
-      );
-    }
-    let crxName=null;
-    if(this.state.crxVersion) {
-      crxName = 'extension_' + (this.state.crxVersion.replace(/\./g,'_') + '.crx');
-    }
-    const nb_rating=<tr><td>{'NB-Rating'}</td><td>{this.state.nb_rating}</td></tr>;
-    let tags=null;
-    if(this.state.joinCommunity) {
-      const extensionWeb = this.state.extensionWeb || { tags: [], upVotes: 0, downVotes: 0 };
-      const active = {};
-      const temp = Object.keys(this.state.tags || {});
-      for(let j = 0; j < temp.length; j++) {
-        if(this.state.tags[temp[j]]) {
-          active[temp[j]] = 'active';
-        }
-      }
-      const tags=(
-        <div className="tags">
-          <div className="tagColumn">
-            <div onClick={this.toggleTag.bind(this,'useful')} className={"tag wtf "+active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful']||0}</div>
-            <div onClick={this.toggleTag.bind(this,'working')} className={"tag wtf "+active['working']}>{GL('working')}<br />{extensionWeb.tags['working']||0}</div>
-          </div>
-          <div className="tagColumn">
-            <div onClick={this.toggleTag.bind(this,'laggy')} className={"tag soso "+active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy']||0}</div>
-            <div onClick={this.toggleTag.bind(this,'buggy')} className={"tag soso "+active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy']||0}</div>
-          </div>
-          <div className="tagColumn">
-            <div onClick={this.toggleTag.bind(this,'not_working')} className={"tag bad "+active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working']||0}</div>
-            <div onClick={this.toggleTag.bind(this,'ASM')} className={"tag bad "+active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM']||0}</div>
-          </div>
-        </div>
-      );
-		}
 	}
 }
 

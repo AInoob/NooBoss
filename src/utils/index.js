@@ -364,7 +364,7 @@ export const ajax = (req) => {
 		const params = (typeof req.data == 'string' || !req.data) ? req.data : Object.keys(req.data).map(
 			function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(req.data[k]) }
 		).join('&');
-		request.open(req.type || 'GET', req.url, req.async, req.user, req.password);
+		request.open(req.type || 'GET', req.url, req.async == undefined ? true : req.async, req.user, req.password);
 		request.onload = () => {
 			 if (request.status >= 200 && request.status < 400) {
 				 resolve(request.responseText);
