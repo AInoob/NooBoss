@@ -341,7 +341,14 @@ class NooBoss extends Component{
 			);
 		}
 		else if (location == 'userscripts') { page = <Userscripts />; }
-		else if (location == 'history') { page = <History getIcon={this.getIcon.bind(this)} />; }
+		else if (location == 'history') {
+			page = (
+				<History getIcon={this.getIcon.bind(this)}
+					icons={this.state.icons}
+					extensions={extensions}
+				/>
+			);
+		}
 		else if (location == 'options') { page = <Options />; }
 		else if (location == 'about') { page = <About />; }
 		return (

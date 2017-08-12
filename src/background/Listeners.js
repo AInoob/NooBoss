@@ -18,6 +18,7 @@ export default (NooBoss) => {
 					let event = 'installed';
 					if (NooBoss.Extensions.tempActiveList.indexOf(appInfo.id) != -1) {
 						event = 'updated';
+						await NooBoss.Extensions.updateAppInfoById(appInfo.id, { lastUpdateDate: new Date().getTime() });
 					}
 					if (NooBoss.Options.options['historyInstall']) {
 						const { id, icon, name, version } = appInfo;

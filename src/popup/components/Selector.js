@@ -242,6 +242,9 @@ class Selector extends Component{
 				case 'app':
 					appList.push(x);
 					break;
+				case 'packaged_app':
+					appList.push(x);
+					break;
 				case 'theme':
 					themeList.push(x);
 					break;

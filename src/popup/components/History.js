@@ -53,7 +53,7 @@ class History extends Component{
 			this.setState({ recordList });
 			for(let i = 0; i < recordList.length; i++) {
 				const record = recordList[i];
-				if (!window.shared.icons[record.icon]) {
+				if (!this.props.icons[record.icon]) {
 					await this.props.getIcon(record.icon);
 				}
 			}
@@ -61,12 +61,13 @@ class History extends Component{
 	}
 
 	render() {
+		const icons = this.props.icons;
 		const recordList = (this.state.recordList || []).sort((a, b) => { return b.date - a.date}).map((record, index) => {
 			return (
 				<tr key={index} className="record">
 					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>
 					<td>{record.event}</td>
-					<td className="icon"><img src={window.shared.icons[record.icon]} /></td>
+					<td className="icon"><img src={icons[record.icon]} /></td>
 					<td>{record.name}</td>
 					<td>{record.version}</td>
 				</tr>

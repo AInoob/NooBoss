@@ -122,3 +122,47 @@ undo:
   message: Undo
 redo:
   message: Redo
+state:
+  message: State
+official_rating:
+  message: 'Official rating'
+description:
+  message: Description
+enabled:
+  message: Enabled
+disabled:
+  message: Disabled
+removed:
+  message: Removed
+detail:
+  message: Detail
+last_update:
+  message: Last update'
+first_installed:
+  message: 'First installed'
+homepage_url:
+  message: 'Home url'
+id:
+  message: ID
+short_name:
+  message: 'Short name'
+type:
+  message: Type
+offline_enabled:
+  message: 'Offline enabled'
+download_crx:
+  message: 'Download CRX'
+update_url:
+  message: 'Update url'
+manifest_file:
+  message: 'Manifest file'
+may_disable:
+  message: 'May disable'
+install_type:
+  message: 'Install type'
+launch_type:
+  message: 'Launch type'
+permissions:
+  message: 'Permissions'
+host_permissions:
+  message: 'Host permissions'

@@ -61,9 +61,10 @@ export default (NooBoss) => {
 				appInfo.icon = await getIconDBKey(appInfo);
 				const oldInfo = await promisedGetDB(appInfo.id) || {};
 				const time = new Date().getTime();
-				oldInfo.installedDate = time;
-				oldInfo.lastUpdateDate = time;
-				const newInfo = {...oldInfo, ...appInfo, ...extraInfo };
+				const preset= {};
+				preset.installedDate = time;
+				preset.lastUpdateDate = time;
+				const newInfo = {...preset, ...oldInfo, ...appInfo, ...extraInfo };
 				NooBoss.Extensions.apps[newInfo.id] = newInfo;
 				await promisedSetDB(appInfo.id, newInfo);
 				resolve();
@@ -157,12 +158,24 @@ export default (NooBoss) => {
 		},
 		remove: (id) => {
 			browser.management.uninstall(id, { showConfirmDialog: true }, () => {
-				delete NooBoss.Extensions.apps.id;
-				sendMessage({ job: 'extensionRemoved',id });
+				browser.management.get(id, (result) => {
+					if (!result) {
+						console.log(result);
+						delete NooBoss.Extensions.apps.id;
+						sendMessage({ job: 'extensionRemoved',id });
+					}
+				});
 			});
 		},
 		browserOptions: (id) => {
-			browser.tabs.create({ url: 'browser://extensions/?id=' + id });
+			browser.tabs.create({ url: 'chrome://extensions/?id=' + id });
+		},
+		launchApp: (id) => {
+			chrome.management.launchApp(id);
+		},
+		openManifest: (id) => {
+			const url = 'chrome-extension://' + id + '/manifest.json';
+			browser.tabs.create({ url });
 		},
 	};
 };

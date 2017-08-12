@@ -106,6 +106,12 @@ NooBoss.initiate = async () => {
 			case 'groupUpdate':
 				NooBoss.Extensions.groupUpdate(message.group);
 				break;
+			case 'launchApp':
+				NooBoss.Extensions.launchApp(message.id);
+				break;
+			case 'openManifest':
+				NooBoss.Extensions.openManifest(message.id);
+				break;
 		}
 	});
 };
