@@ -36,7 +36,7 @@ const GroupDiv = styled.div`
 	}
 	#iconHolder{
 		width: 109px;
-		height: 1090px;
+		height: 109px;
 		display: block;
     position: absolute;
 		top: 10px;
@@ -50,6 +50,11 @@ const GroupDiv = styled.div`
 			width: 100%;
 			height: 100%;
 		}
+	}
+	#padder{
+		height: 16px;
+		float: left;
+		width: 100%;
 	}
 `;
 
@@ -85,7 +90,7 @@ class Group extends Component{
 	}
 	render() {
 		const group = this.props.group;
-		if (!group || (Object.keys(this.props.icons).length < Object.keys(this.props.groupList).length + Object.keys(this.props.extensions).length)) {
+		if (!group) {
 			return <GroupDiv><img id="loader" src="/images/icon_128.png" /></GroupDiv>;
 		}
 		const selectedList = (group.appList || []).map((id, index) => {
@@ -104,12 +109,14 @@ class Group extends Component{
 						{selectedList}
 					</div>
 					<Selector
+						actionBar={true}
 						icons={this.props.icons}
 						updateSubWindow={this.props.updateSubWindow}
 						extensions={this.props.extensions}
 						selectedList={group.appList}
 						select={this.change.bind(this, 'selectExtension')}
 					/>
+					<div id="padder" />
 				</section>
 			</GroupDiv>
 		);

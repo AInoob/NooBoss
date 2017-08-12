@@ -14,7 +14,7 @@ const SelectorDiv = styled.div`
 		height: 26px;
 		#nameFilter, #typeFilter{
 			height: 20px;
-			width: 100px;
+			width: 90px;
 			border: none;
 			padding: 0px;
 			border-bottom: ${() => shared.themeMainColor} solid 1px;
@@ -34,6 +34,7 @@ const SelectorDiv = styled.div`
 		}
 		button{
 			margin-top: -3px;
+			margin-right: 8px;
 		}
 		button.inActive{
 			filter: grayscale(100%);
@@ -209,6 +210,10 @@ class Selector extends Component{
 		sendMessage({ job: 'groupRemove', id });
 	}
 
+	newGroup() {
+		sendMessage({ job: 'newGroup' });
+	}
+
 	componentDidMount() {
 		if (this.props.actionBar) {
 			this.nameFilter.focus();
@@ -269,23 +274,35 @@ class Selector extends Component{
 		if (this.props.groupList) {
 			selectGroup = <option value="group">{GL('group')}</option>;
 		}
-		const actionBar = !this.props.actionBar ? null : (
-			<div id="actionBar">
-				<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
-					<option value="all">{GL('all')}</option>
-					{selectGroup}
-					<option value="app">{GL('app')}</option>
-					<option value="extension">{GL('extension')}</option>
-					<option value="theme">{GL('theme')}</option>
-				</select>
-				<input id="nameFilter" placeholder={GL('name')} ref={input => {this.nameFilter = input;}} value={this.state.filterName} onChange={(e) => { this.setState({ filterName: e.target.value })} } />
-				<span id="clearNameFilter" onClick={()=>{this.setState({ filterName: '' }); this.nameFilter.focus(); }}><Cleary color={shared.themeSubColor} /></span>
-				<button onClick={this.enable.bind(this)}>{GL('enable')}</button>
-				<button onClick={this.disable.bind(this)}>{GL('disable')}</button>
-				<button className={this.state.stateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.undo.bind(this)}>{GL('undo')}</button>
-				<button className={this.state.redoStateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.redo.bind(this)}>{GL('redo')}</button>
-			</div>
-		);
+		let actionBar;
+		if (this.props.actionBar) {
+			let buttonEnable, buttonDisable, buttonUndo, buttonRedo, buttonNewGroup;
+			if (this.props.withControl) {
+				buttonEnable = <button onClick={this.enable.bind(this)}>{GL('enable')}</button>;
+				buttonDisable = <button onClick={this.disable.bind(this)}>{GL('disable')}</button>;
+				buttonUndo = <button className={this.state.stateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.undo.bind(this)}>{GL('undo')}</button>;
+				buttonRedo = <button className={this.state.redoStateHistoryList.length > 0 ? '' : 'inActive'} onClick={this.redo.bind(this)}>{GL('redo')}</button>;
+				buttonNewGroup = <button onClick={this.newGroup.bind(this)}>{GL('new_group')}</button>;
+			}
+			actionBar = (
+				<div id="actionBar">
+					<select defaultValue={this.state.filterType} onChange={(e) => { this.setState({ filterType: e.target.value }) }} id="typeFilter">
+						<option value="all">{GL('all')}</option>
+						{selectGroup}
+						<option value="app">{GL('app')}</option>
+						<option value="extension">{GL('extension')}</option>
+						<option value="theme">{GL('theme')}</option>
+					</select>
+					<input id="nameFilter" placeholder={GL('name')} ref={input => {this.nameFilter = input;}} value={this.state.filterName} onChange={(e) => { this.setState({ filterName: e.target.value })} } />
+					<span id="clearNameFilter" onClick={()=>{this.setState({ filterName: '' }); this.nameFilter.focus(); }}><Cleary color={shared.themeSubColor} /></span>
+					{buttonEnable}
+					{buttonDisable}
+					{buttonUndo}
+					{buttonRedo}
+					{buttonNewGroup}
+				</div>
+			);
+		}
 		let appDiv, extensionDiv, themeDiv, groupDiv;
 		if (appList.length > 0) {
 			appDiv = <div id="appList"><h2>{GL('app')}</h2>{appList}</div>;

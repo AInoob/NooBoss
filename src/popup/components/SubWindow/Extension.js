@@ -50,6 +50,7 @@ const ExtensionDiv = styled.div`
     }
   }
   #title{
+    overflow: hidden;
     font-size: 30px;
     display: block;
     width: 574px;

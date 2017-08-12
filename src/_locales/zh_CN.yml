@@ -180,3 +180,5 @@ ASM:
   message: 广告/垃圾
 nooboss_tags:
   message: 二管家标签
+new_group:
+  message: 新建组

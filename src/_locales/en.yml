@@ -180,3 +180,5 @@ ASM:
   message: 'AD/Spam/Bad'
 nooboss_tags:
   message: 'NooBoss Tags'
+new_group:
+  message: 'New group'

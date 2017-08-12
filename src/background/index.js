@@ -103,6 +103,9 @@ NooBoss.initiate = async () => {
 			case 'groupListUpdate':
 				NooBoss.Extensions.groupListUpdate(message.groupList);
 				break;
+			case 'newGroup':
+				NooBoss.Extensions.newGroup();
+				break;
 			case 'groupUpdate':
 				NooBoss.Extensions.groupUpdate(message.group);
 				break;

@@ -1,4 +1,4 @@
-import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB, sendMessage } from '../utils';
+import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB, sendMessage, promisedSet } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -112,7 +112,7 @@ export default (NooBoss) => {
 				NooBoss.Extensions.toggle(elem, enabled);
 			});
 		},
-		groupCopy: (id) => {
+		groupCopy: async (id) => {
 			const group = NooBoss.Extensions.groupList.filter(elem => {
 				return elem.id == id;
 			})[0];
@@ -120,32 +120,48 @@ export default (NooBoss) => {
 			newGroup.id = 'NooBoss-Group-' + (Math.random().toString(36)).slice(2, 19)+(Math.random().toString(36)).slice(2, 19);
 			NooBoss.Extensions.groupList.push(newGroup);
 			sendMessage({ job: 'groupCopied', newGroup });
+			await promisedSet('groupList', NooBoss.Extensions.groupList);
 		},
 		groupRemove: (id) => {
 			return new Promise(resolve => {
-				NooBoss.Extensions.groupList.map((elem, index) => {
+				NooBoss.Extensions.groupList.map(async (elem, index) => {
 					if (elem.id == id) {
 						NooBoss.Extensions.groupList.splice(index, 1);
 						sendMessage({ job: 'groupRemoved', index });
+						await promisedSet('groupList', NooBoss.Extensions.groupList);
 						resolve();
 					}
 				});
 			});
 		},
 		groupListUpdate: (groupList) => {
-			return new Promise(resolve => {
+			return new Promise(async resolve => {
 				NooBoss.Extensions.groupList = groupList;
 				sendMessage({ job: 'groupListUpdated', groupList })
+				await promisedSet('groupList', NooBoss.Extensions.groupList);
 				resolve();
 			});
 		},
+		newGroup: () => {
+			return new Promise(async resolve => {
+				NooBoss.Extensions.groupList.push({
+					appList: [],
+					id: 'NooBoss-Group-' + (Math.random().toString(36)).slice(2, 19)+(Math.random().toString(36)).slice(2, 19),
+					name: "Group x"
+				});
+				sendMessage({ job: 'groupListUpdated', groupList: NooBoss.Extensions.groupList });
+				await promisedSet('groupList', NooBoss.Extensions.groupList);
+				resolve();
+			})
+		},
 		groupUpdate: (group) => {
-			return new Promise(resolve => {
+			return new Promise(async resolve => {
 				let groupIndex = -1;
 				for(let i = 0; i < NooBoss.Extensions.groupList.length; i++) {
 					if (NooBoss.Extensions.groupList[i].id == group.id) {
 						NooBoss.Extensions.groupList[i] = group;
 						sendMessage({ job: 'groupUpdated', group });
+						await promisedSet('groupList', NooBoss.Extensions.groupList);
 						resolve();
 						break;
 					}
