@@ -166,3 +166,17 @@ permissions:
   message: 'Permissions'
 host_permissions:
   message: 'Host permissions'
+useful:
+  message: Useful
+working:
+  message: Working
+laggy:
+  message: Laggy
+buggy:
+  message: Buggy
+not_working:
+  message: 'Not working'
+ASM:
+  message: 'AD/Spam/Bad'
+nooboss_tags:
+  message: 'NooBoss Tags'

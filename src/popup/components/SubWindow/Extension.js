@@ -86,6 +86,38 @@ const ExtensionDiv = styled.div`
   #detailText{
     margin-left: 18px;
   }
+  #tagsText{
+    width: 100px;
+    float: left;
+    display: block;
+  }
+  #tags{
+    float: left;
+    width: 400px;
+    margin: auto;
+    .tagColumn{
+      width: 111px;
+      float: left;
+      margin-left: 16px;
+      .tag{
+        filter: invert(50%);
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        color: ${() => shared.themeMainColor};
+        box-shadow: ${() => shared.themeMainColor} 0px 0px 0px 1px;
+        &:hover{
+          box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
+        }
+        margin-top: 16px;
+      }
+      .tag.active{
+        font-weight: bold;
+        border: 1px solid ${() => shared.themeMainColor};
+        filter: invert(0%);
+      }
+    }
+  }
 `;
 
 class Extension extends Component{
@@ -95,7 +127,7 @@ class Extension extends Component{
 			crxUrl: '',
 			crxVersion: '',
 			rating: '? / 5',
-			extensionWeb: { tags: [], upVotes: 0, downVotes: 0 },
+			extensionWeb: { tags: {}, upVotes: 0, downVotes: 0 },
 			tags: {},
 			joinCommunity: false,
 			userId: 'notBelloed',
@@ -119,8 +151,8 @@ class Extension extends Component{
 			const tags = {};
 			for (let i = 0; i < data.tags.length; i++) {
 				tags[data.tags[i].tag] = data.tags[i].tagged;
-			}
-			this.setState({ extensionWeb: data.extension, tags });
+      }
+			this.setState({ extensionWeb: data.appInfo, tags });
 		}
 		data = await ajax({
 			url: 'https://clients2.google.com/service/update2/crx?prodversion=' + getChromeVersion() + '&x=id%3D' + id + '%26installsource%3Dondemand%26uc'
@@ -176,6 +208,9 @@ class Extension extends Component{
     });
     hostPermissions = <tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>;
     const manifestUrl='chrome-extension://'+extension.id+'/manifest.json';
+    const active = {useful: 'active'};
+    const extensionWeb = this.state.extensionWeb;
+    console.log(extensionWeb)
     return (
       <ExtensionDiv>
         <div id="actions">
@@ -193,6 +228,24 @@ class Extension extends Component{
             <tr><td>{GL('state')}</td><td>{capFirst(extension.state || (extension.enabled ? GL('enabled') : GL('disabled')))}</td></tr>
             <tr><td>{GL('official_rating')}</td><td>{this.state.rating}</td></tr>
             <tr><td>{GL('description')}</td><td>{extension.description}</td></tr>
+            <tr><td>{GL('nooboss_tags')}</td>
+              <td>
+                <div id="tags">
+                  <div className="tagColumn">
+                    <div onClick={this.toggleTag.bind(this, 'useful')} className={"tag " + active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful'] || 0}</div>
+                    <div onClick={this.toggleTag.bind(this, 'working')} className={"tag " + active['working']}>{GL('working')}<br />{extensionWeb.tags['working'] || 0}</div>
+                  </div>
+                  <div className="tagColumn">
+                    <div onClick={this.toggleTag.bind(this, 'laggy')} className={"tag " + active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy'] || 0}</div>
+                    <div onClick={this.toggleTag.bind(this, 'buggy')} className={"tag " + active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy'] || 0}</div>
+                  </div>
+                  <div className="tagColumn">
+                    <div onClick={this.toggleTag.bind(this, 'not_working')} className={"tag " + active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working'] || 0}</div>
+                    <div onClick={this.toggleTag.bind(this, 'ASM')} className={"tag " + active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM'] || 0}</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
         <h2 id="detailText">{GL('detail')}</h2>

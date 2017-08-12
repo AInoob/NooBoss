@@ -166,3 +166,17 @@ permissions:
   message: 权限
 host_permissions:
   message: Host权限
+useful:
+  message: 很有用
+working:
+  message: 能工作
+laggy:
+  message: 卡
+buggy:
+  message: 很多bugs
+not_working:
+  message: 没卵用
+ASM:
+  message: 广告/垃圾
+nooboss_tags:
+  message: 二管家标签
