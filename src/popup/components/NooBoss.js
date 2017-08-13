@@ -67,6 +67,20 @@ const NooBossDiv = styled.div`
 		outline: none;
     font-size: 16px;
     line-height: 16px;
+		height: 20px;
+		min-width: 90px;
+		border: none;
+		padding: 0px;
+		border-bottom: ${() => shared.themeMainColor} solid 1px;
+		&:hover, &:focus{
+			border-bottom: ${() => shared.themeMainColor} solid 2px;
+		}
+		background-color: white;
+	}
+	input{
+		&:hover, &:focus{
+			margin-top: -1px;
+		}
 	}
 	.hidden{
 		display: none;
@@ -197,6 +211,7 @@ class NooBoss extends Component{
 			gorupList: [],
 			themeMainColor: 'rgba(241,46,26,1)',
 			themeSubColor: 'rgba(0,0,0,1)',
+			autoStateRuleList: [],
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.listener = this.listener.bind(this);
@@ -310,6 +325,13 @@ class NooBoss extends Component{
 							}
 						}
 						prevState.groupList = copy(prevState.groupList);
+						return prevState;
+					});
+					break;
+				case 'autoStateRulesUpdated':
+					this.setState(prevState => {
+						const rules = message.rules;
+						prevState.autoStateRuleList = rules;
 						return prevState;
 					});
 					break;

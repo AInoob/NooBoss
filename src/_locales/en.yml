@@ -182,3 +182,33 @@ nooboss_tags:
   message: 'NooBoss Tags'
 new_group:
   message: 'New group'
+rules:
+  message: Rules
+new_rule:
+  message: New Rule
+target_s:
+  message: Target(s)
+action:
+  message: Action
+match:
+  message: Match
+pattern:
+  message: 'Pattern'
+wildcard:
+  message: Wildcard
+RegExp:
+  message: RegExp
+enableWhen:
+  message: 'Enable when'
+disableWhen:
+  message: 'Disable when'
+enableOnly:
+  message: 'Enable only'
+disableOnly:
+  message: 'Disable only'
+add_rule:
+  message: 'Add rule'
+select_target_s:
+  message: 'Select target(s)'
+set_as_current_website:
+  message: 'Set as current website'

@@ -1,10 +1,10 @@
-import { promisedGet, getRegExpFromWildcard, notify, isOn, GL } from '../utils';
+import { promisedSet, promisedGet, getRegExpFromWildcard, notify, isOn, GL, sendMessage } from '../utils';
 
 export default (NooBoss) => {
 	return {
 		initiate: () => {
 			return new Promise(async resolve => {
-				NooBoss.AutoState.reles = [];
+				NooBoss.AutoState.rules = [];
 				NooBoss.AutoState.tabs = {};
 				await NooBoss.AutoState.fetchTabs();
 				await NooBoss.AutoState.updateRules();
@@ -23,9 +23,11 @@ export default (NooBoss) => {
 				});
 			});
 		},
-		updateRules: () => {
+		updateRules: (rules) => {
 			return new Promise(async resolve => {
-				let rules = await promisedGet('autoStateRules');
+				if (rules == undefined) {
+					rules = await promisedGet('autoStateRules');
+				}
 				if (!rules) {
 					resolve();
 				}
@@ -33,6 +35,10 @@ export default (NooBoss) => {
 					rules = JSON.parse(rules);
 				}
 				NooBoss.AutoState.rules = rules;
+				sendMessage({ job: 'autoStateRulesUpdated', rules: NooBoss.AutoState.rules });
+				if (rules != undefined) {
+					await promisedSet('autoStateRules', rules);
+				}
 				resolve();
 			});
 		},

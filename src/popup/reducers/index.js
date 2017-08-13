@@ -5,6 +5,7 @@ import navigator from './navigator';
 import overview from './overview';
 import options from './options';
 import subWindow from './subWindow';
+import autoState from './autoState';
 
 const noobossReducer = (state = {}, action) => {
 	if (action && action.type == 'UPDATE_STATE') {
@@ -20,6 +21,7 @@ const noobossReducer = (state = {}, action) => {
 		subWindow: subWindow(state.subWindow, action),
 		overview: overview(state.overview, action),
 		options: options(state.options, action),
+		autoState: autoState(state.autoState, action),
 	};
 
 	return state

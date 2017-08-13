@@ -115,6 +115,9 @@ NooBoss.initiate = async () => {
 			case 'openManifest':
 				NooBoss.Extensions.openManifest(message.id);
 				break;
+			case 'autoStateRulesUpdate':
+				NooBoss.AutoState.updateRules(message.rules);
+				break;
 		}
 	});
 };

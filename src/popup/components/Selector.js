@@ -12,17 +12,6 @@ const SelectorDiv = styled.div`
 		margin-left: 0px;
 		margin-top: 20px;
 		height: 26px;
-		#nameFilter, #typeFilter{
-			height: 20px;
-			width: 90px;
-			border: none;
-			padding: 0px;
-			border-bottom: ${() => shared.themeMainColor} solid 1px;
-			&:hover, &:focus{
-				border-bottom: ${() => shared.themeMainColor} solid 2px;
-			}
-			background-color: white;
-		}
 		#typeFilter{
 			height: 21px;
 		}
@@ -258,13 +247,20 @@ class Selector extends Component{
 		const groupList = [];
 		(this.props.groupList || []).map((group, index) => {
 			if ((this.state.filterName == '' || group.name.indexOf(this.state.filterName)) != -1 && (this.state.filterType == 'all' || this.state.filterType == 'group')) {
+				const id = group.id;
 				groupList.push(
 					<GroupBrief group={group} withControl={true} key={index}
-						icon = {this.props.icons[group.id + '_icon']}
-						enable={this.groupToggle.bind(this, group.id, true)}
-						disable={this.groupToggle.bind(this, group.id, false)}
-						copy={this.groupCopy.bind(this, group.id)}
-						remove={this.groupRemove.bind(this, group.id)}
+						selected={this.props.selectedList ? (this.props.selectedList.indexOf(id) != -1) : null}
+						onClick={() => {
+							if (this.props.select) {
+								this.props.select(id);
+							}
+						}}
+						icon = {this.props.icons[id + '_icon']}
+						enable={this.groupToggle.bind(this, id, true)}
+						disable={this.groupToggle.bind(this, id, false)}
+						copy={this.groupCopy.bind(this, id)}
+						remove={this.groupRemove.bind(this, id)}
 						updateSubWindow={this.props.updateSubWindow}
 					/>
 				);

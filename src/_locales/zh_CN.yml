@@ -182,3 +182,33 @@ nooboss_tags:
   message: 二管家标签
 new_group:
   message: 新建组
+rules:
+  message: 规则
+new_rule:
+  message: 新规则
+target_s:
+  message: 对象
+action:
+  message: 动作
+match:
+  message: 匹配
+pattern:
+  message: 模式
+wildcard:
+  message: 通配符
+RegExp:
+  message: 正则匹配
+enableWhen:
+  message: 匹配后开启
+disableWhen:
+  message: 匹配后关闭
+enableOnly:
+  message: 只有匹配才开启
+disableOnly:
+  message: 只有匹配才关闭
+add_rule:
+  message: 添加规则
+select_target_s:
+  message: 选择对象
+set_as_current_website:
+  message: 设置为当前网站

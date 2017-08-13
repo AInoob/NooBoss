@@ -8,6 +8,7 @@ const GroupBriefDiv = styled.div`
 	&:hover{
 		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
+	position: relative;
 	width: 76px;
 	height: 76px;
 	padding: 20px;
@@ -85,6 +86,44 @@ const GroupBriefDiv = styled.div`
 			}
 		}
 	`}
+	${props => (props.selected == true || props.selected == false) && css `
+		box-shadow: none !important;
+		cursor: pointer;
+		width: 49px;
+		height: 49px;
+		margin: 0px !important;
+		&:hover{
+			.shadow{
+				background-color: rgba(0, 0, 0, ${props => props.selected ? '0.09' : '0.4'});
+			}
+		}
+		.shadow{
+			z-index: 1;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			transition: background-color 0.309s;
+			background-color: rgba(0, 0, 0, ${props => props.selected ? '0' : '0.5'});
+			position: absolute;
+			display: block !important;
+		}
+		.nameFront{
+			top: 48px !important;
+			width: 76px !important;
+			margin-left: -14px;
+		}
+		&:hover{
+			.groupBrief{
+				.groupIcon, .nameFront{
+					transform: rotateY(0deg);
+				}
+				.groupInfo{
+					transform: rotateY(180deg);
+				}
+			}
+		}
+	`}
 `;
 
 class GroupBrief extends Component{
@@ -103,14 +142,19 @@ class GroupBrief extends Component{
 				{removy}
 			</div>
 		);
+		let updateSubWindow = function() {};
+		if (this.props.updateSubWindow) {
+			updateSubWindow = this.props.updateSubWindow.bind(null, 'group', group.id);
+		}
 		return (
-			<GroupBriefDiv withControl={this.props.withControl}>
+			<GroupBriefDiv onClick={this.props.onClick} selected={this.props.selected} withControl={this.props.withControl}>
+				<div className="shadow"></div>
 				<div className="groupBrief">
 					{this.props.icon ? <img className="groupIcon" src={this.props.icon} /> : <Groupy className="groupIcon" color={shared.themeMainColor} />}
 					<span className="nameFront">{group.name}</span>
 					<div className="groupInfo">
 						{groupControl}
-						<span id="groupName" onClick={this.props.updateSubWindow.bind(null, 'group', group.id)}>{group.name}</span>
+						<span id="groupName" onClick={updateSubWindow}>{group.name}</span>
 					</div>
 				</div>
 			</GroupBriefDiv>

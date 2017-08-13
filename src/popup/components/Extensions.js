@@ -63,10 +63,24 @@ class Extensions extends Component{
 	render() {
 		let core;
 		if (this.props.location.sub['extensions'] == 'manage') {
-			core = <Manage updateSubWindow={this.props.updateSubWindow} icons={this.props.icons} extensions={this.props.extensions} groupList={this.props.groupList} />
+			core = (
+				<Manage
+					updateSubWindow={this.props.updateSubWindow}
+					icons={this.props.icons}
+					extensions={this.props.extensions}
+					groupList={this.props.groupList}
+				/>
+			);
 		}
 		else if (this.props.location.sub['extensions'] == 'autoState') {
-			core = <AutoState autoStateRuleList={this.props.autoStateRuleList} extensions={this.props.extensions} groupList={this.props.groupList} />
+			core = (
+				<AutoState
+					autoStateRuleList={this.props.autoStateRuleList}
+					icons={this.props.icons}
+					extensions={this.props.extensions}
+					groupList={this.props.groupList}
+				/>
+			);
 		}
 		return (
 			<ExtensionsDiv themeMainColor={window.shared.themeMainColor} themeSubColor={window.shared.themeSubColor}>

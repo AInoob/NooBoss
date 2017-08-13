@@ -8,6 +8,7 @@ const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
 const OPTIONS_UPDATE_THEME_MAIN_COLOR = 'OPTIONS_UPDATE_THEME_MAIN_COLOR';
 const OPTIONS_UPDATE_THEME_SUB_COLOR = 'OPTIONS_UPDATE_THEME_SUB_COLOR';
 const OPTIONS_TOGGLE_DISPLAY = 'OPTIONS_TOGGLE_DISPLAY';
+const UPDATE_AUTO_STATE_RULE = 'UPDATE_AUTO_STATE_RULE';
 		
 
 export const updateState = (state) => ({
@@ -60,4 +61,9 @@ export const optionsUpdateThemeSubColor = (color) => ({
 export const optionsToggleDisplay = (name) => ({
 	type: OPTIONS_TOGGLE_DISPLAY,
 	name
+});
+
+export const updateAutoStateRule = (rule) => ({
+	type: UPDATE_AUTO_STATE_RULE,
+	rule
 });

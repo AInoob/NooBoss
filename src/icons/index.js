@@ -14,6 +14,19 @@ export const Removy = (props) => {
 	);
 };
 
+export const Edity = (props) => {
+	let color = props.color || 'rgba(255, 255, 255, 1)';
+	if (props.changeRGBA) {
+		color = rgbaChange(color, props.changeRGBA);
+	}
+	return (
+		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+			<path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</svg>
+	);
+};
+
 export const Optioney = (props) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
 	if (props.changeRGBA) {

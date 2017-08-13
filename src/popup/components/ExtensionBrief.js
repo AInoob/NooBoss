@@ -162,6 +162,10 @@ class ExtensionBrief extends Component{
 				{chromey}
 			</div>
 		);
+		let updateSubWindow = function() {};
+		if (this.props.updateSubWindow) {
+			updateSubWindow = this.props.updateSubWindow.bind(null, 'extension', extension.id);
+		}
 		return (
 			<ExtensionBriefDiv onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
 				<div className="shadow"></div>
@@ -171,7 +175,7 @@ class ExtensionBrief extends Component{
 					<div className="extensionInfo">
 						{extensionControl}
 						{extension.version}<br />
-						<span id="extensionName" onClick={this.props.updateSubWindow.bind(null, 'extension', extension.id)}>{extension.name}</span>
+						<span id="extensionName" onClick={updateSubWindow}>{extension.name}</span>
 					</div>
 				</div>
 			</ExtensionBriefDiv>
