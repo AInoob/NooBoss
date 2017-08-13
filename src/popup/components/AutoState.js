@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Selector from './Selector';
 import { updateAutoStateRule } from '../actions';
 import { Groupy, Removy, Edity } from '../../icons';
-import { GL, copy, sendMessage } from '../../utils';
+import { GL, copy, sendMessage, getA } from '../../utils';
 
 const AutoStateDiv = styled.div`
 	h2{
@@ -30,7 +30,7 @@ const AutoStateDiv = styled.div`
 		font-size: 1.2em;
 		.line{
 			margin-bottom: 10px;
-			div{
+			.chunk{
 				float: left;
 				&:nth-child(1){
 					width: 100px;
@@ -41,6 +41,12 @@ const AutoStateDiv = styled.div`
 					width: 600px;
 					#matchUrl{
 						width: 370px;
+					}
+					.icon{
+						width: 36px;
+						height: 36px;
+						margin-right: 9px;
+						float: left;
 					}
 				}
 			}
@@ -216,8 +222,8 @@ class AutoState extends Component{
 			if (tabs[0]) {
 				url = tabs[0].url;
 			}
-			rule.match.url = url;
-			this.props.updateAutoStateRule(null);
+			rule.match.url = getA(url).origin;
+			this.props.updateAutoStateRule(rule);
 		});
 	}
 	render() {
@@ -261,16 +267,16 @@ class AutoState extends Component{
 				<h1>{GL('new_rule')}</h1>
 				<div id="rule">
 					<div className="line">
-						<div>{GL('target_s')}</div>
-						<div>
+						<div className="chunk">{GL('target_s')}</div>
+						<div className="chunk">
 							<div id="selectedList">
 								{selectedList}
 							</div>
 						</div>
 					</div>
 					<div className="line">
-						<div>{GL('action')}</div>
-						<div>
+						<div className="chunk">{GL('action')}</div>
+						<div className="chunk">
 							<select value={rule.action} onChange={this.updateRule.bind(this, 'action')}>
 								<option value="enableOnly">{GL('enableOnly')}</option>
 								<option value="disableOnly">{GL('disableOnly')}</option>
@@ -280,15 +286,15 @@ class AutoState extends Component{
 						</div>
 					</div>
 					<div className="line">
-						<div>{GL('match')}</div>
-						<div>
+						<div className="chunk">{GL('match')}</div>
+						<div className="chunk">
 							<input id="matchUrl" value={rule.match.url} onChange={this.updateRule.bind(this, 'url')} />
 							<button id="setAsCurrentWebsite" onClick={this.setCurrentWebsite.bind(this)}>{GL('set_as_current_website')}</button>
 						</div>
 					</div>
 					<div className="line">
-						<div>{GL('pattern')}</div>
-						<div>
+						<div className="chunk">{GL('pattern')}</div>
+						<div className="chunk">
 							<select value={rule.match.isWildcard ? 'wildcard' : 'RegExp'} onChange={this.updateRule.bind(this, 'pattern')}>
 								<option value="RegExp">{GL('RegExp')}</option>
 								<option value="wildcard">{GL('wildcard')}</option>

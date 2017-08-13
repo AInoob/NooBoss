@@ -353,6 +353,12 @@ export const getLanguage = () => {
 	});
 };
 
+export const getA = (url) => {
+  const parser = document.createElement('a');
+  parser.href = url;
+  return parser;
+};
+
 export const getChromeVersion = () => {
 	var match = window.navigator.userAgent.match(/Chrom(?:e|ium)\/([0-9\.]+)/);
   return match ? match[1] : '58.0.3029.110';
