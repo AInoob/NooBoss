@@ -14,6 +14,7 @@ export const defaultValues = {
 	sortOrder: 'nameState',
 	bello: true,
 	joinCommunity: true,
+	recoExtensions: true,
 	notificationDuration_autoState: 5,
 	notificationDuration_stateChange: 5,
 	notificationDuration_installation: -1,

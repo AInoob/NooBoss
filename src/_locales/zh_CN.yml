@@ -212,3 +212,17 @@ select_target_s:
   message: 选择对象
 set_as_current_website:
   message: 设置为当前网站
+you_have:
+  message: 你有
+extension_s:
+  message: 个拓展
+app_s:
+  message: 个应用
+theme:
+  message: 个主题
+group_s:
+  message: 个分组
+autoState_rule_s:
+  message: 个自动管理规则
+recommend_extensions:
+  message: 推荐拓展

@@ -350,7 +350,16 @@ class NooBoss extends Component{
 		if (!this.state.loadByParam) {
 			location = this.props.location.main;
 		}
-		if (location == 'overview') { page = <Overview />; }
+		if (location == 'overview') {
+			page = (
+				<Overview
+					icons={this.state.icons}
+					extensions={extensions}
+					groupList={groupList}
+					autoStateRuleList={autoStateRuleList}
+				/>
+			);
+		}
 		else if (location == 'extensions') {
 			page = (
 				<Extensions

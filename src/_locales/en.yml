@@ -212,3 +212,17 @@ select_target_s:
   message: 'Select target(s)'
 set_as_current_website:
   message: 'Set as current website'
+you_have:
+  message: 'You have'
+extension_s:
+  message: extension(s)
+app_s:
+  message: app(s)
+theme:
+  message: theme
+group_s:
+  message: group(s)
+autoState_rule_s:
+  message: 'AutoState rule(s)'
+recommend_extensions:
+  message: 'Recommend extensions'

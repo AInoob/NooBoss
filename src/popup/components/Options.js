@@ -144,6 +144,7 @@ const OptionsDiv = styled.div`
 	}
 `;
 
+
 const mapStateToProps = (state, ownProps) => {
 	return ({
 		...ownProps,
@@ -184,6 +185,7 @@ class Options extends Component{
 			notifyStateChange: false,
 			notifyInstallation: false,
 			notifyRemoval: false,
+			recoExtensions: true,
 			autoState: false,
 			autoStateNotification: false,
 			joinCommunity: false,
@@ -224,6 +226,7 @@ class Options extends Component{
 			'historyUpdate',
 			'historyEnable',
 			'historyDisable',
+			'recoExtensions',
 			'notificationDuration_installation',
 			'notificationDuration_autoState',
 			'notificationDuration_removal',
@@ -272,16 +275,16 @@ class Options extends Component{
 		}
 	}
 
-	getDisplayLabel(name) {
+	getDisplayLabel(name, htmlId) {
 		return (
-			<label htmlFor={'display_'+name} className="displayToggle">{GL(name)}</label>
+			<label htmlFor={'display_'+(htmlId || name)} className="displayToggle">{GL(name)}</label>
 		);
 	}
 
-	getDisplayInput(name, id) {
+	getDisplayInput(name, id, htmlId) {
 		id = id || name;
 		return (
-			<input id={'display_'+name} type="checkbox" className="displayMore"
+			<input id={'display_'+(htmlId || name)} type="checkbox" className="displayMore"
 				checked={this.props.options.display[id]}
 				onChange={this.props.toggleDisplay.bind(this, id)}
 			/>
@@ -405,6 +408,11 @@ class Options extends Component{
 						{this.getDisplayInput('extensions')}
 						{this.getDisplayLabel('extensions')}
 						<section>
+							{this.getDisplayInput('extensions', 'extensionsExtensions', 'extensionsSub')}
+							{this.getDisplayLabel('extensions', 'extensionsSub')}
+							{this.getSwitch('recommend_extensions', 'recoExtensions')}
+						</section>
+						<section>
 							{this.getDisplayInput('notifications', 'extensionsNotifications')}
 							{this.getDisplayLabel('notifications')}
 							{this.getSwitch('notify_state_change', 'notifyStateChange', 'for_X_seconds', 'notificationDuration_stateChange')}
@@ -434,8 +442,8 @@ class Options extends Component{
 						{this.getDisplayInput('advanced')}
 						{this.getDisplayLabel('advanced')}
 						<section>
-							{this.getDisplayInput('advanced', 'advancedBasics')}
-							{this.getDisplayLabel('advanced')}
+							{this.getDisplayInput('advanced', 'advancedBasics', 'advancedSub')}
+							{this.getDisplayLabel('advanced', 'advancedSub')}
 							{this.getSwitch('join_community', 'joinCommunity')}
 						</section>
 						<section>
