@@ -226,3 +226,5 @@ autoState_rule_s:
   message: 'AutoState rule(s)'
 recommend_extensions:
   message: 'Recommend extensions'
+recommended_for:
+  message: 'Recommended for X'

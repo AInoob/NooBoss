@@ -161,7 +161,6 @@ class Extension extends Component{
 		const crxUrl = data.match('codebase=\"\([^ ]*)\"')[1];
     const crxVersion = data.slice(20).match('version=\"\([^ ]*)\"')[1];
     const crxName = crxUrl.substr(crxUrl.lastIndexOf('/') + 1);
-    console.log(data);
 		this.setState({ crxUrl, crxVersion, crxName });
 		data = await ajax({
 			url: 'https://chrome.google.com/webstore/detail/'+id,

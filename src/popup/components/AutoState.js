@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Selector from './Selector';
 import { updateAutoStateRule } from '../actions';
 import { Groupy, Removy, Edity } from '../../icons';
-import { GL, copy, sendMessage, getA } from '../../utils';
+import { GL, copy, sendMessage, getA, getCurrentUrl } from '../../utils';
 
 const AutoStateDiv = styled.div`
 	h2{
@@ -215,16 +215,11 @@ class AutoState extends Component{
 		rules.splice(index, 1);
 		sendMessage({ job: 'autoStateRulesUpdate', rules });
 	}
-	setCurrentWebsite() {
-		chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, (tabs) => {
-			const rule = this.props.autoState.rule || this.state.rule;
-			let url = "";
-			if (tabs[0]) {
-				url = tabs[0].url;
-			}
-			rule.match.url = getA(url).origin;
-			this.props.updateAutoStateRule(rule);
-		});
+	async setCurrentWebsite() {
+		const rule = this.props.autoState.rule || this.state.rule;
+		const url = await getCurrentUrl();
+		rule.match.url = getA(url).origin;
+		this.props.updateAutoStateRule(rule);
 	}
 	render() {
 		const ruleList = this.props.autoStateRuleList;

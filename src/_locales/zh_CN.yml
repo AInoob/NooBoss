@@ -226,3 +226,5 @@ autoState_rule_s:
   message: 个自动管理规则
 recommend_extensions:
   message: 推荐拓展
+recommended_for:
+  message: 为X推荐

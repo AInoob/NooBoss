@@ -327,6 +327,37 @@ export const getIcon = (appInfo) => {
 	});
 };
 
+export const getCurrentUrl = () => {
+	return new Promise(resolve => {
+		chrome.tabs.query({ 'active': true, 'lastFocusedWindow': true }, (tabs) => {
+			let url = null;
+			if (tabs[0]) {
+				url = tabs[0].url || null;
+			}
+			resolve(url);
+		});
+	});
+}
+
+export const getDomainFromUrl = (url) => {
+	if (!url) {
+		return '';
+	}
+	let domain;
+	if (url.indexOf("://") > -1) {
+		domain = url.split('/')[2];
+	}
+	else {
+		domain = url.split('/')[0];
+	}
+	domain = domain.split(':')[0];
+	const list = domain.split('.');
+	if (list.length == 1){
+		return list[0];
+	}
+	return list[list.length - 2] + '.' + list[list.length - 1];
+};
+
 export const getIconDBKey = (appInfo) => {
 	return new Promise(async resolve => {
 		const dataUrl = await getIcon(appInfo);
