@@ -118,6 +118,9 @@ NooBoss.initiate = async () => {
 			case 'autoStateRulesUpdate':
 				NooBoss.AutoState.updateRules(message.rules);
 				break;
+			case 'openWebStore':
+				NooBoss.Extensions.openWebStore(message.id);
+				break;
 		}
 	});
 };

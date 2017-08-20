@@ -397,6 +397,7 @@ export const getChromeVersion = () => {
 
 export const ajax = (req) => {
 	return new Promise((resolve, reject) => {
+		console.log(JSON.stringify(req));
 		const request = new XMLHttpRequest();
 		const params = (typeof req.data == 'string' || !req.data) ? req.data : Object.keys(req.data).map(
 			function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(req.data[k]) }
@@ -404,7 +405,7 @@ export const ajax = (req) => {
 		request.open(req.type || 'GET', req.url, req.async == undefined ? true : req.async, req.user, req.password);
 		request.onload = () => {
 			 if (request.status >= 200 && request.status < 400) {
-				 resolve(request.responseText);
+					resolve(request.responseText);
 			 }
 			 else {
 				 reject('server error');

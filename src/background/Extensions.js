@@ -193,5 +193,9 @@ export default (NooBoss) => {
 			const url = 'chrome-extension://' + id + '/manifest.json';
 			browser.tabs.create({ url });
 		},
+		openWebStore: (id) => {
+			const url = 'https://chrome.google.com/webstore/detail/' + id;
+			browser.tabs.create({ url });
+		},
 	};
 };

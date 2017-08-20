@@ -1,11 +1,161 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { overviewUpdateBello } from '../actions';
-import { GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
+import { overviewUpdateBello, overviewToggleRecommendExtensions } from '../actions';
+import { sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
 import styled from 'styled-components';
+import Selector from './Selector';
 
 const OverviewDiv = styled.div`
 	padding-left: 16px;
+	#recommendExtensionsButton{
+		display: ${props => props.recommendExtensions ? 'inline-block' : 'none'};
+		margin-left: 16px;
+	}
+	#selectExtensionsButton{
+		&:after{
+			content: '▼';
+			margin-left: 4px;
+			transform: ${props => props.recommendExtensions ? 'rotate(180deg)' : 'rotate(0deg)' };
+			display: block;
+			float: right;
+			transition: transform 0.309s;
+		}
+	}
+	#recommendExtensionsDiv{
+		display: ${props => props.recommendExtensions ? 'block' : 'none'};
+	}
+	.recommendedExtension{
+		margin-bottom: 10px;
+		overflow: hidden;
+		height: 111px;
+		#voteDiv{
+			padding-top: 20px;
+			text-align: center;
+			float: left;
+			width: 50px;
+			.arrowUp, .arrowDown {
+				width: 0;
+				height: 0;
+				border-left: 10px solid transparent;
+				border-right: 10px solid transparent;
+			}
+			.flip{
+				text-align: center;
+				margin-top: 7px;
+				height: 24px;
+				width: 100%;
+				position: relative;
+				cursor: pointer;
+				.arrowUp{
+					border-bottom: 10px solid rgba(128, 128, 128, 0.46);
+				}
+				.arrowDown{
+					border-top: 10px solid rgba(128, 128, 128, 0.46);
+				}
+				.front, .back{
+					position: absolute;
+					backface-visibility: hidden;
+					transition: transform 0.309s;
+				}
+				.front{
+					left: 15px;
+					transform: rotateY(0deg);
+				}
+				.back{
+					width: 100%;
+					transform: rotateY(180deg);
+				}
+				&:hover{
+					.front{
+						transform: rotateY(180deg);
+					}
+					.back{
+						transform: rotateY(0deg);
+					}
+				}
+				.arrowDown{
+					margin-top: 4px;
+				}
+			}
+			.flip.active{
+				color: ${() => shared.themeMainColor};
+				.arrowUp{
+					border-bottom: 10px solid ${() => shared.themeMainColor};
+				}
+				.arrowDown{
+					border-top: 10px solid ${() => shared.themeMainColor};
+				}
+			}
+		}
+		#extensionInfo{
+			width: 277px;
+			height: 86px;
+			margin-top: 16px;
+			position: relative;
+			float: left;
+			cursor: pointer;
+			color: ${() => shared.themeMainColor};
+			#icon, #name, #description{
+				transition: transform 0.309s;
+				backface-visibility: hidden;
+				position: absolute;
+				top: 8px;
+				display: block;
+				transform: rotateY(0deg);
+			}
+			#icon{
+				left: 0px;
+				height: 32px;
+				width: 32px;
+			}
+			#name{
+				left: 40px;
+				width: 220px;
+				height: 32px;
+				font-size: 16px;
+			}
+			#description{
+				left: 0px;
+				transform: rotateY(180deg);
+				width: 100%;
+			}
+			&:hover{
+				#icon, #name{
+					transform: rotateY(180deg);
+				}
+				#description{
+					transform: rotateY(0deg);
+				}
+			}
+		}
+		#tags{
+			float: left;
+			width: 400px;
+			margin: auto;
+			.tagColumn{
+				width: 111px;
+				float: left;
+				margin-left: 16px;
+				.tag{
+					filter: invert(50%);
+					width: 100%;
+					text-align: center;
+					cursor: pointer;
+					color: ${() => shared.themeMainColor};
+					box-shadow: ${() => shared.themeMainColor} 0px 0px 0px 1px;
+					&:hover{
+						box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
+					}
+					margin-top: 16px;
+				}
+				.tag.active{
+					font-weight: bold;
+					border: 1px solid ${() => shared.themeMainColor};
+					filter: invert(0%);
+				}
+			}
+		}
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -20,7 +170,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		...ownProps,
 		updateBello: (bello) => {
 			dispatch(overviewUpdateBello(bello));
-		}
+		},
+		toggleRecommendExtensions: () => {
+			dispatch(overviewToggleRecommendExtensions());
+		},
 	})
 }
 
@@ -30,7 +183,10 @@ class Overview extends Component{
 		this.state = {
 			recommendedExtensionList: [],
 			currentWebsite: 'ainoob.com',
+			maxReco: 10,
+			recommendExtensionList: [],
 		};
+		this.getExtensionInfoWeb = this.getExtensionInfoWeb.bind(this);
 		this.initialize();
 	}
 	async initialize() {
@@ -46,8 +202,8 @@ class Overview extends Component{
 		this.setState({ currentWebsite });
 		let data = await ajax({
 			type: 'POST',
+			data: JSON.stringify({ website: currentWebsite, userId }),
 			contentType: "application/json",
-			data: JSON.stringify({ website: domain, userId }),
 			url: 'https://ainoob.com/api/nooboss/website'
 		});
 		data = JSON.parse(data);
@@ -71,7 +227,18 @@ class Overview extends Component{
 			const vote = data.votes[i];
 			votes[vote.appId] = vote.action;
 		}
-		this.setState({ recommendedExtensionList, tags, votes });
+		this.setState({ recommendedExtensionList, tags, votes }, this.getExtensionInfoWeb);
+	}
+	getExtensionInfoWeb() {
+		const extensionList = [];
+		const recommendedExtensionList = this.state.recommendedExtensionList;
+		for(let i = 0; i < recommendedExtensionList.length && i < this.state.maxReco; i++) {
+			const id = recommendedExtensionList[i].id;
+			if (!this.props.extensionInfoWeb[id]) {
+				extensionList.push(id);
+			}
+		}
+		shared.getExtensionInfoWeb(extensionList);
 	}
 	componentDidMount() {
 		shared.getAllExtensions();
@@ -80,8 +247,77 @@ class Overview extends Component{
 	}
 	toggleTag(id, tag) {
 	}
+	async vote(idList, action, clickArrow) {
+		const userId = await promisedGet('userId');
+		if (clickArrow) {
+			if (this.state.votes[idList[0]] == action) {
+				action = null;
+			}
+		}
+		const x = {};
+		for (let i = 0; i < idList.length; i++) {
+			const id = idList[i];
+			x[idList[i]] = { upVotes: 0, downVotes: 0 };
+			if (action == null) {
+				x[id][this.state.votes[id] == 'up' ? 'upVotes' : 'downVotes'] = -1;
+			} else if (action == 'up') {
+				if (this.state.votes[id] == 'down') {
+					x[id].upVotes = 1;
+					x[id].downVotes = -1;
+				} else if (!this.state.votes[id]) {
+					x[id].upVotes = 1;
+				}
+			} else if (action == 'down') {
+				if (this.state.votes[id] == 'up') {
+					x[id].upVotes = -1;
+					x[id].downVotes = 1;
+				} else if (!this.state.votes[id]) {
+					x[id].downVotes = 1;
+				}
+			}
+		}
+		this.setState(prevState => {
+			for (let i = 0; i < idList.length; i++) {
+				const id = idList[i];
+				prevState.votes[id] = action;
+				const index = prevState.recommendedExtensionList.findIndex(elem => elem.id == id);
+				prevState.recommendedExtensionList[index].votes.upVotes += x[id].upVotes;
+				prevState.recommendedExtensionList[index].votes.downVotes += x[id].downVotes;
+			}
+			return prevState;
+		});
+		await ajax({
+			type: 'POST',
+			url: 'https://ainoob.com/api/nooboss/reco/website',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				appIds: idList,
+				action,
+				userId,
+				website: this.state.currentWebsite,
+			}),
+		});
+	}
+	reco (type, id) {
+		switch (type) {
+			case 'selectExtension':
+				this.setState(prevState => {
+					const index = prevState.recommendExtensionList.indexOf(id);
+					if (index == -1) {
+						prevState.recommendExtensionList.push(id);
+					}	else {
+						prevState.recommendExtensionList.splice(index, 1);
+					}
+					return prevState;
+				});
+				break;
+			case 'recommendExtensions':
+				this.props.toggleRecommendExtensions();
+				this.setState({ recommendExtensionList: [] });
+				break;
+		}
+	}
 	render() {
-		console.log(this.state);
 		const { extensions, groupList, autoStateRuleList } = this.props;
 		const overview = {
 			app: Object.keys(extensions).filter(id => extensions[id].isApp == true).length,
@@ -91,33 +327,56 @@ class Overview extends Component{
 			autoStateRule: autoStateRuleList.length,
 		};
 		const recommendedExtensionList = this.state.recommendedExtensionList.map((elem, index) => {
+			const extensionWeb = elem;
 			const active = {};
-			const extensionWeb = {tags: {}};
+			const myTagList = Object.keys(this.state.tags[elem.id] || {});
+			for (let i = 0; i < myTagList.length; i++) {
+				active[myTagList[i]] = 'active';
+			}
+			const myVote = this.state.votes[elem.id] || '';
+			const votes = extensionWeb.votes;
+			const extensionInfoWeb = this.props.extensionInfoWeb[elem.id] || {};
 			return (
-				<div id="tags">
-					<div className="tagColumn">
-						<div onClick={this.toggleTag.bind(this, elem.id, 'useful')} className={"tag " + active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful'] || 0}</div>
-						<div onClick={this.toggleTag.bind(this, elem.id, 'working')} className={"tag " + active['working']}>{GL('working')}<br />{extensionWeb.tags['working'] || 0}</div>
+				<div className="recommendedExtension" key={index}>
+					<div id="voteDiv">
+						<div className={"flip " + (myVote == 'up' ? 'active' : '')} onClick={this.vote.bind(this, [elem.id], 'up', true)}>
+							<div className="front arrowUp" />
+							<div className="back">{votes.upVotes}</div>
+						</div>	
+						<div className="vote">{votes.upVotes - votes.downVotes}</div>
+						<div className={"flip " + (myVote == 'down' ? 'active' : '')} onClick={this.vote.bind(this, [elem.id], 'down', true)}>
+							<div className="front arrowDown" />
+							<div className="back">{votes.downVotes}</div>
+						</div>
 					</div>
-					<div className="tagColumn">
-						<div onClick={this.toggleTag.bind(this, elem.id, 'laggy')} className={"tag " + active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy'] || 0}</div>
-						<div onClick={this.toggleTag.bind(this, elem.id, 'buggy')} className={"tag " + active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy'] || 0}</div>
+					<div id="extensionInfo" onClick={sendMessage.bind(null, { job: 'openWebStore', id: elem.id }, () => {})}>
+						<img id="icon" src={extensionInfoWeb.iconDataURL} />
+						<span id="name" dangerouslySetInnerHTML={{__html: extensionInfoWeb.name}} /><br />
+						<span id="description" dangerouslySetInnerHTML={{__html: extensionInfoWeb.description}} />
 					</div>
-					<div className="tagColumn">
-						<div onClick={this.toggleTag.bind(this, elem.id, 'not_working')} className={"tag " + active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working'] || 0}</div>
-						<div onClick={this.toggleTag.bind(this, elem.id, 'ASM')} className={"tag " + active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM'] || 0}</div>
+					<div id="tags">
+						<div className="tagColumn">
+							<div onClick={this.toggleTag.bind(this, elem.id, 'useful')} className={"tag " + active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful'] || 0}</div>
+							<div onClick={this.toggleTag.bind(this, elem.id, 'working')} className={"tag " + active['working']}>{GL('working')}<br />{extensionWeb.tags['working'] || 0}</div>
+						</div>
+						<div className="tagColumn">
+							<div onClick={this.toggleTag.bind(this, elem.id, 'laggy')} className={"tag " + active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy'] || 0}</div>
+							<div onClick={this.toggleTag.bind(this, elem.id, 'buggy')} className={"tag " + active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy'] || 0}</div>
+						</div>
+						<div className="tagColumn">
+							<div onClick={this.toggleTag.bind(this, elem.id, 'not_working')} className={"tag " + active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working'] || 0}</div>
+							<div onClick={this.toggleTag.bind(this, elem.id, 'ASM')} className={"tag " + active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM'] || 0}</div>
+						</div>
 					</div>
 				</div>
 			);
 		});
+		let noReco = null;
+		if (recommendedExtensionList.length == 0) {
+			noReco = <span>{GL('x_1').replace('X', this.state.currentWebsite)}</span>;
+		}
 		return (
-			<OverviewDiv>
-				<input 
-					onChange={(e)=>{
-						this.props.updateBello(e.target.value);
-					}} 
-					value={this.props.overview.bello}
-				/>
+			<OverviewDiv recommendExtensions={this.props.overview.recommendExtensions}>
 				<h2>
 					{GL('you_have')}
 				</h2>
@@ -135,6 +394,20 @@ class Overview extends Component{
 				<h2>
 					{GL('recommended_for').replace('X', this.state.currentWebsite)}
 				</h2>
+				{recommendedExtensionList}
+				{noReco}
+				<button onClick={this.props.toggleRecommendExtensions} id="selectExtensionsButton">{GL('select_extensions')}</button>
+				<button onClick={this.reco.bind(this, 'recommendExtensions')} className={this.state.recommendExtensionList.length > 0 ? '' : 'inActive'} id="recommendExtensionsButton">{GL('recommend')}</button>
+				<div id="recommendExtensionsDiv">
+					<Selector
+						actionBar={true}
+						filterType='chromeWebStoreExtensionOnly'
+						icons={this.props.icons}
+						extensions={this.props.extensions}
+						selectedList={this.state.recommendExtensionList}
+						select={this.reco.bind(this, 'selectExtension')}
+					/>
+				</div>
 			</OverviewDiv>
 		);
 	}

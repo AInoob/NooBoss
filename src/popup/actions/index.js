@@ -5,6 +5,7 @@ const UPDATE_SUB_WINDOW = 'UPDATE_SUB_WINDOW';
 const UPDATE_LANGUAGE = 'UPDATE_LANGUAGE';
 const NAVIGATOR_UPDATE_HOVER_POSITION = 'NAVIGATOR_UPDATE_HOVER_POSITION';
 const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
+const OVERVIEW_TOGGLE_RECOMMEND_EXTENSIONS = 'OVERVIEW_TOGGLE_RECOMMEND_EXTENSIONS';
 const OPTIONS_UPDATE_THEME_MAIN_COLOR = 'OPTIONS_UPDATE_THEME_MAIN_COLOR';
 const OPTIONS_UPDATE_THEME_SUB_COLOR = 'OPTIONS_UPDATE_THEME_SUB_COLOR';
 const OPTIONS_TOGGLE_DISPLAY = 'OPTIONS_TOGGLE_DISPLAY';
@@ -46,6 +47,10 @@ export const navigatorUpdateHoverPosition = (position) => ({
 export const overviewUpdateBello = (bello) => ({
 	type: OVERVIEW_UPDATE_BELLO,
 	bello
+});
+
+export const overviewToggleRecommendExtensions = () => ({
+	type: OVERVIEW_TOGGLE_RECOMMEND_EXTENSIONS
 });
 
 export const optionsUpdateThemeMainColor = (color) => ({

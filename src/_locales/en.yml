@@ -228,3 +228,11 @@ recommend_extensions:
   message: 'Recommend extensions'
 recommended_for:
   message: 'Recommended for X'
+all_websites:
+  message: 'All websites'
+x_1:
+  message: 'No one has recommended any extension for this website yet, do you have a wonderful extension for X?'
+select_extensions:
+  message: 'Select extensions'
+recommend:
+  message: Recommend

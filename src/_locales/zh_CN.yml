@@ -228,3 +228,11 @@ recommend_extensions:
   message: 推荐拓展
 recommended_for:
   message: 为X推荐
+all_websites:
+  message: '所有网站'
+x_1:
+  message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
+select_extensions:
+  message: 选择拓展
+recommend:
+  message: 推荐

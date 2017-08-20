@@ -111,7 +111,6 @@ class Group extends Component{
 					<Selector
 						actionBar={true}
 						icons={this.props.icons}
-						updateSubWindow={this.props.updateSubWindow}
 						extensions={this.props.extensions}
 						selectedList={group.appList}
 						select={this.change.bind(this, 'selectExtension')}

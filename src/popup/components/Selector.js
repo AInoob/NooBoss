@@ -25,11 +25,6 @@ const SelectorDiv = styled.div`
 			margin-top: -3px;
 			margin-right: 8px;
 		}
-		button.inActive{
-			filter: grayscale(100%);
-			opacity: 0.7;
-			cursor: default;
-		}
 		#clearNameFilter{
 			display: inline-block;
 			margin-left: -36px;
@@ -148,6 +143,16 @@ class Selector extends Component{
 				return;
 			}
 			let pass = true;
+			switch (this.props.filterType) {
+				case 'chromeWebStoreExtensionOnly':
+					if (extension.installType == 'development'
+							|| (extension.updateUrl && extension.updateUrl.indexOf('https://clients2.google.com') == -1)
+							|| (extension.homepageUrl && extension.homepageUrl.indexOf('ext.chrome.360.cn') != -1)
+					) {
+						pass = false;
+					}
+					break;
+			}
 			if (type && ((extension.name.match(/NooBoss-Group/) && type == 'group') || (extension.type != type))) {
 				pass = false;
 			}

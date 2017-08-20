@@ -18,7 +18,7 @@ import {
 	optionsUpdateThemeMainColor,
 	optionsUpdateThemeSubColor
 } from '../actions';
-import { getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import { ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
@@ -129,6 +129,11 @@ const NooBossDiv = styled.div`
 		outline: none;
 		background-color: ${props => props.themeMainColor};
 	}
+	button.inActive{
+		filter: grayscale(100%);
+		opacity: 0.7;
+		cursor: default;
+	}
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -199,6 +204,7 @@ class NooBoss extends Component{
 		window.shared = {
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
+			getExtensionInfoWeb: this.getExtensionInfoWeb.bind(this),
 			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
@@ -212,6 +218,7 @@ class NooBoss extends Component{
 			themeMainColor: 'rgba(241,46,26,1)',
 			themeSubColor: 'rgba(0,0,0,1)',
 			autoStateRuleList: [],
+			extensionInfoWeb: {},
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.listener = this.listener.bind(this);
@@ -234,11 +241,33 @@ class NooBoss extends Component{
 	}
 	getAllExtensions() {
 		browser.runtime.sendMessage({ job: 'getAllExtensions' }, async extensions => {
+			if (extensions.undefined) {
+				delete extensions.undefined;
+			}
 			this.setState({ extensions });
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
 				await this.getIcon(extensions[keyList[i]].icon);
 			}
+		});
+	}
+	async getExtensionInfoWeb(extensionList) {
+		if (extensionList.length == 0) {
+			return;
+		}
+		let data = await ajax({
+			type: 'POST',
+			data: JSON.stringify({ extensionList }),
+			contentType: "application/json",
+			url: 'https://ainoob.com/api/nooboss/extensionInfo'
+		});
+		data = JSON.parse(data).extensionInfoList;
+		this.setState(prevState => {
+			for (let i = 0; i < data.length; i++) {
+				const extensionInfo = data[i];
+				prevState.extensionInfoWeb[extensionInfo.id] = extensionInfo;
+			}
+			return prevState;
 		});
 	}
 	getIcon(iconDBKey, update) {
@@ -353,6 +382,7 @@ class NooBoss extends Component{
 		if (location == 'overview') {
 			page = (
 				<Overview
+					extensionInfoWeb={this.state.extensionInfoWeb}
 					icons={this.state.icons}
 					extensions={extensions}
 					groupList={groupList}
