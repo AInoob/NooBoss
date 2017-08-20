@@ -252,62 +252,87 @@ class Overview extends Component{
 		shared.getGroupList();
 		shared.getAutoStateRuleList();
 	}
-	toggleTag(id, tag) {
-	}
-	async vote(idList, action, clickArrow) {
+	async toggleTag(id, tag) {
+		const tags = this.state.tags[id] || {};
+		let action = 'tag';
+		if (tags[tag]) {
+			action = 'unTag';
+		}
 		const userId = await promisedGet('userId');
-		if (clickArrow) {
-			if (this.state.votes[idList[0]] == action) {
-				action = null;
-			}
-		}
-		const x = {};
-		for (let i = 0; i < idList.length; i++) {
-			const id = idList[i];
-			x[idList[i]] = { upVotes: 0, downVotes: 0 };
-			if (action == null) {
-				x[id][this.state.votes[id] == 'up' ? 'upVotes' : 'downVotes'] = -1;
-			} else if (action == 'up') {
-				if (this.state.votes[id] == 'down') {
-					x[id].upVotes = 1;
-					x[id].downVotes = -1;
-				} else if (!this.state.votes[id]) {
-					x[id].upVotes = 1;
-				}
-			} else if (action == 'down') {
-				if (this.state.votes[id] == 'up') {
-					x[id].upVotes = -1;
-					x[id].downVotes = 1;
-				} else if (!this.state.votes[id]) {
-					x[id].downVotes = 1;
-				}
-			}
-		}
+    const reco = {
+      userId,
+      appId: id,
+      tag,
+      action
+		};
+    await ajax({
+      type: 'POST',
+      url: 'https://ainoob.com/api/nooboss/reco/app/tag',
+      contentType: 'application/json',
+      data: JSON.stringify(reco)
+    });
 		this.setState(prevState => {
-			for (let i = 0; i < idList.length; i++) {
-				const id = idList[i];
-				prevState.votes[id] = action;
-				const index = prevState.recommendedExtensionList.findIndex(elem => elem.id == id);
-				if (index != -1) {
-					prevState.recommendedExtensionList[index].votes.upVotes += x[id].upVotes;
-					prevState.recommendedExtensionList[index].votes.downVotes += x[id].downVotes;
-				}
-			}
+			prevState.tags[id][tag] = !prevState.tags[id][tag];
 			return prevState;
 		});
-		await ajax({
-			type: 'POST',
-			url: 'https://ainoob.com/api/nooboss/reco/website',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				appIds: idList,
-				action,
-				userId,
-				website: this.state.currentWebsite,
-			}),
+	}
+	vote(idList, action, clickArrow) {
+		return new Promise(async resolve => {
+			const userId = await promisedGet('userId');
+			if (clickArrow) {
+				if (this.state.votes[idList[0]] == action) {
+					action = null;
+				}
+			}
+			const x = {};
+			for (let i = 0; i < idList.length; i++) {
+				const id = idList[i];
+				x[idList[i]] = { upVotes: 0, downVotes: 0 };
+				if (action == null) {
+					x[id][this.state.votes[id] == 'up' ? 'upVotes' : 'downVotes'] = -1;
+				} else if (action == 'up') {
+					if (this.state.votes[id] == 'down') {
+						x[id].upVotes = 1;
+						x[id].downVotes = -1;
+					} else if (!this.state.votes[id]) {
+						x[id].upVotes = 1;
+					}
+				} else if (action == 'down') {
+					if (this.state.votes[id] == 'up') {
+						x[id].upVotes = -1;
+						x[id].downVotes = 1;
+					} else if (!this.state.votes[id]) {
+						x[id].downVotes = 1;
+					}
+				}
+			}
+			this.setState(prevState => {
+				for (let i = 0; i < idList.length; i++) {
+					const id = idList[i];
+					prevState.votes[id] = action;
+					const index = prevState.recommendedExtensionList.findIndex(elem => elem.id == id);
+					if (index != -1) {
+						prevState.recommendedExtensionList[index].votes.upVotes += x[id].upVotes;
+						prevState.recommendedExtensionList[index].votes.downVotes += x[id].downVotes;
+					}
+				}
+				return prevState;
+			});
+			await ajax({
+				type: 'POST',
+				url: 'https://ainoob.com/api/nooboss/reco/website',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					appIds: idList,
+					action,
+					userId,
+					website: this.state.currentWebsite,
+				}),
+			});
+			resolve();
 		});
 	}
-	reco (type, id) {
+	async reco (type, id) {
 		switch (type) {
 			case 'selectExtension':
 				this.setState(prevState => {
@@ -322,7 +347,7 @@ class Overview extends Component{
 				break;
 			case 'recommendExtensions':
 				this.props.toggleRecommendExtensions();
-				this.vote(this.state.recommendExtensionList, 'up', false);
+				await this.vote(this.state.recommendExtensionList, 'up', false);
 				notify(GL('recommend_extensions'), GL('x_2'), 5);
 				this.setState({ recommendExtensionList: [] });
 				break;
@@ -355,7 +380,9 @@ class Overview extends Component{
 			const active = {};
 			const myTagList = Object.keys(this.state.tags[elem.id] || {});
 			for (let i = 0; i < myTagList.length; i++) {
-				active[myTagList[i]] = 'active';
+				if (this.state.tags[elem.id] && this.state.tags[elem.id][myTagList[i]]) {
+					active[myTagList[i]] = 'active';
+				}
 			}
 			const myVote = this.state.votes[elem.id] || '';
 			const votes = extensionWeb.votes;
