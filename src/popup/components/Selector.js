@@ -146,7 +146,7 @@ class Selector extends Component{
 			switch (this.props.filterType) {
 				case 'chromeWebStoreExtensionOnly':
 					if (extension.installType == 'development'
-							|| (extension.updateUrl && extension.updateUrl.indexOf('https://clients2.google.com') == -1)
+							|| (extension.updateUrl && extension.updateUrl.indexOf('clients2.google.com') == -1)
 							|| (extension.homepageUrl && extension.homepageUrl.indexOf('ext.chrome.360.cn') != -1)
 					) {
 						pass = false;

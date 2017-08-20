@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { overviewUpdateBello, overviewToggleRecommendExtensions } from '../actions';
-import { sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
+import { notify, sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
 import styled from 'styled-components';
 import Selector from './Selector';
 
@@ -231,14 +231,21 @@ class Overview extends Component{
 	}
 	getExtensionInfoWeb() {
 		const extensionList = [];
-		const recommendedExtensionList = this.state.recommendedExtensionList;
+		const recommendedExtensionList = this.state.recommendedExtensionList.sort((a, b) => {
+			let temp = (b.votes.upVotes - b.votes.downVotes) - (a.votes.upVotes - a.votes.downVotes);
+			if (temp != 0) {
+				return temp;
+			} else {
+				return a.id.localeCompare(b.id);
+			}
+		});
 		for(let i = 0; i < recommendedExtensionList.length && i < this.state.maxReco; i++) {
 			const id = recommendedExtensionList[i].id;
 			if (!this.props.extensionInfoWeb[id]) {
 				extensionList.push(id);
 			}
 		}
-		shared.getExtensionInfoWeb(extensionList);
+		this.props.getExtensionInfoWeb(extensionList);
 	}
 	componentDidMount() {
 		shared.getAllExtensions();
@@ -281,8 +288,10 @@ class Overview extends Component{
 				const id = idList[i];
 				prevState.votes[id] = action;
 				const index = prevState.recommendedExtensionList.findIndex(elem => elem.id == id);
-				prevState.recommendedExtensionList[index].votes.upVotes += x[id].upVotes;
-				prevState.recommendedExtensionList[index].votes.downVotes += x[id].downVotes;
+				if (index != -1) {
+					prevState.recommendedExtensionList[index].votes.upVotes += x[id].upVotes;
+					prevState.recommendedExtensionList[index].votes.downVotes += x[id].downVotes;
+				}
 			}
 			return prevState;
 		});
@@ -313,8 +322,16 @@ class Overview extends Component{
 				break;
 			case 'recommendExtensions':
 				this.props.toggleRecommendExtensions();
+				this.vote(this.state.recommendExtensionList, 'up', false);
+				notify(GL('recommend_extensions'), GL('x_2'), 5);
 				this.setState({ recommendExtensionList: [] });
 				break;
+		}
+	}
+	onWheel(e) {
+		const noobossDiv = document.getElementById('noobossDiv');
+		if (noobossDiv.scrollHeight - (noobossDiv.scrollTop + noobossDiv.clientHeight) < 200) {
+			this.setState({ maxReco: this.state.maxReco + 10 }, this.getExtensionInfoWeb);
 		}
 	}
 	render() {
@@ -326,7 +343,14 @@ class Overview extends Component{
 			group: groupList.length,
 			autoStateRule: autoStateRuleList.length,
 		};
-		const recommendedExtensionList = this.state.recommendedExtensionList.map((elem, index) => {
+		const recommendedExtensionList = this.state.recommendedExtensionList.sort((a, b) => {
+			let temp = (b.votes.upVotes - b.votes.downVotes) - (a.votes.upVotes - a.votes.downVotes);
+			if (temp != 0) {
+				return temp;
+			} else {
+				return a.id.localeCompare(b.id);
+			}
+		}).filter((elem, index) => index < this.state.maxReco).map((elem, index) => {
 			const extensionWeb = elem;
 			const active = {};
 			const myTagList = Object.keys(this.state.tags[elem.id] || {});
@@ -376,7 +400,7 @@ class Overview extends Component{
 			noReco = <span>{GL('x_1').replace('X', this.state.currentWebsite)}</span>;
 		}
 		return (
-			<OverviewDiv recommendExtensions={this.props.overview.recommendExtensions}>
+			<OverviewDiv onWheel={this.onWheel.bind(this)} recommendExtensions={this.props.overview.recommendExtensions}>
 				<h2>
 					{GL('you_have')}
 				</h2>
@@ -394,7 +418,6 @@ class Overview extends Component{
 				<h2>
 					{GL('recommended_for').replace('X', this.state.currentWebsite)}
 				</h2>
-				{recommendedExtensionList}
 				{noReco}
 				<button onClick={this.props.toggleRecommendExtensions} id="selectExtensionsButton">{GL('select_extensions')}</button>
 				<button onClick={this.reco.bind(this, 'recommendExtensions')} className={this.state.recommendExtensionList.length > 0 ? '' : 'inActive'} id="recommendExtensionsButton">{GL('recommend')}</button>
@@ -408,6 +431,7 @@ class Overview extends Component{
 						select={this.reco.bind(this, 'selectExtension')}
 					/>
 				</div>
+				{recommendedExtensionList}
 			</OverviewDiv>
 		);
 	}

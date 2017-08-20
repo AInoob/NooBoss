@@ -230,9 +230,11 @@ recommended_for:
   message: 为X推荐
 all_websites:
   message: '所有网站'
-x_1:
-  message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
 select_extensions:
   message: 选择拓展
 recommend:
   message: 推荐
+x_1:
+  message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
+x_2:
+  message: 拓展推荐成功～不在二管家数据库里的拓展会稍后被添加

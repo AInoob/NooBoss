@@ -204,7 +204,6 @@ class NooBoss extends Component{
 		window.shared = {
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
-			getExtensionInfoWeb: this.getExtensionInfoWeb.bind(this),
 			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
@@ -387,6 +386,7 @@ class NooBoss extends Component{
 					extensions={extensions}
 					groupList={groupList}
 					autoStateRuleList={autoStateRuleList}
+					getExtensionInfoWeb={this.getExtensionInfoWeb.bind(this)}
 				/>
 			);
 		}
@@ -414,6 +414,7 @@ class NooBoss extends Component{
 		else if (location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
+				id="noobossDiv"
 				themeMainColor={shared.themeMainColor}
 				themeSubColor={shared.themeSubColor}
 			>
