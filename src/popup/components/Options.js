@@ -301,7 +301,7 @@ class Options extends Component{
 		): null;
 		return (
 			<div className="line">
-				<input type="checkbox" checked={this.state[key]} />
+				<input type="checkbox" readOnly checked={this.state[key]} />
 				<label className="checkbox" onClick={this.toggleState.bind(this, key)} />
 				<span onClick={this.toggleState.bind(this, key)}>{GL(name)}</span>
 				{appending}
@@ -319,6 +319,9 @@ class Options extends Component{
 	toggleState(key) {
 		const temp = {};
 		temp[key] = !this.state[key];
+		if (key == 'joinCommunity') {
+			shared.joinCommunity = temp[key];
+		}
 		this.setState(temp);
 		sendMessage({ job: 'set', key, value: temp[key] });
 	}

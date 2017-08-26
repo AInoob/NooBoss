@@ -1,10 +1,11 @@
 const initialState = {
-	themeMainColor: { r: 195, g: 147, b: 220, a: 1 },
+	themeMainColor: { r: 0, g: 0, b: 0, a: 1 },
 	themeSubColor: { r: 0, g: 0, b: 0, a: 1 },
 	display: {
 		experience: true,
 		experienceTheme: true,
 		extensions: true,
+		extensionsExtensions: true,
 		extensionsNotifications: true,
 		extensionsHistory: true,
 		extensionsAutoState: true,
@@ -20,7 +21,7 @@ const initialState = {
 const options = (state = initialState, action) => {
 	switch (action.type) {
 		case 'OPTIONS_UPDATE_THEME_MAIN_COLOR':
-			state.themeMainColor = action.color || { r: 195, g: 147, b: 220, a: 1 };
+			state.themeMainColor = action.color || { r: 0, g: 0, b: 0, a: 1 };
 			break;
 		case 'OPTIONS_UPDATE_THEME_SUB_COLOR':
 			state.themeSubColor = action.color || { r: 0, g: 0, b: 0, a: 1 };

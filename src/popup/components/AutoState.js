@@ -202,7 +202,14 @@ class AutoState extends Component{
 		const rules = copy(this.props.autoStateRuleList);
 		rules.push(rule);
 		sendMessage({ job: 'autoStateRulesUpdate', rules });
-		this.props.updateAutoStateRule(null);
+		this.props.updateAutoStateRule({
+			action: 'enableOnly',
+			ids: [],
+			match: {
+				isWildcard: false,
+				url: '',
+			},
+		});
 	}
 	editRule(index) {
 		const rules = copy(this.props.autoStateRuleList);

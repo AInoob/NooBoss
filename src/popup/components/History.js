@@ -31,6 +31,10 @@ const HistoryDiv = styled.div`
 			& + .record{
 				border-top: ${props => props.themeMainColor} solid 1px;
 			}
+			.name{
+				cursor: pointer;
+				color: ${() => shared.themeMainColor};
+			}
 			.icon{
 				img{
 					margin-top: 3px;
@@ -48,6 +52,7 @@ class History extends Component{
 		this.state = {
 			recordList: [],
 			icons: {},
+			maxRecords: 30,
 		};
 		getDB('history_records', async (recordList = []) => {
 			this.setState({ recordList });
@@ -59,16 +64,31 @@ class History extends Component{
 			}
 		});
 	}
+	componentDidMount() {
+		this.props.updateScrollChild(this);
+	}
+
+	componentWillUnmount() {
+		this.props.updateScrollChild(null);
+	}
+	onScroll(e) {
+		const noobossDiv = document.getElementById('noobossDiv');
+		if (noobossDiv.scrollHeight - (noobossDiv.scrollTop + noobossDiv.clientHeight) < 200) {
+			this.setState({ maxRecords: this.state.maxRecords + 20 });
+		}
+	}
 
 	render() {
 		const icons = this.props.icons;
-		const recordList = (this.state.recordList || []).sort((a, b) => { return b.date - a.date}).map((record, index) => {
+		const recordList = (this.state.recordList || []).sort((a, b) => {
+			return b.date - a.date
+		}).filter((elem, index) => index < this.state.maxRecords).map((record, index) => {
 			return (
 				<tr key={index} className="record">
 					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>
 					<td>{record.event}</td>
 					<td className="icon"><img src={icons[record.icon]} /></td>
-					<td>{record.name}</td>
+					<td className="name" onClick={this.props.updateSubWindow.bind(null, 'extension', record.id)}>{record.name}</td>
 					<td>{record.version}</td>
 				</tr>
 			);

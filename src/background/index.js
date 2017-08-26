@@ -6,7 +6,7 @@ import createAutoState from './AutoState';
 import createUserscripts from './Userscripts';
 import createHistory from './History';
 import createListeners from './Listeners';
-import { set, isOn, GL, notify, sendMessage } from '../utils';
+import { set, isOn, GL, notify, sendMessage, promisedGetDB } from '../utils';
 
 const NooBoss = {
 	defaultValues,
@@ -29,13 +29,14 @@ NooBoss.initiate = async () => {
 	await NooBoss.History.initiate();
 	await NooBoss.Listeners.initiate();
 	browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+		let temp;
 		switch (message.job) {
 			case 'bello':
 				NooBoss.Bello.bello(message.bananana);
 				break;
 			case 'set':
 				await NooBoss.Options.promisedSet(message.key, message.value);
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: message.key }));
+				NooBoss.Bello.bello({ category: 'Options', action: message.job, label: message.key });
 				break;
 			case 'reset':
 				await NooBoss.Options.resetOptions();
@@ -46,29 +47,26 @@ NooBoss.initiate = async () => {
 				notify(GL('extension_name'), GL('successfully_reset_everything'), 3);
 				sendMessage({ job: 'popupNooBossUpdateTheme' });
 				sendMessage({ job: 'popupOptionsInitiate' });
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'reset', label: '' }));
+				NooBoss.Bello.bello({ category: 'Options', action: message.job });
 				break;
 			case 'emptyHistory':
 				await NooBoss.History.empty();
 				notify(GL('extension_name'), GL('successfully_emptied_history'), 3);
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'emptyHistory', label: '' }));
-				break;
-			case 'toggleAutoState':
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'set', label: 'autoState' }));
+				NooBoss.Bello.bello({ category: 'Options', action: message.job });
 				break;
 			case 'updateAutoStateRules':
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'AutoState', action: 'updateAutoStateRules', label: '' }));
+				NooBoss.Bello.bello({ category: 'AutoState', action: message.job });
 				break;
 			case 'updateGroupList':
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Extensions', action: 'updateGroupList', label: '' }));
+				NooBoss.Bello.bello({ category: 'Extensions', action: message.job });
 				break;
 			case 'importOptions':
 				NooBoss.Options.importOptions(message.optionsString);
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'importOptions' }));
+				NooBoss.Bello.bello({ category: 'Options', action: message.job });
 				break;
 			case 'exportOptions':
 				NooBoss.Options.exportOptions();
-				isOn('bello', NooBoss.Bello.bello.bind(null, { category: 'Options', action: 'exportOptions' }));
+				NooBoss.Bello.bello({ category: 'Options', action: message.job });
 				break;
 			case 'getAllExtensions':
 				sendResponse(NooBoss.Extensions.apps);
@@ -120,6 +118,13 @@ NooBoss.initiate = async () => {
 				break;
 			case 'openWebStore':
 				NooBoss.Extensions.openWebStore(message.id);
+				break;
+			case 'notify':
+				notify(message.title, message.message, message.duration);
+				break;
+			case 'getExtensionFromDB':
+				temp = await promisedGetDB(message.id);
+				sendMessage({ job: 'updateExtension', extension: temp });
 				break;
 		}
 	});

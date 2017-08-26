@@ -1,6 +1,19 @@
 import React from 'react';
 import { rgbaChange } from '../utils';
 
+export const Addy = (props) => {
+	let color = props.color || 'rgba(255, 255, 255, 1)';
+	if (props.changeRGBA) {
+		color = rgbaChange(color, props.changeRGBA);
+	}
+	return (
+		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+			<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</svg>
+	);
+};
+
 export const Removy = (props) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
 	if (props.changeRGBA) {

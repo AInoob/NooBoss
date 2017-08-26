@@ -47,12 +47,13 @@ export default (NooBoss) => {
 					}
 					for(let j = 0; j < group.appList.length; j++) {
 						appId = group.appList[j];
+						appIds[appId] = true;
 					}
 				}
 				else {
 					appId = name;
+					appIds[appId] = true;
 				}
-				appIds[appId] = true;
 			}
 			return Object.keys(appIds);
 		},
@@ -88,6 +89,9 @@ export default (NooBoss) => {
 				await promisedSetDB(id, newInfo);
 				resolve();
 			});
+		},
+		delete: id => {
+			delete NooBoss.Extensions.apps[id];
 		},
 		toggle: (id, enabled) => {
 			return new Promise(resolve => {
@@ -176,11 +180,14 @@ export default (NooBoss) => {
 			browser.management.uninstall(id, { showConfirmDialog: true }, () => {
 				browser.management.get(id, (result) => {
 					if (!result) {
-						console.log(result);
 						delete NooBoss.Extensions.apps.id;
 						sendMessage({ job: 'extensionRemoved',id });
 					}
 				});
+				if (browser.runtime.lastError) {
+					delete NooBoss.Extensions.apps.id;
+					sendMessage({ job: 'extensionRemoved',id });
+				}
 			});
 		},
 		browserOptions: (id) => {

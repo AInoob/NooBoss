@@ -1,6 +1,6 @@
 const initialState = {
   rule: {
-    actions: 'enableOnly',
+    action: 'enableOnly',
     ids: [],
     match: {
       isWildcard: false,

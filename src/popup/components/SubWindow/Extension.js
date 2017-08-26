@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Extensiony, Launchy, Switchy, Removy, Optioney, Chromey } from '../../../icons';
+import { Extensiony, Launchy, Switchy, Removy, Optioney, Chromey, Addy } from '../../../icons';
 import { copy, ajax, promisedGet, getChromeVersion, GL, capFirst, getString, sendMessage } from '../../../utils';
 import TimeAgo from 'timeago-react';
 
@@ -166,7 +166,12 @@ class Extension extends Component{
 			url: 'https://chrome.google.com/webstore/detail/'+id,
 		});
 		const rating = parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5';
-		this.setState({ rating });
+    this.setState({ rating });
+    setTimeout(() => {
+      if (!this.props.extension) {
+        sendMessage({ job: 'getExtensionFromDB', id: this.props.id });
+      }
+    }, 233);
 	}
 	async toggleTag(tag) {
     let inc = 1;
@@ -214,24 +219,32 @@ class Extension extends Component{
 		if (!extension || !this.props.icons[extension.icon]) {
 			return <ExtensionDiv display='flex'><Extensiony id="loader" color={shared.themeMainColor} /></ExtensionDiv>;
     }
+    let state = extension.state || (extension.enabled ? GL('enabled') : GL('disabled'));
+    if (extension && extension.uninstalledDate > extension.lastUpdateDate) {
+      state = 'removed';
+    }
 		let switchyRGBA = undefined;
 		if (!extension.enabled) {
 			switchyRGBA = 'rgba(-155,-155,-155,-0.8)';
 		}
-		let launchy, switchy, optioney, removy, chromey;
-    if(extension.isApp) {
-      launchy=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+    let launchy, switchy, optioney, removy, chromey, addy;
+    if (state != 'removed') {
+      if(extension.isApp) {
+        launchy=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+      }
+      if (extension.type != 'theme') {
+        switchy = <Switchy onClick={() => {
+          sendMessage({ job: 'extensionToggle', id: extension.id }, ()=>{})
+        }} color={shared.themeMainColor} changeRGBA={switchyRGBA} />;
+      }
+      if (extension.optionsUrl && extension.optionsUrl.length > 0) {
+        optioney = <Optioney onClick={sendMessage.bind(null, { job: 'extensionOptions', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+      }
+      removy = <Removy onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+      chromey = <Chromey onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+    } else {
+      addy = <Addy onClick={sendMessage.bind(null, { job: 'openWebStore', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
     }
-		if (extension.type != 'theme') {
-			switchy = <Switchy onClick={() => {
-				sendMessage({ job: 'extensionToggle', id: extension.id }, ()=>{})
-			}} color={shared.themeMainColor} changeRGBA={switchyRGBA} />;
-		}
-		if (extension.optionsUrl && extension.optionsUrl.length > 0) {
-			optioney = <Optioney onClick={sendMessage.bind(null, { job: 'extensionOptions', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
-		}
-		removy = <Removy onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
-    chromey = <Chromey onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
     let launchType = null;
     if(extension.launchType) {
       launchType=<tr><td>{GL('launch_type')}</td><td>{extension.launchType}</td></tr>
@@ -259,6 +272,7 @@ class Extension extends Component{
       <ExtensionDiv>
         <div id="actions">
           <a id="icon" title={'https://chrome.google.com/webstore/detail/'+extension.id} target="_blank" href={'https://chrome.google.com/webstore/detail/'+extension.id}><img src={this.props.icons[extension.icon]} /></a>
+          {addy}
           {launchy}
           {switchy}
           {optioney}
@@ -269,7 +283,7 @@ class Extension extends Component{
         <table id="appBrief">
           <tbody>
             <tr><td>{GL('version')}</td><td>{extension.version}</td></tr>
-            <tr><td>{GL('state')}</td><td>{capFirst(extension.state || (extension.enabled ? GL('enabled') : GL('disabled')))}</td></tr>
+            <tr><td>{GL('state')}</td><td>{capFirst(state)}</td></tr>
             <tr><td>{GL('official_rating')}</td><td>{this.state.rating}</td></tr>
             <tr><td>{GL('description')}</td><td>{extension.description}</td></tr>
             <tr><td>{GL('nooboss_tags')}</td>

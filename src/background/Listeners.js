@@ -32,7 +32,7 @@ export default (NooBoss) => {
 						);
 					}
 				});
-				browser.management.onUninstalled.addListener(id => {
+				browser.management.onUninstalled.addListener(async id => {
 					const appInfo = NooBoss.Extensions.apps[id];
 					if (NooBoss.Options.options['historyRemove']) {
 						const event = 'removed';
@@ -46,7 +46,8 @@ export default (NooBoss) => {
 							NooBoss.Options.options['notificationDuration_removal']
 						);
 					}
-					NooBoss.Extensions.updateAppInfoById(id, { uninstalledDate: new Date().getTime() });
+					await NooBoss.Extensions.updateAppInfoById(id, { uninstalledDate: new Date().getTime() });
+					NooBoss.Extensions.delete(id);
 				});
 				browser.management.onEnabled.addListener(async appInfo => {
 					const icon = await getIconDBKey(appInfo);

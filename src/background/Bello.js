@@ -10,7 +10,10 @@ export default (NooBoss) => {
 			sr: screen.width + 'x' + screen.height,
 			ul: navigator.language || navigator.userLanguage,
 		},
-		bello: (obj) => {
+		bello: async obj => {
+			if (!await promisedGet('joinCommunity')) {
+				return;
+			}
 			const id = '' + obj.category + '_' + obj.action + '_' + obj.label;
 			if (NooBoss.Bello.history[id] && NooBoss.Bello.history[id] + 10000 > new Date().getTime()) {
 				NooBoss.Bello.history[id] = new Date().getTime();

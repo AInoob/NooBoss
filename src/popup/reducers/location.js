@@ -1,5 +1,5 @@
 const initialState = {
-	main: 'overview',
+	main: 'about',
 	sub: {
 		extensions: 'manage',
 	},

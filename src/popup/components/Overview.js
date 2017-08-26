@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { overviewUpdateBello, overviewToggleRecommendExtensions } from '../actions';
-import { notify, sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
+import { sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
 import styled from 'styled-components';
 import Selector from './Selector';
 
@@ -185,11 +185,15 @@ class Overview extends Component{
 			currentWebsite: 'ainoob.com',
 			maxReco: 10,
 			recommendExtensionList: [],
+			lastScrollDate: 0,
 		};
 		this.getExtensionInfoWeb = this.getExtensionInfoWeb.bind(this);
 		this.initialize();
 	}
 	async initialize() {
+		if (!await promisedGet('joinCommunity')) {
+			return;
+		}
 		const url = await getCurrentUrl();
 		const userId = await promisedGet('userId');
 		this.setState({ userId });
@@ -248,9 +252,13 @@ class Overview extends Component{
 		this.props.getExtensionInfoWeb(extensionList);
 	}
 	componentDidMount() {
+		this.props.updateScrollChild(this);
 		shared.getAllExtensions();
 		shared.getGroupList();
 		shared.getAutoStateRuleList();
+	}
+	async componentWillUnmount() {
+		this.props.updateScrollChild(null);
 	}
 	async toggleTag(id, tag) {
 		const tags = this.state.tags[id] || {};
@@ -272,6 +280,7 @@ class Overview extends Component{
       data: JSON.stringify(reco)
     });
 		this.setState(prevState => {
+			prevState.tags[id] = prevState.tags[id] || {};
 			prevState.tags[id][tag] = !prevState.tags[id][tag];
 			return prevState;
 		});
@@ -348,15 +357,20 @@ class Overview extends Component{
 			case 'recommendExtensions':
 				this.props.toggleRecommendExtensions();
 				await this.vote(this.state.recommendExtensionList, 'up', false);
-				notify(GL('recommend_extensions'), GL('x_2'), 5);
+				sendMessage({ job: 'notify', title: GL('recommend_extensions'), message: GL('x_2'), duration: 5 });
 				this.setState({ recommendExtensionList: [] });
 				break;
 		}
 	}
-	onWheel(e) {
+	onScroll() {
 		const noobossDiv = document.getElementById('noobossDiv');
 		if (noobossDiv.scrollHeight - (noobossDiv.scrollTop + noobossDiv.clientHeight) < 200) {
-			this.setState({ maxReco: this.state.maxReco + 10 }, this.getExtensionInfoWeb);
+			const lastScrollDate = Date.now();
+			console.log(this.state.lastScrollDate);
+			console.log(lastScrollDate);
+			if (this.state.lastScrollDate + 200 < lastScrollDate) {
+				this.setState({ maxReco: this.state.maxReco + 10, lastScrollDate }, this.getExtensionInfoWeb);
+			}
 		}
 	}
 	render() {
@@ -375,7 +389,11 @@ class Overview extends Component{
 			} else {
 				return a.id.localeCompare(b.id);
 			}
-		}).filter((elem, index) => index < this.state.maxReco).map((elem, index) => {
+		}).filter(
+			(elem, index) => index < this.state.maxReco
+		).filter(
+			elem => this.props.extensionInfoWeb && this.props.extensionInfoWeb[elem.id]
+		).map((elem, index) => {
 			const extensionWeb = elem;
 			const active = {};
 			const myTagList = Object.keys(this.state.tags[elem.id] || {});
@@ -426,8 +444,32 @@ class Overview extends Component{
 		if (recommendedExtensionList.length == 0) {
 			noReco = <span>{GL('x_1').replace('X', this.state.currentWebsite)}</span>;
 		}
+		let recommendSection = null;
+		if (shared.joinCommunity) {
+			recommendSection = (
+				<div>
+					<h2>
+						{GL('recommended_for').replace('X', this.state.currentWebsite)}
+					</h2>
+					{noReco}
+					<button onClick={this.props.toggleRecommendExtensions} id="selectExtensionsButton">{GL('select_extensions')}</button>
+					<button onClick={this.reco.bind(this, 'recommendExtensions')} className={this.state.recommendExtensionList.length > 0 ? '' : 'inActive'} id="recommendExtensionsButton">{GL('recommend')}</button>
+					<div id="recommendExtensionsDiv">
+						<Selector
+							actionBar={true}
+							filterType='chromeWebStoreExtensionOnly'
+							icons={this.props.icons}
+							extensions={this.props.extensions}
+							selectedList={this.state.recommendExtensionList}
+							select={this.reco.bind(this, 'selectExtension')}
+						/>
+					</div>
+					{recommendedExtensionList}
+				</div>
+			);
+		}
 		return (
-			<OverviewDiv onWheel={this.onWheel.bind(this)} recommendExtensions={this.props.overview.recommendExtensions}>
+			<OverviewDiv recommendExtensions={this.props.overview.recommendExtensions}>
 				<h2>
 					{GL('you_have')}
 				</h2>
@@ -442,23 +484,7 @@ class Overview extends Component{
 				<div className="line">
 					<span>{overview.autoStateRule + ' ' + GL('autoState_rule_s')}</span>
 				</div>
-				<h2>
-					{GL('recommended_for').replace('X', this.state.currentWebsite)}
-				</h2>
-				{noReco}
-				<button onClick={this.props.toggleRecommendExtensions} id="selectExtensionsButton">{GL('select_extensions')}</button>
-				<button onClick={this.reco.bind(this, 'recommendExtensions')} className={this.state.recommendExtensionList.length > 0 ? '' : 'inActive'} id="recommendExtensionsButton">{GL('recommend')}</button>
-				<div id="recommendExtensionsDiv">
-					<Selector
-						actionBar={true}
-						filterType='chromeWebStoreExtensionOnly'
-						icons={this.props.icons}
-						extensions={this.props.extensions}
-						selectedList={this.state.recommendExtensionList}
-						select={this.reco.bind(this, 'selectExtension')}
-					/>
-				</div>
-				{recommendedExtensionList}
+				{recommendSection}
 			</OverviewDiv>
 		);
 	}

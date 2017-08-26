@@ -207,14 +207,16 @@ class NooBoss extends Component{
 			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
+			joinCommunity: false,
 		};
+		get('joinCommunity', joinCommunity => shared.joinCommunity = joinCommunity);
 		props.initialize(props);
 		this.state = {
 			icons: {},
 			loadByParam: true,
 			extensions: {},
 			gorupList: [],
-			themeMainColor: 'rgba(241,46,26,1)',
+			themeMainColor: 'rgba(0,0,0,1)',
 			themeSubColor: 'rgba(0,0,0,1)',
 			autoStateRuleList: [],
 			extensionInfoWeb: {},
@@ -363,6 +365,15 @@ class NooBoss extends Component{
 						return prevState;
 					});
 					break;
+				case 'updateExtension':
+					this.setState(prevState => {
+						const extension = message.extension;
+						prevState.extensions[extension.id] = extension;
+						prevState.extensions = copy(prevState.extensions);
+						this.getIcon(extension.icon);
+						return prevState;
+					});
+					break;
 			}
 		}
 	}
@@ -381,6 +392,7 @@ class NooBoss extends Component{
 		if (location == 'overview') {
 			page = (
 				<Overview
+					updateScrollChild={ref => this.onScrollChild = ref}
 					extensionInfoWeb={this.state.extensionInfoWeb}
 					icons={this.state.icons}
 					extensions={extensions}
@@ -405,8 +417,10 @@ class NooBoss extends Component{
 		else if (location == 'history') {
 			page = (
 				<History getIcon={this.getIcon.bind(this)}
+					updateScrollChild={ref => this.onScrollChild = ref}
 					icons={this.state.icons}
 					extensions={extensions}
+					updateSubWindow={this.props.updateSubWindow}
 				/>
 			);
 		}
@@ -417,6 +431,7 @@ class NooBoss extends Component{
 				id="noobossDiv"
 				themeMainColor={shared.themeMainColor}
 				themeSubColor={shared.themeSubColor}
+				onScroll={() => {if(this.onScrollChild){this.onScrollChild.onScroll()}}}
 			>
 				<Navigator />
 				{page}
