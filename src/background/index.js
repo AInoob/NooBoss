@@ -126,6 +126,13 @@ NooBoss.initiate = async () => {
 				temp = await promisedGetDB(message.id);
 				sendMessage({ job: 'updateExtension', extension: temp });
 				break;
+			case 'resetZoom':
+				browser.management.getSelf(extensionInfo => {
+					const url = extensionInfo.optionsUrl + '&resetZoom=true'
+					console.log(url);
+					browser.tabs.create({ url });
+				});
+				break;
 		}
 	});
 };

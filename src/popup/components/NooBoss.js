@@ -18,12 +18,11 @@ import {
 	optionsUpdateThemeMainColor,
 	optionsUpdateThemeSubColor
 } from '../actions';
-import { ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import { notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
 	body{
-		zoom: ${100 / window.devicePixelRatio}%;
 		width: 760px;
 		margin: 0px;
 	}
@@ -207,7 +206,6 @@ class NooBoss extends Component{
 			getAutoStateRuleList: this.getAutoStateRuleList.bind(this),
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
-			joinCommunity: false,
 		};
 		get('joinCommunity', joinCommunity => shared.joinCommunity = joinCommunity);
 		props.initialize(props);
@@ -290,6 +288,17 @@ class NooBoss extends Component{
 
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
+		if (window.devicePixelRatio != 1) {
+			if (getParameterByName('resetZoom')) {
+				browser.tabs.setZoom(1, () => {
+					sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
+					window.close();
+				});
+			}
+			alerty(GL('x_3'), shared.themeMainColor, () => {
+				sendMessage({ job: 'resetZoom' });
+			});
+		}
 	}
 
 	componentWillUnmount() {

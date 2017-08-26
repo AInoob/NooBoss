@@ -234,7 +234,13 @@ select_extensions:
   message: 选择拓展
 recommend:
   message: 推荐
+reset_zoom:
+  message: 重置缩放
 x_1:
   message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
 x_2:
   message: 拓展推荐成功～不在二管家数据库里的拓展会稍后被添加
+x_3:
+  message: 二管家页面缩放不是100%，请点击确定来调整缩放
+x_4:
+  message: 成功重置二管家的缩放为100%

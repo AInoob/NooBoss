@@ -186,14 +186,17 @@ class Overview extends Component{
 			maxReco: 10,
 			recommendExtensionList: [],
 			lastScrollDate: 0,
+			joinCommunity: false,
+			recoExtensions: false,
 		};
 		this.getExtensionInfoWeb = this.getExtensionInfoWeb.bind(this);
 		this.initialize();
 	}
 	async initialize() {
-		if (!await promisedGet('joinCommunity')) {
+		if (!await promisedGet('joinCommunity') || !await promisedGet('recoExtensions')) {
 			return;
 		}
+		this.setState({ joinCommunity: true, recoExtensions: true });
 		const url = await getCurrentUrl();
 		const userId = await promisedGet('userId');
 		this.setState({ userId });
@@ -445,7 +448,7 @@ class Overview extends Component{
 			noReco = <span>{GL('x_1').replace('X', this.state.currentWebsite)}</span>;
 		}
 		let recommendSection = null;
-		if (shared.joinCommunity) {
+		if (this.state.joinCommunity && this.state.recoExtensions) {
 			recommendSection = (
 				<div>
 					<h2>

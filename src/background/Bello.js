@@ -1,3 +1,5 @@
+import { promisedGet } from '../utils';
+
 export default (NooBoss) => {
 	return {
 		belloOnce: false,

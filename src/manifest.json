@@ -16,7 +16,7 @@
   "background": {
     "scripts":["js/background.js"]
   },
-  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+  "minimum_chrome_version": "42",
   "permissions": [
     "tabs",
     "management",
