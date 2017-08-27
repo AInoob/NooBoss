@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { GL, getDB, generateRGBAString } from '../../utils';
+import { sendMessage, GL, getDB, generateRGBAString } from '../../utils';
+import { Closey } from '../../icons';
 import TimeAgo from 'timeago-react';
 
 const HistoryDiv = styled.div`
@@ -42,6 +43,23 @@ const HistoryDiv = styled.div`
 					height: 22px;
 				}
 			}
+			.remove{
+				svg{
+					display: none;
+					margin-top: 4px;
+					width: 15px;
+					height: 15px;
+					cursor: pointer;
+				}
+			}
+			&:hover{
+				background-color: #eeeeee;
+				.remove{
+					svg{
+						display: table-row;
+					}
+				}
+			}
 		}
 	}
 `;
@@ -80,6 +98,7 @@ class History extends Component{
 					<td className="icon"><img src={icons[record.icon]} /></td>
 					<td className="name" onClick={this.props.updateSubWindow.bind(null, 'extension', record.id)}>{record.name}</td>
 					<td>{record.version}</td>
+					<td className="remove"><Closey onClick={sendMessage.bind(null, { job: 'historyRemoveRecord', index }, ()=>{})} color={shared.themeMainColor} /></td>
 				</tr>
 			);
 		});

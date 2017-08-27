@@ -131,6 +131,9 @@ NooBoss.initiate = async () => {
 				const url = temp.optionsUrl + '&resetZoom=true'
 				browser.tabs.create({ url });
 				break;
+			case 'historyRemoveRecord':
+				NooBoss.History.removeRecord(message.index);
+				break;
 		}
 	});
 };
