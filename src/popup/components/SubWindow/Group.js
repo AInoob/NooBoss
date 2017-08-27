@@ -43,8 +43,8 @@ const GroupDiv = styled.div`
 		right: 27px;
 		cursor: pointer;
 		#icon{
-			max-width: 100%;
-			max-height: 100%;
+			width: 100%;
+			height: 100%;
 		}
 		svg#icon{
 			width: 100%;

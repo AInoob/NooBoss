@@ -297,6 +297,7 @@ class NooBoss extends Component{
 			}
 		});
 	}
+
 	getAllExtensions() {
 		browser.runtime.sendMessage({ job: 'getAllExtensions' }, async extensions => {
 			if (extensions.undefined) {
@@ -305,7 +306,13 @@ class NooBoss extends Component{
 			this.setState({ extensions });
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
-				await this.getIcon(extensions[keyList[i]].icon);
+				const extension = extensions[keyList[i]];
+				if (extension.icons && extension.icons.length > 0) {
+					await this.getIcon(extension.icon, false, extension.icons);
+				}
+				else {
+					await this.getIcon(extension.icon);
+				}
 			}
 		});
 	}
@@ -340,19 +347,28 @@ class NooBoss extends Component{
 			return prevState;
 		});
 	}
-	getIcon(iconDBKey, update) {
+	getIconHelper(iconDBKey, icon, callback) {
+		this.setState(prevState => {
+			prevState.icons[iconDBKey] = icon;
+			prevState.icons = copy(prevState.icons);
+			return prevState;
+		}, callback);
+	}
+	getIcon(iconDBKey, update, iconList) {
 		return new Promise(resolve => {
 			if (this.state.icons[iconDBKey] && !update) {
 				resolve();
 			}
 			else {
-				getDB(iconDBKey, icon => {
-					this.setState(prevState => {
-						prevState.icons[iconDBKey] = icon;
-						prevState.icons = copy(prevState.icons);
-						return prevState;
-					}, resolve);
-				});
+				if (iconList) {
+					const icon = iconList.sort((a, b) => b.size - a.size)[0].url;
+					this.getIconHelper(iconDBKey, icon, resolve);
+				}
+				else {
+					getDB(iconDBKey, icon => {
+						this.getIconHelper(iconDBKey, icon, resolve);
+					});
+				}
 			}
 		});
 	}
