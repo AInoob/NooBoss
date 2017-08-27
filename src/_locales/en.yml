@@ -244,3 +244,5 @@ x_3:
   message: 'Page zoom for NooBoss is not 100%, please click confirm to set zoom to 100%'
 x_4:
   message: 'Successfully reset NooBoss page zoom to 100%'
+x_5:
+  message: 'By turning off join community, you will no long get community features, and you will not send any NooBoss usage to AInoob, so he will not be able to provide a better NooBoss.'

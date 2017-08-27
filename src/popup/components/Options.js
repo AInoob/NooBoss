@@ -318,9 +318,13 @@ class Options extends Component{
 
 	toggleState(key) {
 		const temp = {};
-		temp[key] = !this.state[key];
+		const value = !this.state[key];
+		temp[key] = value;
 		if (key == 'joinCommunity') {
-			shared.joinCommunity = temp[key];
+			shared.joinCommunity = value;
+			if (!value) {
+				sendMessage({ job: 'notify', title: ':(', message: GL('x_5') });
+			}
 		}
 		this.setState(temp);
 		sendMessage({ job: 'set', key, value: temp[key] });
@@ -411,9 +415,9 @@ class Options extends Component{
 						{this.getDisplayInput('extensions')}
 						{this.getDisplayLabel('extensions')}
 						<section>
-							{this.getDisplayInput('extensions', 'extensionsExtensions', 'extensionsSub')}
-							{this.getDisplayLabel('extensions', 'extensionsSub')}
-							{this.getSwitch('recommend_extensions', 'recoExtensions')}
+							{!this.state.joinCommunity ? null : this.getDisplayInput('extensions', 'extensionsExtensions', 'extensionsSub')}
+							{!this.state.joinCommunity ? null : this.getDisplayLabel('extensions', 'extensionsSub')}
+							{!this.state.joinCommunity ? null : this.getSwitch('recommend_extensions', 'recoExtensions')}
 						</section>
 						<section>
 							{this.getDisplayInput('notifications', 'extensionsNotifications')}
