@@ -79,45 +79,57 @@ NooBoss.initiate = async () => {
 				break;
 			case 'extensionToggle':
 				NooBoss.Extensions.toggle(message.id, message.enabled);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'extensionOptions':
 				NooBoss.Extensions.options(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'extensionRemove':
 				NooBoss.Extensions.remove(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'extensionBrowserOptions':
 				NooBoss.Extensions.browserOptions(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'groupToggle':
 				NooBoss.Extensions.groupToggle(message.id, message.enabled);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job });
 				break;
 			case 'groupCopy':
 				NooBoss.Extensions.groupCopy(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job });
 				break;
 			case 'groupRemove':
 				NooBoss.Extensions.groupRemove(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job });
 				break;
 			case 'groupListUpdate':
 				NooBoss.Extensions.groupListUpdate(message.groupList);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job });
 				break;
 			case 'newGroup':
 				NooBoss.Extensions.newGroup();
+				NooBoss.Bello.bello({ category: 'manage', action: message.job });
 				break;
 			case 'groupUpdate':
 				NooBoss.Extensions.groupUpdate(message.group);
 				break;
 			case 'launchApp':
 				NooBoss.Extensions.launchApp(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'openManifest':
 				NooBoss.Extensions.openManifest(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'autoStateRulesUpdate':
 				NooBoss.AutoState.updateRules(message.rules);
 				break;
 			case 'openWebStore':
 				NooBoss.Extensions.openWebStore(message.id);
+				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
 				break;
 			case 'notify':
 				notify(message.title, message.message, message.duration);
@@ -130,9 +142,11 @@ NooBoss.initiate = async () => {
 				temp = await getSelf();
 				const url = temp.optionsUrl + '&resetZoom=true'
 				browser.tabs.create({ url });
+				NooBoss.Bello.bello({ category: 'nooboss', action: message.job, id: message.id });
 				break;
 			case 'historyRemoveRecord':
 				NooBoss.History.removeRecord(message.index);
+				NooBoss.Bello.bello({ category: 'history', action: message.job });
 				break;
 		}
 	});
