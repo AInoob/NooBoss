@@ -1,3 +1,17 @@
+export const waitFor = (duration) => {
+	return new Promise(resolve => {
+		setTimeout(resolve, duration);
+	});
+};
+
+export const getSelf = () => {
+	return new Promise(resolve => {
+		browser.management.getSelf(extensionInfo => {
+			resolve(extensionInfo);
+		});
+	});
+};
+
 export const getDB = (key, callback) => {
 	if(callback) {
 		const indexedDB = window.indexedDB;

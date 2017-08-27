@@ -255,9 +255,12 @@ class Extension extends Component{
     });
     permissions = <tr><td>{GL('permissions')}</td><td><ul>{permissionList}</ul></td></tr>;
     let hostPermissions = null;
-    const hostPermissionList = (extension.hostPermissions || []).map((elem,index) => {
-      return <li key={index}>{elem}</li>
-    });
+    let hostPermissionList = GL('none');
+    if (extension.hostPermissions && extension.hostPermissions.length > 0) {
+      hostPermissionList = extension.hostPermissions.map((elem,index) => {
+        return <li key={index}>{elem}</li>
+      });
+    }
     hostPermissions = <tr><td>{GL('host_permissions')}</td><td><ul>{hostPermissionList}</ul></td></tr>;
     const manifestUrl='chrome-extension://'+extension.id+'/manifest.json';
     const active = {};
@@ -268,6 +271,29 @@ class Extension extends Component{
       }
     })
     const extensionWeb = this.state.extensionWeb;
+    let extensionTags = null;
+    if (this.state.joinCommunity) {
+      extensionTags = (
+        <tr><td>{GL('nooboss_tags')}</td>
+          <td>
+            <div id="tags">
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this, 'useful')} className={"tag " + active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful'] || 0}</div>
+                <div onClick={this.toggleTag.bind(this, 'working')} className={"tag " + active['working']}>{GL('working')}<br />{extensionWeb.tags['working'] || 0}</div>
+              </div>
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this, 'laggy')} className={"tag " + active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy'] || 0}</div>
+                <div onClick={this.toggleTag.bind(this, 'buggy')} className={"tag " + active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy'] || 0}</div>
+              </div>
+              <div className="tagColumn">
+                <div onClick={this.toggleTag.bind(this, 'not_working')} className={"tag " + active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working'] || 0}</div>
+                <div onClick={this.toggleTag.bind(this, 'ASM')} className={"tag " + active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM'] || 0}</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      );
+    }
     return (
       <ExtensionDiv>
         <div id="actions">
@@ -286,24 +312,7 @@ class Extension extends Component{
             <tr><td>{GL('state')}</td><td>{capFirst(state)}</td></tr>
             <tr><td>{GL('official_rating')}</td><td>{this.state.rating}</td></tr>
             <tr><td>{GL('description')}</td><td>{extension.description}</td></tr>
-            <tr><td>{GL('nooboss_tags')}</td>
-              <td>
-                <div id="tags">
-                  <div className="tagColumn">
-                    <div onClick={this.toggleTag.bind(this, 'useful')} className={"tag " + active['useful']}>{GL('useful')}<br />{extensionWeb.tags['useful'] || 0}</div>
-                    <div onClick={this.toggleTag.bind(this, 'working')} className={"tag " + active['working']}>{GL('working')}<br />{extensionWeb.tags['working'] || 0}</div>
-                  </div>
-                  <div className="tagColumn">
-                    <div onClick={this.toggleTag.bind(this, 'laggy')} className={"tag " + active['laggy']}>{GL('laggy')}<br />{extensionWeb.tags['laggy'] || 0}</div>
-                    <div onClick={this.toggleTag.bind(this, 'buggy')} className={"tag " + active['buggy']}>{GL('buggy')}<br />{extensionWeb.tags['buggy'] || 0}</div>
-                  </div>
-                  <div className="tagColumn">
-                    <div onClick={this.toggleTag.bind(this, 'not_working')} className={"tag " + active['not_working']}>{GL('not_working')}<br />{extensionWeb.tags['not_working'] || 0}</div>
-                    <div onClick={this.toggleTag.bind(this, 'ASM')} className={"tag " + active['ASM']}>{GL('ASM')}<br />{extensionWeb.tags['ASM'] || 0}</div>
-                  </div>
-                </div>
-              </td>
-            </tr>
+            {extensionTags}
           </tbody>
         </table>
         <h2 id="detailText">{GL('detail')}</h2>
@@ -329,19 +338,6 @@ class Extension extends Component{
         </table>
       </ExtensionDiv>
     );
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 }
 

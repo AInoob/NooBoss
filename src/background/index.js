@@ -6,7 +6,7 @@ import createAutoState from './AutoState';
 import createUserscripts from './Userscripts';
 import createHistory from './History';
 import createListeners from './Listeners';
-import { set, isOn, GL, notify, sendMessage, promisedGetDB } from '../utils';
+import { getIconDBKey, waitFor, getSelf, set, isOn, GL, notify, sendMessage, promisedGetDB } from '../utils';
 
 const NooBoss = {
 	defaultValues,
@@ -127,14 +127,27 @@ NooBoss.initiate = async () => {
 				sendMessage({ job: 'updateExtension', extension: temp });
 				break;
 			case 'resetZoom':
-				browser.management.getSelf(extensionInfo => {
-					const url = extensionInfo.optionsUrl + '&resetZoom=true'
-					console.log(url);
-					browser.tabs.create({ url });
-				});
+				temp = await getSelf();
+				const url = temp.optionsUrl + '&resetZoom=true'
+				browser.tabs.create({ url });
 				break;
 		}
 	});
 };
 
 document.addEventListener('DOMContentLoaded', NooBoss.initiate);
+
+chrome.runtime.onInstalled.addListener(async details => {
+	await waitFor(3000);
+	const extensionInfo = await getSelf();
+	const icon = await getIconDBKey(extensionInfo);
+	const { id, name, version } = extensionInfo;
+	let event;
+	if (details.reason == "install") {
+		event = 'install';
+		NooBoss.History.addRecord({ event, id, icon, name, version });
+	} else if (details.reason == "update") {
+		event = 'update';
+		NooBoss.History.addRecord({ event, id, icon, name, version });
+	}
+});

@@ -236,6 +236,8 @@ recommend:
   message: Recommend
 reset_zoom:
   message: 'Reset zoom'
+none:
+  message: 'None'
 x_1:
   message: 'No one has recommended any extension for this website yet, do you have a wonderful extension for X?'
 x_2:
@@ -245,4 +247,4 @@ x_3:
 x_4:
   message: 'Successfully reset NooBoss page zoom to 100%'
 x_5:
-  message: 'By turning off join community, you will no long get community features, and you will not send any NooBoss usage to AInoob, so he will not be able to provide a better NooBoss.'
+  message: 'By turning off join community, you will no longer get any community features, and you will not send any NooBoss usage to AInoob, so he will not be able to make a better NooBoss based on user usage'

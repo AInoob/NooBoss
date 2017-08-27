@@ -236,6 +236,8 @@ recommend:
   message: 推荐
 reset_zoom:
   message: 重置缩放
+none:
+  message: 没有
 x_1:
   message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
 x_2:
