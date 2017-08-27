@@ -29,7 +29,9 @@ export default (NooBoss) => {
 		removeRecord: (index) => {
 			console.log(index);
 			return new Promise(resolve => {
-				NooBoss.History.recordList.splice(index, 1);
+				NooBoss.History.recordList.sort((a, b) => {
+					return b.date - a.date
+				}).splice(index, 1);
 				setDB('history_records', NooBoss.History.recordList, () => {
 					sendMessage({ job: 'popupHistoryUpdate' });
 					resolve();
