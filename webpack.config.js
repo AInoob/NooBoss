@@ -42,6 +42,7 @@ module.exports={
 			{ from: './src/popup/popup.html' },
 			{ from: './src/manifest.json' },
 			{ from: './src/images', to: 'images'  },
+			{ from: './src/thirdParty', to: 'thirdParty'  },
 		])
   ]
 }

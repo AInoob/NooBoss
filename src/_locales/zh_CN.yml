@@ -104,7 +104,7 @@ name:
   message: 名字
 version:
   message: 版本
-menage:
+manage:
   message: 管理
 app:
   message: 应用
