@@ -62,10 +62,11 @@ export default (NooBoss) => {
 				appInfo.icon = await getIconDBKey(appInfo);
 				const oldInfo = await promisedGetDB(appInfo.id) || {};
 				const time = new Date().getTime();
-				const preset= {};
-				preset.installedDate = time;
-				preset.lastUpdateDate = time;
-				const newInfo = {...preset, ...oldInfo, ...appInfo, ...extraInfo };
+				const preset = {};
+				const postset = {};
+				postset.lastUpdateDate = time;
+				postset.installedDate = time;
+				const newInfo = {...preset, ...oldInfo, ...appInfo, ...extraInfo, ...postset };
 				NooBoss.Extensions.apps[newInfo.id] = newInfo;
 				await promisedSetDB(appInfo.id, newInfo);
 				resolve();

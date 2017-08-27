@@ -218,8 +218,10 @@ class NooBoss extends Component{
 			themeSubColor: 'rgba(0,0,0,1)',
 			autoStateRuleList: [],
 			extensionInfoWeb: {},
+			historyRecordList: [],
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
+		this.getHistoryRecordList = this.getHistoryRecordList.bind(this);
 		this.listener = this.listener.bind(this);
 		setTimeout(() => {
 			this.setState({ loadByParam: false });
@@ -250,6 +252,18 @@ class NooBoss extends Component{
 			}
 		});
 	}
+	async getHistoryRecordList() {
+		getDB('history_records', async (historyRecordList = []) => {
+			this.setState({ historyRecordList });
+			for(let i = 0; i < historyRecordList.length; i++) {
+				const record = historyRecordList[i];
+				if (!this.state.icons[record.icon]) {
+					await this.getIcon(record.icon);
+				}
+			}
+		});
+	}
+
 	async getExtensionInfoWeb(extensionList) {
 		if (extensionList.length == 0) {
 			return;
@@ -307,7 +321,14 @@ class NooBoss extends Component{
 
 	async listener(message, sender, sendResponse) {
 		if (message) {
+			const location = this.props.location.main;
 			switch (message.job) {
+				case 'popupHistoryUpdate':
+					console.log(location);
+					if (location == 'history') {
+						this.getHistoryRecordList();
+					}
+					break;
 				case 'popupNooBossUpdateTheme':
 					get('mainColor', (color) => {
 						this.props.optionsUpdateThemeMainColor(color);
@@ -428,8 +449,10 @@ class NooBoss extends Component{
 				<History getIcon={this.getIcon.bind(this)}
 					updateScrollChild={ref => this.onScrollChild = ref}
 					icons={this.state.icons}
+					recordList={this.state.historyRecordList}
 					extensions={extensions}
 					updateSubWindow={this.props.updateSubWindow}
+					getRecordList={this.getHistoryRecordList}
 				/>
 			);
 		}

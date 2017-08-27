@@ -1,4 +1,4 @@
-import { waitFor, getDB, setDB } from '../utils';
+import { sendMessage, waitFor, getDB, setDB } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -20,7 +20,10 @@ export default (NooBoss) => {
 				}
 				record.date = new Date().getTime();
 				NooBoss.History.recordList.push(record);
-				setDB('history_records', NooBoss.History.recordList, resolve);
+				setDB('history_records', NooBoss.History.recordList, () => {
+					sendMessage({ job: 'popupHistoryUpdate' });
+					resolve();
+				});
 			});
 		},
 		removeRecord: (index) => {
@@ -33,12 +36,6 @@ export default (NooBoss) => {
 			return new Promise(resolve => {
 				NooBoss.History.recordList = [];
 				setDB('history_records', NooBoss.History.recordList, resolve);
-			});
-		},
-		onUpdate: () => {
-		},
-		listen: () => {
-			browser.management.onInstalled.addListener(appInfo => {
 			});
 		},
 	};

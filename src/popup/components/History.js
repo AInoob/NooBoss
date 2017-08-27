@@ -50,22 +50,12 @@ class History extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			recordList: [],
-			icons: {},
 			maxRecords: 30,
 		};
-		getDB('history_records', async (recordList = []) => {
-			this.setState({ recordList });
-			for(let i = 0; i < recordList.length; i++) {
-				const record = recordList[i];
-				if (!this.props.icons[record.icon]) {
-					await this.props.getIcon(record.icon);
-				}
-			}
-		});
 	}
 	componentDidMount() {
 		this.props.updateScrollChild(this);
+		this.props.getRecordList();
 	}
 
 	componentWillUnmount() {
@@ -80,7 +70,7 @@ class History extends Component{
 
 	render() {
 		const icons = this.props.icons;
-		const recordList = (this.state.recordList || []).sort((a, b) => {
+		const recordList = this.props.recordList.sort((a, b) => {
 			return b.date - a.date
 		}).filter((elem, index) => index < this.state.maxRecords).map((record, index) => {
 			return (
