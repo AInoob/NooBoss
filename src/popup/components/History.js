@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { sendMessage, GL, getDB, generateRGBAString } from '../../utils';
+import { isZh, sendMessage, GL, getDB, generateRGBAString } from '../../utils';
 import { Closey } from '../../icons';
 import TimeAgo from 'timeago-react';
 
@@ -69,11 +69,13 @@ class History extends Component{
 		super(props);
 		this.state = {
 			maxRecords: 30,
+			isZh: false,
 		};
 	}
-	componentDidMount() {
+	async componentDidMount() {
 		this.props.updateScrollChild(this);
 		this.props.getRecordList();
+		this.setState({ isZh: await isZh() });
 	}
 
 	componentWillUnmount() {
@@ -93,8 +95,8 @@ class History extends Component{
 		}).filter((elem, index) => index < this.state.maxRecords).map((record, index) => {
 			return (
 				<tr key={index} className="record">
-					<td><TimeAgo datetime={record.date} locale={this.props.language} /></td>
-					<td>{record.event}</td>
+					<td><TimeAgo datetime={record.date} locale={this.state.isZh ? 'zh_CN' : 'en'} /></td>
+					<td>{GL(record.event)}</td>
 					<td className="icon"><img src={icons[record.icon]} /></td>
 					<td className="name" onClick={this.props.updateSubWindow.bind(null, 'extension', record.id)}>{record.name}</td>
 					<td>{record.version}</td>

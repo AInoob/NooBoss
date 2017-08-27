@@ -15,9 +15,9 @@ export default (NooBoss) => {
 				browser.management.onInstalled.addListener(async appInfo => {
 					appInfo.icon = await getIconDBKey(appInfo);
 					await NooBoss.Extensions.updateAppInfo(appInfo);
-					let event = 'installed';
+					let event = 'install';
 					if (NooBoss.Extensions.tempActiveList.indexOf(appInfo.id) != -1) {
-						event = 'updated';
+						event = 'update';
 						await NooBoss.Extensions.updateAppInfoById(appInfo.id, { lastUpdateDate: new Date().getTime() });
 					}
 					if (NooBoss.Options.options['historyInstall']) {
@@ -35,7 +35,7 @@ export default (NooBoss) => {
 				browser.management.onUninstalled.addListener(async id => {
 					const appInfo = NooBoss.Extensions.apps[id];
 					if (NooBoss.Options.options['historyRemove']) {
-						const event = 'removed';
+						const event = 'remove';
 						const { id, icon, name, version } = appInfo;
 						NooBoss.History.addRecord({ event, id, icon, name, version });
 					}
@@ -52,7 +52,7 @@ export default (NooBoss) => {
 				browser.management.onEnabled.addListener(async appInfo => {
 					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyEnable']) {
-						const event = 'enabled';
+						const event = 'enable';
 						const { id, name, version } = appInfo;
 						NooBoss.History.addRecord({ event, id, icon, name, version });
 					}
@@ -68,7 +68,7 @@ export default (NooBoss) => {
 				browser.management.onDisabled.addListener(async appInfo => {
 					const icon = await getIconDBKey(appInfo);
 					if (NooBoss.Options.options['historyDisable']) {
-						const event = 'disnabled';
+						const event = 'disable';
 						const { id, name, version } = appInfo;
 						NooBoss.History.addRecord({ event, id, icon, name, version });
 					}

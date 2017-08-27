@@ -134,6 +134,16 @@ disabled:
   message: Disabled
 removed:
   message: Removed
+install:
+  message: Install
+update:
+  message: Update
+enable:
+  message: Enable
+disable:
+  message: Disable
+remove:
+  message: Remove
 detail:
   message: Detail
 last_update:

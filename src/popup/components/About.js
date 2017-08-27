@@ -189,7 +189,7 @@ class About extends Component{
 						<li>NooBoss uses <a href="https://github.com/facebook/react" target="_blank">React(BSD Liscense)</a> from Facebook to build the bases</li>
 						<li>NooBoss uses <a href="https://material.io/icons/" target="_blank">Material icons</a> from Google to make things look good</li>
 						<li>NooBoss uses <a href="https://github.com/styled-components/styled-components" target="_blank">styled components(MIT Liscense)</a> from  <a href="https://twitter.com/glenmaddern" target="_blank">@glenmaddern</a>, <a href="https://twitter.com/mxstbr" target="_blank">@mxstbr</a> & <a href="https://twitter.com/_philpl" target="_blank">@_philpl‬</a> to manage CSS</li>
-						<li>NooBoss uses <a href="https://github.com/nmn/react-timeago" target="_blank">Timeago(MIT Liscense)</a> from Hust.cc to display timeago</li>
+						<li>NooBoss uses <a href="https://github.com/hustcc/timeago-react" target="_blank">Timeago-React(MIT Liscense)</a> from Hust.cc to display timeago</li>
 						<li>NooBoss uses <a href="https://github.com/casesandberg/react-color" target="_blank">React Color(MIT Liscense)</a> from case to pick color</li>
 					</ul>
 				</section>
@@ -316,7 +316,7 @@ class About extends Component{
 							<li>二管家使用Facebook的<a href="https://github.com/facebook/react" target="_blank">React(BSD Liscense)</a>来弄的基础</li>
 							<li>二管家使用Google的<a href="https://material.io/icons/" target="_blank">Material icons</a> from Google to make things look good</li>
 							<li>二管家使用<a href="https://twitter.com/glenmaddern" target="_blank">@glenmaddern</a>, <a href="https://twitter.com/mxstbr" target="_blank">@mxstbr</a> & <a href="https://twitter.com/_philpl" target="_blank">@_philpl‬</a>的<a href="https://github.com/styled-components/styled-components" target="_blank">styled components(MIT Liscense)</a>来管理CSS</li>
-							<li>二管家使用Hust.cc的<a href="https://github.com/nmn/react-timeago" target="_blank">Timeago(MIT Liscense)</a>来展示过了多久</li>
+							<li>二管家使用Hust.cc的<a href="https://github.com/hustcc/timeago-react" target="_blank">Timeago-React(MIT Liscense)</a>来展示过了多久</li>
 							<li>二管家使用case的<a href="https://github.com/casesandberg/react-color" target="_blank">React Color(MIT Liscense)</a>来选择颜色</li>
 						</ul>
 					</section>

@@ -238,6 +238,16 @@ reset_zoom:
   message: 重置缩放
 none:
   message: 没有
+install:
+  message: 安装
+update:
+  message: 更新
+remove:
+  message: 卸载
+enable:
+  message: 开启
+disable:
+  message: 关闭
 x_1:
   message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
 x_2:
