@@ -1,4 +1,4 @@
-import { promisedGet, getIconDBKey, promisedSetDB, promisedGetDB, sendMessage, promisedSet } from '../utils';
+import { waitFor, promisedGet, getIconDBKey, promisedSetDB, promisedGetDB, sendMessage, promisedSet } from '../utils';
 
 export default (NooBoss) => {
 	return {
@@ -90,7 +90,8 @@ export default (NooBoss) => {
 				resolve();
 			});
 		},
-		delete: id => {
+		delete: async id => {
+			await waitFor(233);
 			delete NooBoss.Extensions.apps[id];
 		},
 		toggle: (id, enabled) => {
@@ -179,15 +180,11 @@ export default (NooBoss) => {
 		remove: (id) => {
 			browser.management.uninstall(id, { showConfirmDialog: true }, () => {
 				browser.management.get(id, (result) => {
-					if (!result) {
-						delete NooBoss.Extensions.apps.id;
+					if (browser.runtime.lastError || !result) {
+						NooBoss.Extensions.delete(id);
 						sendMessage({ job: 'extensionRemoved',id });
 					}
 				});
-				if (browser.runtime.lastError) {
-					delete NooBoss.Extensions.apps.id;
-					sendMessage({ job: 'extensionRemoved',id });
-				}
 			});
 		},
 		browserOptions: (id) => {

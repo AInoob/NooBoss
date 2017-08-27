@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { overviewUpdateBello, overviewToggleRecommendExtensions } from '../actions';
-import { sendMessage, GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
+import { sendMessage, GLS,GL, getDomainFromUrl, getCurrentUrl, ajax, promisedGet } from '../../utils';
 import styled from 'styled-components';
 import Selector from './Selector';
 
@@ -188,6 +188,11 @@ class Overview extends Component{
 			lastScrollDate: 0,
 			joinCommunity: false,
 			recoExtensions: false,
+			historyInstallEvents: 0,
+			historyRemoveEvents: 0,
+			historyUpdateEvents: 0,
+			historyEnableEvents: 0,
+			historyDisableEvents: 0,
 		};
 		this.getExtensionInfoWeb = this.getExtensionInfoWeb.bind(this);
 		this.initialize();
@@ -477,15 +482,15 @@ class Overview extends Component{
 					{GL('you_have')}
 				</h2>
 				<div className="line">
-					<span>{overview.extension + ' ' + GL('extension_s')}</span>,
-					<span>{' ' + overview.app + ' ' + GL('app_s')}</span>,
+					<span>{overview.extension + ' ' + GLS('extension_s', overview.extension)}</span>,
+					<span>{' ' + overview.app + ' ' + GLS('app_s', overview.app)}</span>,
 					<span>{' ' + overview.theme + ' ' + GL('theme')}</span>
 				</div>
 				<div className="line">
-					<span>{overview.group + ' ' + GL('group_s')}</span>
+					<span>{overview.group + ' ' + GLS('group_s', overview.group)}</span>
 				</div>
 				<div className="line">
-					<span>{overview.autoStateRule + ' ' + GL('autoState_rule_s')}</span>
+					<span>{overview.autoStateRule + ' ' + GLS('autoState_rule_s', overview.autoStateRule)}</span>
 				</div>
 				{recommendSection}
 			</OverviewDiv>

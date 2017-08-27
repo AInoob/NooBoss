@@ -1,3 +1,13 @@
+export const GLS = (string, number) => {
+	console.log(GL(string));
+	console.log(JSON.parse(GL(string)));
+	if (number == 0 || number == 1) {
+		return JSON.parse(GL(string))[0];
+	} else {
+		return JSON.parse(GL(string))[1];
+	}
+};
+
 export const waitFor = (duration) => {
 	return new Promise(resolve => {
 		setTimeout(resolve, duration);

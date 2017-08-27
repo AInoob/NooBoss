@@ -215,15 +215,15 @@ set_as_current_website:
 you_have:
   message: 'You have'
 extension_s:
-  message: extension(s)
+  message: '["extension","extensions"]'
 app_s:
-  message: app(s)
+  message: '["app","apps"]'
 theme:
   message: theme
 group_s:
-  message: group(s)
+  message: '["group","groups"]'
 autoState_rule_s:
-  message: 'AutoState rule(s)'
+  message: '["AutoState rule","AutoState rules"]'
 recommend_extensions:
   message: 'Recommend extensions'
 recommended_for:
