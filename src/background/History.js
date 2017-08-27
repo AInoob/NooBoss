@@ -16,7 +16,7 @@ export default (NooBoss) => {
 				//                        remove events come after disable events
 				// somehow Chroem call these is a strange sequence
 				if (record.event == 'removed' || record.event == 'enabled') {
-					await waitFor(233);
+					await waitFor(666);
 				}
 				record.date = new Date().getTime();
 				NooBoss.History.recordList.push(record);
