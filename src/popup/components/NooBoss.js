@@ -61,6 +61,63 @@ const NooBossDiv = styled.div`
 	}
 	font-size: 12px;
 	color: ${props => props.themeSubColor};
+	.switch-input {
+		display: none;
+	}
+	.switch-label {
+		position: relative;
+    display: inline-block;
+    width: 39px;
+    cursor: pointer;
+	}
+	.switch-label:before, .switch-label:after {
+		content: "";
+		position: absolute;
+		margin: 0;
+		outline: 0;
+		top: 50%;
+		-ms-transform: translate(0, -50%);
+		-webkit-transform: translate(0, -50%);
+		transform: translate(0, -50%);
+		-webkit-transition: all 0.3s ease;
+		transition: all 0.3s ease;
+	}
+	.switch-label:before {
+		left: 1px;
+		width: 30px;
+		height: 12px;
+		background-color: #9E9E9E;
+		border-radius: 8px;
+	}
+	.switch-label:after {
+		left: 0;
+		width: 17px;
+		height: 17px;
+		background-color: #FAFAFA;
+		border-radius: 50%;
+		box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
+	}
+	.switch-label .toggle--on {
+		display: none;
+	}
+	.switch-label .toggle--off {
+		display: inline-block;
+	}
+	.switch-input:checked + .switch-label:before {
+		background-color: ${props => props.themeSubColor};
+		opacity: 0.4;
+	}
+	.switch-input:checked + .switch-label:after {
+		background-color: ${props => props.themeSubColor};
+		transform: translate(80%, -50%);
+	}
+	.switch-input:checked + .switch-label .toggle--on {
+		display: inline-block;
+	}
+	.switch-input:checked + .switch-label .toggle--off {
+		display: none;
+	}
+
 	input, select{
 		color: ${props => props.themeSubColor};
 		outline: none;

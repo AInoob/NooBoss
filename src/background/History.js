@@ -29,6 +29,7 @@ export default (NooBoss) => {
 		removeRecord: (index) => {
 			console.log(index);
 			return new Promise(resolve => {
+				// we need to sort it because popupHistory sends index based on sorted list
 				NooBoss.History.recordList.sort((a, b) => {
 					return b.date - a.date
 				}).splice(index, 1);

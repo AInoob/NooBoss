@@ -77,6 +77,10 @@ NooBoss.initiate = async () => {
 			case 'getAutoStateRuleList':
 				sendResponse(NooBoss.AutoState.rules);
 				break;
+			case 'autoStateRulesUpdate':
+				NooBoss.AutoState.updateRules(message.rules);
+				NooBoss.Bello.bello({ category: 'autoState', action: message.action, id: message.id });
+				break;
 			case 'extensionToggle':
 				NooBoss.Extensions.toggle(message.id, message.enabled);
 				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
@@ -123,9 +127,6 @@ NooBoss.initiate = async () => {
 			case 'openManifest':
 				NooBoss.Extensions.openManifest(message.id);
 				NooBoss.Bello.bello({ category: 'manage', action: message.job, id: message.id });
-				break;
-			case 'autoStateRulesUpdate':
-				NooBoss.AutoState.updateRules(message.rules);
 				break;
 			case 'openWebStore':
 				NooBoss.Extensions.openWebStore(message.id);

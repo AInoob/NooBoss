@@ -6,6 +6,7 @@ const initialState = {
       isWildcard: false,
       url: '',
     },
+    disabled: false,
   },
 };
 
