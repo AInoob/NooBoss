@@ -1,3 +1,20 @@
+export const isZh = () => {
+	return new Promise(resolve => {
+		chrome.i18n.getAcceptLanguages((data) => {
+			let result = false;
+			if (data.indexOf('zh') != -1) {
+				result = true;
+				try {
+					if (browser.i18n.getUILanguage().indexOf('zh') == -1) {
+						result = false;
+					}
+				} catch (e) {}
+			}
+			resolve(result);
+		})
+	});
+};
+
 export const GLS = (string, number) => {
 	console.log(GL(string));
 	console.log(JSON.parse(GL(string)));
@@ -421,7 +438,6 @@ export const getChromeVersion = () => {
 
 export const ajax = (req) => {
 	return new Promise((resolve, reject) => {
-		console.log(JSON.stringify(req));
 		const request = new XMLHttpRequest();
 		const params = (typeof req.data == 'string' || !req.data) ? req.data : Object.keys(req.data).map(
 			function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(req.data[k]) }

@@ -155,18 +155,22 @@ class Extension extends Component{
       }
 			this.setState({ extensionWeb: data.appInfo, tags });
 		}
-		data = await ajax({
-			url: 'https://clients2.google.com/service/update2/crx?prodversion=' + getChromeVersion() + '&x=id%3D' + id + '%26installsource%3Dondemand%26uc'
-		});
-		const crxUrl = data.match('codebase=\"\([^ ]*)\"')[1];
-    const crxVersion = data.slice(20).match('version=\"\([^ ]*)\"')[1];
-    const crxName = crxUrl.substr(crxUrl.lastIndexOf('/') + 1);
-		this.setState({ crxUrl, crxVersion, crxName });
-		data = await ajax({
-			url: 'https://chrome.google.com/webstore/detail/'+id,
-		});
-		const rating = parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5';
-    this.setState({ rating });
+		try {
+      data = await ajax({
+        url: 'https://clients2.google.com/service/update2/crx?prodversion=' + getChromeVersion() + '&x=id%3D' + id + '%26installsource%3Dondemand%26uc'
+      });
+      const crxUrl = data.match('codebase=\"\([^ ]*)\"')[1];
+      const crxVersion = data.slice(20).match('version=\"\([^ ]*)\"')[1];
+      const crxName = crxUrl.substr(crxUrl.lastIndexOf('/') + 1);
+      this.setState({ crxUrl, crxVersion, crxName });
+      data = await ajax({
+        url: 'https://chrome.google.com/webstore/detail/'+id,
+      });
+      const rating = parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3)+' / 5';
+      this.setState({ rating });
+    } catch(e) {
+      this.setState({ joinCommunity: false });
+    }
     setTimeout(() => {
       if (!this.props.extension) {
         sendMessage({ job: 'getExtensionFromDB', id: this.props.id });
