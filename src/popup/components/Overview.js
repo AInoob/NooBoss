@@ -25,6 +25,7 @@ const OverviewDiv = styled.div`
 		display: ${props => props.recommendExtensions ? 'block' : 'none'};
 	}
 	.recommendedExtension{
+		clear: both;
 		margin-bottom: 10px;
 		overflow: hidden;
 		height: 111px;

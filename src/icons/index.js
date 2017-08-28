@@ -1,6 +1,45 @@
 import React from 'react';
 import { rgbaChange } from '../utils';
 
+export const BigTiley = (props) => {
+	let color = props.color || 'rgba(255, 255, 255, 1)';
+	if (props.changeRGBA) {
+		color = rgbaChange(color, props.changeRGBA);
+	}
+	return (
+		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+			<path d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</svg>
+	);
+}
+
+export const Tiley = (props) => {
+	let color = props.color || 'rgba(255, 255, 255, 1)';
+	if (props.changeRGBA) {
+		color = rgbaChange(color, props.changeRGBA);
+	}
+	return (
+		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+			<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</svg>
+	);
+}
+
+export const Listy = (props) => {
+	let color = props.color || 'rgba(255, 255, 255, 1)';
+	if (props.changeRGBA) {
+		color = rgbaChange(color, props.changeRGBA);
+	}
+	return (
+		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
+			<path d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v2zm0-6v2h16V5H4z"/>
+			<path d="M0 0h24v24H0V0z" fill="none"/>
+		</svg>
+	);
+}
+
 export const Closey = (props) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
 	if (props.changeRGBA) {

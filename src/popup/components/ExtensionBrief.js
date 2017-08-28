@@ -27,7 +27,7 @@ const ExtensionBriefDiv = styled.div`
 		position: relative;
 		.extensionIcon, .nameFront, .extensionInfo{
 			backface-visibility: hidden;
-			transition: transform 0.309s;
+			transition: transform 0.111s;
 			position: absolute;
 			left: 0;
 			top: 0;
@@ -129,6 +129,66 @@ const ExtensionBriefDiv = styled.div`
 			}
 		}
 	`}
+	${props => props.viewMode == 'list' && css `
+		width: 100%;
+		height: 33px;
+		padding: 0px;
+		padding-top: 6px;
+		box-shadow: none;
+		transition: none !important;
+		&:hover{
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 0px 1px;
+		}
+		.nameFront{
+			display: none;
+		}
+		.extensionInfo, .extensionIcon{
+			transform: rotateY(0deg) !important;
+		}
+		.extensionControl{
+			#switchy{
+				left: 16px;
+			}
+			#launchy{
+				left: 540px;
+			}
+			#optioney{
+				left: 570px;
+			}
+			#removy{
+				left: 600px;
+			}
+			#chromey{
+				left: 630px;
+			}
+			svg{
+				position: absolute;
+			}
+		}
+		.extensionBrief{
+			margin-top: 0px;
+			.extensionIcon{
+				position: absolute;
+				margin-top: 0px;
+				margin-left: 36px;
+				width: 26px;
+			}
+			#extensionName{
+				position: absolute;
+				margin-left: 0px;
+				left: 90px;
+				top: 0;
+				text-align: left;
+				overflow: hidden;
+				width: 300px;
+				height: 20px !important;
+			}
+			#extensionVersion{
+				position: absolute;
+				left: 333px;
+			}
+		}
+	`}
 `;
 
 class ExtensionBrief extends Component{
@@ -142,10 +202,10 @@ class ExtensionBrief extends Component{
 		}
 		let launchy, switchy, optioney, removy, chromey;
 		if (extension.isApp) {
-			launchy=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+			launchy=<Launchy id="launchy" onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
 		}
 		if (extension.type != 'theme') {
-			switchy = <Switchy onClick={() => {
+			switchy = <Switchy id="switchy" onClick={() => {
 				const stateHistory = {};
 				stateHistory[extension.id] = extension.enabled;
 				this.props.addStateHistory(stateHistory);
@@ -153,10 +213,10 @@ class ExtensionBrief extends Component{
 			}} color={shared.themeMainColor} changeRGBA={switchyRGBA} />;
 		}
 		if (extension.optionsUrl && extension.optionsUrl.length > 0) {
-			optioney = <Optioney onClick={sendMessage.bind(null, { job: 'extensionOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
+			optioney = <Optioney id="optioney" onClick={sendMessage.bind(null, { job: 'extensionOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
 		}
-		removy = <Removy onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, () => {})} color={shared.themeMainColor} />;
-		chromey = <Chromey onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
+		removy = <Removy id="removy" onClick={sendMessage.bind(null, { job: 'extensionRemove', id: extension.id }, () => {})} color={shared.themeMainColor} />;
+		chromey = <Chromey id="chromey" onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
 		const extensionControl = !this.props.withControl ? null : (
 			<div className="extensionControl">
 				{launchy}
@@ -171,14 +231,14 @@ class ExtensionBrief extends Component{
 			updateSubWindow = this.props.updateSubWindow.bind(null, 'extension', extension.id);
 		}
 		return (
-			<ExtensionBriefDiv onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
+			<ExtensionBriefDiv viewMode={this.props.viewMode} onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
 				<div className="shadow"></div>
 				<div className="extensionBrief">
 					<img className="extensionIcon" src={this.props.icon} />
 					<span className="nameFront">{extension.name}</span>
 					<div className="extensionInfo">
 						{extensionControl}
-						{extension.version}<br />
+						<span id="extensionVersion">{extension.version}</span><br />
 						<span id="extensionName" onClick={updateSubWindow}>{extension.name}</span>
 					</div>
 				</div>

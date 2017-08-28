@@ -18,7 +18,7 @@ import {
 	optionsUpdateThemeMainColor,
 	optionsUpdateThemeSubColor
 } from '../actions';
-import { notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import { promisedGet, notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
@@ -282,6 +282,7 @@ class NooBoss extends Component{
 			autoStateRuleList: [],
 			extensionInfoWeb: {},
 			historyRecordList: [],
+			viewMode: 'tile',
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.getHistoryRecordList = this.getHistoryRecordList.bind(this);
@@ -379,8 +380,9 @@ class NooBoss extends Component{
 		});
 	}
 
-	componentDidMount() {
+	async componentWillMount() {
 		browser.runtime.onMessage.addListener(this.listener);
+		this.setState({ viewMode: await promisedGet('viewMode') });
 	}
 
 	componentWillUnmount() {
@@ -391,6 +393,9 @@ class NooBoss extends Component{
 		if (message) {
 			const location = this.props.location.main;
 			switch (message.job) {
+				case 'updateViewMode':
+					this.setState({ viewMode: message.value });
+					break;
 				case 'popupHistoryUpdate':
 					console.log(location);
 					if (location == 'history') {
@@ -508,6 +513,7 @@ class NooBoss extends Component{
 					groupList={groupList}
 					autoStateRuleList={autoStateRuleList}
 					updateSubWindow={this.props.updateSubWindow}
+					viewMode={this.state.viewMode}
 				/>
 			);
 		}
