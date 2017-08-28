@@ -375,7 +375,7 @@ class NooBoss extends Component{
 
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
-		if (window.devicePixelRatio != 1) {
+		if (!(window.devicePixelRatio > 0.95 && window.devicePixelRatio < 1.05)) {
 			if (getParameterByName('resetZoom')) {
 				browser.tabs.setZoom(1, () => {
 					sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
