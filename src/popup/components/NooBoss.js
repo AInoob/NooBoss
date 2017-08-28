@@ -257,6 +257,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 class NooBoss extends Component{
 	constructor(props) {
 		super(props);
+		if (getParameterByName('resetZoom')) {
+			browser.tabs.setZoom(1, () => {
+				sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
+				window.close();
+			});
+		}
 		window.shared = {
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
@@ -375,17 +381,6 @@ class NooBoss extends Component{
 
 	componentDidMount() {
 		browser.runtime.onMessage.addListener(this.listener);
-		if (!(window.devicePixelRatio > 0.95 && window.devicePixelRatio < 1.05)) {
-			if (getParameterByName('resetZoom')) {
-				browser.tabs.setZoom(1, () => {
-					sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
-					window.close();
-				});
-			}
-			alerty(GL('x_3'), shared.themeMainColor, () => {
-				sendMessage({ job: 'resetZoom' });
-			});
-		}
 	}
 
 	componentWillUnmount() {

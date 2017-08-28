@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { } from '../actions';
-import { alerty, GL, get, generateRGBAString, sendMessage } from '../../utils';
+import { getParameterByName, alerty, GL, get, generateRGBAString, sendMessage } from '../../utils';
 import { SketchPicker } from 'react-color';
 import { optionsUpdateThemeMainColor, optionsUpdateThemeSubColor, optionsToggleDisplay } from '../actions';
 import styled from 'styled-components';
@@ -359,6 +359,15 @@ class Options extends Component{
 		r.readAsText(file);
 	}
 
+	resetZoom() {
+		if (window.devicePixelRatio != 1) {
+			sendMessage({ job: 'resetZoom' });
+		}
+		else {
+				sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_6'), duration: 5 });
+		}
+	}
+
 	exportOptions() {
 		sendMessage({ job: 'exportOptions' });
 	}
@@ -452,6 +461,7 @@ class Options extends Component{
 							{this.getDisplayInput('advanced', 'advancedBasics', 'advancedSub')}
 							{this.getDisplayLabel('advanced', 'advancedSub')}
 							{this.getSwitch('join_community', 'joinCommunity')}
+							<div className="line"><button onClick={this.resetZoom.bind(this)}>{GL('set_zoom_to_100')}</button></div>
 						</section>
 						<section>
 							{this.getDisplayInput('clean', 'advancedClean')}
