@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switchy, Optioney, Removy, Chromey } from '../../icons';
+import { Launchy, Switchy, Optioney, Removy, Chromey } from '../../icons';
 import { sendMessage } from '../../utils';
 import styled, { css } from 'styled-components';
 
@@ -140,7 +140,10 @@ class ExtensionBrief extends Component{
 			disabled = true;
 			switchyRGBA = 'rgba(-155,-155,-155,-0.8)';
 		}
-		let switchy, optioney, removy, chromey;
+		let launchy, switchy, optioney, removy, chromey;
+		if (extension.isApp) {
+			launchy=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
+		}
 		if (extension.type != 'theme') {
 			switchy = <Switchy onClick={() => {
 				const stateHistory = {};
@@ -156,6 +159,7 @@ class ExtensionBrief extends Component{
 		chromey = <Chromey onClick={sendMessage.bind(null, { job: 'extensionBrowserOptions', id: extension.id }, () => {})} color={shared.themeMainColor} />;
 		const extensionControl = !this.props.withControl ? null : (
 			<div className="extensionControl">
+				{launchy}
 				{switchy}
 				{optioney}
 				{removy}
