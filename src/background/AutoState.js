@@ -168,7 +168,12 @@ export default (NooBoss) => {
 						enabledStr = 'disabled';
 					}
 					isOn('autoStateNotification', async () => {
-						notify(GL('autoState'), '', await promisedGet('notificationDuration_autoState'));
+						notify(
+							GL('autoState'),
+							GL('x_7').replace('X1', appInfo.name
+											).replace('X2',GL(enabled ? 'is_enabled' : 'is_disabled').toLowerCase()
+											).replace('X3', ruleId + 1),
+							await promisedGet('notificationDuration_autoState'));
 					});
 					//get('userId', userId => {
 					//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });

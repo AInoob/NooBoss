@@ -42,7 +42,10 @@ export default (NooBoss) => {
 		empty: () => {
 			return new Promise(resolve => {
 				NooBoss.History.recordList = [];
-				setDB('history_records', NooBoss.History.recordList, resolve);
+				setDB('history_records', NooBoss.History.recordList, () => {
+					sendMessage({ job: 'popupHistoryUpdate' });
+					resolve();
+				});
 			});
 		},
 	};

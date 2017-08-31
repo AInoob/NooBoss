@@ -90,6 +90,10 @@ was_updated:
   message: ' was updated'
 was_removed:
   message: ' was removed'
+is_enabled:
+  message: 'is enabled'
+is_disabled:
+  message: 'is disabled'
 was_enabled:
   message: ' was enabled'
 was_disabled:
@@ -262,3 +266,5 @@ x_5:
   message: 'By turning off join community, you will no longer get any community features, and you will not send any NooBoss usage to AInoob, so he will not be able to make a better NooBoss based on user usage'
 x_6:
   message: 'NooBoss zoom is already 100%'
+x_7:
+  message: 'X1 X2 by autoState rule #X3'
