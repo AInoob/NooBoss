@@ -30,5 +30,5 @@ export const defaultValues = {
 };
 
 export const constantValues = {
-	version: '0.1.5.7',
+	version: '0.1.5.8',
 };
