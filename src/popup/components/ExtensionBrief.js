@@ -129,6 +129,56 @@ const ExtensionBriefDiv = styled.div`
 			}
 		}
 	`}
+	${props => props.viewMode == 'bigTile' && css `
+		width: 212px;
+		height: 66px;
+		padding: 6px;
+		margin: 6px;
+		margin-bottom: 12px;
+		box-shadow: none;
+		transition: none !important;
+		&:hover{
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 6px 0px;
+		}
+		.nameFront{
+			display: none;
+		}
+		.extensionInfo, .extensionIcon{
+			transform: rotateY(0deg) !important;
+		}
+		.extensionControl{
+			position: absolute;
+			left: 86px;
+			top: 36px;
+			svg{
+				float: left;
+			}
+		}
+		.extensionBrief{
+			margin-top: 0px;
+			.extensionIcon{
+				cursor: pointer;
+				position: absolute;
+				margin-top: 0px;
+				margin-left: 0px;
+				width: 64px;
+			}
+			#extensionName{
+				position: absolute;
+				height: initial !important;
+				margin-left: 0px;
+				left: 95px;
+				top: 0px;
+				text-align: left;
+				overflow: hidden;
+				width: 145px !important;
+			}
+			#extensionVersion{
+				position: absolute;
+				left: 400px;
+			}
+		}
+	`}
 	${props => props.viewMode == 'list' && css `
 		width: 100%;
 		height: 33px;
@@ -180,12 +230,12 @@ const ExtensionBriefDiv = styled.div`
 				top: 0;
 				text-align: left;
 				overflow: hidden;
-				width: 300px;
+				width: 346px !important;
 				height: 20px !important;
 			}
 			#extensionVersion{
 				position: absolute;
-				left: 333px;
+				left: 400px;
 			}
 		}
 	`}
@@ -234,7 +284,7 @@ class ExtensionBrief extends Component{
 			<ExtensionBriefDiv viewMode={this.props.viewMode} onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
 				<div className="shadow"></div>
 				<div className="extensionBrief">
-					<img className="extensionIcon" src={this.props.icon} />
+					<img onClick={updateSubWindow} className="extensionIcon" src={this.props.icon} />
 					<span className="nameFront">{extension.name}</span>
 					<div className="extensionInfo">
 						{extensionControl}

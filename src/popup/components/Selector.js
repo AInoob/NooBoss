@@ -338,6 +338,7 @@ class Selector extends Component{
 		const view = (
 			<div id="viewDiv">
 				<Tiley id="tile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'tile' }, ()=>{})} color={shared.themeMainColor} />
+				<BigTiley id="bigTile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'bigTile' }, ()=>{})} color={shared.themeMainColor} />
 				<Listy id="list" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'list' }, ()=>{})} color={shared.themeMainColor} />
 			</div>
 		);
