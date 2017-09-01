@@ -44,6 +44,7 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	padding-top: 35px;
 	overflow-y: scroll;
 	&::-webkit-scrollbar-track{
 		background: white;

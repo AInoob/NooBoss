@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { GL } from '../../utils';
 
 const NavigatorDiv = styled.nav`
-	position: relative;
+	position: fixed;
+	top: 0px;
 	width: 100%;
 	height: 38px;
 	overflow: visible;
