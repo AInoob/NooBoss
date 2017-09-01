@@ -233,7 +233,7 @@ class Extension extends Component{
 		}
     let launchy, switchy, optioney, removy, chromey, addy;
     if (state != 'removed') {
-      if(extension.isApp) {
+      if (extension.isApp) {
         launchy=<Launchy onClick={sendMessage.bind(null, { job: 'launchApp', id: extension.id }, ()=>{})} color={shared.themeMainColor} />;
       }
       if (extension.type != 'theme') {

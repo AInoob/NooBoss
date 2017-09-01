@@ -65,6 +65,7 @@ class Extensions extends Component{
 		if (this.props.location.sub['extensions'] == 'manage') {
 			core = (
 				<Manage
+					viewMode={this.props.viewMode}
 					updateSubWindow={this.props.updateSubWindow}
 					icons={this.props.icons}
 					extensions={this.props.extensions}

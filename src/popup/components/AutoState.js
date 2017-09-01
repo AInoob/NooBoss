@@ -76,8 +76,11 @@ const AutoStateDiv = styled.div`
 					&:nth-child(5){
 						width: 66px;
 					}
-					&:nth-child(6), &:nth-child(7){
-						width: 34px;
+					&:nth-child(6){
+						width: 44px;
+					}
+					&:nth-child(7), &:nth-child(8){
+						width: 26px;
 					}
 				}
 			}
@@ -98,11 +101,19 @@ const AutoStateDiv = styled.div`
 							margin-right: 9px;
 						}
 					}
-					&:nth-child(6), &:nth-child(7){
+					&:nth-child(6){
 						text-align: center;
 						svg{
-							width: 32px;
-							height: 32px;
+							width: 24px;
+							height: 24px;
+							cursor: pointer;
+						}
+					}
+					&:nth-child(7), &:nth-child(8){
+						text-align: center;
+						svg{
+							width: 24px;
+							height: 24px;
 							cursor: pointer;
 						}
 					}
@@ -201,7 +212,7 @@ class AutoState extends Component{
 		const rule = this.props.autoState.rule;
 		const rules = copy(this.props.autoStateRuleList);
 		rules.push(rule);
-		sendMessage({ job: 'autoStateRulesUpdate', rules });
+		sendMessage({ job: 'autoStateRulesUpdate', rules, action: 'addRule', id: rules.length });
 		this.props.updateAutoStateRule({
 			action: 'enableOnly',
 			ids: [],
@@ -209,18 +220,24 @@ class AutoState extends Component{
 				isWildcard: false,
 				url: '',
 			},
+			disabled: false,
 		});
 	}
 	editRule(index) {
 		const rules = copy(this.props.autoStateRuleList);
 		const rule = rules.splice(index, 1)[0];
-		sendMessage({ job: 'autoStateRulesUpdate', rules });
+		sendMessage({ job: 'autoStateRulesUpdate', rules, action: 'editRule', id: index });
 		this.props.updateAutoStateRule(rule);
 	}
 	deleteRule(index) {
 		const rules = copy(this.props.autoStateRuleList);
 		rules.splice(index, 1);
-		sendMessage({ job: 'autoStateRulesUpdate', rules });
+		sendMessage({ job: 'autoStateRulesUpdate', rules, action: 'deleteRule', id: index });
+	}
+	toggleRule(index) {
+		const rules = copy(this.props.autoStateRuleList);
+		rules[index].disabled = !rules[index].disabled;
+		sendMessage({ job: 'autoStateRulesUpdate', rules, action: 'toggleRule', id: index });
 	}
 	async setCurrentWebsite() {
 		const rule = this.props.autoState.rule || this.state.rule;
@@ -242,6 +259,13 @@ class AutoState extends Component{
           <td>{GL(rule.action)}</td>
           <td>{rule.match.url}</td>
           <td>{GL(rule.match.isWildcard ? 'wildcard' : 'RegExp')}</td>
+					<td>
+						<input type="checkbox" checked={rule.disabled ? false : true} onChange={()=>{}} id={'switch-'+index} className="switch-input" />
+						<label htmlFor={'switch-'+index} className="switch-label" onClick={this.toggleRule.bind(this,index)}>
+							<span className="toggle--on"></span>
+							<span className="toggle--off"></span>
+						</label>
+					</td>
           <td onClick={this.editRule.bind(this, index)}><Edity color={shared.themeMainColor} /></td>
           <td onClick={this.deleteRule.bind(this, index)}><Removy color={shared.themeMainColor} /></td>
         </tr>
@@ -258,6 +282,7 @@ class AutoState extends Component{
 							<th>{GL('action')}</th>
 							<th>{GL('match')}</th>
 							<th>{GL('pattern')}</th>
+							<th></th>
 							<th></th>
 							<th></th>
 						</tr>

@@ -90,6 +90,10 @@ was_updated:
   message: '已被更新'
 was_removed:
   message: '已被卸载'
+is_enabled:
+  message: '已被开启'
+is_disabled:
+  message: '已被关闭'
 was_enabled:
   message: '已被开启'
 was_disabled:
@@ -248,6 +252,8 @@ enable:
   message: 开启
 disable:
   message: 关闭
+set_zoom_to_100:
+  message: 设置二管家缩放为100%
 x_1:
   message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
 x_2:
@@ -258,3 +264,7 @@ x_4:
   message: 成功重置二管家的缩放为100%
 x_5:
   message: 关闭社区功能后，二管家社区相关功能将被关闭，二管家也不会再上传你的二管家使用记录了，这样AInoob就没法根据用户使用情况提供更好的二管家了。
+x_6:
+  message: 二管家缩放已经是100%了
+x_7:
+  message: 因为自动管理规则#X3，X1X2

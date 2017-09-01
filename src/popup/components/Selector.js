@@ -3,11 +3,28 @@ import styled from 'styled-components';
 import ExtensionBrief  from './ExtensionBrief';
 import GroupBrief  from './GroupBrief';
 import { GL, sendMessage } from '../../utils';
-import { Cleary } from '../../icons';
+import { Listy, Tiley, BigTiley, Cleary } from '../../icons';
 
 const SelectorDiv = styled.div`
 	overflow: visible;
 	padding-bottom: 10px;
+	#viewDiv{
+		margin-bottom: -50px;
+		overflow: hidden;
+		svg{
+			float: right;
+			cursor: pointer;
+		}
+		#list{
+			opacity: ${props => props.viewMode == 'list' ? '1' : '0.3'};
+		}
+		#tile{
+			opacity: ${props => props.viewMode == 'tile' ? '1' : '0.3'};
+		}
+		#bigTile{
+			opacity: ${props => props.viewMode == 'bigTile' ? '1' : '0.3'};
+		}
+	}
 	#actionBar{
 		margin-left: 0px;
 		margin-top: 20px;
@@ -220,6 +237,7 @@ class Selector extends Component{
 		this.getFiltered().map((id, index) => {
 			const x = (
 				<ExtensionBrief
+					viewMode={this.props.viewMode}
 					selected={this.props.selectedList ? (this.props.selectedList.indexOf(id) != -1) : null}
 					onClick={() => {
 						if (this.props.select) {
@@ -317,9 +335,18 @@ class Selector extends Component{
 		if (groupList.length > 0) {
 			groupDiv = <div id="groupList"><h2>{GL('group')}</h2>{groupList}</div>;
 		}
+		const view = (
+			<div id="viewDiv">
+				<Tiley id="tile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'tile' }, ()=>{})} color={shared.themeMainColor} />
+				<BigTiley id="bigTile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'bigTile' }, ()=>{})} color={shared.themeMainColor} />
+				<Listy id="list" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'list' }, ()=>{})} color={shared.themeMainColor} />
+			</div>
+		);
+		let tttt = <BigTiley id="bigTile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'bigTile' }, ()=>{})} color={shared.themeMainColor} />
 		return (
-			<SelectorDiv>
+			<SelectorDiv viewMode={this.props.viewMode}>
 				{actionBar}
+				{view}
 				{groupDiv}
 				{extensionDiv}
 				{appDiv}

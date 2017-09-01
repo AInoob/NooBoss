@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { isZh, sendMessage, GL, getDB, generateRGBAString } from '../../utils';
+import { alerty, isZh, sendMessage, GL, getDB, generateRGBAString } from '../../utils';
 import { Closey } from '../../icons';
 import TimeAgo from 'timeago-react';
 
@@ -8,6 +8,10 @@ const HistoryDiv = styled.div`
 	padding: 16px;
 	padding-left: 32px;
 	padding-right: 32px;
+	#emptyHistoryDiv{
+		margin-top: -8px;
+		margin-bottom: 12px;
+	}
 	table{
 		width: 100%;
 		border-collapse: collapse;
@@ -30,7 +34,7 @@ const HistoryDiv = styled.div`
 		}
 		.record{
 			& + .record{
-				border-top: ${props => props.themeMainColor} solid 1px;
+				border-top: ${props => shared.themeMainColor} solid 1px;
 			}
 			.name{
 				cursor: pointer;
@@ -88,6 +92,16 @@ class History extends Component{
 		}
 	}
 
+	emptyHistory() {
+		alerty(
+			GL('are_you_sure'),
+			shared.themeMainColor,
+			() => {
+				sendMessage({ job: 'emptyHistory' });
+			}
+		);
+	}
+
 	render() {
 		const icons = this.props.icons;
 		const recordList = this.props.recordList.sort((a, b) => {
@@ -108,6 +122,7 @@ class History extends Component{
 			<HistoryDiv
 				themeMainColor={window.shared.themeMainColor}
 			>
+				<div id="emptyHistoryDiv" className="line"><button onClick={this.emptyHistory.bind(this)}>{GL('empty_history')}</button></div>
 				<table>
 					<thead>
 						<tr>

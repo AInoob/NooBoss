@@ -37,12 +37,16 @@ module.exports={
   },
   plugins:[
     new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
 		new CopyWebpackPlugin([
 			{ from: './src/popup/popup.html' },
 			{ from: './src/manifest.json' },
 			{ from: './src/images', to: 'images'  },
 			{ from: './src/thirdParty', to: 'thirdParty'  },
-		])
+    ]),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    })
   ]
 }

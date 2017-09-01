@@ -18,7 +18,7 @@ import {
 	optionsUpdateThemeMainColor,
 	optionsUpdateThemeSubColor
 } from '../actions';
-import { notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import { promisedGet, notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
 
 
 injectGlobal`
@@ -44,6 +44,7 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	padding-top: 35px;
 	overflow-y: scroll;
 	&::-webkit-scrollbar-track{
 		background: white;
@@ -61,6 +62,63 @@ const NooBossDiv = styled.div`
 	}
 	font-size: 12px;
 	color: ${props => props.themeSubColor};
+	.switch-input {
+		display: none;
+	}
+	.switch-label {
+		position: relative;
+    display: inline-block;
+    width: 39px;
+    cursor: pointer;
+	}
+	.switch-label:before, .switch-label:after {
+		content: "";
+		position: absolute;
+		margin: 0;
+		outline: 0;
+		top: 50%;
+		-ms-transform: translate(0, -50%);
+		-webkit-transform: translate(0, -50%);
+		transform: translate(0, -50%);
+		-webkit-transition: all 0.3s ease;
+		transition: all 0.3s ease;
+	}
+	.switch-label:before {
+		left: 1px;
+		width: 30px;
+		height: 12px;
+		background-color: #9E9E9E;
+		border-radius: 8px;
+	}
+	.switch-label:after {
+		left: 0;
+		width: 17px;
+		height: 17px;
+		background-color: #FAFAFA;
+		border-radius: 50%;
+		box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.098), 0 1px 5px 0 rgba(0, 0, 0, 0.084);
+	}
+	.switch-label .toggle--on {
+		display: none;
+	}
+	.switch-label .toggle--off {
+		display: inline-block;
+	}
+	.switch-input:checked + .switch-label:before {
+		background-color: ${props => props.themeSubColor};
+		opacity: 0.4;
+	}
+	.switch-input:checked + .switch-label:after {
+		background-color: ${props => props.themeSubColor};
+		transform: translate(80%, -50%);
+	}
+	.switch-input:checked + .switch-label .toggle--on {
+		display: inline-block;
+	}
+	.switch-input:checked + .switch-label .toggle--off {
+		display: none;
+	}
+
 	input, select{
 		color: ${props => props.themeSubColor};
 		outline: none;
@@ -200,6 +258,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 class NooBoss extends Component{
 	constructor(props) {
 		super(props);
+		if (getParameterByName('resetZoom')) {
+			browser.tabs.setZoom(1, () => {
+				sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
+				window.close();
+			});
+		}
 		window.shared = {
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
@@ -219,6 +283,7 @@ class NooBoss extends Component{
 			autoStateRuleList: [],
 			extensionInfoWeb: {},
 			historyRecordList: [],
+			viewMode: 'tile',
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.getHistoryRecordList = this.getHistoryRecordList.bind(this);
@@ -240,6 +305,7 @@ class NooBoss extends Component{
 			}
 		});
 	}
+
 	getAllExtensions() {
 		browser.runtime.sendMessage({ job: 'getAllExtensions' }, async extensions => {
 			if (extensions.undefined) {
@@ -248,7 +314,13 @@ class NooBoss extends Component{
 			this.setState({ extensions });
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
-				await this.getIcon(extensions[keyList[i]].icon);
+				const extension = extensions[keyList[i]];
+				if (extension.icons && extension.icons.length > 0) {
+					await this.getIcon(extension.icon, false, extension.icons);
+				}
+				else {
+					await this.getIcon(extension.icon);
+				}
 			}
 		});
 	}
@@ -283,36 +355,35 @@ class NooBoss extends Component{
 			return prevState;
 		});
 	}
-	getIcon(iconDBKey, update) {
+	getIconHelper(iconDBKey, icon, callback) {
+		this.setState(prevState => {
+			prevState.icons[iconDBKey] = icon;
+			prevState.icons = copy(prevState.icons);
+			return prevState;
+		}, callback);
+	}
+	getIcon(iconDBKey, update, iconList) {
 		return new Promise(resolve => {
 			if (this.state.icons[iconDBKey] && !update) {
 				resolve();
 			}
 			else {
-				getDB(iconDBKey, icon => {
-					this.setState(prevState => {
-						prevState.icons[iconDBKey] = icon;
-						prevState.icons = copy(prevState.icons);
-						return prevState;
-					}, resolve);
-				});
+				if (iconList) {
+					const icon = iconList.sort((a, b) => b.size - a.size)[0].url;
+					this.getIconHelper(iconDBKey, icon, resolve);
+				}
+				else {
+					getDB(iconDBKey, icon => {
+						this.getIconHelper(iconDBKey, icon, resolve);
+					});
+				}
 			}
 		});
 	}
 
-	componentDidMount() {
+	async componentWillMount() {
 		browser.runtime.onMessage.addListener(this.listener);
-		if (window.devicePixelRatio != 1) {
-			if (getParameterByName('resetZoom')) {
-				browser.tabs.setZoom(1, () => {
-					sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
-					window.close();
-				});
-			}
-			alerty(GL('x_3'), shared.themeMainColor, () => {
-				sendMessage({ job: 'resetZoom' });
-			});
-		}
+		this.setState({ viewMode: await promisedGet('viewMode') });
 	}
 
 	componentWillUnmount() {
@@ -323,6 +394,9 @@ class NooBoss extends Component{
 		if (message) {
 			const location = this.props.location.main;
 			switch (message.job) {
+				case 'updateViewMode':
+					this.setState({ viewMode: message.value });
+					break;
 				case 'popupHistoryUpdate':
 					console.log(location);
 					if (location == 'history') {
@@ -440,6 +514,7 @@ class NooBoss extends Component{
 					groupList={groupList}
 					autoStateRuleList={autoStateRuleList}
 					updateSubWindow={this.props.updateSubWindow}
+					viewMode={this.state.viewMode}
 				/>
 			);
 		}

@@ -72,8 +72,9 @@ export default (NooBoss) => {
 			const nextPhases = {};
 			const enableOnlys = {};
 			const disableOnlys={};
-			for(let i = 0; i < autoState.rules.length; i++) {
-				const rule = autoState.rules[i];
+			const rules = autoState.rules.filter(rule => !rule.disabled);
+			for(let i = 0; i < rules.length; i++) {
+				const rule = rules[i];
 				const appIds = rule.ids;
 				const pattern = rule.match.isWildcard ? getRegExpFromWildcard(rule.match.url): new RegExp(rule.match.url, 'i');
 				const tabIds = Object.keys(tabs);
@@ -167,7 +168,12 @@ export default (NooBoss) => {
 						enabledStr = 'disabled';
 					}
 					isOn('autoStateNotification', async () => {
-						notify(GL('autoState'), '', await promisedGet('notificationDuration_autoState'));
+						notify(
+							GL('autoState'),
+							GL('x_7').replace('X1', appInfo.name
+											).replace('X2',GL(enabled ? 'is_enabled' : 'is_disabled').toLowerCase()
+											).replace('X3', ruleId + 1),
+							await promisedGet('notificationDuration_autoState'));
 					});
 					//get('userId', userId => {
 					//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });

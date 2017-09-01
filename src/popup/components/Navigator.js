@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateMainLocation, updateSubLocation, navigatorUpdateHoverPosition } from '../actions';
+import { updateMainLocation, updateSubLocation } from '../actions';
 import styled from 'styled-components';
 import { GL } from '../../utils';
 
 const NavigatorDiv = styled.nav`
-	position: relative;
+	position: fixed;
+	top: 0px;
 	width: 100%;
 	height: 38px;
 	overflow: visible;
@@ -14,32 +15,25 @@ const NavigatorDiv = styled.nav`
 		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
 	transition: box-shadow 0.1s;
+
 	background-color: ${props => props.themeMainColor};
 	z-index: 1;
-	#selector{
-		position: absolute;
-		width: ${props => (100 / props.numOfLinks) + '%'};
-		height: 38px;
-		background-color: white;
-		z-index: -1;
-		margin-left: ${props => (props.hoverPosition * 100 / props.numOfLinks) + '%'};
-		transition: margin-left 0.309s;
-	}
 	.link{
 		user-select: none;
 		color: white;
+		&.active{
+			color: ${props => props.themeMainColor};
+			background-color: white;
+		}
 		display: block;
 		float: left;
 		font-size: large;
 		text-align: center;
 		width: ${props => (100 / props.numOfLinks) + '%'};
-		transition: color 0.309s;
+		transition: color 0.109s, background-color 0.109s;
 		cursor: pointer;
 		height: 38px;
 		line-height: 38px;
-		&:nth-child(${props => props.hoverPosition + 2}){
-			color: ${props => props.themeMainColor};
-		}
 		overflow: visible;
 		.sub{
 			display: none;
@@ -105,9 +99,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 		updateMainLocation: (location) => {
 			dispatch(updateMainLocation(location));
 		},
-		navigatorUpdateHoverPosition: (position) => {
-			dispatch(navigatorUpdateHoverPosition(position));
-		},
 		updateSubLocation: (mainLocation, subLocation) => {
 			dispatch(updateSubLocation(mainLocation, subLocation));
 		},
@@ -137,10 +128,6 @@ class Navigator extends Component{
 				className={(isActive ? 'active' : '') + ' link ' + hasSub}
 				onClick={() => {
 					this.props.updateMainLocation(link.main);
-					this.props.navigatorUpdateHoverPosition(index);
-				}}
-				onMouseOver={() => {
-					this.props.navigatorUpdateHoverPosition(index);
 				}}
 			>
 				{GL(link.main)}
@@ -184,7 +171,6 @@ class Navigator extends Component{
 				themeMainColor={window.shared.themeMainColor}
 				themeSubColor={window.shared.themeSubColor}
 				numOfLinks={links.length}
-				hoverPosition={this.props.navigator.hoverPosition}
 				onMouseOut={() => {
 					this.props.navigatorUpdateHoverPosition(activePosition);
 				}}

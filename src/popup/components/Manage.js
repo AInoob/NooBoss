@@ -10,6 +10,7 @@ class Manage extends Component{
 		return (
 			<ManageDiv>
 				<Selector
+					viewMode={this.props.viewMode}
 					updateSubWindow={this.props.updateSubWindow}
 					icons={this.props.icons}
 					groupList={this.props.groupList}
