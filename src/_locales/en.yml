@@ -1,0 +1,270 @@
+extension_name:
+  message: NooBoss
+extension_description:
+  message: A powerful Extensions Manager and Userscript Manager with many unique features
+overview:
+  message: Overview
+options:
+  message: Options
+extensions:
+  message: Extensions
+userscripts:
+  message: Userscripts
+history:
+  message: History
+about:
+  message: About
+notifications:
+  message: Notifications
+notification:
+  message: Notification
+autoState:
+  message: Auto State
+join_community:
+  message: Join community
+experience:
+  message: Experience
+empty_history:
+  message: Empty history
+clean:
+  message: Clean
+reset_everything:
+  message: Reset everything (Be careful!)
+join_nooboss_community:
+  message: Join NooBoss Community
+advanced:
+  message: Advanced
+theme:
+  message: Theme
+main_color:
+  message: Main color
+sub_color:
+  message: Sub color
+notify_state_change:
+  message: Notify state change
+notify_installation:
+  message: Notify installation/update
+notify_removal:
+  message: Notify removal
+notify_extension_state_change:
+  message: Notify extension state change
+for_X_seconds:
+  message: for X second(s)
+record_installation:
+  message: Record installation
+record_update:
+  message: Record update
+record_removal:
+  message: Record removal
+record_enable:
+  message: Record enable event
+record_disable:
+  message: Record disable event
+confirm:
+  message: Confirm
+cancel:
+  message: Cancel
+are_you_sure:
+  message: Are you sure?
+successfully_emptied_history:
+  message: Successfully emptied history
+successfully_reset_everything:
+  message: Successfully reset everything
+basics:
+  message: Basics
+backup:
+  message: Backup
+import_options:
+  message: Import options
+export_options:
+  message: Export options
+successfully_exported:
+  message: Successfully exported, the file name is "NooBoss.options"
+successfully_imported:
+  message: Successfully imported
+failed_to_import:
+  message: Failed to import
+was_installed:
+  message: ' was installed'
+was_updated:
+  message: ' was updated'
+was_removed:
+  message: ' was removed'
+is_enabled:
+  message: 'is enabled'
+is_disabled:
+  message: 'is disabled'
+was_enabled:
+  message: ' was enabled'
+was_disabled:
+  message: ' was disabled'
+when:
+  message: When
+event:
+  message: Event
+icon:
+  message: Icon
+name:
+  message: Name
+version:
+  message: Version
+manage:
+  message: Manage
+app:
+  message: App
+extension:
+  message: Extension
+all:
+  message: All
+group:
+  message: Group
+enable:
+  message: Enable
+disable:
+  message: Disable
+undo:
+  message: Undo
+redo:
+  message: Redo
+state:
+  message: State
+official_rating:
+  message: 'Official rating'
+description:
+  message: Description
+enabled:
+  message: Enabled
+disabled:
+  message: Disabled
+removed:
+  message: Removed
+install:
+  message: Install
+update:
+  message: Update
+enable:
+  message: Enable
+disable:
+  message: Disable
+remove:
+  message: Remove
+detail:
+  message: Detail
+last_update:
+  message: Last update'
+first_installed:
+  message: 'First installed'
+homepage_url:
+  message: 'Home url'
+id:
+  message: ID
+short_name:
+  message: 'Short name'
+type:
+  message: Type
+offline_enabled:
+  message: 'Offline enabled'
+download_crx:
+  message: 'Download CRX'
+update_url:
+  message: 'Update url'
+manifest_file:
+  message: 'Manifest file'
+may_disable:
+  message: 'May disable'
+install_type:
+  message: 'Install type'
+launch_type:
+  message: 'Launch type'
+permissions:
+  message: 'Permissions'
+host_permissions:
+  message: 'Host permissions'
+useful:
+  message: Useful
+working:
+  message: Working
+laggy:
+  message: Laggy
+buggy:
+  message: Buggy
+not_working:
+  message: 'Not working'
+ASM:
+  message: 'AD/Spam/Bad'
+nooboss_tags:
+  message: 'NooBoss Tags'
+new_group:
+  message: 'New group'
+rules:
+  message: Rules
+new_rule:
+  message: New Rule
+target_s:
+  message: Target(s)
+action:
+  message: Action
+match:
+  message: Match
+pattern:
+  message: 'Pattern'
+wildcard:
+  message: Wildcard
+RegExp:
+  message: RegExp
+enableWhen:
+  message: 'Enable when'
+disableWhen:
+  message: 'Disable when'
+enableOnly:
+  message: 'Enable only'
+disableOnly:
+  message: 'Disable only'
+add_rule:
+  message: 'Add rule'
+select_target_s:
+  message: 'Select target(s)'
+set_as_current_website:
+  message: 'Set as current website'
+you_have:
+  message: 'You have'
+extension_s:
+  message: '["extension","extensions"]'
+app_s:
+  message: '["app","apps"]'
+theme:
+  message: theme
+group_s:
+  message: '["group","groups"]'
+autoState_rule_s:
+  message: '["AutoState rule","AutoState rules"]'
+recommend_extensions:
+  message: 'Recommend extensions'
+recommended_for:
+  message: 'Recommended for X'
+all_websites:
+  message: 'All websites'
+select_extensions:
+  message: 'Select extensions'
+recommend:
+  message: Recommend
+reset_zoom:
+  message: 'Reset zoom'
+none:
+  message: 'None'
+set_zoom_to_100:
+  message: 'Set NooBoss zoom to 100%'
+x_1:
+  message: 'No one has recommended any extension for this website yet, do you have a wonderful extension for X?'
+x_2:
+  message: 'Extension(s) recommended successfully! Extensions that are not in NooBoss database will be added soon.'
+x_3:
+  message: 'Page zoom for NooBoss is not 100%, please click confirm to set zoom to 100%'
+x_4:
+  message: 'Successfully reset NooBoss page zoom to 100%'
+x_5:
+  message: 'By turning off join community, you will no longer get any community features, and you will not send any NooBoss usage to AInoob, so he will not be able to make a better NooBoss based on user usage'
+x_6:
+  message: 'NooBoss zoom is already 100%'
+x_7:
+  message: 'X1 X2 by autoState rule #X3'

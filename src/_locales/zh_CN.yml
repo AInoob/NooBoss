@@ -1,0 +1,270 @@
+extension_name:
+  message: 二管家
+extension_description:
+  message: 一个全能的拓展管理和用户脚本管理拓展
+overview:
+  message: 总览
+options:
+  message: 选项
+extensions:
+  message: 拓展
+userscripts:
+  message: 用户脚本
+history:
+  message: 历史
+about:
+  message: 关于
+notifications:
+  message: 通知
+notification:
+  message: 通知
+autoState:
+  message: 自动管理
+join_community:
+  message: 加入社区
+experience:
+  message: 体验
+empty_history:
+  message: 清空历史
+clean:
+  message: 清理
+reset_everything:
+  message: 重置(注意！)
+join_nooboss_community:
+  message: 加入二管家社区
+advanced:
+  message: 高级
+theme:
+  message: 主题
+main_color:
+  message: 主颜色
+sub_color:
+  message: 辅颜色
+notify_state_change:
+  message: 通知拓展的开启/关闭
+notify_installation:
+  message: 通知拓展的安装和更新
+notify_removal:
+  message: 通知拓展的卸载
+notify_extension_state_change:
+  message: 通知拓展状态更新
+for_X_seconds:
+  message: 持续X秒
+record_installation:
+  message: 记录安装
+record_update:
+  message: 记录更新
+record_removal:
+  message: 记录删除
+record_enable:
+  message: 记录开启事件
+record_disable:
+  message: 记录关闭事件
+confirm:
+  message: 确认
+cancel:
+  message: 取消
+are_you_sure:
+  message: 你确定吗？
+successfully_emptied_history:
+  message: 成功清空历史
+successfully_reset_everything:
+  message: 成功重置
+basics:
+  message: 基本
+backup:
+  message: 备份
+import_options:
+  message: 导入
+export_options:
+  message: 导出
+successfully_exported:
+  message: 成功导出，文字名为"NooBoss.options"
+successfully_imported:
+  message: 成功导入
+failed_to_import:
+  message: 导入失败
+was_installed:
+  message: '已被安装'
+was_updated:
+  message: '已被更新'
+was_removed:
+  message: '已被卸载'
+is_enabled:
+  message: '已被开启'
+is_disabled:
+  message: '已被关闭'
+was_enabled:
+  message: '已被开启'
+was_disabled:
+  message: '已被关闭'
+when:
+  message: 时间
+event:
+  message: 事件
+icon:
+  message: 图标
+name:
+  message: 名字
+version:
+  message: 版本
+manage:
+  message: 管理
+app:
+  message: 应用
+extension:
+  message: 拓展
+all:
+  message: 全部
+group:
+  message: 组
+enable:
+  message: 开启
+disable:
+  message: 关闭
+undo:
+  message: 撤销
+redo:
+  message: 重做
+state:
+  message: 状态
+official_rating:
+  message: 官方评分
+description:
+  message: 描述
+enabled:
+  message: 已开启
+disabled:
+  message: 已关闭
+removed:
+  message: 已删除
+detail:
+  message: 详细
+last_update:
+  message: 最后更新
+first_installed:
+  message: 首次安装
+homepage_url:
+  message: 主页
+id:
+  message: ID
+short_name:
+  message: 短名字
+type:
+  message: 类型
+offline_enabled:
+  message: 'Offline enabled'
+download_crx:
+  message: 下载CRX
+update_url:
+  message: 更新网址
+manifest_file:
+  message: Manifest文件`
+may_disable:
+  message: 可以关闭
+install_type:
+  message: 安装类型
+launch_type:
+  message: 启动类型
+permissions:
+  message: 权限
+host_permissions:
+  message: Host权限
+useful:
+  message: 很有用
+working:
+  message: 能工作
+laggy:
+  message: 卡
+buggy:
+  message: 很多bugs
+not_working:
+  message: 没卵用
+ASM:
+  message: 广告/垃圾
+nooboss_tags:
+  message: 二管家标签
+new_group:
+  message: 新建组
+rules:
+  message: 规则
+new_rule:
+  message: 新规则
+target_s:
+  message: 对象
+action:
+  message: 动作
+match:
+  message: 匹配
+pattern:
+  message: 模式
+wildcard:
+  message: 通配符
+RegExp:
+  message: 正则匹配
+enableWhen:
+  message: 匹配后开启
+disableWhen:
+  message: 匹配后关闭
+enableOnly:
+  message: 只有匹配才开启
+disableOnly:
+  message: 只有匹配才关闭
+add_rule:
+  message: 添加规则
+select_target_s:
+  message: 选择对象
+set_as_current_website:
+  message: 设置为当前网站
+you_have:
+  message: 你有
+extension_s:
+  message: '["个拓展","个拓展"]'
+app_s:
+  message: '["个应用","个应用"]'
+theme:
+  message: 个主题
+group_s:
+  message: '["个分组","个分组"]'
+autoState_rule_s:
+  message: '["个自动管理规则","个自动管理规则"]'
+recommend_extensions:
+  message: 推荐拓展
+recommended_for:
+  message: 为X推荐
+all_websites:
+  message: '所有网站'
+select_extensions:
+  message: 选择拓展
+recommend:
+  message: 推荐
+reset_zoom:
+  message: 重置缩放
+none:
+  message: 没有
+install:
+  message: 安装
+update:
+  message: 更新
+remove:
+  message: 卸载
+enable:
+  message: 开启
+disable:
+  message: 关闭
+set_zoom_to_100:
+  message: 设置二管家缩放为100%
+x_1:
+  message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
+x_2:
+  message: 拓展推荐成功～不在二管家数据库里的拓展会稍后被添加
+x_3:
+  message: 二管家页面缩放不是100%，请点击确定来调整缩放
+x_4:
+  message: 成功重置二管家的缩放为100%
+x_5:
+  message: 关闭社区功能后，二管家社区相关功能将被关闭，二管家也不会再上传你的二管家使用记录了，这样AInoob就没法根据用户使用情况提供更好的二管家了。
+x_6:
+  message: 二管家缩放已经是100%了
+x_7:
+  message: 因为自动管理规则#X3，X1X2
