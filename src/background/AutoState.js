@@ -48,7 +48,7 @@ export default (NooBoss) => {
 		},
 		updateTab: (tabId, changeInfo, tab) => {
 			if (changeInfo.url) {
-				const oldUrl = (NooBoss.AutoState.tabs[tabId] || {}).url;
+				const oldUrl = NooBoss.AutoState.tabs[tabId] || null;
 				if(oldUrl != changeInfo.url) {
 					NooBoss.AutoState.tabs[tabId] = changeInfo.url;
 					NooBoss.AutoState.manage(tabId);
@@ -66,7 +66,7 @@ export default (NooBoss) => {
 				NooBoss.AutoState.newTab(tab);
 			});
 		},
-		manage: (tabId) => {
+		manage: async tabId => {
 			const autoState = NooBoss.AutoState;
 			const tabs = autoState.tabs;
 			const nextPhases = {};
@@ -151,38 +151,45 @@ export default (NooBoss) => {
 				}
 			}
 			const ids=Object.keys(nextPhases);
-			for(let i = 0; i < ids.length; i++) {
-				const id=ids[i];
+			let tabIdRefresh = null;
+			await Promise.all(ids.map(id => {
 				const phase=nextPhases[id];
-				NooBoss.AutoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
+				tabIdRefresh = tabIdRefresh || phase.tabId;
+				return NooBoss.AutoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
+			}));
+			if (tabIdRefresh) {
+				browser.tabs.reload(tabIdRefresh);
 			}
 		},
-		setAppState: async (id, enabled, tabId, ruleId) => {
-			if (NooBoss.Extensions.apps[id]) {
-				const appInfo = NooBoss.Extensions.apps[id];
-				if (appInfo && appInfo.enabled != enabled) {
-					appInfo.enabled = enabled;
-					await NooBoss.Extensions.toggle(id, enabled);
-					let enabledStr = 'enabled';
-					if (!enabled) {
-						enabledStr = 'disabled';
+		setAppState: (id, enabled, tabId, ruleId) => {
+			return new Promise(async resolve => {
+				if (NooBoss.Extensions.apps[id]) {
+					const appInfo = NooBoss.Extensions.apps[id];
+					if (appInfo && appInfo.enabled != enabled) {
+						appInfo.enabled = enabled;
+						await NooBoss.Extensions.toggle(id, enabled);
+						let enabledStr = 'enabled';
+						if (!enabled) {
+							enabledStr = 'disabled';
+						}
+						isOn('autoStateNotification', async () => {
+							notify(
+								GL('autoState'),
+								GL('x_7').replace('X1', appInfo.name
+								).replace('X2', GL(enabled ? 'is_enabled' : 'is_disabled').toLowerCase()
+									).replace('X3', ruleId + 1),
+								await promisedGet('notificationDuration_autoState'));
+						});
+						resolve();
 					}
-					isOn('autoStateNotification', async () => {
-						notify(
-							GL('autoState'),
-							GL('x_7').replace('X1', appInfo.name
-											).replace('X2',GL(enabled ? 'is_enabled' : 'is_disabled').toLowerCase()
-											).replace('X3', ruleId + 1),
-							await promisedGet('notificationDuration_autoState'));
-					});
-					//get('userId', userId => {
-					//	newCommunityRecord(false, { userId, category: 'AutoState', event: enabledStr });
-					//});
-					if (tabId) {
-						browser.tabs.reload(tabId);
+					else {
+						resolve();
 					}
 				}
-			}
+				else {
+					resolve();
+				}
+			});
 		},
 	};
 };
