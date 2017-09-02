@@ -21,15 +21,13 @@ const OptionsDiv = styled.div`
 		display: none;
 	}
 	.colorPickerHolder{
+		height: 196px;
 		overflow: hidden;
 		margin-left: 88px;
 		float: left;
 		margin-top: 6px;
-		box-shadow: ${() => shared.themeMainColor} -1px -1px 3px 0px;
-		&:focus{
-			box-shadow: ${() => shared.themeMainColor} -1px -1px 8px 0px;
-			outline: none;
-		}
+		box-shadow: ${() => shared.themeMainColor} -1px -1px 8px 0px;
+		outline: none;
 	}
 	.displayMore{
 		display: none;
@@ -390,8 +388,8 @@ class Options extends Component{
 									<div
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
-									 	tabIndex="-1"
 										onBlur={()=>{setTimeout(() => {this.setState({ colorPicker: null })}, 88)}}
+									 	tabIndex="-1"
 									>
 										<SketchPicker
 											color={this.props.options.themeMainColor}
@@ -407,8 +405,8 @@ class Options extends Component{
 									<div
 										ref={div => div && div.focus()}
 										className="colorPickerHolder"
-									 	tabIndex="-1"
 										onBlur={()=>{setTimeout(() => {this.setState({ colorPicker: null })}, 88)}}
+									 	tabIndex="-1"
 									>
 										<SketchPicker
 											color={this.props.options.themeSubColor}

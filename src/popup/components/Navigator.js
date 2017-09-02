@@ -171,9 +171,6 @@ class Navigator extends Component{
 				themeMainColor={window.shared.themeMainColor}
 				themeSubColor={window.shared.themeSubColor}
 				numOfLinks={links.length}
-				onMouseOut={() => {
-					this.props.navigatorUpdateHoverPosition(activePosition);
-				}}
 			>
 				<div id="selector" />
 				{links}

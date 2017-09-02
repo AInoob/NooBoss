@@ -151,12 +151,14 @@ export default (NooBoss) => {
 				}
 			}
 			const ids=Object.keys(nextPhases);
-			let tabIdRefresh = null;
-			await Promise.all(ids.map(id => {
+			let x = await Promise.all(ids.map(id => {
 				const phase=nextPhases[id];
-				tabIdRefresh = tabIdRefresh || phase.tabId;
 				return NooBoss.AutoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
 			}));
+			let tabIdRefresh = x.reduce((accumulator, current) => {
+				return accumulator || current;
+			});
+			console.log(tabIdRefresh);
 			if (tabIdRefresh) {
 				browser.tabs.reload(tabIdRefresh);
 			}
@@ -180,7 +182,7 @@ export default (NooBoss) => {
 									).replace('X3', ruleId + 1),
 								await promisedGet('notificationDuration_autoState'));
 						});
-						resolve();
+						resolve(tabId);
 					}
 					else {
 						resolve();
