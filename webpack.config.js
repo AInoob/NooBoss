@@ -45,5 +45,8 @@ module.exports={
 			{ from: './src/images', to: 'images'  },
 			{ from: './src/thirdParty', to: 'thirdParty'  },
     ]),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    })
   ]
 }

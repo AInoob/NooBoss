@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ExtensionBrief  from './ExtensionBrief';
 import GroupBrief  from './GroupBrief';
 import { GL, sendMessage } from '../../utils';
@@ -66,6 +66,17 @@ const SelectorDiv = styled.div`
 		clear: both;
 		padding-top: 12px;
 	}
+	${props => props.selectMode && css `
+		#extensionList{
+			zoom: 0.8;
+		}
+		#appList{
+			zoom: 0.8;
+		}
+		#groupList{
+			zoom: 0.8;
+		}
+	`}
 `;
 
 class Selector extends Component{
@@ -273,6 +284,7 @@ class Selector extends Component{
 				const id = group.id;
 				groupList.push(
 					<GroupBrief group={group} withControl={true} key={index}
+						viewMode={this.props.viewMode}
 						selected={this.props.selectedList ? (this.props.selectedList.indexOf(id) != -1) : null}
 						onClick={() => {
 							if (this.props.select) {
@@ -344,7 +356,7 @@ class Selector extends Component{
 		);
 		let tttt = <BigTiley id="bigTile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'bigTile' }, ()=>{})} color={shared.themeMainColor} />
 		return (
-			<SelectorDiv viewMode={this.props.viewMode}>
+			<SelectorDiv selectMode={this.props.select} viewMode={this.props.viewMode}>
 				{actionBar}
 				{view}
 				{groupDiv}

@@ -503,6 +503,7 @@ class NooBoss extends Component{
 					groupList={groupList}
 					autoStateRuleList={autoStateRuleList}
 					getExtensionInfoWeb={this.getExtensionInfoWeb.bind(this)}
+					viewMode={this.state.viewMode}
 				/>
 			);
 		}
@@ -543,6 +544,7 @@ class NooBoss extends Component{
 				<Navigator />
 				{page}
 				<SubWindow
+					viewMode={this.state.viewMode}
 					icons={this.state.icons}
 					extensions={extensions}
 					groupList={groupList}

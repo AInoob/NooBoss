@@ -76,6 +76,7 @@ class Extensions extends Component{
 		else if (this.props.location.sub['extensions'] == 'autoState') {
 			core = (
 				<AutoState
+					viewMode={this.props.viewMode}
 					autoStateRuleList={this.props.autoStateRuleList}
 					icons={this.props.icons}
 					extensions={this.props.extensions}

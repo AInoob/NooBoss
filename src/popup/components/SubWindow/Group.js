@@ -109,6 +109,7 @@ class Group extends Component{
 						{selectedList}
 					</div>
 					<Selector
+						viewMode={this.props.viewMode}
 						actionBar={true}
 						icons={this.props.icons}
 						extensions={this.props.extensions}

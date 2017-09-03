@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switchy, Removy, Copyy, Groupy } from '../../icons';
+import { Optioney, Switchy, Removy, Copyy, Groupy } from '../../icons';
 import { sendMessage } from '../../utils';
 import styled, { css } from 'styled-components';
 
@@ -36,6 +36,9 @@ const GroupBriefDiv = styled.div`
 		}
 		svg.groupIcon{
 			height: 100%;
+		}
+		#optioney{
+			display: none;
 		}
 		.nameFront{
 			top: 80px;
@@ -124,33 +127,153 @@ const GroupBriefDiv = styled.div`
 			}
 		}
 	`}
+	${props => props.viewMode == 'bigTile' && css `
+		width: 212px;
+		height: 66px;
+		padding: 6px;
+		margin: 6px;
+		margin-bottom: 12px;
+		box-shadow: none;
+		transition: none !important;
+		&:hover{
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 6px 0px;
+		}
+		.nameFront{
+			display: none;
+		}
+		.groupInfo, .groupIcon{
+			transform: rotateY(0deg) !important;
+		}
+		.groupControl{
+			position: absolute;
+			left: 86px;
+			top: 36px;
+			svg{
+				float: left;
+			}
+		}
+		.groupBrief{
+			margin-top: 0px;
+			.groupIcon{
+				cursor: pointer;
+				position: absolute;
+				margin-top: 0px;
+				margin-left: 0px;
+				width: 64px;
+			}
+			#groupName{
+				position: absolute;
+				height: initial !important;
+				margin-left: 0px;
+				left: 95px;
+				top: 0px;
+				text-align: left;
+				overflow: hidden;
+				width: 145px !important;
+			}
+			#groupVersion{
+				position: absolute;
+				left: 400px;
+			}
+		}
+	`}
+	${props => props.viewMode == 'list' && css `
+		width: 100%;
+		height: 33px;
+		padding: 0px;
+		padding-top: 6px;
+		box-shadow: none;
+		transition: none !important;
+		&:hover{
+			box-shadow: ${() => shared.themeMainColor} 0px 0px 0px 1px;
+		}
+		.nameFront{
+			display: none;
+		}
+		.groupInfo, .groupIcon{
+			transform: rotateY(0deg) !important;
+		}
+		.groupControl{
+			#switchyEnable{
+				left: 16px;
+			}
+			#switchyDisable{
+				left: 44px;
+			}
+			#copyy{
+				left: 540px;
+			}
+			#optioney{
+				display: inline-block;
+				left: 570px;
+			}
+			#removy{
+				left: 600px;
+			}
+			#chromey{
+				left: 630px;
+			}
+			svg{
+				position: absolute;
+				top: 2px;
+			}
+		}
+		.groupBrief{
+			margin-top: 0px;
+			.groupIcon{
+				position: absolute;
+				margin-top: 0px;
+				margin-left: 63px;
+				width: 26px;
+				height: 26px !important;
+			}
+			#groupName{
+				position: absolute;
+				margin-left: 0px;
+				margin-top: 0px !important;
+				line-height: 26px;
+				left: 119px;
+				top: 0;
+				text-align: left;
+				overflow: hidden;
+				width: 346px !important;
+				height: 20px !important;
+			}
+			#groupVersion{
+				position: absolute;
+				left: 400px;
+			}
+		}
+	`}
 `;
 
 class GroupBrief extends Component{
 	render() {
 		const group = this.props.group;
-		let switchyEnable, switchyDisable, removy, copyy;
-    switchyEnable = <Switchy onClick={this.props.enable} color={shared.themeMainColor} />;
-		switchyDisable = <Switchy onClick={this.props.disable} color={shared.themeMainColor} changeRGBA='rgba(-155,-155,-155,-0.8)' />;
-		copyy = <Copyy onClick={this.props.copy} color={shared.themeMainColor} />
-		removy = <Removy onClick={this.props.remove} color={shared.themeMainColor} />;
+		let updateSubWindow = function() {};
+		if (this.props.updateSubWindow) {
+			updateSubWindow = this.props.updateSubWindow.bind(null, 'group', group.id);
+		}
+		let switchyEnable, switchyDisable, removy, copyy, optioney;
+    switchyEnable = <Switchy id="switchyEnable" onClick={this.props.enable} color={shared.themeMainColor} />;
+		switchyDisable = <Switchy id="switchyDisable" onClick={this.props.disable} color={shared.themeMainColor} changeRGBA='rgba(-155,-155,-155,-0.6)' />;
+		optioney = <Optioney id="optioney" onClick={updateSubWindow} color={shared.themeMainColor} />
+		copyy = <Copyy id="copyy" onClick={this.props.copy} color={shared.themeMainColor} />
+		removy = <Removy id="removy" onClick={this.props.remove} color={shared.themeMainColor} />;
 		const groupControl = !this.props.withControl ? null : (
 			<div className="groupControl">
 				{switchyEnable}
 				{switchyDisable}
 				{copyy}
+				{optioney}
 				{removy}
 			</div>
 		);
-		let updateSubWindow = function() {};
-		if (this.props.updateSubWindow) {
-			updateSubWindow = this.props.updateSubWindow.bind(null, 'group', group.id);
-		}
 		return (
-			<GroupBriefDiv onClick={this.props.onClick} selected={this.props.selected} withControl={this.props.withControl}>
+			<GroupBriefDiv viewMode={this.props.viewMode} onClick={this.props.onClick} selected={this.props.selected} withControl={this.props.withControl}>
 				<div className="shadow"></div>
 				<div className="groupBrief">
-					{this.props.icon ? <img className="groupIcon" src={this.props.icon} /> : <Groupy className="groupIcon" color={shared.themeMainColor} />}
+					{this.props.icon ? <img className="groupIcon" onClick={updateSubWindow} src={this.props.icon} /> : <Groupy className="groupIcon" onClick={updateSubWindow} color={shared.themeMainColor} />}
 					<span className="nameFront">{group.name}</span>
 					<div className="groupInfo">
 						{groupControl}

@@ -159,9 +159,9 @@ const ExtensionBriefDiv = styled.div`
 			.extensionIcon{
 				cursor: pointer;
 				position: absolute;
-				margin-top: 0px;
-				margin-left: 0px;
-				width: 64px;
+				margin-top: 4px;
+				margin-left: 4px;
+				width: 53px;
 			}
 			#extensionName{
 				position: absolute;
@@ -213,6 +213,7 @@ const ExtensionBriefDiv = styled.div`
 			}
 			svg{
 				position: absolute;
+				top: 2px;
 			}
 		}
 		.extensionBrief{
@@ -230,6 +231,7 @@ const ExtensionBriefDiv = styled.div`
 				top: 0;
 				text-align: left;
 				overflow: hidden;
+				line-height: 26px;
 				width: 346px !important;
 				height: 20px !important;
 			}
@@ -248,7 +250,7 @@ class ExtensionBrief extends Component{
 		let disabled = false;
 		if (!extension.enabled) {
 			disabled = true;
-			switchyRGBA = 'rgba(-155,-155,-155,-0.8)';
+			switchyRGBA = 'rgba(-155,-155,-155,-0.6)';
 		}
 		let launchy, switchy, optioney, removy, chromey;
 		if (extension.isApp) {

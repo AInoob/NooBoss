@@ -332,6 +332,7 @@ class AutoState extends Component{
 				<button onClick={this.addRule.bind(this)}>{GL('add_rule')}</button>
 				<h2>{GL('select_target_s')}</h2>
 				<Selector
+					viewMode={this.props.viewMode}
 					icons={this.props.icons}
 					groupList={this.props.groupList}
 					extensions={this.props.extensions}

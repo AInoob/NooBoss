@@ -76,6 +76,7 @@ class SubWindow extends Component{
             icons={this.props.icons}
             icon={this.props.icons[(group || {}).id + '_icon']}
             group={group} 
+            viewMode={this.props.viewMode}
           />
         );
         break;

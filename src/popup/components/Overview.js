@@ -465,6 +465,7 @@ class Overview extends Component{
 					<button onClick={this.reco.bind(this, 'recommendExtensions')} className={this.state.recommendExtensionList.length > 0 ? '' : 'inActive'} id="recommendExtensionsButton">{GL('recommend')}</button>
 					<div id="recommendExtensionsDiv">
 						<Selector
+							viewMode={this.props.viewMode}
 							actionBar={true}
 							filterType='chromeWebStoreExtensionOnly'
 							icons={this.props.icons}
