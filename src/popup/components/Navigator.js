@@ -17,7 +17,7 @@ const NavigatorDiv = styled.nav`
 	transition: box-shadow 0.1s;
 
 	background-color: ${props => props.themeMainColor};
-	z-index: 1;
+	z-index: 5;
 	.link{
 		user-select: none;
 		color: white;
