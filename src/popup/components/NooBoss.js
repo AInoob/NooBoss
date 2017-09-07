@@ -55,8 +55,7 @@ const NooBossDiv = styled.div`
 	&::-webkit-scrollbar-thumb{
 		background: ${props => props.themeMainColor};
 	}
-	height: 600px;
-	min-height: 300px;
+	height: 560px;
 	* {
 		transition: opacity 0.309s, box-shadow 0.309s;
 	}

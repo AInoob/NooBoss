@@ -1,0 +1,270 @@
+extension_name:
+  message: 二管家
+extension_description:
+  message: 一個全能的擴充功能管理和使用者指令碼管理擴充功能
+overview:
+  message: 總覽
+options:
+  message: 選項
+extensions:
+  message: 擴充功能
+userscripts:
+  message: 使用者指令碼
+history:
+  message: 歷程記錄
+about:
+  message: 關於
+notifications:
+  message: 通知
+notification:
+  message: 通知
+autoState:
+  message: 自動管理
+join_community:
+  message: 加入社群
+experience:
+  message: 體驗
+empty_history:
+  message: 清除歷程記錄
+clean:
+  message: 清理
+reset_everything:
+  message: 重設(注意！)
+join_nooboss_community:
+  message: 加入二管家社群
+advanced:
+  message: 進階
+theme:
+  message: 主題
+main_color:
+  message: 主色彩
+sub_color:
+  message: 輔色彩
+notify_state_change:
+  message: 通知擴充功能的開啟/關閉
+notify_installation:
+  message: 通知擴充功能的安裝和更新
+notify_removal:
+  message: 通知擴充功能的移除
+notify_extension_state_change:
+  message: 通知擴充功能狀態更新
+for_X_seconds:
+  message: 持續X秒
+record_installation:
+  message: 記錄安裝
+record_update:
+  message: 記錄更新
+record_removal:
+  message: 記錄刪除
+record_enable:
+  message: 記錄開啟事件
+record_disable:
+  message: 記錄關閉事件
+confirm:
+  message: 確認
+cancel:
+  message: 取消
+are_you_sure:
+  message: 你確定嗎？
+successfully_emptied_history:
+  message: 成功清除歷程記錄
+successfully_reset_everything:
+  message: 成功重設
+basics:
+  message: 基本
+backup:
+  message: 備份
+import_options:
+  message: 匯入
+export_options:
+  message: 匯出
+successfully_exported:
+  message: 成功匯出，檔名為"NooBoss.options"
+successfully_imported:
+  message: 成功匯入
+failed_to_import:
+  message: 匯入失敗
+was_installed:
+  message: '已被安裝'
+was_updated:
+  message: '已被更新'
+was_removed:
+  message: '已被移除'
+is_enabled:
+  message: '已被開啟'
+is_disabled:
+  message: '已被關閉'
+was_enabled:
+  message: '已被開啟'
+was_disabled:
+  message: '已被關閉'
+when:
+  message: 時間
+event:
+  message: 事件
+icon:
+  message: 圖示
+name:
+  message: 名稱
+version:
+  message: 版本
+manage:
+  message: 管理
+app:
+  message: 應用
+extension:
+  message: 擴充功能
+all:
+  message: 全部
+group:
+  message: 分組
+enable:
+  message: 開啟
+disable:
+  message: 關閉
+undo:
+  message: 還原
+redo:
+  message: 重做
+state:
+  message: 狀態
+official_rating:
+  message: 官方評分
+description:
+  message: 描述
+enabled:
+  message: 已開啟
+disabled:
+  message: 已關閉
+removed:
+  message: 已刪除
+detail:
+  message: 詳細
+last_update:
+  message: 最後更新
+first_installed:
+  message: 首次安裝
+homepage_url:
+  message: 首頁
+id:
+  message: ID
+short_name:
+  message: 短名稱
+type:
+  message: 類型
+offline_enabled:
+  message: 'Offline enabled'
+download_crx:
+  message: 下載CRX
+update_url:
+  message: 更新網址
+manifest_file:
+  message: Manifest檔案
+may_disable:
+  message: 可以關閉
+install_type:
+  message: 安裝類型
+launch_type:
+  message: 啟動類型
+permissions:
+  message: 權限
+host_permissions:
+  message: Host權限
+useful:
+  message: 很有用
+working:
+  message: 能運作
+laggy:
+  message: 卡
+buggy:
+  message: 很多bug
+not_working:
+  message: 沒屁用
+ASM:
+  message: 廣告/垃圾
+nooboss_tags:
+  message: 二管家標籤
+new_group:
+  message: 新增分組
+rules:
+  message: 規則
+new_rule:
+  message: 新規則
+target_s:
+  message: 物件
+action:
+  message: 動作
+match:
+  message: 比對
+pattern:
+  message: 模式
+wildcard:
+  message: 萬用字元
+RegExp:
+  message: 正則符合
+enableWhen:
+  message: 符合後開啟
+disableWhen:
+  message: 符合後關閉
+enableOnly:
+  message: 只有符合才開啟
+disableOnly:
+  message: 只有符合才關閉
+add_rule:
+  message: 新增規則
+select_target_s:
+  message: 選擇物件
+set_as_current_website:
+  message: 設定為目前網站
+you_have:
+  message: 你有
+extension_s:
+  message: '["個擴充功能","個擴充功能"]'
+app_s:
+  message: '["個應用","個應用"]'
+theme:
+  message: 個主題
+group_s:
+  message: '["個分組","個分組"]'
+autoState_rule_s:
+  message: '["個自動管理規則","個自動管理規則"]'
+recommend_extensions:
+  message: 推薦擴充功能
+recommended_for:
+  message: 為X推薦
+all_websites:
+  message: '所有網站'
+select_extensions:
+  message: 選擇擴充功能
+recommend:
+  message: 推薦
+reset_zoom:
+  message: 重設縮放
+none:
+  message: 沒有
+install:
+  message: 安裝
+update:
+  message: 更新
+remove:
+  message: 移除
+enable:
+  message: 開啟
+disable:
+  message: 關閉
+set_zoom_to_100:
+  message: 設定二管家縮放為100%
+x_1:
+  message: '還沒人給X推薦擴充功能呢，你有什麼好的擴充功能推薦嗎？'
+x_2:
+  message: 擴充功能推薦成功～不在二管家資料庫裡的擴充功能會稍後被加入
+x_3:
+  message: 二管家頁面縮放不是100%，請點選確定來調整縮放
+x_4:
+  message: 成功重設二管家的縮放為100%
+x_5:
+  message: 關閉社群功能後，二管家社群相關功能將被關閉，二管家也不會再上傳你的二管家使用記錄了，這樣AInoob就沒法根據使用者使用情況提供更好的二管家了。
+x_6:
+  message: 二管家縮放已經是100%了
+x_7:
+  message: 因為自動管理規則#X3，X1X2

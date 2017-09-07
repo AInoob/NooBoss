@@ -159,7 +159,7 @@ download_crx:
 update_url:
   message: 更新网址
 manifest_file:
-  message: Manifest文件`
+  message: Manifest文件
 may_disable:
   message: 可以关闭
 install_type:
