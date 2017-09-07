@@ -198,7 +198,7 @@ class About extends Component{
 			case 'zh':
 			case 'zh-CN':
 				aboutDiv = (
-					<AboutDiv em={1.5}>
+					<AboutDiv em={1.3}>
 						<section>
 							<h2>二管家</h2>
 							<a id="icon1" target="_blank" href='https://ainoob.com/project/nooboss'
@@ -327,7 +327,7 @@ class About extends Component{
 			break;
 			case 'zh-TW':
 				aboutDiv = (
-					<AboutDiv em={1.5}>
+					<AboutDiv em={1.3}>
 						<section>
 							<h2>二管家</h2>
 							<a id="icon1" target="_blank" href='https://ainoob.com/project/nooboss'

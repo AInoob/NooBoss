@@ -109,7 +109,7 @@ class History extends Component{
 		}).filter((elem, index) => index < this.state.maxRecords).map((record, index) => {
 			return (
 				<tr key={index} className="record">
-					<td><TimeAgo datetime={record.date} locale={this.state.isZh ? 'zh_CN' : 'en'} /></td>
+					<td><TimeAgo datetime={record.date} locale={browser.i18n.getUILanguage().replace('-', '_')} /></td>
 					<td>{GL(record.event)}</td>
 					<td className="icon"><img src={icons[record.icon]} /></td>
 					<td className="name" onClick={this.props.updateSubWindow.bind(null, 'extension', record.id)}>{record.name}</td>
