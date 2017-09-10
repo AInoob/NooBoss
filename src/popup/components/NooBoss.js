@@ -482,6 +482,7 @@ class NooBoss extends Component{
 	}
 
 	render() {
+		const language = this.props.language;
 		shared.themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		shared.themeSubColor = generateRGBAString(this.props.options.themeSubColor);
 		const extensions = this.state.extensions || {};
@@ -522,6 +523,7 @@ class NooBoss extends Component{
 		else if (location == 'history') {
 			page = (
 				<History getIcon={this.getIcon.bind(this)}
+					language={language}
 					updateScrollChild={ref => this.onScrollChild = ref}
 					icons={this.state.icons}
 					recordList={this.state.historyRecordList}
