@@ -545,6 +545,7 @@ class NooBoss extends Component{
 				<Navigator />
 				{page}
 				<SubWindow
+					language={language}
 					viewMode={this.state.viewMode}
 					icons={this.state.icons}
 					extensions={extensions}

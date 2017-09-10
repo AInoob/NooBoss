@@ -56,6 +56,7 @@ class SubWindow extends Component{
         const extension = this.props.extensions[id];
         content = (
           <Extension
+            language={this.props.language}
 						updateSubWindow={this.props.updateSubWindow}
             extensions={this.props.extensions}
             groupList={this.props.groupList}
