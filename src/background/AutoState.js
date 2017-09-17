@@ -96,6 +96,7 @@ export default (NooBoss) => {
 									tabId,
 									ruleId: i
 								}
+								enableOnlys[id] = true;
 							});
 						}
 						else{
