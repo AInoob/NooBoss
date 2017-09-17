@@ -210,8 +210,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			})
 		},
 		updateLanguage: () => {
-			return new Promise(async resolve => {
-				const language = await getLanguage();
+			return new Promise(resolve => {
+				const language = getLanguage();
 				dispatch(updateLanguage(language));
 				resolve();
 			});
@@ -383,6 +383,7 @@ class NooBoss extends Component{
 	async componentWillMount() {
 		browser.runtime.onMessage.addListener(this.listener);
 		this.setState({ viewMode: await promisedGet('viewMode') });
+		this.props.updateLanguage();
 	}
 
 	componentWillUnmount() {
@@ -397,7 +398,6 @@ class NooBoss extends Component{
 					this.setState({ viewMode: message.value });
 					break;
 				case 'popupHistoryUpdate':
-					console.log(location);
 					if (location == 'history') {
 						this.getHistoryRecordList();
 					}

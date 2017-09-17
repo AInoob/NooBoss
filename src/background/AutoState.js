@@ -150,15 +150,14 @@ export default (NooBoss) => {
 						break;
 				}
 			}
-			const ids=Object.keys(nextPhases);
-			let x = await Promise.all(ids.map(id => {
+			const idList=Object.keys(nextPhases);
+			let x = await Promise.all(idList.map(id => {
 				const phase=nextPhases[id];
 				return NooBoss.AutoState.setAppState(id, phase.enabled, phase.tabId, phase.ruleId);
 			}));
 			let tabIdRefresh = x.reduce((accumulator, current) => {
 				return accumulator || current;
-			});
-			console.log(tabIdRefresh);
+			}, null);
 			if (tabIdRefresh) {
 				browser.tabs.reload(tabIdRefresh);
 			}

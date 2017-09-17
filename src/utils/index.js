@@ -1,6 +1,4 @@
 export const GLS = (string, number) => {
-	console.log(GL(string));
-	console.log(JSON.parse(GL(string)));
 	if (number == 0 || number == 1) {
 		return JSON.parse(GL(string))[0];
 	} else {
@@ -394,18 +392,12 @@ export const getIconDBKey = (appInfo) => {
 };
 
 export const getLanguage = () => {
-	return new Promise(resolve => {
-		browser.i18n.getAcceptLanguages(languageList => {
-			const supportedLanguageList = [ 'ar', 'be', 'bg', 'ca', 'da', 'de', 'el', 'en', 'en_short', 'es', 'eu', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'in_BG', 'in_HI', 'in_ID', 'it', 'ja', 'ko', 'ml', 'my', 'nb_NO', 'nl', 'nn_NO', 'pl', 'pt_BR', 'ro', 'ru', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'zh_CN', 'zh_TW' ];
-			const bestLanguageIndex = supportedLanguagesList.reduce((index, language) => {
-				const languageIndex = languageList.indexOf(language);
-				if (index == -1 || (languageIndex != -1 && languageIndex < index)) {
-					return languageIndex;
-				}
-			}, -1);
-			resolve(bestLanguageIndex == -1 ? 'en' : languageList[bestLanguageIndex]);
-		});
-	});
+	let language = browser.i18n.getUILanguage().replace('-', '_');
+	const supportedLanguageList = [ 'ar', 'be', 'bg', 'ca', 'da', 'de', 'el', 'en', 'en_short', 'es', 'eu', 'fa', 'fi', 'fr', 'gl', 'he', 'hu', 'in_BG', 'in_HI', 'in_ID', 'it', 'ja', 'ko', 'ml', 'my', 'nb_NO', 'nl', 'nn_NO', 'pl', 'pt_BR', 'ro', 'ru', 'sv', 'ta', 'th', 'tr', 'uk', 'vi', 'zh_CN', 'zh_TW' ];
+	if (supportedLanguageList.indexOf(language) == -1) {
+		language = language.split('_')[0];
+	}
+	return supportedLanguageList.indexOf(language) == -1 ? 'en' : language;
 };
 
 export const getA = (url) => {

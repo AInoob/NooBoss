@@ -375,8 +375,6 @@ class Overview extends Component{
 		const noobossDiv = document.getElementById('noobossDiv');
 		if (noobossDiv.scrollHeight - (noobossDiv.scrollTop + noobossDiv.clientHeight) < 200) {
 			const lastScrollDate = Date.now();
-			console.log(this.state.lastScrollDate);
-			console.log(lastScrollDate);
 			if (this.state.lastScrollDate + 200 < lastScrollDate) {
 				this.setState({ maxReco: this.state.maxReco + 10, lastScrollDate }, this.getExtensionInfoWeb);
 			}

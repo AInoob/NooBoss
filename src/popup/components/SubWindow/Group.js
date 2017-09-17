@@ -20,6 +20,9 @@ const GroupDiv = styled.div`
 	&::-webkit-scrollbar-thumb{
 		background: ${props => window.shared.themeMainColor};
 	}
+	section{
+		width: 90%;
+	}
 	#name{
 		margin-top: 10px;
 		font-size: 36px;
@@ -110,6 +113,7 @@ class Group extends Component{
 					</div>
 					<Selector
 						viewMode={this.props.viewMode}
+						zoom={0.8}
 						actionBar={true}
 						icons={this.props.icons}
 						extensions={this.props.extensions}

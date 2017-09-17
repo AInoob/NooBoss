@@ -65,16 +65,11 @@ const SelectorDiv = styled.div`
 	#extensionList, #appList, #themeList, #groupList{
 		clear: both;
 		padding-top: 12px;
+		zoom: ${props => props.zoom || 1};
 	}
-	${props => props.selectMode && css `
-		#extensionList{
-			zoom: 0.8;
-		}
-		#appList{
-			zoom: 0.8;
-		}
-		#groupList{
-			zoom: 0.8;
+	${props => props.viewMode == 'tile' && css `
+		#extensionList, #appList, #themeList, #groupList{
+			zoom: ${props => props.zoom ? props.zoom * 1.08325 : 1};
 		}
 	`}
 `;
@@ -268,6 +263,7 @@ class Selector extends Component{
 					extensionList.push(x);
 					break;
 				case 'app':
+				case 'hosted_app':
 					appList.push(x);
 					break;
 				case 'packaged_app':
@@ -356,7 +352,7 @@ class Selector extends Component{
 		);
 		let tttt = <BigTiley id="bigTile" onClick={sendMessage.bind(null, { job: 'set', key: 'viewMode', value: 'bigTile' }, ()=>{})} color={shared.themeMainColor} />
 		return (
-			<SelectorDiv selectMode={this.props.select} viewMode={this.props.viewMode}>
+			<SelectorDiv zoom={this.props.zoom} viewMode={this.props.viewMode}>
 				{actionBar}
 				{view}
 				{groupDiv}
