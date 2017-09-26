@@ -28,7 +28,7 @@ export default (NooBoss) => {
 						notify(
 							GL('notification'),
 							appInfo.name + GL('was_' + (event == 'install' ? 'installed' : 'updated')),
-							NooBoss.Options.options['notificationDuration_removal']
+							NooBoss.Options.options['notificationDuration_installation']
 						);
 					}
 				});

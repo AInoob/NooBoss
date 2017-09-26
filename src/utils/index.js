@@ -377,6 +377,9 @@ export const getDomainFromUrl = (url) => {
 	if (list.length == 1){
 		return list[0];
 	}
+	if (list.length > 3 && ['com', 'net', 'gov'].indexOf(list[list.length -2]) != -1) {
+		return list[list.length - 3] + '.' + list[list.length - 2] + '.' + list[list.length - 1];
+	}
 	return list[list.length - 2] + '.' + list[list.length - 1];
 };
 
