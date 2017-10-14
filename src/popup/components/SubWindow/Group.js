@@ -98,7 +98,12 @@ class Group extends Component{
 		}
 		const selectedList = (group.appList || []).map((id, index) => {
 			const extension = this.props.extensions[id];
-			return <img key={index} title={extension.name} src={this.props.icons[id + '_' + extension.version + '_icon']} />;
+			if (extension) {
+				return <img key={index} title={extension.name} src={this.props.icons[id + '_' + extension.version + '_icon']} />;
+			}
+			else {
+				this.change('selectExtension', id);
+			}
 		});
 		return (
 			<GroupDiv>
