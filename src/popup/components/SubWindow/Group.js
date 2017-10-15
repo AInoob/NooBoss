@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Groupy } from '../../../icons';
-import { sendMessage, fileToDataURL, promisedSetDB } from '../../../utils';
+import { Closey, Groupy } from '../../../icons';
+import { promisedDeleteDB, getSquareImg, sendMessage, fileToDataURL, promisedSetDB } from '../../../utils';
 import Selector from '../Selector';
 
 const GroupDiv = styled.div`
@@ -53,6 +53,24 @@ const GroupDiv = styled.div`
 			width: 100%;
 			height: 100%;
 		}
+		&:hover{
+			& + #deleteIcon{
+				display: block;
+			}
+		}
+	}
+	#deleteIcon{
+		display: none;
+		position: absolute;
+		right: 27px;
+		top: 10px;
+		background: rgba(200, 200, 200, 0.68);
+		cursor: pointer;
+		width: 33px;
+		height: 33px;
+		&:hover{
+			display: block;
+		}
 	}
 	#padder{
 		height: 16px;
@@ -86,9 +104,15 @@ class Group extends Component{
 	}
 	async updateIcon(e) {
 		const file = (e.target.files || e.dataTransfer.files)[0];
-		const dataURL = await fileToDataURL(file);
+		let dataURL = await fileToDataURL(file);
+		dataURL = await getSquareImg(dataURL);
 		const group = this.props.group;
 		await promisedSetDB(group.id + '_icon', dataURL);
+		sendMessage({ job: 'groupUpdate', group });
+	}
+	async removeIcon(e) {
+		const group = this.props.group;
+		await promisedDeleteDB(group.id + '_icon');
 		sendMessage({ job: 'groupUpdate', group });
 	}
 	render() {
@@ -113,6 +137,7 @@ class Group extends Component{
 					<label id="iconHolder" htmlFor="groupIconInput">
 						{this.props.icon ? <img id="icon" src={this.props.icon} /> : <Groupy id="icon" color={shared.themeMainColor} />}
 					</label>
+					<Closey onClick={this.removeIcon.bind(this)} id="deleteIcon" color={shared.themeMainColor} />
 					<div id="selectedList">
 						{selectedList}
 					</div>

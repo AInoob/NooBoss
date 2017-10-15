@@ -74,6 +74,35 @@ export const clearDB = () => {
 	});
 };
 
+export const deleteDB = (key, callback) => {
+	const indexedDB = window.indexedDB;
+	const open = indexedDB.open('NooBoss', 1);
+	open.onupgradeneeded = () => {
+		const db = open.result;
+		const store = db.createObjectStore('Store', { keyPath: 'key' });
+	};
+	open.onsuccess = () => {
+		const db = open.result;
+		const tx = db.transaction('Store', 'readwrite');
+		const store = tx.objectStore('Store');
+		const action = store.delete(key);
+		action.onsuccess = () => {
+			if(callback) {
+				callback();
+			}
+		};
+		action.onerror = () => {
+			console.log('deleteDB fail');
+		};
+	}
+}
+
+export const promisedDeleteDB = key => {
+	return new Promise(resolve => {
+		deleteDB(key, resolve);
+	});
+}
+
 export const setDB = (key, value, callback) => {
 	const indexedDB = window.indexedDB;
 	const open = indexedDB.open('NooBoss', 1);
@@ -237,6 +266,31 @@ export const colorToRGBA = (color) => {
 export const copy = obj => {
 	return JSON.parse(JSON.stringify(obj));
 };
+
+export const getSquareImg = dataUrl => {
+	return new Promise(resolve => {
+		const canvas = document.createElement('canvas');
+		canvas.height = 128;
+		canvas.width = 128
+		const ctx = canvas.getContext('2d');
+		const image = new Image();
+		image.onload = function() {
+			const hentai = Math.min(image.width, image.height);
+			ctx.drawImage(image,
+				(image.width - hentai) / 2,
+				(image.height - hentai) / 2,
+				hentai,
+				hentai,
+				0,
+				0,
+				128,
+				128
+			);
+			resolve(canvas.toDataURL());
+		};
+		image.src = dataUrl;
+	});
+}
 
 export const fileToDataURL =  file => {
 	return new Promise((resolve, reject) => {
