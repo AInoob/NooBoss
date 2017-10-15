@@ -282,11 +282,18 @@ class ExtensionBrief extends Component{
 		if (this.props.updateSubWindow) {
 			updateSubWindow = this.props.updateSubWindow.bind(null, 'extension', extension.id);
 		}
+		let icon;
+		if (extension.icons && extension.icons.length > 0) {
+			icon = extension.icons[extension.icons.length - 1].url;
+		}
+		if (!icon) {
+			icon = this.props.icon;
+		}
 		return (
 			<ExtensionBriefDiv viewMode={this.props.viewMode} onClick={this.props.onClick} selected={this.props.selected} disabled={disabled} withControl={this.props.withControl}>
 				<div className="shadow"></div>
 				<div className="extensionBrief">
-					<img onClick={updateSubWindow} className="extensionIcon" src={this.props.icon} />
+					<img onClick={updateSubWindow} className="extensionIcon" src={icon} />
 					<span className="nameFront">{extension.name}</span>
 					<div className="extensionInfo">
 						{extensionControl}

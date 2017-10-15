@@ -314,10 +314,7 @@ class NooBoss extends Component{
 			const keyList = Object.keys(extensions);
 			for(let i = 0; i < keyList.length; i++) {
 				const extension = extensions[keyList[i]];
-				if (extension.icons && extension.icons.length > 0) {
-					await this.getIcon(extension.icon, false, extension.icons);
-				}
-				else {
+				if (!(extension.icons && extension.icons.length > 0)) {
 					await this.getIcon(extension.icon);
 				}
 			}
@@ -444,7 +441,7 @@ class NooBoss extends Component{
 					const groupList = message.groupList;
 					this.setState({ groupList });
 					for(let i = 0; i < groupList.length; i++) {
-						await this.getIcon(groupList[i].ic + '_icon');
+						await this.getIcon(groupList[i].id + '_icon');
 					}
 					break;
 				case 'groupUpdated':
@@ -473,7 +470,7 @@ class NooBoss extends Component{
 						const extension = message.extension;
 						prevState.extensions[extension.id] = extension;
 						prevState.extensions = copy(prevState.extensions);
-						this.getIcon(extension.icon);
+						//this.getIcon(extension.icon);
 						return prevState;
 					});
 					break;
