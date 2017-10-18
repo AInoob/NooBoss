@@ -115,6 +115,20 @@ class Group extends Component{
 		await promisedDeleteDB(group.id + '_icon');
 		sendMessage({ job: 'groupUpdate', group });
 	}
+	getIcon(id) {
+		let icon;
+		const extension = this.props.extensions[id];
+		if (!extension) {
+			return;
+		}
+		if (extension.icons && extension.icons.length > 0) {
+			icon = extension.icons[extension.icons.length - 1].url;
+		}
+		else {
+			icon = this.props.icons[id + '_' + extension.version + '_icon'];
+		}
+		return icon;
+	}
 	render() {
 		const group = this.props.group;
 		if (!group) {
@@ -123,7 +137,7 @@ class Group extends Component{
 		const selectedList = (group.appList || []).map((id, index) => {
 			const extension = this.props.extensions[id];
 			if (extension) {
-				return <img key={index} title={extension.name} src={this.props.icons[id + '_' + extension.version + '_icon']} />;
+				return <img key={index} title={extension.name} src={this.getIcon(id)} />;
 			}
 			else {
 				this.change('selectExtension', id);

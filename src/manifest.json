@@ -3,7 +3,7 @@
   "name": "__MSG_extension_name__",
   "description": "__MSG_extension_description__",
   "default_locale": "en",
-  "version": "0.1.6.8",
+  "version": "0.1.6.9",
   "options_page": "popup.html?page=options",
   "browser_action": {
 		"default_icon": "images/icon_128.png",

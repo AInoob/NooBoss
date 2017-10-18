@@ -156,15 +156,14 @@ class AutoState extends Component{
 			}
 		};
 	}
-	getIcons(ids) {
+	getIcon(ids) {
 		if (!ids) {
 			return null;
 		}
 		const { extensions, groupList, icons } = this.props;
 		return ids.map((id, index) => {
 			let img;
-			let src;
-			let name;
+			let icon;
 			if (id.match(/^NooBoss-Group/)) {
 				name = (groupList.filter(elem => elem.id == id)[0] || {}).name;
 				if (icons[id + '_icon']) {
@@ -177,9 +176,13 @@ class AutoState extends Component{
 			}
 			else {
 				const extension = extensions[id] || {};
-				src = extension.icon;
-				name = extension.name;
-				img = <img title={name} src={icons[src]} />;
+				if (extension.icons && extension.icons.length > 0) {
+					icon = extension.icons[extension.icons.length - 1].url;
+				}
+				else {
+					icon = extension.icon;
+				}
+				img = <img title={extension.name} src={icon} />;
 			}
 			return <div key={index} className="icon" title={name}>{img}</div>;
 		});
@@ -249,27 +252,27 @@ class AutoState extends Component{
 		const ruleList = this.props.autoStateRuleList;
 		const rule = this.props.autoState.rule || this.state.rule;
 		const { icons, extensions, groupList } = this.props;
-		const selectedList = this.getIcons(rule.ids);
+		const selectedList = this.getIcon(rule.ids);
 		const ruleRows = ruleList.map((rule, index) => {
-			const icons = this.getIcons(rule.ids);
-      return (
-        <tr className="rule" key={index}>
-          <td>{index+1}</td>
-          <td>{icons}</td>
-          <td>{GL(rule.action)}</td>
-          <td>{rule.match.url}</td>
-          <td>{GL(rule.match.isWildcard ? 'wildcard' : 'RegExp')}</td>
-					<td>
-						<input type="checkbox" checked={rule.disabled ? false : true} onChange={()=>{}} id={'switch-'+index} className="switch-input" />
-						<label htmlFor={'switch-'+index} className="switch-label" onClick={this.toggleRule.bind(this,index)}>
-							<span className="toggle--on"></span>
-							<span className="toggle--off"></span>
-						</label>
-					</td>
-          <td onClick={this.editRule.bind(this, index)}><Edity color={shared.themeMainColor} /></td>
-          <td onClick={this.deleteRule.bind(this, index)}><Removy color={shared.themeMainColor} /></td>
-        </tr>
-      );
+			const icon = this.getIcon(rule.ids);
+			return (
+				<tr className="rule" key={index}>
+				<td>{index+1}</td>
+				<td>{icon}</td>
+				<td>{GL(rule.action)}</td>
+				<td>{rule.match.url}</td>
+				<td>{GL(rule.match.isWildcard ? 'wildcard' : 'RegExp')}</td>
+							<td>
+								<input type="checkbox" checked={rule.disabled ? false : true} onChange={()=>{}} id={'switch-'+index} className="switch-input" />
+								<label htmlFor={'switch-'+index} className="switch-label" onClick={this.toggleRule.bind(this,index)}>
+									<span className="toggle--on"></span>
+									<span className="toggle--off"></span>
+								</label>
+							</td>
+				<td onClick={this.editRule.bind(this, index)}><Edity color={shared.themeMainColor} /></td>
+				<td onClick={this.deleteRule.bind(this, index)}><Removy color={shared.themeMainColor} /></td>
+				</tr>
+			);
 		});
 		return (
 			<AutoStateDiv>
