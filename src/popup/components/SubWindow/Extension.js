@@ -217,10 +217,29 @@ class Extension extends Component{
       prevState.extensionWeb = copy(prevState.extensionWeb);
       return prevState;
     });
+  }
+  getIcon() {
+    let icon;
+    const extension = this.props.extension;
+		if (!extension) {
+      console.log(1);
+			return;
+		}
+		if (extension.icons && extension.icons.length > 0) {
+      console.log(2);
+      icon = extension.icons[extension.icons.length - 1].url;
+      console.log(icon);
+		}
+		else {
+      console.log(3);
+			icon = this.props.icons[id + '_' + extension.version + '_icon'];
+      console.log(icon);
+		}
+		return icon;
 	}
 	render() {
     const extension = this.props.extension;
-		if (!extension || !this.props.icons[extension.icon]) {
+		if (!extension) {
 			return <ExtensionDiv display='flex'><Extensiony id="loader" color={shared.themeMainColor} /></ExtensionDiv>;
     }
     let state = extension.state || (extension.enabled ? GL('enabled') : GL('disabled'));
@@ -301,7 +320,9 @@ class Extension extends Component{
     return (
       <ExtensionDiv>
         <div id="actions">
-          <a id="icon" title={'https://chrome.google.com/webstore/detail/'+extension.id} target="_blank" href={'https://chrome.google.com/webstore/detail/'+extension.id}><img src={this.props.icons[extension.icon]} /></a>
+          <a id="icon" title={'https://chrome.google.com/webstore/detail/'+extension.id} target="_blank" href={'https://chrome.google.com/webstore/detail/'+extension.id}>
+            <img src={this.getIcon()} />
+          </a>
           {addy}
           {launchy}
           {switchy}
