@@ -1,13 +1,13 @@
 extension_name:
   message: 二管家
 extension_description:
-  message: 一个全能的拓展管理和用户脚本管理拓展
+  message: 一个全能的扩展管理和用户脚本管理扩展
 overview:
   message: 总览
 options:
   message: 选项
 extensions:
-  message: 拓展
+  message: 扩展
 userscripts:
   message: 用户脚本
 history:
@@ -41,13 +41,13 @@ main_color:
 sub_color:
   message: 辅颜色
 notify_state_change:
-  message: 通知拓展的开启/关闭
+  message: 通知扩展的开启/关闭
 notify_installation:
-  message: 通知拓展的安装和更新
+  message: 通知扩展的安装和更新
 notify_removal:
-  message: 通知拓展的卸载
+  message: 通知扩展的卸载
 notify_extension_state_change:
-  message: 通知拓展状态更新
+  message: 通知扩展状态更新
 for_X_seconds:
   message: 持续X秒
 record_installation:
@@ -113,7 +113,7 @@ manage:
 app:
   message: 应用
 extension:
-  message: 拓展
+  message: 扩展
 all:
   message: 全部
 group:
@@ -219,7 +219,7 @@ set_as_current_website:
 you_have:
   message: 你有
 extension_s:
-  message: '["个拓展","个拓展"]'
+  message: '["个扩展","个扩展"]'
 app_s:
   message: '["个应用","个应用"]'
 theme:
@@ -229,13 +229,13 @@ group_s:
 autoState_rule_s:
   message: '["个自动管理规则","个自动管理规则"]'
 recommend_extensions:
-  message: 推荐拓展
+  message: 推荐扩展
 recommended_for:
   message: 为X推荐
 all_websites:
   message: '所有网站'
 select_extensions:
-  message: 选择拓展
+  message: 选择扩展
 recommend:
   message: 推荐
 reset_zoom:
@@ -255,9 +255,9 @@ disable:
 set_zoom_to_100:
   message: 设置二管家缩放为100%
 x_1:
-  message: '还没人给X推荐拓展呢，你有什么好的拓展推荐吗？'
+  message: '还没人给X推荐扩展呢，你有什么好的扩展推荐吗？'
 x_2:
-  message: 拓展推荐成功～不在二管家数据库里的拓展会稍后被添加
+  message: 扩展推荐成功～不在二管家数据库里的扩展会稍后被添加
 x_3:
   message: 二管家页面缩放不是100%，请点击确定来调整缩放
 x_4:
