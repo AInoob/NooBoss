@@ -1,0 +1,1 @@
+export const BELLO_URL = 'https://ainoob.com/bello/nooboss';

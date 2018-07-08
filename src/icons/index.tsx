@@ -1,10 +1,18 @@
-import React from 'react';
-import { rgbaChange } from '../utils';
+import * as React from 'react';
+import { rgbaChange } from '../../srcTemp/utils/index';
 
-export const BigTiley = (props) => {
+interface IconProps {
+  color?: string
+  deltaRGBA?: string
+  className?: string
+  id?: string
+  onClick?: () => void
+}
+
+export const BigTileIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -14,10 +22,10 @@ export const BigTiley = (props) => {
 	);
 }
 
-export const Tiley = (props) => {
+export const TileIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -27,10 +35,10 @@ export const Tiley = (props) => {
 	);
 }
 
-export const Listy = (props) => {
+export const ListIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -40,10 +48,10 @@ export const Listy = (props) => {
 	);
 }
 
-export const Closey = (props) => {
+export const CloseIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -53,10 +61,10 @@ export const Closey = (props) => {
 	);
 }
 
-export const Addy = (props) => {
+export const AddIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -66,10 +74,10 @@ export const Addy = (props) => {
 	);
 };
 
-export const Removy = (props) => {
+export const RemoveIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -79,10 +87,10 @@ export const Removy = (props) => {
 	);
 };
 
-export const Edity = (props) => {
+export const EditIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -92,10 +100,10 @@ export const Edity = (props) => {
 	);
 };
 
-export const Optioney = (props) => {
+export const OptionIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return(
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -105,10 +113,10 @@ export const Optioney = (props) => {
 	);
 };
 
-export const Switchy = (props) => {
+export const SwitchIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -118,10 +126,10 @@ export const Switchy = (props) => {
 	);
 };
 
-export const Chromey = (props) => {
+export const ChromeIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} height="512px" viewBox="0 -40 600 600" width="512px" xmlns="http://www.w3.org/2000/svg" >
@@ -135,10 +143,10 @@ export const Chromey = (props) => {
 	);
 };
 
-export const Cleary = (props) => {
+export const ClearIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -148,10 +156,10 @@ export const Cleary = (props) => {
 	);
 };
 
-export const Copyy = (props) => {
+export const CopyIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="-3 -1 27 27" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -161,10 +169,10 @@ export const Copyy = (props) => {
 	);
 };
 
-export const Sunny = (props) => {
+export const SunnyIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -174,10 +182,10 @@ export const Sunny = (props) => {
 	);
 };
 
-export const Groupy = (props) => {
+export const GroupIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -188,10 +196,10 @@ export const Groupy = (props) => {
 	);
 };
 
-export const Extensiony = (props) => {
+export const ExtensionIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
@@ -201,10 +209,10 @@ export const Extensiony = (props) => {
 	);
 };
 
-export const Launchy = (props) => {
+export const LaunchIcon = (props: IconProps) => {
 	let color = props.color || 'rgba(255, 255, 255, 1)';
-	if (props.changeRGBA) {
-		color = rgbaChange(color, props.changeRGBA);
+	if (props.deltaRGBA) {
+		color = rgbaChange(color, props.deltaRGBA);
 	}
 	return (
 		<svg className={props.className} id={props.id} onClick={props.onClick} fill={color} height="48" viewBox="0 0 24 24" width="48" xmlns="http://www.w3.org/2000/svg">
