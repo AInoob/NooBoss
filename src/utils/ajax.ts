@@ -1,6 +1,6 @@
 interface Request {
   url: string
-	type?: 'GET' | 'POST'
+	method?: 'GET' | 'POST'
   contentType?: string
   payload?: Object
 }
@@ -9,15 +9,20 @@ export default (req: Request) => {
 	return new Promise((resolve, reject) => {
 		const request = new XMLHttpRequest();
 		let payload;
-    if (req.type == 'GET') {
-      payload = Object.keys(req.payload).map(
+		if (!req.method) {
+		  req.method = 'GET';
+    }
+    if (req.method === 'GET') {
+      req.url += '?' + Object.keys(req.payload).map(
         function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(req.payload[k]) }
       ).join('&');
     }
     else {
       payload = JSON.stringify(req.payload);
 		}
-		request.open(req.type || 'GET', req.url, true);
+		console.log(payload);
+    console.log(req.url);
+		request.open(req.method, req.url, true);
 		request.onload = () => {
 			 if (request.status >= 200 && request.status < 400) {
 					resolve(request.responseText);

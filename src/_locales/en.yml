@@ -173,9 +173,9 @@ manifest_file:
 may_disable:
   message: 'May disable'
 install_type:
-  message: 'Install type'
+  message: 'Install method'
 launch_type:
-  message: 'Launch type'
+  message: 'Launch method'
 permissions:
   message: 'Permissions'
 host_permissions:

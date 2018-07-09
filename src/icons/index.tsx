@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { rgbaChange } from '../../srcTemp/utils/index';
+import { rgbaChange } from '../utils/index';
 
 interface IconProps {
   color?: string
-  deltaRGBA?: string
+  deltaRGBA?: Object
   className?: string
   id?: string
   onClick?: () => void

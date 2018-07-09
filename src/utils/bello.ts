@@ -9,7 +9,7 @@ export const logEvent = async (obj: {
   value?: string
 }) => {
     const params = {
-        type: 'logEvent',
+        type: 'event',
         category: obj.category,
         action: obj.action,
         label: obj.label,
@@ -22,6 +22,6 @@ export const logEvent = async (obj: {
     };
     await ajax({
       url: BELLO_URL,
-      payload: params
+      payload: params,
     });
 };

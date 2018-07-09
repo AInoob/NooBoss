@@ -1,4 +1,4 @@
-declare var browser: any;
+import browser from "./browser";
 
 const indexedDB = window.indexedDB;
 

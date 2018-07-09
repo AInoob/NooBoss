@@ -20,6 +20,9 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.ts', '.tsx']
+  },
   plugins:[
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
