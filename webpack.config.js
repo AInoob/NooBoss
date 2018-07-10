@@ -5,6 +5,7 @@ module.exports = {
   cache: true,
   entry: {
     background: './src/background/index.ts',
+    popup: './src/popup/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,7 +22,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
   plugins:[
     new webpack.DefinePlugin({
