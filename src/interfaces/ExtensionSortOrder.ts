@@ -1,0 +1,4 @@
+enum ExtensionSortOrder {
+  NAME,
+  STATE,
+};

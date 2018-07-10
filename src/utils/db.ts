@@ -2,7 +2,7 @@ import browser from "./browser";
 
 const indexedDB = window.indexedDB;
 
-export const get = (key: string) => {
+export const get = (key: string): Promise<any> => {
   return new Promise(resolve => {
     browser.storage.sync.get(key, (result: Object) => {
       resolve(result[key]);
@@ -10,7 +10,7 @@ export const get = (key: string) => {
   });
 };
 
-export const set = (key: string, value: any) => {
+export const set = (key: string, value: any): Promise<any> => {
   return new Promise(resolve => {
     // console.log(key,value);
     const temp: Object = {};
@@ -32,7 +32,7 @@ export const isOptionOn = async (key: string) => {
   }
 };
 
-export const getDB = (key: string) => {
+export const getDB = (key: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     const indexedDB = window.indexedDB;
     const open = indexedDB.open("NooBox", 1);

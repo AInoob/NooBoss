@@ -1,4 +1,4 @@
-import DefaultOptions from "../interfaces/DefaultOptions";
+import DefaultOptions, {ExtensionSortOrder} from "../interfaces/DefaultOptions";
 
 export const BELLO_URL = 'https://ainoob.com/bello/nooboss';
 
@@ -14,7 +14,7 @@ export const defaultOptions: DefaultOptions = {
   autoState: true,
   autoStateNotification: false,
   autoStateRules: [],
-  sortOrder: 'nameState',
+  extensionSortOrder: [ExtensionSortOrder.STATE, ExtensionSortOrder.NAME],
   joinCommunity: true,
   recoExtensions: true,
   notificationDuration_autoState: 5,

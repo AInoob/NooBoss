@@ -2,6 +2,11 @@ import AutoState from "./AutoState";
 import Group from "./Group";
 import Color from "./Color";
 
+export enum ExtensionSortOrder {
+  NAME,
+  STATE,
+};
+
 export default interface DefaultOptions {
   notifyStateChange: boolean
   notifyInstallation: boolean
@@ -14,7 +19,7 @@ export default interface DefaultOptions {
   autoState: boolean
   autoStateNotification: false
   autoStateRules: AutoState[]
-  sortOrder: 'nameState'
+  extensionSortOrder: ExtensionSortOrder[]
   joinCommunity: boolean
   recoExtensions: boolean
   notificationDuration_autoState: number
@@ -28,4 +33,4 @@ export default interface DefaultOptions {
   subColor: Color
   extensions: boolean
   userscripts: boolean
-}
+};

@@ -3,6 +3,7 @@
     "experimentalDecorators": true,
     "outDir": "./dist/",
     "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
     "module": "es6",
     "target": "es5",
     "jsx": "react",
