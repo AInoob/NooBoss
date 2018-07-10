@@ -40,6 +40,7 @@
   "dependencies": {
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
+    "mobx": "^5.0.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "timeago-react": "^2.0.0"

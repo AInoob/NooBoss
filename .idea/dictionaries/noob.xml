@@ -2,12 +2,15 @@
   <dictionary name="noob">
     <words>
       <w>ainoob</w>
+      <w>bello</w>
       <w>devtool</w>
       <w>nooboss</w>
       <w>onerror</w>
       <w>onload</w>
       <w>onsuccess</w>
       <w>onupgradeneeded</w>
+      <w>reco</w>
+      <w>userscripts</w>
     </words>
   </dictionary>
 </component>
