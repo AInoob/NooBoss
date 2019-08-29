@@ -1,6 +1,9 @@
 # NooBoss
 [Website](https://ainoob.com/project/nooboss)
 
+## Current status - Dormant
+Personally I have not use NooBoss in past few months. I am not sure if there is any big use case for NooBoss. So yeah, no plan of updating it at this point.
+
 ## What is NooBoss?
 NooBox is a Chrome Extensions Manager and a Userscript Manager that contains many unique features
 
