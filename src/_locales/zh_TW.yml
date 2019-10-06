@@ -1,7 +1,7 @@
 extension_name:
   message: 二管家
 extension_description:
-  message: 一個全能的擴充功能管理和使用者指令碼管理擴充功能
+  message: 一個全能的擴充功能管理和使用者指令碼管理套件
 overview:
   message: 總覽
 options:
@@ -85,19 +85,19 @@ successfully_imported:
 failed_to_import:
   message: 匯入失敗
 was_installed:
-  message: '已被安裝'
+  message: '已安裝'
 was_updated:
-  message: '已被更新'
+  message: '已更新'
 was_removed:
-  message: '已被移除'
+  message: '已移除'
 is_enabled:
-  message: '已被開啟'
+  message: '已開啟'
 is_disabled:
-  message: '已被關閉'
+  message: '已關閉'
 was_enabled:
-  message: '已被開啟'
+  message: '已開啟'
 was_disabled:
-  message: '已被關閉'
+  message: '已關閉'
 when:
   message: 時間
 event:
