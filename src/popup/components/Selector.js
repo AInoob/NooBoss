@@ -350,7 +350,6 @@ class Selector extends Component {
         return nameA.localeCompare(nameB);
       })
       .map((group, index) => {
-        console.log(group);
         if (
           (this.state.filterName === '' ||
             group.name.indexOf(this.state.filterName)) !== -1 &&

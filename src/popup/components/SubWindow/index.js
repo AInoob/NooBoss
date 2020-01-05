@@ -61,7 +61,6 @@ class SubWindow extends Component {
             extensions={this.props.extensions}
             groupList={this.props.groupList}
             icons={this.props.icons}
-            icon={this.props.icons[(group || {}).id + '_icon']}
             extension={extension}
             id={id}
           />
@@ -69,7 +68,7 @@ class SubWindow extends Component {
         break;
       case 'group':
         const group = (this.props.groupList || []).filter(
-          (elem) => elem.id == id
+          (elem) => elem.id === id
         )[0];
         content = (
           <Group

@@ -186,13 +186,6 @@ class Extension extends Component {
       const crxVersion = data.slice(20).match('version="([^ ]*)"')[1];
       const crxName = crxUrl.substr(crxUrl.lastIndexOf('/') + 1);
       this.setState({ crxUrl, crxVersion, crxName });
-      data = await ajax({
-        url: 'https://chrome.google.com/webstore/detail/' + id
-      });
-      const rating =
-        parseFloat(data.match(/g:rating_override=\"([\d.]*)\"/)[1]).toFixed(3) +
-        ' / 5';
-      this.setState({ rating });
     } catch (e) {
       this.setState({ joinCommunity: false });
     }
@@ -246,19 +239,29 @@ class Extension extends Component {
     let icon;
     const extension = this.props.extension;
     if (!extension) {
-      console.log(1);
       return;
     }
     if (extension.icons && extension.icons.length > 0) {
-      console.log(2);
       icon = extension.icons[extension.icons.length - 1].url;
-      console.log(icon);
     } else {
-      console.log(3);
       icon = this.props.icons[id + '_' + extension.version + '_icon'];
-      console.log(icon);
     }
     return icon;
+  }
+  getGroupNameListForExtension() {
+    const { id, groupList } = this.props;
+    const extensionGroupList = groupList.filter((g) => {
+      return (
+        g.appList.filter((a) => {
+          return a === id;
+        }).length > 0
+      );
+    });
+    if (extensionGroupList.length === 0) {
+      return '';
+    } else {
+      return extensionGroupList.map((g) => g.name).join(', ');
+    }
   }
   render() {
     const extension = this.props.extension;
@@ -279,7 +282,7 @@ class Extension extends Component {
       switchyRGBA = 'rgba(-155,-155,-155,-0.8)';
     }
     let launchy, switchy, optioney, removy, chromey, addy;
-    if (state != 'removed') {
+    if (state !== 'removed') {
       if (extension.isApp) {
         launchy = (
           <Launchy
@@ -292,7 +295,7 @@ class Extension extends Component {
           />
         );
       }
-      if (extension.type != 'theme') {
+      if (extension.type !== 'theme') {
         switchy = (
           <Switchy
             onClick={() => {
@@ -490,8 +493,8 @@ class Extension extends Component {
               <td>{capFirst(state)}</td>
             </tr>
             <tr>
-              <td>{GL('official_rating')}</td>
-              <td>{this.state.rating}</td>
+              <td>{GL('group')}</td>
+              <td>{this.getGroupNameListForExtension()}</td>
             </tr>
             <tr>
               <td>{GL('description')}</td>

@@ -614,7 +614,7 @@ class Overview extends Component {
             {overview.extension + ' ' + GLS('extension_s', overview.extension)}
           </span>
           ,<span>{' ' + overview.app + ' ' + GLS('app_s', overview.app)}</span>,
-          <span>{' ' + overview.theme + ' ' + GL('theme')}</span>
+          <span>{' ' + overview.theme + ' ' + GL('theme_s')}</span>
         </div>
         <div className='line'>
           <span>{overview.group + ' ' + GLS('group_s', overview.group)}</span>

@@ -222,7 +222,7 @@ extension_s:
   message: '["個擴充功能","個擴充功能"]'
 app_s:
   message: '["個應用","個應用"]'
-theme:
+theme_s:
   message: 個主題
 group_s:
   message: '["個分組","個分組"]'
@@ -248,10 +248,6 @@ update:
   message: 更新
 remove:
   message: 移除
-enable:
-  message: 開啟
-disable:
-  message: 關閉
 set_zoom_to_100:
   message: 設定二管家縮放為100%
 x_1:
