@@ -16,13 +16,13 @@ const SelectorDiv = styled.div`
       cursor: pointer;
     }
     #list {
-      opacity: ${(props) => (props.viewMode == 'list' ? '1' : '0.3')};
+      opacity: ${(props) => (props.viewMode === 'list' ? '1' : '0.3')};
     }
     #tile {
-      opacity: ${(props) => (props.viewMode == 'tile' ? '1' : '0.3')};
+      opacity: ${(props) => (props.viewMode === 'tile' ? '1' : '0.3')};
     }
     #bigTile {
-      opacity: ${(props) => (props.viewMode == 'bigTile' ? '1' : '0.3')};
+      opacity: ${(props) => (props.viewMode === 'bigTile' ? '1' : '0.3')};
     }
   }
   #actionBar {
@@ -71,7 +71,7 @@ const SelectorDiv = styled.div`
     zoom: ${(props) => props.zoom || 1};
   }
   ${(props) =>
-    props.viewMode == 'tile' &&
+    props.viewMode === 'tile' &&
     css`
       #extensionList,
       #appList,
@@ -209,11 +209,11 @@ class Selector extends Component {
       switch (this.props.filterType) {
         case 'chromeWebStoreExtensionOnly':
           if (
-            extension.installType == 'development' ||
+            extension.installType === 'development' ||
             (extension.updateUrl &&
-              extension.updateUrl.indexOf('clients2.google.com') == -1) ||
+              extension.updateUrl.indexOf('clients2.google.com') === -1) ||
             (extension.homepageUrl &&
-              extension.homepageUrl.indexOf('ext.chrome.360.cn') != -1)
+              extension.homepageUrl.indexOf('ext.chrome.360.cn') !== -1)
           ) {
             pass = false;
           }
@@ -221,14 +221,14 @@ class Selector extends Component {
       }
       if (
         type &&
-        ((extension.name.match(/NooBoss-Group/) && type == 'group') ||
-          extension.type != type)
+        ((extension.name.match(/NooBoss-Group/) && type === 'group') ||
+          extension.type !== type)
       ) {
         pass = false;
       } else if (
         extension.name
           .toLowerCase()
-          .indexOf(this.state.filterName.toLowerCase()) == -1
+          .indexOf(this.state.filterName.toLowerCase()) === -1
       ) {
         pass = false;
       } else {
@@ -241,7 +241,7 @@ class Selector extends Component {
             }
             break;
           default:
-            if ((extension.type || '').indexOf(this.state.filterType) == -1) {
+            if ((extension.type || '').indexOf(this.state.filterType) === -1) {
               pass = false;
             }
         }
@@ -253,12 +253,12 @@ class Selector extends Component {
   groupToggle(id, enabled) {
     const stateHistory = {};
     const group = this.props.groupList.filter((elem) => {
-      return elem.id == id;
+      return elem.id === id;
     })[0];
     group.appList.map((elem) => {
       if (
-        enabled != undefined &&
-        this.props.extensions[elem].enabled != enabled
+        enabled !== undefined &&
+        this.props.extensions[elem].enabled !== enabled
       ) {
         stateHistory[elem] = !enabled;
       }
@@ -294,61 +294,23 @@ class Selector extends Component {
     const appList = [],
       extensionList = [],
       themeList = [];
-    this.getFiltered().map((id, index) => {
-      const x = (
-        <ExtensionBrief
-          viewMode={this.props.viewMode}
-          selected={
-            this.props.selectedList
-              ? this.props.selectedList.indexOf(id) != -1
-              : null
-          }
-          onClick={() => {
-            if (this.props.select) {
-              this.props.select(id);
-            }
-          }}
-          icon={this.props.icons[extensions[id].icon]}
-          addStateHistory={this.addStateHistory.bind(this)}
-          extension={extensions[id]}
-          withControl={this.props.withControl}
-          key={index}
-          updateSubWindow={this.props.updateSubWindow}
-        />
-      );
-      switch (extensions[id].type) {
-        case 'extension':
-          extensionList.push(x);
-          break;
-        case 'app':
-        case 'hosted_app':
-          appList.push(x);
-          break;
-        case 'packaged_app':
-          appList.push(x);
-          break;
-        case 'theme':
-          themeList.push(x);
-          break;
-      }
-    });
-    const groupList = [];
-    (this.props.groupList || []).map((group, index) => {
-      if (
-        (this.state.filterName == '' ||
-          group.name.indexOf(this.state.filterName)) != -1 &&
-        (this.state.filterType == 'all' || this.state.filterType == 'group')
-      ) {
-        const id = group.id;
-        groupList.push(
-          <GroupBrief
-            group={group}
-            withControl={true}
-            key={index}
+    this.getFiltered()
+      .map((id) => {
+        return extensions[id];
+      })
+      .sort((a, b) => {
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      })
+      .map((extension, index) => {
+        const id = extension.id;
+        const x = (
+          <ExtensionBrief
             viewMode={this.props.viewMode}
             selected={
               this.props.selectedList
-                ? this.props.selectedList.indexOf(id) != -1
+                ? this.props.selectedList.indexOf(id) !== -1
                 : null
             }
             onClick={() => {
@@ -356,16 +318,71 @@ class Selector extends Component {
                 this.props.select(id);
               }
             }}
-            icon={this.props.icons[id + '_icon']}
-            enable={this.groupToggle.bind(this, id, true)}
-            disable={this.groupToggle.bind(this, id, false)}
-            copy={this.groupCopy.bind(this, id)}
-            remove={this.groupRemove.bind(this, id)}
+            icon={this.props.icons[extension.icon]}
+            addStateHistory={this.addStateHistory.bind(this)}
+            extension={extension}
+            withControl={this.props.withControl}
+            key={index}
             updateSubWindow={this.props.updateSubWindow}
           />
         );
-      }
-    });
+        switch (extension.type) {
+          case 'extension':
+            extensionList.push(x);
+            break;
+          case 'app':
+          case 'hosted_app':
+            appList.push(x);
+            break;
+          case 'packaged_app':
+            appList.push(x);
+            break;
+          case 'theme':
+            themeList.push(x);
+            break;
+        }
+      });
+    const groupList = [];
+    (this.props.groupList || [])
+      .sort((a, b) => {
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      })
+      .map((group, index) => {
+        console.log(group);
+        if (
+          (this.state.filterName === '' ||
+            group.name.indexOf(this.state.filterName)) !== -1 &&
+          (this.state.filterType === 'all' || this.state.filterType === 'group')
+        ) {
+          const id = group.id;
+          groupList.push(
+            <GroupBrief
+              group={group}
+              withControl={true}
+              key={index}
+              viewMode={this.props.viewMode}
+              selected={
+                this.props.selectedList
+                  ? this.props.selectedList.indexOf(id) !== -1
+                  : null
+              }
+              onClick={() => {
+                if (this.props.select) {
+                  this.props.select(id);
+                }
+              }}
+              icon={this.props.icons[id + '_icon']}
+              enable={this.groupToggle.bind(this, id, true)}
+              disable={this.groupToggle.bind(this, id, false)}
+              copy={this.groupCopy.bind(this, id)}
+              remove={this.groupRemove.bind(this, id)}
+              updateSubWindow={this.props.updateSubWindow}
+            />
+          );
+        }
+      });
     let selectGroup;
     if (this.props.groupList) {
       selectGroup = <option value='group'>{GL('group')}</option>;

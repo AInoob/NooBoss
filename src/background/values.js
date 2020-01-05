@@ -36,5 +36,5 @@ export const defaultValues = {
 };
 
 export const constantValues = {
-  version: '0.1.7.0'
+  version: chrome.runtime.getManifest().version
 };

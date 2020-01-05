@@ -525,7 +525,7 @@ class NooBoss extends Component {
     if (!this.state.loadByParam) {
       location = this.props.location.main;
     }
-    if (location == 'overview') {
+    if (location === 'overview') {
       page = (
         <Overview
           updateScrollChild={(ref) => (this.onScrollChild = ref)}
@@ -538,7 +538,7 @@ class NooBoss extends Component {
           viewMode={this.state.viewMode}
         />
       );
-    } else if (location == 'extensions') {
+    } else if (location === 'extensions') {
       page = (
         <Extensions
           icons={this.state.icons}
@@ -549,9 +549,9 @@ class NooBoss extends Component {
           viewMode={this.state.viewMode}
         />
       );
-    } else if (location == 'userscripts') {
+    } else if (location === 'userscripts') {
       page = <Userscripts />;
-    } else if (location == 'history') {
+    } else if (location === 'history') {
       page = (
         <History
           getIcon={this.getIcon.bind(this)}
@@ -564,9 +564,9 @@ class NooBoss extends Component {
           getRecordList={this.getHistoryRecordList}
         />
       );
-    } else if (location == 'options') {
+    } else if (location === 'options') {
       page = <Options />;
-    } else if (location == 'about') {
+    } else if (location === 'about') {
       page = <About />;
     }
     return (
