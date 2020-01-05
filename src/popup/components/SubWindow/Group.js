@@ -98,7 +98,7 @@ class Group extends Component {
       case 'selectExtension':
         const id = e;
         let index = group.appList.indexOf(id);
-        if (index == -1) {
+        if (index === -1) {
           group.appList.push(id);
         } else {
           group.appList.splice(index, 1);

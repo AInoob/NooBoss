@@ -14,14 +14,14 @@ export default (NooBoss) => {
 				browser.tabs.onReplaced.removeListener();*/
         browser.management.onInstalled.addListener(async (appInfo) => {
           appInfo.icon = await getIconDBKey(appInfo);
-          await NooBoss.Extensions.updateAppInfo(appInfo);
           let event = 'install';
-          if (NooBoss.Extensions.tempActiveList.indexOf(appInfo.id) != -1) {
+          if (NooBoss.Extensions.apps[appInfo.id]) {
             event = 'update';
             await NooBoss.Extensions.updateAppInfoById(appInfo.id, {
               lastUpdateDate: new Date().getTime()
             });
           }
+          await NooBoss.Extensions.updateAppInfo(appInfo);
           if (NooBoss.Options.options['historyInstall']) {
             const { id, icon, name, version } = appInfo;
             NooBoss.History.addRecord({ event, id, icon, name, version });
@@ -30,7 +30,7 @@ export default (NooBoss) => {
             notify(
               GL('notification'),
               appInfo.name +
-                GL('was_' + (event == 'install' ? 'installed' : 'updated')),
+                GL('was_' + (event === 'install' ? 'installed' : 'updated')),
               NooBoss.Options.options['notificationDuration_installation']
             );
           }

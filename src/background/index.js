@@ -47,7 +47,7 @@ NooBoss.initiate = async () => {
           break;
         case 'set':
           await NooBoss.Options.promisedSet(message.key, message.value);
-          if (message.key == 'viewMode') {
+          if (message.key === 'viewMode') {
             sendMessage({ job: 'updateViewMode', value: message.value });
           }
           NooBoss.Bello.bello({
