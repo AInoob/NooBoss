@@ -61,6 +61,11 @@ const GroupBriefDiv = styled.div`
 				color: ${() => shared.themeMainColor};
 				cursor: pointer;
 			}
+			.groupControl {
+			  #switchyDisable {
+			    filter: invert(1) brightness(0.8);
+			  }
+			}
 		}
 	}
 	&:hover{
@@ -292,7 +297,6 @@ class GroupBrief extends Component {
         id='switchyDisable'
         onClick={this.props.disable}
         color={shared.themeMainColor}
-        changeRGBA='rgba(-155,-155,-155,-0.6)'
       />
     );
     optioney = (

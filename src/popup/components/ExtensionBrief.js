@@ -8,6 +8,7 @@ const ExtensionBriefDiv = styled.div`
 	&:hover{
 		box-shadow: ${() => shared.themeMainColor} 0px 0px 13px;
 	}
+	background-color: ${(p) => (p.disabled ? '#0000001a' : '')};
 	width: 76px;
 	height: 76px;
 	padding: 20px;
@@ -152,7 +153,7 @@ const ExtensionBriefDiv = styled.div`
       &:hover {
         .extensionBrief {
           .extensionIcon {
-            display: none;
+            opacity: 0;
           }
         }
       }
@@ -234,6 +235,9 @@ const ExtensionBriefDiv = styled.div`
         #switchy {
           left: 16px;
         }
+        #switchy.disabled {
+          filter: invert(1) brightness(0.8);
+        }
         #launchy {
           left: 540px;
         }
@@ -281,11 +285,9 @@ const ExtensionBriefDiv = styled.div`
 class ExtensionBrief extends Component {
   render() {
     const extension = this.props.extension;
-    let switchyRGBA = undefined;
     let disabled = false;
     if (!extension.enabled) {
       disabled = true;
-      switchyRGBA = 'rgba(-155,-155,-155,-0.6)';
     }
     let launchy, switchy, optioney, removy, chromey;
     if (extension.isApp) {
@@ -305,6 +307,7 @@ class ExtensionBrief extends Component {
       switchy = (
         <Switchy
           id='switchy'
+          className={disabled ? 'disabled' : ''}
           onClick={() => {
             const stateHistory = {};
             stateHistory[extension.id] = extension.enabled;
@@ -312,7 +315,6 @@ class ExtensionBrief extends Component {
             sendMessage({ job: 'extensionToggle', id: extension.id });
           }}
           color={shared.themeMainColor}
-          changeRGBA={switchyRGBA}
         />
       );
     }
