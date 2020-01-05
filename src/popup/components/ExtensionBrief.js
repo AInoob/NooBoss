@@ -129,7 +129,17 @@ const ExtensionBriefDiv = styled.div`
 			}
 		}
 	`}
-	${props => props.viewMode == 'bigTile' && css `
+	${props => props.viewMode === 'tile' && css `
+		&:hover{
+			.extensionBrief{
+			    .extensionIcon {
+			      display: none;
+			    }
+			}
+		}
+	`}
+
+	${props => props.viewMode === 'bigTile' && css `
 		width: 212px;
 		height: 66px;
 		padding: 6px;
@@ -179,7 +189,7 @@ const ExtensionBriefDiv = styled.div`
 			}
 		}
 	`}
-	${props => props.viewMode == 'list' && css `
+	${props => props.viewMode === 'list' && css `
 		width: 100%;
 		height: 33px;
 		padding: 0px;
