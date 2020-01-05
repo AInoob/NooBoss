@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-module.exports = {
+const base = {
   cache: true,
   entry: {
     popup: './src/popup/index.js',
@@ -39,17 +39,30 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
     new CopyWebpackPlugin([
       { from: './src/popup/popup.html' },
       { from: './src/manifest.json' },
       { from: './src/images', to: 'images' },
       { from: './src/thirdParty', to: 'thirdParty' }
-    ]),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false }
-    })
+    ])
   ]
+};
+
+module.exports = (env) => {
+  env = env || {};
+  const isProd = env.production;
+  if (isProd) {
+    base.plugins.push(
+      new webpack.optimize.UglifyJsPlugin({
+        compress: { warnings: false }
+      })
+    );
+
+    base.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('production')
+      })
+    );
+  }
+  return base;
 };
