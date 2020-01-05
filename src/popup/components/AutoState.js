@@ -355,7 +355,8 @@ class AutoState extends Component {
             <div className='chunk'>
               <input
                 id='matchUrl'
-                value={rule.match.url}
+                // https://github.com/facebook/react/issues/3926
+                defaultValue={rule.match.url}
                 onChange={this.updateRule.bind(this, 'url')}
               />
               <button

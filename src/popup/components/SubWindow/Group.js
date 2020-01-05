@@ -158,7 +158,8 @@ class Group extends Component {
           <input
             id='name'
             onChange={this.change.bind(this, 'name')}
-            value={group.name}
+            // https://github.com/facebook/react/issues/3926
+            defaultValue={group.name}
           />
           <input
             type='file'

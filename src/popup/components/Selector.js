@@ -436,7 +436,8 @@ class Selector extends Component {
             ref={(input) => {
               this.nameFilter = input;
             }}
-            value={this.state.filterName}
+            // https://github.com/facebook/react/issues/3926
+            defaultValue={this.state.filterName}
             onChange={(e) => {
               this.setState({ filterName: e.target.value });
             }}
