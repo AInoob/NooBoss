@@ -16,6 +16,7 @@ const initialState = {
 		advancedClean: true,
 		advancedBackup: true,
 	},
+    zoom: 1
 };
 
 const options = (state = initialState, action) => {
@@ -28,6 +29,9 @@ const options = (state = initialState, action) => {
 			break;
 		case 'OPTIONS_TOGGLE_DISPLAY':
 			state.display[action.name] = !state.display[action.name];
+			break;
+		case 'OPTIONS_UPDATE_ZOOM':
+			state.zoom = action.zoom;
 			break;
 	}
 	return JSON.parse(JSON.stringify(state));

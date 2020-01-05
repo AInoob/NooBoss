@@ -142,12 +142,6 @@ NooBoss.initiate = async () => {
 				temp = await promisedGetDB(message.id);
 				sendMessage({ job: 'updateExtension', extension: temp });
 				break;
-			case 'resetZoom':
-				temp = await getSelf();
-				const url = temp.optionsUrl + '&resetZoom=true'
-				browser.tabs.create({ url });
-				NooBoss.Bello.bello({ category: 'nooboss', action: message.job, id: message.id });
-				break;
 			case 'historyRemoveRecord':
 				NooBoss.History.removeRecord(message.index);
 				NooBoss.Bello.bello({ category: 'history', action: message.job });

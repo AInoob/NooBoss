@@ -7,6 +7,7 @@ const OVERVIEW_UPDATE_BELLO = 'OVERVIEW_UPDATE_BELLO';
 const OVERVIEW_TOGGLE_RECOMMEND_EXTENSIONS = 'OVERVIEW_TOGGLE_RECOMMEND_EXTENSIONS';
 const OPTIONS_UPDATE_THEME_MAIN_COLOR = 'OPTIONS_UPDATE_THEME_MAIN_COLOR';
 const OPTIONS_UPDATE_THEME_SUB_COLOR = 'OPTIONS_UPDATE_THEME_SUB_COLOR';
+const OPTIONS_UPDATE_ZOOM = 'OPTIONS_UPDATE_ZOOM';
 const OPTIONS_TOGGLE_DISPLAY = 'OPTIONS_TOGGLE_DISPLAY';
 const UPDATE_AUTO_STATE_RULE = 'UPDATE_AUTO_STATE_RULE';
 		
@@ -55,6 +56,11 @@ export const optionsUpdateThemeMainColor = (color) => ({
 export const optionsUpdateThemeSubColor = (color) => ({
 	type: OPTIONS_UPDATE_THEME_SUB_COLOR,
 	color
+});
+
+export const optionsUpdateZoom = (zoom) => ({
+	type: OPTIONS_UPDATE_ZOOM,
+	zoom
 });
 
 export const optionsToggleDisplay = (name) => ({

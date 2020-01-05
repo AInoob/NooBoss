@@ -16,14 +16,28 @@ import {
 	updateSubWindow,
 	updateLanguage,
 	optionsUpdateThemeMainColor,
-	optionsUpdateThemeSubColor
+	optionsUpdateThemeSubColor, optionsUpdateZoom
 } from '../actions';
-import { promisedGet, notify, sendMessage, GL, alerty, ajax, getDB, copy, getParameterByName, get, generateRGBAString, getLanguage } from '../../utils';
+import {
+	promisedGet,
+	notify,
+	sendMessage,
+	get,
+	GL,
+	alerty,
+	ajax,
+	getDB,
+	copy,
+	getParameterByName,
+	oldGet,
+	generateRGBAString,
+	getLanguage,
+	promisedSet
+} from '../../utils';
 
 
 injectGlobal`
 	body{
-		width: 760px;
 		margin: 0px;
 	}
 	@keyframes spin {
@@ -44,6 +58,8 @@ injectGlobal`
 `;
 
 const NooBossDiv = styled.div`
+	width: 760px;
+	zoom: ${props => props.zoom};
 	padding-top: 35px;
 	overflow-y: scroll;
 	&::-webkit-scrollbar-track{
@@ -235,16 +251,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 				resolve();
 			});
 		},
-		initialRequiredOptions: async (key) => {
-			return new Promise(resolve => {
-				get('mainColor', (color) => {
-					dispatch(optionsUpdateThemeMainColor(color));
-					get('subColor', (color) => {
-						dispatch(optionsUpdateThemeSubColor(color));
-						resolve();
-					});
-				});
-			});
+		initialRequiredOptions: async () => {
+		    const mainColor = await get('mainColor');
+			dispatch(optionsUpdateThemeMainColor(mainColor));
+
+			const subColor = await get('subColor');
+			dispatch(optionsUpdateThemeSubColor(subColor));
+
+			const zoom = await get('zoom', 1);
+			dispatch(optionsUpdateZoom(zoom));
 		},
 		initialize: async (props) => {
 			await props.loadPrevState();
@@ -252,17 +267,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			await props.initialRequiredOptions();
 		},
 	});
-}
+};
 
 class NooBoss extends Component{
 	constructor(props) {
 		super(props);
-		if (getParameterByName('resetZoom')) {
-			browser.tabs.setZoom(1, () => {
-				sendMessage({ job: 'notify', title: GL('reset_zoom'), message: GL('x_4'), duration: 5 });
-				window.close();
-			});
-		}
 		window.shared = {
 			getAllExtensions: this.getAllExtensions.bind(this),
 			getGroupList: this.getGroupList.bind(this),
@@ -270,7 +279,7 @@ class NooBoss extends Component{
 			themeMainColor: generateRGBAString(this.props.options.themeMainColor),
 			themeSubColor: generateRGBAString(this.props.options.themeSubColor),
 		};
-		get('joinCommunity', joinCommunity => shared.joinCommunity = joinCommunity);
+		oldGet('joinCommunity', joinCommunity => shared.joinCommunity = joinCommunity);
 		props.initialize(props);
 		this.state = {
 			icons: {},
@@ -282,7 +291,7 @@ class NooBoss extends Component{
 			autoStateRuleList: [],
 			extensionInfoWeb: {},
 			historyRecordList: [],
-			viewMode: 'tile',
+			viewMode: 'tile'
 		};
 		this.updateSubWindow = this.props.updateSubWindow.bind(this);
 		this.getHistoryRecordList = this.getHistoryRecordList.bind(this);
@@ -383,6 +392,15 @@ class NooBoss extends Component{
 		this.props.updateLanguage();
 	}
 
+	componentDidMount() {
+	    // a hack to get current zoom level and reset it to 100%
+	    setTimeout(async () => {
+			const zoom = window.document.documentElement.clientWidth / window.outerWidth;
+			this.setState({ zoom });
+			await promisedSet('zoom', zoom);
+		}, 500);
+	}
+
 	componentWillUnmount() {
 		browser.runtime.onMessage.removeListener(this.listener);
 	}
@@ -400,9 +418,9 @@ class NooBoss extends Component{
 					}
 					break;
 				case 'popupNooBossUpdateTheme':
-					get('mainColor', (color) => {
+					oldGet('mainColor', (color) => {
 						this.props.optionsUpdateThemeMainColor(color);
-						get('subColor', (color) => {
+						oldGet('subColor', (color) => {
 							this.props.optionsUpdateThemeSubColor(color);
 						});
 					});
@@ -482,6 +500,7 @@ class NooBoss extends Component{
 		const language = this.props.language;
 		shared.themeMainColor = generateRGBAString(this.props.options.themeMainColor);
 		shared.themeSubColor = generateRGBAString(this.props.options.themeSubColor);
+		const zoom = this.props.options.zoom;
 		const extensions = this.state.extensions || {};
 		const groupList = this.state.groupList || [];
 		const autoStateRuleList = this.state.autoStateRuleList || [];
@@ -534,6 +553,7 @@ class NooBoss extends Component{
 		else if (location == 'about') { page = <About />; }
 		return (
 			<NooBossDiv
+                zoom={zoom}
 				id="noobossDiv"
 				themeMainColor={shared.themeMainColor}
 				themeSubColor={shared.themeSubColor}

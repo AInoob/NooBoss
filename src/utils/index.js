@@ -160,7 +160,21 @@ export const GL = (string) => {
 	return browser.i18n.getMessage(string);
 };
 
-export const get = (key, callback) => {
+export const get = (key, defaultValue) => {
+	return new Promise((resolve) => {
+		chrome.storage.sync.get(key, (result) => {
+			if ((result == null || result[key] == null) && defaultValue != null) {
+				return resolve(defaultValue);
+			}
+			if (result == null) {
+				return resolve(null);
+			}
+			return resolve(result[key]);
+		});
+	});
+};
+
+export const oldGet = (key, callback) => {
 	browser.storage.sync.get(key, (result) => {
 		if(callback)
 			callback(result[key]);
@@ -169,12 +183,12 @@ export const get = (key, callback) => {
 
 export const promisedGet = (key) => {
 	return new Promise(resolve => {
-		get(key, resolve);
+		oldGet(key, resolve);
 	});
 };
 
 export const isOn = (key, callbackTrue, callbackFalse, param) => {
-	get(key, (value) => {
+	oldGet(key, (value) => {
 		if (value == '1' || value == true) {
 			if(callbackTrue) {
 				callbackTrue(param);
@@ -209,7 +223,7 @@ export const promisedSet = (key, value) => {
 };
 
 export const setIfNull = (key, setValue, callback) => {
-	get(key, (value) => {
+	oldGet(key, (value) => {
 		if (value == undefined || value == null) {
 			set(key, setValue, callback);
 		}
