@@ -16,6 +16,7 @@ import {
   optionsToggleDisplay
 } from '../actions';
 import styled from 'styled-components';
+import { optionsUpdateZoom } from '../actions';
 
 const OptionsDiv = styled.div`
   user-select: none;
@@ -152,6 +153,12 @@ const OptionsDiv = styled.div`
     padding-left: 32px;
     position: relative;
   }
+  #zoomDiv {
+    input {
+      width: 100px;
+      margin-left: 58px;
+    }
+  }
 `;
 
 const mapStateToProps = (state, ownProps) => {
@@ -176,6 +183,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     toggleDisplay: (name) => {
       dispatch(optionsToggleDisplay(name));
+    },
+    updateZoom: (zoom) => {
+      dispatch(optionsUpdateZoom(zoom));
     }
   };
 };
@@ -200,7 +210,8 @@ class Options extends Component {
       recoExtensions: true,
       autoState: false,
       autoStateNotification: false,
-      joinCommunity: false
+      joinCommunity: false,
+      zoom: 1
     };
     this.listener = this.listener.bind(this);
   }
@@ -242,7 +253,8 @@ class Options extends Component {
       'notificationDuration_autoState',
       'notificationDuration_removal',
       'notificationDuration_stateChange',
-      'joinCommunity'
+      'joinCommunity',
+      'zoom'
     ];
     for (let i = 0; i < options.length; i++) {
       oldGet(
@@ -452,6 +464,23 @@ class Options extends Component {
                   />
                 </div>
               ) : null}
+            </div>
+            <div className='line' id='zoomDiv'>
+              <span>{GL('zoom')}</span>
+              <input
+                onChange={(e) => {
+                  const zoom = e.target.value / 100;
+                  this.changeOption('zoom', {
+                    target: { value: e.target.value / 100 }
+                  });
+                  this.props.updateZoom(zoom);
+                }}
+                type='number'
+                min='25'
+                max='300'
+                value={Math.floor(this.state.zoom * 100)}
+              />
+              <span>%</span>
             </div>
           </section>
         </section>

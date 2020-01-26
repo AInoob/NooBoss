@@ -405,16 +405,6 @@ class NooBoss extends Component {
     this.props.updateLanguage();
   }
 
-  componentDidMount() {
-    // a hack to get current zoom level and reset it to 100%
-    setTimeout(async () => {
-      const zoom =
-        window.document.documentElement.clientWidth / window.outerWidth;
-      this.setState({ zoom });
-      await promisedSet('zoom', zoom);
-    }, 500);
-  }
-
   componentWillUnmount() {
     browser.runtime.onMessage.removeListener(this.listener);
   }
@@ -571,7 +561,8 @@ class NooBoss extends Component {
     }
     return (
       <NooBossDiv
-        zoom={zoom}
+        // zoom should be in range 0.5 and 2
+        zoom={Math.max(Math.min(zoom, 2), 0.5)}
         id='noobossDiv'
         themeMainColor={shared.themeMainColor}
         themeSubColor={shared.themeSubColor}

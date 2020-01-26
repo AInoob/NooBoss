@@ -238,8 +238,8 @@ select_extensions:
   message: 选择扩展
 recommend:
   message: 推荐
-reset_zoom:
-  message: 重置缩放
+zoom:
+  message: '缩放'
 none:
   message: 没有
 install:

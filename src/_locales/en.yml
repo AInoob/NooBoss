@@ -244,8 +244,8 @@ select_extensions:
   message: 'Select extensions'
 recommend:
   message: Recommend
-reset_zoom:
-  message: 'Reset zoom'
+zoom:
+  message: 'Zoom'
 none:
   message: 'None'
 set_zoom_to_100:
