@@ -86,6 +86,10 @@ NooBoss.initiate = async () => {
           NooBoss.Options.exportOptions();
           NooBoss.Bello.bello({ category: 'Options', action: message.job });
           break;
+        case 'exportExtensions':
+          NooBoss.Options.exportExtensions();
+          NooBoss.Bello.bello({ category: 'Options', action: message.job });
+          break;
         case 'getAllExtensions':
           sendResponse(NooBoss.Extensions.apps);
           break;

@@ -80,6 +80,8 @@ export_options:
   message: 导出
 successfully_exported:
   message: 成功导出，文字名为"NooBoss.options"
+successfully_exported_extensions:
+  message: 成功导出，文字名为"Extensions.html"
 successfully_imported:
   message: 成功导入
 failed_to_import:
@@ -240,6 +242,8 @@ recommend:
   message: 推荐
 zoom:
   message: '缩放'
+export_extensions_to_html:
+  message: '导出拓展到HTML'
 none:
   message: 没有
 install:

@@ -20,6 +20,7 @@ import { optionsUpdateZoom } from '../actions';
 
 const OptionsDiv = styled.div`
   user-select: none;
+  padding-bottom: 20px;
   section {
     font-size: 18px;
     section {
@@ -574,6 +575,14 @@ class Options extends Component {
           <section>
             {this.getDisplayInput('backup', 'advancedBackup')}
             {this.getDisplayLabel('backup')}
+            <div className='line'>
+              <button
+                onClick={() => {
+                  sendMessage({ job: 'exportExtensions' });
+                }}>
+                {GL('export_extensions_to_html')}
+              </button>
+            </div>
             <input
               id='upload'
               type='file'

@@ -110,7 +110,69 @@ export default (NooBoss) => {
         document.body.appendChild(a);
         a.click();
         notify(GL('backup'), GL('successfully_exported'), 5);
+        a.remove();
       });
+    },
+    exportExtensions: () => {
+      let appList = [];
+      const appMap = NooBoss.Extensions.apps;
+      Object.keys(appMap).forEach((id) => {
+        const app = appMap[id];
+        appList.push(app);
+      });
+      appList = appList.sort((a, b) => {
+        if (a.enabled && !b.enabled) {
+          return -1;
+        } else if (!a.enabled && b.enabled) {
+          return 1;
+        }
+        const nameA = a.name || '';
+        const nameB = b.name || '';
+        return nameA.localeCompare(nameB);
+      });
+      const dataURI =
+        'data:text;charset=utf-8,' +
+        `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>Extensions - NooBoss</title>
+          </head>
+          <body> 
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${appList
+                  .map((app) => {
+                    const link =
+                      app.installType === 'development'
+                        ? `${app.name}`
+                        : `<a href=${'https://chrome.google.com/webstore/detail/' +
+                            app.id} target='_blank'>${app.name}</a>`;
+                    return `<tr><td>${link}</td><td>${
+                      app.enabled ? 'O' : 'X'
+                    }</td></tr>`;
+                  })
+                  .join('')}
+              </tbody>
+            </table>
+          </body>
+        </html>
+        `;
+      const a = document.createElement('a');
+      a.href = dataURI;
+      a.download = 'Extensions.html';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      notify(GL('backup'), GL('successfully_exported_extensions'), 5);
+      a.remove();
     }
   };
 };

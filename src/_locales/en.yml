@@ -80,6 +80,8 @@ export_options:
   message: Export options
 successfully_exported:
   message: Successfully exported, the file name is "NooBoss.options"
+successfully_exported_extensions:
+  message: Successfully exported, the file name is "Extensions.html"
 successfully_imported:
   message: Successfully imported
 failed_to_import:
@@ -246,6 +248,8 @@ recommend:
   message: Recommend
 zoom:
   message: 'Zoom'
+export_extensions_to_html:
+  message: 'Export extensions to html'
 none:
   message: 'None'
 set_zoom_to_100:
