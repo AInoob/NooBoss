@@ -2,12 +2,12 @@
 [Website](https://ainoob.com/project/nooboss)
 
 ## Current status - Dormant
-Personally I have not use NooBoss in past few months. I am not sure if there is any big use case for NooBoss. So yeah, no plan of updating it at this point.
+Personally I have not used NooBoss in the past few months. I am not sure if there are any big use cases for NooBoss. So yeah, no plan of updating it at this point.
 
 ## What is NooBoss?
-NooBox is a Chrome Extensions Manager and a Userscript Manager that contains many unique features
+NooBoss is a Chrome Extensions Manager and a Userscript Manager that contains many unique features.
 
-As you can see, NooBoss is an open source software, it is free and does not have any ADs.
+As you can see, NooBoss is open source software, it is free and does not have any ads.
 
 
 ## Copyright
