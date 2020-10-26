@@ -151,7 +151,7 @@ class AutoState extends Component {
     super(props);
     this.state = {
       rule: {
-        actions: 'enableOnly',
+        action: 'enableOnly',
         ids: [],
         match: {
           isWildcard: false,
@@ -275,21 +275,20 @@ class AutoState extends Component {
   render() {
     const ruleList = this.props.autoStateRuleList;
     const rule = this.props.autoState.rule || this.state.rule;
-    const { icons, extensions, groupList } = this.props;
     const selectedList = this.getIcon(rule.ids);
-    const ruleRows = ruleList.map((rule, index) => {
-      const icon = this.getIcon(rule.ids);
+    const ruleRows = ruleList.map((rule2, index) => {
+      const icon = this.getIcon(rule2.ids);
       return (
         <tr className='rule' key={index}>
           <td>{index + 1}</td>
           <td>{icon}</td>
-          <td>{GL(rule.action)}</td>
-          <td>{rule.match.url}</td>
-          <td>{GL(rule.match.isWildcard ? 'wildcard' : 'RegExp')}</td>
+          <td>{GL(rule2.action)}</td>
+          <td>{rule2.match.url}</td>
+          <td>{GL(rule2.match.isWildcard ? 'wildcard' : 'RegExp')}</td>
           <td>
             <input
               type='checkbox'
-              checked={rule.disabled ? false : true}
+              checked={rule2.disabled ? false : true}
               onChange={() => {}}
               id={'switch-' + index}
               className='switch-input'

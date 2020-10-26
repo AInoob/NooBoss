@@ -63,6 +63,8 @@ module.exports = (env) => {
         'process.env.NODE_ENV': JSON.stringify('production')
       })
     );
+  } else {
+    base.devtool = 'inline-source-map';
   }
   return base;
 };
