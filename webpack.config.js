@@ -5,7 +5,7 @@ const base = {
   cache: true,
   entry: {
     popup: './src/popup/index.js',
-    background: './src/background/index.js'
+    background: './src/background/background.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

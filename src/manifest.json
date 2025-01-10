@@ -1,11 +1,11 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_extension_name__",
   "description": "__MSG_extension_description__",
   "default_locale": "en",
   "version": "0.1.9",
   "options_page": "popup.html?page=options",
-  "browser_action": {
+  "action": {
 		"default_icon": "images/icon_128.png",
     "default_title": "NooBoss~",
     "default_popup": "popup.html"
@@ -14,15 +14,18 @@
 		"128": "images/icon_128.png"
   },
   "background": {
-    "scripts":["js/background.js"]
+    "service_worker": "js/background.js",
+    "type": "module"
   },
-  "minimum_chrome_version": "42",
+  "minimum_chrome_version": "88",
   "permissions": [
     "tabs",
     "management",
     "notifications",
     "storage",
-    "unlimitedStorage",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
     "https://clients2.google.com/*",
     "https://ainoob.com/*"
   ]
